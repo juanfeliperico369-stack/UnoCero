@@ -4,7 +4,8 @@ const { chromium } = require("playwright");
 (async () => {
   const y0 = +(process.argv[2] || 1995),
     y1 = +(process.argv[3] || 2012),
-    w = +(process.argv[4] || 420);
+    w = +(process.argv[4] || 420),
+    lang = process.argv[5] || "es";
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: w, height: 860 } });
   const errs = [];
@@ -12,10 +13,11 @@ const { chromium } = require("playwright");
   p.on("console", (m) => m.type() == "error" && errs.push("CONSOLE " + m.text().slice(0, 300)));
   await p.goto("file://" + require("path").resolve(__dirname, "../dist/INDUSTRY_ART.html") + "?bot=1");
   const r = await p.evaluate(
-    async ([y0, y1]) => {
+    async ([y0, y1, lang]) => {
       await BOT.correr({ sd: "MONO", y0, y1, est: "agresiva" });
       S.bot = 0;
       S.cash = Math.max(S.cash, 1e12);
+      if (lang != "es") ACT.cfgi(lang);
       const NO = new Set(["auto", "pausa", "mn", "salir", "ev", "mes", "sem", "cfgi", "cfgt", "x", "nx", "borrar", "bor", "imp", "exp", "load", "cargar", "nuevo", "reiniciar", "czp"]);
       const log = [];
       let n = 0;
@@ -52,18 +54,20 @@ const { chromium } = require("playwright");
           };
           ver();
           const L = [...document.querySelectorAll("#app [data-a]")].map((e) => [e.dataset.a, e.dataset.v]).filter(([a]) => !NO.has(a));
-          const vistos = new Set();
+          const vistos = new Set(),
+            porA = {};
           for (const [a, v] of L) {
             const key = a + "|" + v;
-            if (vistos.has(key)) continue;
+            if (vistos.has(key) || (porA[a] | 0) >= 2) continue;
             vistos.add(key);
+            porA[a] = (porA[a] | 0) + 1;
             ver();
             const el = [...document.querySelectorAll("#app [data-a]")].find((e) => e.dataset.a == a && e.dataset.v == v);
             if (!el) continue;
             pulsa(el, `${s}/${k} ${a}=${v}`);
             const md = document.querySelector("#md.on .hoja, #fxp.on");
             if (md) {
-              const M = [...md.querySelectorAll("[data-a]")].map((e) => [e.dataset.a, e.dataset.v]).filter(([a2]) => !NO.has(a2)).slice(0, 12);
+              const M = [...md.querySelectorAll("[data-a]")].map((e) => [e.dataset.a, e.dataset.v]).filter(([a2]) => !NO.has(a2)).filter(([a2], i, A) => A.findIndex((z) => z[0] == a2) == i).slice(0, 10);
               for (const [a2, v2] of M) {
                 ver();
                 const e1 = [...document.querySelectorAll("#app [data-a]")].find((e) => e.dataset.a == a && e.dataset.v == v);
@@ -78,7 +82,7 @@ const { chromium } = require("playwright");
       cerrar();
       return { clics: n, errores: log.slice(0, 60), unicos: [...new Set(log.map((x) => x.split(" :: ")[1]))].slice(0, 30) };
     },
-    [y0, y1],
+    [y0, y1, lang],
   );
   console.log(JSON.stringify(r, null, 1).slice(0, 8000));
   console.log([...new Set(errs)].slice(0, 20).join("\n"));

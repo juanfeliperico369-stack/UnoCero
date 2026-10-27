@@ -11,7 +11,7 @@ Creado por OneZero · Infinite Tree.
 - **Temas de la compañía (nueva partida):** antes eran tres listas. Ahora es un botón que abre un selector con buscador (ignora tildes), en orden alfabético y agrupado. Se eligen hasta 3.
 - **Avatar:** 7 partes nuevas: color de labios, cicatriz, tatuaje, piercing, mirada, cuello (perlas, cadena, bufanda, pajarita…) e iluminación del retrato (estudio, dramática, neón, hora dorada, blanco y negro). La iluminación da volumen a todos los retratos. El avatar al azar también usa las partes nuevas.
 - **Ficha pop:** se comparte con la portada que diseñó el jugador. Antes salía la portada automática.
-- **Temas y tópicos:** se agregó el tema «Política».
+- **Temas y tópicos:** el tema «Política» ya existía, pero la lógica de verosimilitud lo marcaba como «solo existe en la realidad» y lo ocultaba en las obras de ficción. Ahora se puede elegir en ficción, igual que Economía, Ciencia, Filosofía, Psicología y Tecnología.
 - **Clasificación por edades, según el documento:**
   - Cada clasificación pone un tope a violencia, lenguaje, amor, consumo y miedo. Por ejemplo, PG-13 no deja pasar de «Moderado».
   - Se corrigieron los textos de NC-17, 18 y X.
@@ -41,38 +41,49 @@ Creado por OneZero · Infinite Tree.
 
 **Otros cambios**
 - **Idiomas:** francés y portugués en Ajustes y en la portada (botones FR/PT).
-  - Unas 11.000 frases por idioma.
+  - Unas 12.000 frases por idioma, incluidos todos los hitos históricos, los datos curiosos, las ayudas y los 112 logros.
   - Plantillas con números («# años», «crítica #») y frases con nombres propios («X se retira a los N años», «X gana la ventaja Y»).
   - Listas separadas por comas, fechas, y sinopsis automáticas traducidas por frases.
-  - Se midió recorriendo todas las pestañas y el creador: en francés pasaron de 2.885 textos sin traducir a unos 250 segmentos, casi todos nombres inventados de obras, estudios y personajes, que no se traducen a propósito.
-- **Títulos automáticos:** concordancia de género y número («Quimera perdida», «Cenizas eternas», «La última de las sombras»).
+  - Se midió recorriendo todas las pestañas y el creador: en francés pasaron de 2.885 textos sin traducir a unos 130 segmentos. Casi todos son nombres inventados de obras, estudios y personajes (no se traducen a propósito), frases latinas y géneros que se escriben igual en los dos idiomas.
+- **Títulos automáticos:** concordancia de género y número («Quimera perdida», «Cenizas eternas», «La última de las sombras»). Un barrido de más de 30.000 noticias, títulos y sinopsis generados no encontró más errores de concordancia.
 - **Contenido nuevo:**
-  - 41 hitos reales con contexto, de 1710 a 2023;
-  - 15 datos curiosos;
+  - 71 hitos reales con contexto, de 1700 a 2023, sobre todo de los siglos XVIII y XIX, teatro, TV y videojuegos, que eran los que menos tenían;
+  - 29 datos curiosos;
   - 15 obras de dominio público con temas, personajes y sinopsis (Drácula, Los Miserables, La Odisea, Las mil y una noches, María, Popol Vuh…).
-- **Traído de la versión 1.0:** encargo automático, cronología del estudio (Salón → Tu estudio), estado anual (Finanzas: caja, valor del catálogo, deudas y patrimonio) y biblioteca de clásicos (Obras → Usar material). La compra de derechos con regateo y el modo rápido ya existían en la V40.
+- **Obras de dominio público repetidas:** había 9 duplicadas con otro artículo o mayúsculas («Ramayana» y «El Ramayana», «Decamerón» y «El Decamerón»…). Se ocultan de las listas, sin borrarlas, para no romper partidas guardadas.
+- **Traído de la versión 1.0:**
+  - encargo automático;
+  - cronología del estudio (Salón → Tu estudio);
+  - estado anual (Finanzas: caja, valor del catálogo, deudas y patrimonio);
+  - biblioteca de clásicos (Obras → Usar material);
+  - línea de vida en la ficha de cada talento;
+  - logros del año en el balance anual;
+  - discurso de aceptación al ganar en la ceremonia en vivo (agradecer al equipo, mensaje comprometido, hacer reír o breve), con efecto en moral, prestigio o fans.
+  - La compra de derechos con regateo, el modo rápido, la ceremonia en vivo con «Abrir el sobre» y las edades de la población ya existían en la V40.
 - **Del documento original:**
   - audiencia focal por afición (cinéfilos, seriéfilos, gamers, teatrófilos, melómanos, bibliófilos), por cultura (16) y comunidad LGBTQ+, con efecto en ventas, crítica y público;
   - tonos Deprimente, Melancólico, Luminoso y Entretenido;
   - Oktoberfest en el calendario.
 - **Auditoría del creador:** se cambiaron automáticamente 169 opciones de los 6 medios. El arquetipo y el sexo de los personajes no influían; ahora pesan (variedad de papeles, personajes complejos, antagonista en géneros de acción, reparto mixto).
-- **Gramática:** concordancia de las sinopsis («una persona común se ve obligada») y artículos de plurales femeninos («las religiones ancestrales»).
+- **Gramática:** concordancia de las sinopsis («una persona común se ve obligada»), artículos de plurales femeninos («las religiones ancestrales») y el logro «Gana 10 Premios de la Academia».
+- **Ficha del talento:** decía «Acepta obras hasta X»; ahora dice «Se desenvuelve mejor hasta X (más allá cobra más y rinde menos)», acorde con la nueva regla.
+- **Selector con buscador:** el campo de búsqueda toma los colores del tema.
 - **Creador:** más espacio entre bloques y etiquetas.
 - **Limpieza:** se quitaron comentarios de desarrollo, marcas de versión y referencias a herramientas. Los créditos dicen solo OneZero · Infinite Tree. La versión es 1.0.
 
 ## Pruebas
-- **Partidas automáticas en Chromium:** 1920–1960, 1960–1975, 1990–2012 y 1995–1997, sin errores.
+- **Partidas automáticas en Chromium:** 1750–1830, 1780–1840, 1920–1975, 1925–1985, 1990–2035, 1990–2060 y 2026–2120, sin errores ni quiebra.
+- **Prueba de estrés de la interfaz** (`tools/monkey.js`): pulsa los botones de todas las pestañas y de las ventanas que abren. Se corrió en cuatro situaciones, cada una con unas 3.100–3.500 pulsaciones: 1995–2010 en teléfono, 1780–1810 en pantalla de computador, 2080–2100, y 1960–1985 con la interfaz en francés. Cero errores en las cuatro.
+- **Guardar y cargar:** la partida conserva obras, exclusivas, avatar y logros, y sigue jugándose sin errores.
+- **Encargo automático:** probado en los seis medios.
+- **Rendimiento:** traducir al francés o al portugués no hace más lenta la interfaz.
 - **Funciones nuevas una por una:** encargos, exclusivas, música, casino, piratería, TV, streaming, crossover, clasificación, ficha pop, temas, avatar, arquetipos, documento, cronología y balance. Todas sin errores.
 - **Pantallas:** se revisaron a 420 px el documento, los retratos y el tema minimalista.
 
 ## Lo que queda pendiente
 - En francés y portugués, las noticias y eventos largos con muchas variables pueden mostrar partes en español. Para cubrirlos, se amplían `src/mod/i_dic*.js` o las reglas de `src/mod/j_idioma.js`.
 - La abreviatura «mar» se usa en el juego para marzo y para martes, así que en portugués puede salir «Mar» donde debería decir «Ter».
-- La versión 1.0 tiene otras funciones que aquí no se trajeron:
-  - línea de vida de talentos;
-  - premios en vivo;
-  - pirámide de edades;
-  - quitar anuncios.
+- De la versión 1.0 no se trajo «Quitar anuncios», porque esta versión no tiene anuncios.
 - Probar el APK en un teléfono real (no se pudo aquí).
 
 ## Cómo trabajar
@@ -80,3 +91,5 @@ Creado por OneZero · Infinite Tree.
 - **Armar:** `python3 tools/build.py` genera `dist/INDUSTRY_ART.html`.
 - **APK:** `tools/apk.sh <apk base> dist/INDUSTRY_ART.html <salida> <llave>` (necesita build-tools de Android).
 - **Probar:** `node tools/run.js 'await BOT.correr({y0:1990,y1:2010}); return 1'`.
+- **Prueba de estrés:** `node tools/monkey.js <año inicial> <año final> <ancho> [es|en|fr|pt]`.
+- **Cobertura de idiomas:** `node tools/cov2.js fr salida.txt` lista los textos que siguen en español.

@@ -46029,7 +46029,7 @@ LOGR.push(
   ["Ídolo del pueblo", "Una obra con 97 o más de público", () => lgRel().some((p) => p.a >= 97)],
   ["Arte y taquilla", "Una obra con 90 de crítica, 90 de público y el doble de lo que costó", () => lgRel().some((p) => p.c >= 90 && p.a >= 90 && lgMul(p) >= 2)],
   ["Tengo que agradecer a mi mamá", "Gana un " + AWP[0].replace("Premios ", "Premio "), () => lgQuimera() >= 1],
-  ["Coleccionista de estatuillas", "Gana 10 " + AWP[0], () => lgQuimera() >= 10],
+  ["Coleccionista de estatuillas", "Gana 10 " + AWP[0].replace(/^Premio /, "Premios "), () => lgQuimera() >= 10],
   ["Lo peor de lo peor (y orgulloso)", "Gana un premio a lo peor del año", () => S.pj.some((p) => (p.aw || []).some((z) => /PEOR/.test(z)))],
   ["Vitrina llena", "Gana 10 premios en las galas", () => (S.win | 0) >= 10],
   ["Leyenda de las galas", "Gana 50 premios en las galas", () => (S.win | 0) >= 50],

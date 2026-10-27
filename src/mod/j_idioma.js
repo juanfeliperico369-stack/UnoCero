@@ -195,6 +195,8 @@ setTimeout(() => {
     [/^Estadísticas de (.+)$/, "Statistiques de $1", "Estatísticas de $1"],
     [/^Festival de (.+)$/, "Festival de $1", "Festival de $1"],
     [/^nivel (\d+)$/, "niveau $1", "nível $1"],
+    [/^Siglo ([IVXL]+)$/, "$1e siècle", "Século $1"],
+    [/^siglo ([IVXL]+)$/, "$1e siècle", "século $1"],
     [/^(.+?), la saga continúa» de (.+)$/, "$1, la saga continue» de $2", "$1, a saga continua» de $2"],
   ];
   Object.assign(DIC_FR, { "Países Bajos": "Pays-Bas", "Islas Salomón": "Îles Salomon", "República Dominicana": "République dominicaine", Melancólico: "Mélancolique", Nómada: "Nomade", Nazismo: "Nazisme", Fusión: "Fusion", "Fusión entre rivales": "Fusion entre rivaux", "Estrena una obra de teatro": "Monte une pièce de théâtre", "anacrónico para esa época": "anachronique pour l'époque", "Franquicias de rivales que cerraron, a precio de remate": "Franchises de rivaux disparus, à prix bradé", "Asociación de Exhibidores": "Association des exploitants", "Blog de enlaces": "Blog de liens" });
