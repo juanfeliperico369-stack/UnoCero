@@ -1,18 +1,18 @@
 // ===== Más tipos de obra: tradiciones teatrales del mundo, circo y formatos nuevos en todos los medios =====
-// [nombre, naturaleza (""|"f"|"r"), desde, inglés, francés, portugués, decisiones, no cuenta historia, efecto base [costo ×, crítica, público, semanas]]
+// [nombre, naturaleza (""|"f"|"r"), desde, inglés, francés, portugués, decisiones, no cuenta historia, efecto base [costo ×, crítica, público, semanas, ventas ×]]
 const TYN5 = [
   [
     ["Mediometraje", "", 1900, "Medium-length film", "Moyen métrage", "Média-metragem", ["corto"], 0, [0.75, 0, -1, -2]],
-    ["Película de serie B", "f", 1935, "B movie", "Série B", "Filme B", ["serieB"], 0, [0.6, -2, 1, -2]],
+    ["Película de serie B", "f", 1935, "B movie", "Série B", "Filme B", ["serieB"], 0, [0.8, -2, 0, -2, 0.7]],
     ["Docuficción", "", 1930, "Docufiction", "Docufiction", "Docuficção", ["docEnf"], 0, [0.85, 1, 0, 0]],
     ["Anime (película)", "", 1917, "Anime film", "Film d'animation japonaise", "Filme de anime", ["animeE", "voces"], 0, [1, 1, 1, 2]],
     ["Película en realidad virtual", "", 2016, "Virtual reality film", "Film en réalité virtuelle", "Filme em realidade virtual", ["rv"], 0, [1.1, 1, 0, 1]],
   ],
   [
     ["Anime (serie)", "", 1963, "Anime series", "Série d'animation japonaise", "Série de anime", ["animeE", "voces"], 0, [1, 1, 1, 1]],
-    ["Radionovela", "f", 1940, "Radio drama", "Feuilleton radiophonique", "Radionovela", ["radioV"], 0, [0.5, 0, 1, -2]],
-    ["Webserie", "", 2004, "Web series", "Websérie", "Websérie", ["webD"], 0, [0.55, 0, 1, -2]],
-    ["Microserie vertical", "", 2020, "Vertical microseries", "Microsérie verticale", "Microssérie vertical", ["microC"], 0, [0.4, -1, 2, -3]],
+    ["Radionovela", "f", 1940, "Radio drama", "Feuilleton radiophonique", "Radionovela", ["radioV"], 0, [0.7, 0, 0, -2, 0.75]],
+    ["Webserie", "", 2004, "Web series", "Websérie", "Websérie", ["webD"], 0, [0.65, 0, 1, -2, 0.85]],
+    ["Microserie vertical", "", 2020, "Vertical microseries", "Microsérie verticale", "Microssérie vertical", ["microC"], 0, [0.6, -1, 1, -3, 0.75]],
     ["Programa de cocina", "r", 1946, "Cooking show", "Émission culinaire", "Programa de culinária", ["cocTv"], 1, [0.7, 0, 1, -1]],
     ["Programa de viajes", "r", 1950, "Travel show", "Émission de voyage", "Programa de viagens", ["viajeTv"], 1, [0.9, 1, 1, 0]],
   ],
@@ -38,7 +38,7 @@ const TYN5 = [
     ["Kathakali", "", 1600, "Kathakali", "Kathakali", "Kathakali", ["mascaras", "durN"], 0, [1, 2, 0, 1]],
     ["Commedia dell'arte", "", 1600, "Commedia dell'arte", "Commedia dell'arte", "Commedia dell'arte", ["lazzi"], 0, [0.8, 1, 2, 0]],
     ["Pantomima", "", 1600, "Pantomime", "Pantomime", "Pantomima", ["mimoE"], 0, [0.7, 1, 0, -1]],
-    ["Teatro callejero", "", 1600, "Street theater", "Théâtre de rue", "Teatro de rua", ["calleE"], 0, [0.5, 0, 2, -2]],
+    ["Teatro callejero", "", 1600, "Street theater", "Théâtre de rue", "Teatro de rua", ["calleE"], 0, [0.65, 0, 1, -2, 0.8]],
     ["Auto sacramental", "f", 1600, "Sacramental play", "Auto sacramental", "Auto sacramental", ["carros"], 0, [0.9, 1, 1, 0]],
     ["Teatro de revista", "", 1850, "Revue", "Revue", "Teatro de revista", ["numeros", "vedette"], 0, [1.05, -1, 2, 0]],
     ["Espectáculo de ilusionismo", "", 1845, "Magic show", "Spectacle d'illusionnisme", "Espetáculo de ilusionismo", ["magiaT"], 1, [0.9, 0, 2, -1]],
@@ -63,7 +63,7 @@ const TYN5 = [
     ["Novela epistolar", "f", 1740, "Epistolary novel", "Roman épistolaire", "Romance epistolar", ["extension"], 0, [1, 2, -1, 0]],
     ["Novela juvenil", "f", 1967, "Young adult novel", "Roman jeunesse", "Romance juvenil", ["sagaJ"], 0, [1, 0, 2, 0]],
     ["Librojuego (elige tu aventura)", "f", 1979, "Gamebook", "Livre dont vous êtes le héros", "Livro-jogo", ["finales"], 0, [0.9, 0, 2, 0]],
-    ["Fanzine", "", 1930, "Fanzine", "Fanzine", "Fanzine", ["fanzE"], 0, [0.3, 1, 0, -2]],
+    ["Fanzine", "", 1930, "Fanzine", "Fanzine", "Fanzine", ["fanzE"], 0, [0.45, 1, 0, -2, 0.5]],
     ["Audiolibro", "", 1955, "Audiobook", "Livre audio", "Audiolivro", ["narrA"], 0, [0.6, 0, 1, -2]],
     ["Revista literaria", "", 1700, "Literary magazine", "Revue littéraire", "Revista literária", ["periodo"], 0, [0.7, 2, -1, 0]],
     ["Enciclopedia", "r", 1751, "Encyclopedia", "Encyclopédie", "Enciclopédia", ["ciencia", "extension"], 1, [1.5, 2, 0, 3]],
@@ -150,6 +150,7 @@ Object.values(TXD).forEach((d) => {
 const tyB5 = (X) => tyNom(X).map((n) => TYB5[n]).filter(Boolean);
 V37.costo.push((W2) => tyB5(W2).reduce((k, b) => k * b[0], 1));
 V37.sem.push((W2) => tyB5(W2).reduce((s, b) => s + b[3], 0));
+V37.ventas.push((P) => tyB5(P).reduce((k, b) => k * (b[4] || 1), 1));
 V37.mods.push((P, add) => {
   let c = 0,
     a = 0;

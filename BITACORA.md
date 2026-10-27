@@ -53,7 +53,7 @@ Creado por OneZero · Infinite Tree.
 
 **Otros cambios**
 - **Idiomas:** francés y portugués en Ajustes y en la portada (botones FR/PT).
-  - Unas 12.000 frases por idioma, incluidos todos los hitos históricos, los datos curiosos, las ayudas y los 112 logros.
+  - Unas 12.700 frases por idioma, incluidos todos los hitos históricos, los datos curiosos, las ayudas, los 112 logros, todos los tipos de obra con sus decisiones, la política de privacidad, el tutorial y la guía.
   - Plantillas con números («# años», «crítica #») y frases con nombres propios («X se retira a los N años», «X gana la ventaja Y»).
   - Listas separadas por comas, fechas, y sinopsis automáticas traducidas por frases.
   - Se midió recorriendo todas las pestañas y el creador: en francés pasaron de 2.885 textos sin traducir a unos 130 segmentos. Casi todos son nombres inventados de obras, estudios y personajes (no se traducen a propósito), frases latinas y géneros que se escriben igual en los dos idiomas.
@@ -96,7 +96,8 @@ Creado por OneZero · Infinite Tree.
   - **Videojuegos (8):** metroidvania, soulslike, gestión/tycoon, simulador de vida, party game, cartas digital, realidad aumentada y juego narrativo.
   - **Música (7):** unplugged, navideño, colaborativo, tributo, infantil, instrumental y concierto virtual.
   - **Editorial (10):** folletín, novela epistolar, novela juvenil, librojuego, fanzine, audiolibro, revista literaria, enciclopedia, guía de viaje y libro de fotografía.
-  - **Cómo se ven y qué pesan:** cada tipo nuevo tiene su año de aparición, su naturaleza y un efecto base en costo, crítica, público y semanas. En el creador se ven los 12 principales y el resto en «Todos los tipos», con buscador.
+  - **Cómo se ven y qué pesan:** cada tipo nuevo tiene su año de aparición, su naturaleza y un efecto base en costo, crítica, público, semanas y ventas. En el creador se ven los 12 principales y el resto en «Todos los tipos», con buscador.
+  - **Equilibrio:** se produjeron obras iguales que solo cambiaban de tipo y se comparó la ganancia real tras más de dos años. La serie B, la radionovela, la microserie vertical, la webserie, el teatro callejero y el fanzine eran demasiado rentables por lo poco que cuestan. Se ajustaron con tiradas, audiencias y recaudaciones más pequeñas, y ahora quedan a la par o por debajo de los tipos de siempre de su medio.
 - **Gramática:** concordancia de las sinopsis («una persona común se ve obligada»), artículos de plurales femeninos («las religiones ancestrales») y el logro «Gana 10 Premios de la Academia».
 - **Ficha del talento:** decía «Acepta obras hasta X»; ahora dice «Se desenvuelve mejor hasta X (más allá cobra más y rinde menos)», acorde con la nueva regla.
 - **Selector con buscador:** el campo de búsqueda toma los colores del tema.
@@ -113,6 +114,7 @@ Creado por OneZero · Infinite Tree.
 - **Guardar y cargar:** la partida conserva obras, exclusivas, avatar y logros, y sigue jugándose sin errores.
 - **Encargo automático:** probado en los seis medios.
 - **Tipos nuevos:** se produjo una obra de cada uno de los 57, sin errores.
+- **Prueba de estrés final:** unas 3.400 pulsaciones sin errores. Las partidas de 1700–1800 y 1960–2050 terminaron sin errores ni quiebra.
 - **Detector de textos rotos:** la prueba de estrés busca «undefined», «NaN» o «null» visibles después de cada pulsación. Tras las correcciones no encuentra ninguno, ni en las pestañas, ni en el creador de los seis medios, ni en el documento de la idea ni en la ficha pop.
 - **Portada:** completa y correcta en español, inglés, francés y portugués.
 - **Rendimiento:** traducir al francés o al portugués no hace más lenta la interfaz.
