@@ -213,16 +213,16 @@ fdr = function (c, X, Y, Rr, t) {
   c.globalCompositeOperation = "source-over";
   if (il != 1) {
     const L = [
-      ["rgba(255,250,240,.22)", "rgba(0,0,0,.28)"],
+      ["rgba(255,250,240,.12)", "rgba(0,0,0,.26)"],
       null,
       ["rgba(255,240,220,.3)", "rgba(0,0,0,.55)"],
       ["rgba(255,60,200,.32)", "rgba(20,0,60,.45)"],
       ["rgba(255,200,110,.35)", "rgba(80,30,0,.3)"],
       ["rgba(255,255,255,.18)", "rgba(0,0,0,.3)"],
     ][il];
-    const g = c.createRadialGradient(X - U * 0.45, Y - U * 0.55, U * 0.1, X, Y, U * 1.05);
+    const g = c.createRadialGradient(X - U * 0.35, Y - U * 0.45, 0, X - U * 0.1, Y - U * 0.1, U * 1.25);
     g.addColorStop(0, L[0]);
-    g.addColorStop(0.55, "rgba(0,0,0,0)");
+    g.addColorStop(0.6, "rgba(0,0,0,0)");
     g.addColorStop(1, L[1]);
     c.fillStyle = g;
     c.fillRect(X - U, Y - U, U * 2, U * 2);

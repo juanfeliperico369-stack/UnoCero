@@ -35,3 +35,11 @@
 .t-minimal *{text-shadow:none}
 .t-minimal .fxp-h{background:var(--bg)}
 .t-minimal .fxp-i{background:var(--p)}
+.crono{display:flex;flex-direction:column;border-left:2px solid var(--a);margin-left:6px}
+.crono div{display:flex;gap:12px;padding:6px 0 6px 14px;position:relative}
+.crono div::before{content:"";position:absolute;left:-6px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--a)}
+.crono b{min-width:3.2em;color:var(--a)}
+/* Creador: más aire entre bloques */
+.hoja label.m{display:block;margin-top:14px}
+.hoja .chips{gap:8px}
+.hoja .c.sub{margin-top:10px}
