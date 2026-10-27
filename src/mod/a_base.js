@@ -132,23 +132,23 @@ FMT41.push(["Múltiple formato", "Multiple formats", 2010, 0.18, 0.16]);
 
 // ---------- Arquetipos de personajes: más arquetipos, entre ellos el antivillano ----------
 [
-  ["Antivillano", "Antivillana", "Antivillain", "Persigue un fin noble por medios crueles: el público lo entiende aunque no lo apruebe."],
-  ["Mártir", "Mártir", "Martyr", "Se sacrifica por una causa o por los demás."],
-  ["Vengador", "Vengadora", "Avenger", "Vive para saldar una cuenta pendiente."],
-  ["Traidor", "Traidora", "Traitor", "Cambia de bando en el peor momento."],
-  ["Elegido", "Elegida", "Chosen one", "Carga con un destino que no pidió."],
-  ["Seductor", "Seductora", "Seducer", "Usa el encanto como arma y como escudo."],
-  ["Tirano", "Tirana", "Tyrant", "Gobierna con miedo y no tolera rivales."],
-  ["Guerrero", "Guerrera", "Warrior", "Resuelve con valor y disciplina lo que otros no se atreven."],
-  ["Pícaro", "Pícara", "Rogue", "Sobrevive con ingenio, trampas y carisma."],
-  ["Redimido", "Redimida", "Redeemed", "Fue el problema y ahora busca enmendarlo."],
-  ["Profeta", "Profetisa", "Prophet", "Ve lo que viene y nadie le cree."],
-  ["Investigador", "Investigadora", "Investigator", "No descansa hasta descubrir la verdad."],
-  ["Monstruo", "Monstruo", "Monster", "Encarna el miedo; a veces es más víctima que verdugo."],
-  ["Doble", "Doble", "Double", "Es el gemelo, el impostor o el reflejo del protagonista."],
-  ["Bufón trágico", "Bufona trágica", "Sad clown", "Hace reír mientras se rompe por dentro."],
-  ["Mecenas", "Mecenas", "Patron", "Financia los sueños de otros a cambio de algo."],
-].forEach(([m, f, en, d]) => {
+  ["Antivillano", "Antivillana", "Antivillain", "Persigue un fin noble por medios crueles: el público lo entiende aunque no lo apruebe.", "Pursues a noble goal by cruel means: the audience understands even if it doesn't approve."],
+  ["Mártir", "Mártir", "Martyr", "Se sacrifica por una causa o por los demás.", "Sacrifices themself for a cause or for others."],
+  ["Vengador", "Vengadora", "Avenger", "Vive para saldar una cuenta pendiente.", "Lives to settle an old score."],
+  ["Traidor", "Traidora", "Traitor", "Cambia de bando en el peor momento.", "Switches sides at the worst moment."],
+  ["Elegido", "Elegida", "Chosen one", "Carga con un destino que no pidió.", "Carries a destiny they never asked for."],
+  ["Seductor", "Seductora", "Seducer", "Usa el encanto como arma y como escudo.", "Uses charm as both weapon and shield."],
+  ["Tirano", "Tirana", "Tyrant", "Gobierna con miedo y no tolera rivales.", "Rules through fear and tolerates no rivals."],
+  ["Guerrero", "Guerrera", "Warrior", "Resuelve con valor y disciplina lo que otros no se atreven.", "Solves with courage and discipline what others won't dare."],
+  ["Pícaro", "Pícara", "Rogue", "Sobrevive con ingenio, trampas y carisma.", "Survives on wit, tricks and charisma."],
+  ["Redimido", "Redimida", "Redeemed", "Fue el problema y ahora busca enmendarlo.", "Was the problem and now seeks to make amends."],
+  ["Profeta", "Profetisa", "Prophet", "Ve lo que viene y nadie le cree.", "Sees what's coming and no one believes them."],
+  ["Investigador", "Investigadora", "Investigator", "No descansa hasta descubrir la verdad.", "Won't rest until the truth comes out."],
+  ["Monstruo", "Monstruo", "Monster", "Encarna el miedo; a veces es más víctima que verdugo.", "Embodies fear; sometimes more victim than villain."],
+  ["Doble", "Doble", "Double", "Es el gemelo, el impostor o el reflejo del protagonista.", "The twin, the impostor or the lead's reflection."],
+  ["Bufón trágico", "Bufona trágica", "Sad clown", "Hace reír mientras se rompe por dentro.", "Makes people laugh while breaking inside."],
+  ["Mecenas", "Mecenas", "Patron", "Financia los sueños de otros a cambio de algo.", "Funds other people's dreams in exchange for something."],
+].forEach(([m, f, en, d, de]) => {
   if (ARQ.includes(m)) return;
   ARQ.push(m);
   ARQF.push(f);
@@ -156,7 +156,7 @@ FMT41.push(["Múltiple formato", "Multiple formats", 2010, 0.18, 0.16]);
   E40L([
     [m, en],
     [f, en],
-    [d, d],
+    [d, de],
   ]);
 });
 
@@ -323,3 +323,13 @@ dexCobro = function (P, net) {
   gasta("distribucion", p);
   if (S.rv[d.r]) S.rv[d.r].cash += p;
 };
+E40L([
+  ["de 17 en adelante", "17 and over"],
+  ["Adolescentes mayores (17+): lenguaje crudo, violencia intensa y amor candente.", "Older teens (17+): crude language, intense violence and steamy romance."],
+  ["Para nuevos adultos: lenguaje ofensivo, violencia gráfica y amor candente, siempre sugerido.", "For young adults: offensive language, graphic violence and steamy romance, always implied."],
+  ["Solo para mayores: lenguaje, violencia y amor explícitos (en pantalla, siempre sugerido).", "Adults only: explicit language, violence and romance (on screen, always implied)."],
+  ["Drama de despacho presidencial", "Presidential office drama"],
+  ["Campaña electoral", "Election campaign"],
+  ["Mooré", "Mooré"],
+  ["Múltiple formato", "Multiple formats"],
+]);

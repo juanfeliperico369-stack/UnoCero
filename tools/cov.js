@@ -12,7 +12,7 @@ const { chromium } = require("playwright");
     S.bot = 0;
     S.cash = 1e12;
     ACT.cfgi(lang);
-    const D = lang == "fr" ? DIC_FR : DIC_PT;
+    
     const seen = new Map();
     const es = /\b(de|del|la|las|los|el|que|con|para|por|una|un|tu|tus|año|años|obra|obras|está|más|sin)\b|[ñ¿¡]/i;
     const grab = () => {
@@ -21,7 +21,7 @@ const { chromium } = require("playwright");
       while ((x = it.nextNode())) {
         const t = x.nodeValue.trim();
         if (t.length < 2 || !/[a-záéíóúñ]/i.test(t) || t.length > 160) continue;
-        if (trX(t) != t) continue;
+        if ((lang == "en" ? trTxt(t) : trX(t)) != t) continue;
         if (!es.test(t) && !/[áéíóú]/.test(t)) continue;
         seen.set(t, (seen.get(t) || 0) + 1);
       }
