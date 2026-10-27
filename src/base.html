@@ -6173,7 +6173,6 @@ const ENX = {
   "\u00B7 Nominaciones": "\u00B7 Nominations",
   "en d\u00F3lares de hoy \u00B7 Hitos": "in today's dollars \u00B7 Milestones",
   "Ideado y creado por Felipe": "Conceived and created by Felipe",
-  "Programado junto a Claude, de Anthropic": "Programmed together with Claude, by Anthropic",
   "Tipograf\u00EDa de t\u00EDtulos: TeX Gyre Heros Condensed (GUST e-foundry, licencia GUST Font License)":
     "Title typeface: TeX Gyre Heros Condensed (GUST e-foundry, GUST Font License)",
   "F\u00E1cil": "Easy",
@@ -8411,7 +8410,6 @@ const ENX = {
   mediometraje: "medium-length film",
   "sin nombre": "unnamed",
   "Creado por OneZero": "Created by OneZero",
-  "Programaci\u00F3n: Faro (Claude, de Anthropic)": "Programming: Faro (Claude, by Anthropic)",
   "M\u00E1s informaci\u00F3n": "More information",
   "Color de acento": "Accent color",
   "Del tema": "Theme's",
@@ -8423,8 +8421,6 @@ const ENX = {
   "Versi\u00F3n": "Version",
   "Funciona sin conexi\u00F3n. No tiene anuncios ni recopila datos: tus partidas y ajustes se guardan solo en este dispositivo.":
     "Works offline. No ads and no data collection: your games and settings are saved only on this device.",
-  "Creado por OneZero \u00B7 Programaci\u00F3n: Faro (Claude, de Anthropic)":
-    "Created by OneZero \u00B7 Programming: Faro (Claude, by Anthropic)",
   "La honestidad siempre gana": "Honesty always wins",
   "El amor vence al miedo": "Love conquers fear",
   "El poder corrompe": "Power corrupts",
@@ -15442,6 +15438,7 @@ function recB() {
   const L = S.recV || [];
   S.recV = [];
   op(
+    `<div class="c" style="text-align:center"><div class="k"><span class="m">Créditos y legado</span>${btx()}</div><h2>${esc(S.sn)}</h2><div class="m">${S.y0} - ${yr()} · ${esc(S.pn)}</div><h3 style="margin-top:14px">Obras destacadas</h3><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">${L.map((p) => `<div style="width:30%"><canvas class="pt" data-id="${p.id}" style="width:100%;aspect-ratio:2/3;border-radius:6px"></canvas><div class="m">${esc(p.n)}</div></div>`).join("")}</div><h3 style="margin-top:14px">Cifras</h3><div class="m">Estrenos ${S.pj.filter((p) => p.st >= 3).length} · Premios ${S.win} · Nominaciones ${S.nom}<br>Ingresos ${fm0(S.revR || 0)} en dólares de hoy · Hitos ${S.hm.length}/${HT.length}</div><h3 style="margin-top:14px">Legado</h3><b class="titulo" style="font-size:34px;color:var(--g)">${lg}</b><div class="m">${rk}</div><div class="creditos"><b class="titulo">INDUSTRY ART</b><div>Creado por OneZero</div><div class="m">Diseño, programación y arte: OneZero · Infinite Tree</div><details class="nota"><summary aria-label="Más información"></summary><div class="m">Tipografía de títulos: TeX Gyre Heros Condensed (GUST e-foundry, licencia GUST Font License)</div></details></div></div>`,
     `<div class="c"><div class="k"><h2 style="margin:0">${ic("alerta")} Recordatorio</h2>${btx()}</div>${L.map((r) => `<div class="fila"><span>${esc(r.n)}</span><b class="m">${fD(r.d)}</b></div>`).join("")}</div>`,
     1,
   );
@@ -16374,10 +16371,15 @@ const agr = (a, b) => {
     final: ["final", "finales"],
     imposible: ["imposible", "imposibles"],
   }[b];
-  return a + " " + (g ? (a == "Cenizas" ? g[1] : /^(Noche|Frontera|Aurora|Sombra|Marea)$/.test(a) ? g[0] : b) : b);
+  if (!g) return a + " " + b;
+  const w = String(a).trim().split(" ").pop(),
+    pl = /s$/.test(w) && !/(is|us|ís|és)$/.test(w),
+    masc = /^(Cometa|Planeta|Fantasma|Mapa|Día|Dilema|Enigma|Poema|Problema|Sistema|Clima|Drama|Tema|Idioma|Programa|Panorama|Prisma|Cisma|Aroma|Delta|Profeta|Poeta|Atlas|Paralelo|Umbral|Eco)$/.test(w),
+    fem = !masc && (/(a|as|ción|sión|dad|tad|tud|umbre|ie|ez)$/.test(w) || /^(Noche|Medianoche|Nube|Muerte|Llave|Sangre|Fe|Luz|Voz|Paz|Cruz|Raíz|Torre|Gente|Calle|Mente|Fuente|Tarde|Sed|Red|Pared|Imagen|Ley|Flor|Cárcel|Piel|Miel)$/.test(w));
+  return a + " " + (pl ? (fem ? g[1] : b == "final" || b == "imposible" ? g[1] : b + "s") : fem ? g[0] : b);
 };
 const tt12 = () => (IDI == "en" && typeof titGenEN == "function" ? titGenEN() : agr(pk(T1), pk(T2)));
-const ttl0 = () => (IDI == "en" && typeof titGenEN == "function" ? titGenEN() : R() < 0.4 ? tt12() : pk(T3) + " " + pk(T4));
+const ttl0 = () => (IDI == "en" && typeof titGenEN == "function" ? titGenEN() : R() < 0.4 ? tt12() : ((a, b) => (a == "El \u00FAltimo" && /^de (las|la) /.test(b) ? "La \u00FAltima" : a) + " " + b)(pk(T3), pk(T4)));
 const pdO = (x, i) => ({
   i: "p" + i,
   n: x[0],
@@ -32710,7 +32712,7 @@ const TX2 = sp(
 );
 function ttlR() {
   const x = R();
-  return x < 0.3 ? ttl0() : x < 0.55 ? pk(TX1) : x < 0.85 ? pk(TX2) : pk(TX1) + " " + pk(T2);
+  return x < 0.3 ? ttl0() : x < 0.55 ? pk(TX1) : x < 0.85 ? pk(TX2) : agr(pk(TX1), pk(T2));
 }
 const RVA = [
   ["Compa\u00F1\u00EDa Aurora", 1895],
@@ -35086,7 +35088,6 @@ function credits() {
     lg = Math.round((S.leg || 0) + S.win * 3 + S.hm.length * 5 + L.length * 2),
     rk = lg < 60 ? "Aprendiz" : lg < 200 ? "Estudio emergente" : lg < 500 ? "Estudio de renombre" : lg < 1000 ? "Leyenda" : "Mito";
   op(
-    `<div class="c" style="text-align:center"><div class="k"><span class="m">Créditos y legado</span>${btx()}</div><h2>${esc(S.sn)}</h2><div class="m">${S.y0} - ${yr()} · ${esc(S.pn)}</div><h3 style="margin-top:14px">Obras destacadas</h3><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">${L.map((p) => `<div style="width:30%"><canvas class="pt" data-id="${p.id}" style="width:100%;aspect-ratio:2/3;border-radius:6px"></canvas><div class="m">${esc(p.n)}</div></div>`).join("")}</div><h3 style="margin-top:14px">Cifras</h3><div class="m">Estrenos ${S.pj.filter((p) => p.st >= 3).length} · Premios ${S.win} · Nominaciones ${S.nom}<br>Ingresos ${fm0(S.revR || 0)} en dólares de hoy · Hitos ${S.hm.length}/${HT.length}</div><h3 style="margin-top:14px">Legado</h3><b class="titulo" style="font-size:34px;color:var(--g)">${lg}</b><div class="m">${rk}</div><div class="creditos"><b class="titulo">INDUSTRY ART</b><div>Creado por OneZero</div><div class="m">Programación: Faro (Claude, de Anthropic)</div><details class="nota"><summary aria-label="Más información"></summary><div class="m">Tipografía de títulos: TeX Gyre Heros Condensed (GUST e-foundry, licencia GUST Font License)</div></details></div></div>`,
   );
 }
 const DIF = [
@@ -39881,7 +39882,7 @@ function vTend() {
 function ajM() {
   const ch = (a, v, t, on) => `<button class="ch${on ? " on" : ""}" data-a="${a}" data-v="${v}">${t}</button>`;
   let h = `<div class="c"><div class="k"><h2 style="margin:0">${ic("ajustes")} Ajustes</h2><span class="bts">${bi("ajustes")}${btx()}</span></div>
-<label class="m">Idioma · Language</label><div class="chips">${ch("cfgi", "es", "Espa\u00F1ol", IDI == "es")}${ch("cfgi", "en", "English", IDI == "en")}</div>
+<label class="m">Idioma · Language</label><div class="chips">${ch("cfgi", "es", "Espa\u00F1ol", (CFG.idi || "es") == "es")}${ch("cfgi", "en", "English", CFG.idi == "en")}${ch("cfgi", "fr", "Fran\u00E7ais", CFG.idi == "fr")}${ch("cfgi", "pt", "Portugu\u00EAs", CFG.idi == "pt")}</div>
 <label class="m">Tema</label><div class="chips">${[
     ["minimal", "Minimalista"],
     ["oscuro", "Oscuro"],
@@ -47488,7 +47489,7 @@ ACT["pol"] = () => op(polH());
 // ---- Créditos (desde la portada) ----
 ACT["crm"] = () =>
   op(
-    `<div class="c" style="text-align:center"><div class="k"><span class="m">${L37("Créditos", "Credits")}</span>${btx()}</div><h2 class="titulo" style="font-size:2.2rem;margin:10px 0 0">INDUSTRY ART</h2><div class="m">${L37("Simulador de estudio de cine, TV, videojuegos, teatro, música y libros", "Studio simulator for film, TV, games, theatre, music and books")}</div><div class="creditos"><div><b>${L37("Creado por", "Created by")} ${CREADOR}</b></div><div class="m">${L37("Programación", "Programming")}: Faro</div><div class="m">${L37("Los estudios, talentos y obras del juego son ficción; los hechos históricos del arte y el espectáculo son reales.", "The game's studios, talents and works are fiction; the historical facts of art and entertainment are real.")}</div></div>${redesH()}<div class="bts" style="justify-content:center;margin-top:10px">${bt("pol", "", ic("escudo") + " " + L37("Política de privacidad", "Privacy policy"))}</div></div>`,
+    `<div class="c" style="text-align:center"><div class="k"><span class="m">${L37("Créditos", "Credits")}</span>${btx()}</div><h2 class="titulo" style="font-size:2.2rem;margin:10px 0 0">INDUSTRY ART</h2><div class="m">${L37("Simulador de estudio de cine, TV, videojuegos, teatro, música y libros", "Studio simulator for film, TV, games, theatre, music and books")}</div><div class="creditos"><div><b>${L37("Creado por", "Created by")} ${CREADOR}</b></div><div class="m">${L37("Diseño, programación y arte", "Design, programming and art")}: OneZero · Infinite Tree</div><div class="m">${L37("Los estudios, talentos y obras del juego son ficción; los hechos históricos del arte y el espectáculo son reales.", "The game's studios, talents and works are fiction; the historical facts of art and entertainment are real.")}</div></div>${redesH()}<div class="bts" style="justify-content:center;margin-top:10px">${bt("pol", "", ic("escudo") + " " + L37("Política de privacidad", "Privacy policy"))}</div></div>`,
   );
 ACT["gdm"] = () => guide();
 // ---- Novedades ----
