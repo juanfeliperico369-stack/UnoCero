@@ -215,3 +215,47 @@ setTimeout(() => {
     return r;
   };
 })();
+(() => {
+  if (typeof DIC_FR == "undefined") return;
+  const MS = "enero,febrero,marzo,abril,mayo,junio,julio,agosto,septiembre,octubre,noviembre,diciembre".split(","),
+    MF = "janvier,février,mars,avril,mai,juin,juillet,août,septembre,octobre,novembre,décembre".split(","),
+    MP = "janeiro,fevereiro,março,abril,maio,junho,julho,agosto,setembro,outubro,novembro,dezembro".split(",");
+  DIC_FR["Dirige tu estudio de cine, TV, videojuegos, teatro, música y libros, de 1700 a 2300."] = "Dirige ton studio de cinéma, TV, jeux vidéo, théâtre, musique et livres, de 1700 à 2300.";
+  DIC_PT["Dirige tu estudio de cine, TV, videojuegos, teatro, música y libros, de 1700 a 2300."] = "Comande seu estúdio de cinema, TV, videogames, teatro, música e livros, de 1700 a 2300.";
+  const trXH = trX;
+  trX = function (t) {
+    if (XDIC() && t) {
+      const m = t.trim().match(/^(Hoy es )?(\d{1,2}) de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)( de (\d{3,4}))?(\.?)$/);
+      if (m) {
+        const fr = CFG.idi == "fr",
+          j = MS.indexOf(m[3]),
+          d = fr ? m[2] + " " + MF[j] + (m[5] ? " " + m[5] : "") : m[2] + " de " + MP[j] + (m[5] ? " de " + m[5] : "");
+        return t.replace(t.trim(), (m[1] ? (fr ? "Nous sommes le " : "Hoje é ") : "") + d + m[6]);
+      }
+    }
+    return trXH(t);
+  };
+})();
+// Listas separadas por comas: se traduce cada elemento
+(() => {
+  const trXL = trX;
+  trX = function (t) {
+    const r = trXL(t),
+      D = XDIC();
+    if (!D || !t || !/, /.test(t) || t.length > 200) return r;
+    const base = r !== t ? r : t,
+      k = base.trim(),
+      P = k.split(/(, | y | e | et | · )/);
+    let n = 0;
+    const o = P.map((x, i) => {
+      if (i % 2) return x == " y " ? (CFG.idi == "fr" ? " et " : " e ") : x;
+      const v = xl(D, x.trim());
+      if (v != null) {
+        n++;
+        return x.replace(x.trim(), v);
+      }
+      return x;
+    });
+    return n ? base.replace(k, o.join("")) : r;
+  };
+})();

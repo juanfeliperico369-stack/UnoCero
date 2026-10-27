@@ -40,13 +40,23 @@ Creado por OneZero · Infinite Tree.
 - **Tema «Minimalista»:** plano, claro, con un solo color de acento y más aire. Está en Ajustes → Tema.
 
 **Otros cambios**
-- **Idiomas:** francés y portugués en Ajustes y en la portada (botones FR/PT). Traducen la interfaz; los textos largos que no están en el diccionario siguen en español.
+- **Idiomas:** francés y portugués en Ajustes y en la portada (botones FR/PT).
+  - Unas 11.000 frases por idioma.
+  - Plantillas con números («# años», «crítica #») y frases con nombres propios («X se retira a los N años», «X gana la ventaja Y»).
+  - Listas separadas por comas, fechas, y sinopsis automáticas traducidas por frases.
+  - Se midió recorriendo todas las pestañas y el creador: en francés pasaron de 2.885 textos sin traducir a unos 250 segmentos, casi todos nombres inventados de obras, estudios y personajes, que no se traducen a propósito.
 - **Títulos automáticos:** concordancia de género y número («Quimera perdida», «Cenizas eternas», «La última de las sombras»).
 - **Contenido nuevo:**
   - 41 hitos reales con contexto, de 1710 a 2023;
   - 15 datos curiosos;
   - 15 obras de dominio público con temas, personajes y sinopsis (Drácula, Los Miserables, La Odisea, Las mil y una noches, María, Popol Vuh…).
-- **Traído de la versión 1.0:** encargo automático, cronología del estudio (Salón → Tu estudio) y estado anual (Finanzas: caja, valor del catálogo, deudas y patrimonio).
+- **Traído de la versión 1.0:** encargo automático, cronología del estudio (Salón → Tu estudio), estado anual (Finanzas: caja, valor del catálogo, deudas y patrimonio) y biblioteca de clásicos (Obras → Usar material). La compra de derechos con regateo y el modo rápido ya existían en la V40.
+- **Del documento original:**
+  - audiencia focal por afición (cinéfilos, seriéfilos, gamers, teatrófilos, melómanos, bibliófilos), por cultura (16) y comunidad LGBTQ+, con efecto en ventas, crítica y público;
+  - tonos Deprimente, Melancólico, Luminoso y Entretenido;
+  - Oktoberfest en el calendario.
+- **Auditoría del creador:** se cambiaron automáticamente 169 opciones de los 6 medios. El arquetipo y el sexo de los personajes no influían; ahora pesan (variedad de papeles, personajes complejos, antagonista en géneros de acción, reparto mixto).
+- **Gramática:** concordancia de las sinopsis («una persona común se ve obligada») y artículos de plurales femeninos («las religiones ancestrales»).
 - **Creador:** más espacio entre bloques y etiquetas.
 - **Limpieza:** se quitaron comentarios de desarrollo, marcas de versión y referencias a herramientas. Los créditos dicen solo OneZero · Infinite Tree. La versión es 1.0.
 
@@ -56,12 +66,9 @@ Creado por OneZero · Infinite Tree.
 - **Pantallas:** se revisaron a 420 px el documento, los retratos y el tema minimalista.
 
 ## Lo que queda pendiente
-- El francés y el portugués cubren la interfaz. Para traducir las descripciones largas, noticias y eventos hay que seguir ampliando `src/mod/i_dic.js`.
-- No se revisó una por una cada opción del creador para confirmar su peso en el resultado. Solo se ajustaron las que se tocaron en esta versión.
+- En francés y portugués, las noticias y eventos largos con muchas variables pueden mostrar partes en español. Para cubrirlos, se amplían `src/mod/i_dic*.js` o las reglas de `src/mod/j_idioma.js`.
+- La abreviatura «mar» se usa en el juego para marzo y para martes, así que en portugués puede salir «Mar» donde debería decir «Ter».
 - La versión 1.0 tiene otras funciones que aquí no se trajeron:
-  - compra de derechos de libros y franquicias rivales con regateo;
-  - biblioteca de clásicos;
-  - modo rápido de 12 decisiones;
   - línea de vida de talentos;
   - premios en vivo;
   - pirámide de edades;
