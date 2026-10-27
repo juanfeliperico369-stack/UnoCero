@@ -16375,7 +16375,7 @@ const agr = (a, b) => {
   const w = String(a).trim().split(" ").pop(),
     pl = /s$/.test(w) && !/(is|us|ís|és)$/.test(w),
     masc = /^(Cometa|Planeta|Fantasma|Mapa|Día|Dilema|Enigma|Poema|Problema|Sistema|Clima|Drama|Tema|Idioma|Programa|Panorama|Prisma|Cisma|Aroma|Delta|Profeta|Poeta|Atlas|Paralelo|Umbral|Eco)$/.test(w),
-    fem = !masc && (/(a|as|ción|sión|dad|tad|tud|umbre|ie|ez)$/.test(w) || /^(Noche|Medianoche|Nube|Muerte|Llave|Sangre|Fe|Luz|Voz|Paz|Cruz|Raíz|Torre|Gente|Calle|Mente|Fuente|Tarde|Sed|Red|Pared|Imagen|Ley|Flor|Cárcel|Piel|Miel)$/.test(w));
+    fem = !masc && (/(a|as|ción|sión|dad|tad|tud|umbre|ie|ez)$/.test(w) || /^(Noche|Medianoche|Nube|Muerte|Llave|Sangre|Fe|Luz|Voz|Paz|Cruz|Raíz|Torre|Gente|Calle|Mente|Fuente|Tarde|Sed|Red|Pared|Imagen|Ley|Flor|Cárcel|Piel|Miel|Cicatriz|Nariz|Matriz|Perdiz|Lombriz|Codorniz|Hoz|Coz)$/.test(w));
   return a + " " + (pl ? (fem ? g[1] : b == "final" || b == "imposible" ? g[1] : b + "s") : fem ? g[0] : b);
 };
 const tt12 = () => (IDI == "en" && typeof titGenEN == "function" ? titGenEN() : agr(pk(T1), pk(T2)));

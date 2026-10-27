@@ -4,7 +4,7 @@ const X2C = new Map();
 const XRE = /[$€£]?\d[\d.,]*\s?[KMB%]?(?![a-záéíóú])/g;
 function xl(D, y) {
   if (D[y] != null) return D[y];
-  const m = y.match(/^([\s,.;()·]*)([\s\S]*?)([\s,.;()]*)$/),
+  const m = y.match(/^([\s,.;()·▲▼★✓●🔥✂]*)([\s\S]*?)([\s,.;()★✓●🔥✂]*)$/),
     core = m[2];
   if (core !== y && D[core] != null) return m[1] + D[core] + m[3];
   const N = [],
@@ -175,5 +175,43 @@ setTimeout(() => {
       if (re.test(k)) return t.replace(k, k.replace(/\S+$/, (w) => D[w] || w));
     }
     return trX0(t);
+  };
+})();
+// Frases con nombres propios: se traduce la plantilla y se respetan los nombres
+(() => {
+  if (typeof DIC_FR == "undefined") return;
+  const P = [
+    [/^(.+?) se retira a los (\d+) años\.?$/, "$1 prend sa retraite à $2 ans", "$1 se aposenta aos $2 anos"],
+    [/^(.+?) vuelve del retiro\.?$/, "$1 sort de sa retraite", "$1 volta da aposentadoria"],
+    [/^(.+?) muere a los (\d+) años\.?$/, "$1 meurt à $2 ans", "$1 morre aos $2 anos"],
+    [/^(.+?) gana la ventaja «(.+)»\.?$/, "$1 obtient l'atout «$2»", "$1 ganha a vantagem «$2»"],
+    [/^(.+?) ofrece comprar la franquicia «(.+)»\.?$/, "$1 propose de racheter la franchise «$2»", "$1 oferece comprar a franquia «$2»"],
+    [/^(.+?) se reestructura tras un mal año\.?$/, "$1 se restructure après une mauvaise année", "$1 se reestrutura após um ano ruim"],
+    [/^(.+?) compra a (.+?)\.?$/, "$1 rachète $2", "$1 compra $2"],
+    [/^(.+?) te propone una idea\.?$/, "$1 te propose une idée", "$1 propõe uma ideia a você"],
+    [/^comprado por (.+?) en (\d+)$/, "racheté par $1 en $2", "comprado por $1 em $2"],
+    [/^quebró en (\d+)$/, "a fait faillite en $1", "faliu em $1"],
+    [/^Termina la producción de «(.+)»\.?$/, "Fin de la production de «$1»", "Termina a produção de «$1»"],
+    [/^Estadísticas de (.+)$/, "Statistiques de $1", "Estatísticas de $1"],
+    [/^Festival de (.+)$/, "Festival de $1", "Festival de $1"],
+    [/^nivel (\d+)$/, "niveau $1", "nível $1"],
+    [/^(.+?), la saga continúa» de (.+)$/, "$1, la saga continue» de $2", "$1, a saga continua» de $2"],
+  ];
+  Object.assign(DIC_FR, { "Países Bajos": "Pays-Bas", "Islas Salomón": "Îles Salomon", "República Dominicana": "République dominicaine", Melancólico: "Mélancolique", Nómada: "Nomade", Nazismo: "Nazisme", Fusión: "Fusion", "Fusión entre rivales": "Fusion entre rivaux", "Estrena una obra de teatro": "Monte une pièce de théâtre", "anacrónico para esa época": "anachronique pour l'époque", "Franquicias de rivales que cerraron, a precio de remate": "Franchises de rivaux disparus, à prix bradé", "Asociación de Exhibidores": "Association des exploitants", "Blog de enlaces": "Blog de liens" });
+  Object.assign(DIC_PT, { "Países Bajos": "Países Baixos", "Islas Salomón": "Ilhas Salomão", "República Dominicana": "República Dominicana", Melancólico: "Melancólico", Nómada: "Nômade", Nazismo: "Nazismo", Fusión: "Fusão", "Fusión entre rivales": "Fusão entre rivais", "Estrena una obra de teatro": "Estreia uma peça de teatro", "anacrónico para esa época": "anacrônico para a época", "Franquicias de rivales que cerraron, a precio de remate": "Franquias de rivais que fecharam, a preço de liquidação", "Asociación de Exhibidores": "Associação de Exibidores", "Blog de enlaces": "Blog de links" });
+  const N = {
+    fr: [["Audiencia focal", "Public cible"], ["Afición", "Passion"], ["Cultura", "Culture"], ["Ninguna", "Aucune"], ["Comunidad LGBTQ+", "Communauté LGBTQ+"], ["Cinéfilos", "Cinéphiles"], ["Seriéfilos", "Sériephiles"], ["Gamers", "Gamers"], ["Teatrófilos", "Amateurs de théâtre"], ["Melómanos", "Mélomanes"], ["Bibliófilos", "Bibliophiles"], ["Afinar a quién le hablas: rinde más con ese público y un poco menos con el resto.", "Cible ton public : l'œuvre rapporte plus auprès de lui et un peu moins auprès des autres."], ["Biblioteca de clásicos", "Bibliothèque des classiques"], ["Otra obra", "Autre œuvre"], ["Adaptar", "Adapter"], ["Adaptaciones conocidas", "Adaptations connues"], ["Cronología del estudio", "Chronologie du studio"], ["Estado anual", "Bilan annuel"], ["Patrimonio", "Patrimoine net"], ["Valor estimado del catálogo", "Valeur estimée du catalogue"], ["Caza de copias", "Chasse aux copies"], ["Golpes de audiencia", "Coups d'audience"], ["Crecer el catálogo", "Agrandir le catalogue"], ["Carrera de caballos", "Course de chevaux"], ["Póker de dados", "Poker d'as"], ["Rasca y gana del estreno", "Ticket à gratter de la première"], ["Firmar artista o agrupación", "Signer un artiste ou un groupe"], ["Encargo automático", "Commande automatique"], ["Encargo detallado", "Commande détaillée"], ["Elegir estudio…", "Choisir un studio…"], ["Proponer una exclusiva", "Proposer une exclusivité"], ["Oferta recibida", "Offre reçue"], ["Parte que cedes", "Part cédée"], ["Elegir franquicias", "Choisir des franchises"], ["Elegir temas", "Choisir des thèmes"], ["Cambiar temas", "Changer de thèmes"], ["Buscar…", "Rechercher…"], ["Listo", "Terminé"], ["Cancelar", "Annuler"], ["Minimalista", "Minimaliste"], ["Múltiple formato", "Formats multiples"], ["Escaleta", "Séquencier"], ["Atmósfera", "Atmosphère"], ["Escenas para imaginar", "Scènes à imaginer"], ["Preguntas abiertas", "Questions ouvertes"]],
+    pt: [["Audiencia focal", "Público-alvo"], ["Afición", "Paixão"], ["Cultura", "Cultura"], ["Ninguna", "Nenhuma"], ["Comunidad LGBTQ+", "Comunidade LGBTQ+"], ["Cinéfilos", "Cinéfilos"], ["Seriéfilos", "Seriemaníacos"], ["Gamers", "Gamers"], ["Teatrófilos", "Amantes do teatro"], ["Melómanos", "Melômanos"], ["Bibliófilos", "Bibliófilos"], ["Afinar a quién le hablas: rinde más con ese público y un poco menos con el resto.", "Escolha com quem você fala: rende mais com esse público e um pouco menos com o resto."], ["Biblioteca de clásicos", "Biblioteca de clássicos"], ["Otra obra", "Outra obra"], ["Adaptar", "Adaptar"], ["Adaptaciones conocidas", "Adaptações conhecidas"], ["Cronología del estudio", "Cronologia do estúdio"], ["Estado anual", "Balanço anual"], ["Patrimonio", "Patrimônio"], ["Valor estimado del catálogo", "Valor estimado do catálogo"], ["Caza de copias", "Caça às cópias"], ["Golpes de audiencia", "Golpes de audiência"], ["Crecer el catálogo", "Ampliar o catálogo"], ["Carrera de caballos", "Corrida de cavalos"], ["Póker de dados", "Pôquer de dados"], ["Rasca y gana del estreno", "Raspadinha da estreia"], ["Firmar artista o agrupación", "Contratar artista ou grupo"], ["Encargo automático", "Encomenda automática"], ["Encargo detallado", "Encomenda detalhada"], ["Elegir estudio…", "Escolher estúdio…"], ["Proponer una exclusiva", "Propor uma exclusividade"], ["Oferta recibida", "Oferta recebida"], ["Parte que cedes", "Parte cedida"], ["Elegir franquicias", "Escolher franquias"], ["Elegir temas", "Escolher temas"], ["Cambiar temas", "Trocar temas"], ["Buscar…", "Buscar…"], ["Listo", "Pronto"], ["Cancelar", "Cancelar"], ["Minimalista", "Minimalista"], ["Múltiple formato", "Múltiplos formatos"], ["Escaleta", "Escaleta"], ["Atmósfera", "Atmosfera"], ["Escenas para imaginar", "Cenas para imaginar"], ["Preguntas abiertas", "Perguntas abertas"]],
+  };
+  N.fr.forEach(([a, b]) => DIC_FR[a] == null && (DIC_FR[a] = b));
+  N.pt.forEach(([a, b]) => DIC_PT[a] == null && (DIC_PT[a] = b));
+  const trXP = trX;
+  trX = function (t) {
+    const r = trXP(t);
+    if (r !== t || !XDIC() || !t) return r;
+    const k = t.trim(),
+      i = CFG.idi == "fr" ? 1 : 2;
+    for (const p of P) if (p[0].test(k)) return t.replace(k, k.replace(p[0], p[i]));
+    return r;
   };
 })();

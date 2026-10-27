@@ -97,3 +97,12 @@
     if (!PDX[d[0]]) PDX[d[0]] = d.slice(8);
   });
 })();
+E40L([
+  ["Poder y propaganda", "Power and propaganda"], ["Básica", "Basic"], ["Diseñador A&T", "A&T Designer"], ["Japón", "Japan"], ["Ícaro", "Icarus"],
+  ["Momotarō, el niño del durazno", "Momotarō, the Peach Boy"], ["Antonio y Cleopatra", "Antony and Cleopatra"], ["Aladino y la lámpara maravillosa", "Aladdin and the Wonderful Lamp"],
+  ["Alí Babá y los cuarenta ladrones", "Ali Baba and the Forty Thieves"], ["Ricitos de oro y los tres osos", "Goldilocks and the Three Bears"], ["Cinco semanas en globo", "Five Weeks in a Balloon"],
+  ["Little Nemo en Slumberland", "Little Nemo in Slumberland"], ["Popeye el marino", "Popeye the Sailor"], ["Lazarillo de Tormes", "Lazarillo de Tormes"],
+  ["La guerra de los mundos", "The War of the Worlds"], ["La máquina del tiempo", "The Time Machine"], ["El retrato de Dorian Gray", "The Picture of Dorian Gray"],
+  ["El llamado de lo salvaje", "The Call of the Wild"], ["El jardín secreto", "The Secret Garden"], ["Los Miserables", "Les Misérables"], ["La Odisea", "The Odyssey"],
+  ["Las mil y una noches", "One Thousand and One Nights"], ["La vuelta al mundo en ochenta días", "Around the World in Eighty Days"], ["Mujercitas", "Little Women"],
+]);
