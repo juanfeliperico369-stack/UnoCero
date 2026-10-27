@@ -30,6 +30,16 @@ const { chromium } = require("playwright");
           cx();
         } catch (e) {}
       };
+      const raros = new Set();
+      const mira = (ctx) => {
+        const it = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        let x;
+        while ((x = it.nextNode())) {
+          const p = x.parentElement;
+          if (!p || /SCRIPT|STYLE/.test(p.tagName)) continue;
+          if (/\bundefined\b|\bNaN\b|\[object |\bnull\b/.test(x.nodeValue)) raros.add(ctx + " :: " + x.nodeValue.trim().slice(0, 70));
+        }
+      };
       const pulsa = (el, ctx) => {
         window.__ctx = ctx;
         n++;
@@ -38,6 +48,7 @@ const { chromium } = require("playwright");
         } catch (e) {
           log.push(ctx + " :: " + e.message + " @ " + String(e.stack).split("\n")[1]);
         }
+        mira(ctx);
       };
       const subs = TX.es.subs;
       for (let s = 0; s < 6; s++)
@@ -80,7 +91,7 @@ const { chromium } = require("playwright");
           }
         }
       cerrar();
-      return { clics: n, errores: log.slice(0, 60), unicos: [...new Set(log.map((x) => x.split(" :: ")[1]))].slice(0, 30) };
+      return { clics: n, errores: log.slice(0, 60), unicos: [...new Set(log.map((x) => x.split(" :: ")[1]))].slice(0, 30), textosRaros: [...new Map([...raros].map((r) => [r.split(" :: ")[1].replace(/\d+/g, "#"), r])).values()].slice(0, 60) };
     },
     [y0, y1, lang],
   );

@@ -261,3 +261,31 @@ setTimeout(() => {
     return n ? base.replace(k, o.join("")) : r;
   };
 })();
+// Claves que terminan en «: » o con espacio: también valen recortadas
+(() => {
+  if (typeof DIC_FR == "undefined") return;
+  [DIC_FR, DIC_PT].forEach((D) =>
+    Object.keys(D).forEach((k) => {
+      const t = k.replace(/[:\s]+$/, "");
+      if (t && t != k && D[t] == null) D[t] = String(D[k]).replace(/[:\s]+$/, "");
+    }),
+  );
+})();
+// Títulos numerados («2. Qué datos recogemos») y textos con fecha de vigencia
+(() => {
+  const trXN = trX;
+  trX = function (t) {
+    const r = trXN(t),
+      D = XDIC();
+    if (r !== t || !D || !t) return r;
+    const k = t.trim(),
+      m = k.match(/^(\d+\.\s+)(.+)$/);
+    if (m) {
+      const v = xl(D, m[2]);
+      if (v != null) return t.replace(k, m[1] + v);
+    }
+    const f = k.match(/^Versión ([\d.]+) · vigente desde el (.+)$/);
+    if (f) return t.replace(k, (CFG.idi == "fr" ? "Version " + f[1] + " · en vigueur depuis le " : "Versão " + f[1] + " · em vigor desde ") + trX(f[2]));
+    return r;
+  };
+})();

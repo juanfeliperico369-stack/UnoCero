@@ -6,6 +6,18 @@ Creado por OneZero · Infinite Tree.
 - `dist/INDUSTRY_ART.html`: el juego completo, funciona sin conexión.
 - `dist/INDUSTRY_ART_1.0.apk`: la app Android, montada sobre la app 1.0 que ya existía (Capacitor). La llave de firma es nueva (CN=OneZero, O=Infinite Tree) porque la anterior no venía en los archivos. Si en el teléfono está instalada una versión firmada con otra llave, primero hay que desinstalarla.
 
+## Antes de publicar en Google Play (lista de lanzamiento)
+1. **Formato:** Google Play pide un **.aab** (Android App Bundle) para apps nuevas, no un .apk. El .apk de esta entrega sirve para instalar y probar en el teléfono. El .aab no se pudo generar en esta sesión porque no hubo permiso para descargar la herramienta oficial (`bundletool`).
+2. **Envoltorio limpio:** el .apk usa el envoltorio de la app 1.0 (Capacitor), que trae el SDK de anuncios de Google y la biblioteca de compras, aunque el juego no los usa. La política de privacidad del juego dice, con razón, que no hay anuncios ni terceros. Para que todo cuadre en la ficha de Play («Seguridad de los datos») lo recomendable es:
+   - armar la app final con el proyecto Android propio de la V40 (`INDUSTRY_ART_android.zip`, que no tiene anuncios y usa tu llave CN=OneZero);
+   - copiar ahí `dist/INDUSTRY_ART.html` como página del juego;
+   - generar el .aab desde ese proyecto.
+   El juego ya sabe guardar archivos en los dos envoltorios (el puente `AndroidBridge` de la V40 y Capacitor).
+3. **Llave de firma:** el .apk de esta entrega está firmado con una llave nueva. Si publicas con el proyecto de la V40, usa su llave de siempre y guárdala en privado.
+4. **Versión:** la app es 1.0 (versionCode 1 en el envoltorio de la 1.0; el proyecto de la V40 iba en el 47). En Play, cada actualización debe subir el versionCode.
+5. **Ficha de la tienda:** el juego no recoge datos, funciona sin conexión y es apto para todo público según su propio contenido. El contenido adulto existe, pero siempre sugerido. En el cuestionario de clasificación conviene declarar violencia, lenguaje y temas adultos opcionales.
+6. **Probar en un teléfono real:** instalación, guardado y carga, exportar e importar partidas, guardar la ficha pop y el documento de la idea, y el botón Atrás.
+
 ## Qué se corrigió y mejoró (sobre la V40)
 **Pedidos de las capturas**
 - **Temas de la compañía (nueva partida):** antes eran tres listas. Ahora es un botón que abre un selector con buscador (ignora tildes), en orden alfabético y agrupado. Se eligen hasta 3.
@@ -65,9 +77,33 @@ Creado por OneZero · Infinite Tree.
   - tonos Deprimente, Melancólico, Luminoso y Entretenido;
   - Oktoberfest en el calendario.
 - **Auditoría del creador:** se cambiaron automáticamente 169 opciones de los 6 medios. El arquetipo y el sexo de los personajes no influían; ahora pesan (variedad de papeles, personajes complejos, antagonista en géneros de acción, reparto mixto).
+- **Filtro de verosimilitud (el «embudo»):** se auditaron todas las opciones de los seis medios, en ficción y en realidad. Además de «Política», descartaba de más:
+  - **En ficción:** novela política o psicológica, biografías y memorias ficticias, crónica («Crónica de una muerte anunciada»), cocina, educativo, economía, filosofía, ciencia y tecnología.
+  - **En obras de realidad:**
+    - novela de no ficción («A sangre fría»), novela negra real, epopeya histórica, farsa política, tragedia real, telenovela basada en hechos reales y procedimental;
+    - temas como literatura, robótica, transhumanismo, castillos góticos, contacto extraterrestre, fantasmas o maldiciones (como investigación o creencia);
+    - videojuegos basados en hechos reales: shooters históricos, estrategia, sigilo, novela visual y aventura documental.
+  - **Temas históricos:** se pueden tratar desde otra época (por ejemplo, una ficción actual sobre el Holocausto). Al elegir un subgénero de época (vikingos, samuráis, victoriano…), la historia pasa sola a esa época. Si luego la cambias, la crítica lo nota, salvo en fantasía, ciencia ficción o comedia.
+  - **Lo que sigue descartado es coherente:** elfos u orcos en un documental, un reality o un talk show como novela, zombis en una obra de realidad.
+- **Tipos de obra nuevos (57) con decisiones propias:**
+  - **Teatro (21):**
+    - tradiciones de Asia: teatro de sombras chino, wayang kulit (sombras de Java), karagöz (sombras turcas), títeres de agua de Vietnam, bunraku, kabuki, teatro nō, ópera de Pekín y kathakali;
+    - tradiciones europeas: commedia dell'arte, pantomima, teatro callejero y auto sacramental;
+    - formas modernas: teatro de revista, ilusionismo, danza-teatro, teatro documental, teatro del absurdo, teatro negro, ópera rock y circo contemporáneo.
+    - El circo de siempre suma carpa, animales (desde 2000 el público lo castiga) y riesgo sin red.
+  - **Cine (5):** mediometraje, serie B, docuficción, anime y película en realidad virtual.
+  - **Series (6):** anime, radionovela, webserie, microserie vertical, cocina y viajes.
+  - **Videojuegos (8):** metroidvania, soulslike, gestión/tycoon, simulador de vida, party game, cartas digital, realidad aumentada y juego narrativo.
+  - **Música (7):** unplugged, navideño, colaborativo, tributo, infantil, instrumental y concierto virtual.
+  - **Editorial (10):** folletín, novela epistolar, novela juvenil, librojuego, fanzine, audiolibro, revista literaria, enciclopedia, guía de viaje y libro de fotografía.
+  - **Cómo se ven y qué pesan:** cada tipo nuevo tiene su año de aparición, su naturaleza y un efecto base en costo, crítica, público y semanas. En el creador se ven los 12 principales y el resto en «Todos los tipos», con buscador.
 - **Gramática:** concordancia de las sinopsis («una persona común se ve obligada»), artículos de plurales femeninos («las religiones ancestrales») y el logro «Gana 10 Premios de la Academia».
 - **Ficha del talento:** decía «Acepta obras hasta X»; ahora dice «Se desenvuelve mejor hasta X (más allá cobra más y rinde menos)», acorde con la nueva regla.
 - **Selector con buscador:** el campo de búsqueda toma los colores del tema.
+- **Errores encontrados por la prueba de estrés y corregidos:**
+  - **Recordatorio y créditos:** la ventana de «Recordatorio» mostraba los créditos y la de créditos salía vacía. Venía de una entrega anterior de esta misma versión.
+  - **Calendario:** su vista principal tenía el título «undefined».
+  - **Talentos retirados:** la lista decía «energía undefined».
 - **Creador:** más espacio entre bloques y etiquetas.
 - **Limpieza:** se quitaron comentarios de desarrollo, marcas de versión y referencias a herramientas. Los créditos dicen solo OneZero · Infinite Tree. La versión es 1.0.
 
@@ -76,6 +112,9 @@ Creado por OneZero · Infinite Tree.
 - **Prueba de estrés de la interfaz** (`tools/monkey.js`): pulsa los botones de todas las pestañas y de las ventanas que abren. Se corrió en cuatro situaciones, cada una con unas 3.100–3.500 pulsaciones: 1995–2010 en teléfono, 1780–1810 en pantalla de computador, 2080–2100, y 1960–1985 con la interfaz en francés. Cero errores en las cuatro.
 - **Guardar y cargar:** la partida conserva obras, exclusivas, avatar y logros, y sigue jugándose sin errores.
 - **Encargo automático:** probado en los seis medios.
+- **Tipos nuevos:** se produjo una obra de cada uno de los 57, sin errores.
+- **Detector de textos rotos:** la prueba de estrés busca «undefined», «NaN» o «null» visibles después de cada pulsación. Tras las correcciones no encuentra ninguno, ni en las pestañas, ni en el creador de los seis medios, ni en el documento de la idea ni en la ficha pop.
+- **Portada:** completa y correcta en español, inglés, francés y portugués.
 - **Rendimiento:** traducir al francés o al portugués no hace más lenta la interfaz.
 - **Funciones nuevas una por una:** encargos, exclusivas, música, casino, piratería, TV, streaming, crossover, clasificación, ficha pop, temas, avatar, arquetipos, documento, cronología y balance. Todas sin errores.
 - **Pantallas:** se revisaron a 420 px el documento, los retratos y el tema minimalista.
