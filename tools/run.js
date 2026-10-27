@@ -11,7 +11,7 @@ const { chromium } = require("playwright");
   let r;
   try { r = await p.evaluate(`(async()=>{${process.argv[2]}})()`); } catch (e) { r = "EVALERR " + e.message; }
   if (process.argv[4]) await p.screenshot({ path: process.argv[4], fullPage: false });
-  console.log(JSON.stringify(r, null, 0).slice(0, 4000));
+  console.log(process.env.FULL ? JSON.stringify(r) : JSON.stringify(r, null, 0).slice(0, 4000));
   console.log(errs.slice(0, 15).join("\n"));
   await b.close();
 })();
