@@ -106,3 +106,23 @@ E40L([
   ["El llamado de lo salvaje", "The Call of the Wild"], ["El jardín secreto", "The Secret Garden"], ["Los Miserables", "Les Misérables"], ["La Odisea", "The Odyssey"],
   ["Las mil y una noches", "One Thousand and One Nights"], ["La vuelta al mundo en ochenta días", "Around the World in Eighty Days"], ["Mujercitas", "Little Women"],
 ]);
+// Obras repetidas con otro artículo o mayúsculas: se ocultan de las listas (se conservan por las partidas guardadas)
+(() => {
+  const n = (s) =>
+    s
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase()
+      .replace(/^(el|la|los|las) /, "")
+      .replace(/[^a-z0-9 ]/g, "")
+      .trim();
+  const M = {};
+  PD.forEach((x, i) => {
+    if (/metamorfosis/i.test(x[0])) return;
+    const k = n(x[0]);
+    if (M[k] == null) return void (M[k] = i);
+    const o = PD[M[k]];
+    if (!PDX[o[0]] && PDX[x[0]]) PDX[o[0]] = PDX[x[0]];
+    x[2] = 99999;
+  });
+})();

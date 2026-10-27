@@ -468,7 +468,8 @@ b[id^="o-l"]{color:var(--a);font-size:.88rem}
 #fxp{position:fixed;inset:0;z-index:9000;display:none;background:rgba(5,8,18,.62);align-items:flex-end;justify-content:center}
 #fxp.on{display:flex}
 .fxp-h{background:var(--p);color:var(--t);width:100%;max-width:640px;max-height:88vh;display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:20px 20px 0 0;border:1px solid var(--l)}
-.fxp-h input[type=search]{width:100%}
+.fxp-h input[type=search]{width:100%;min-height:46px;padding:10px 14px;border-radius:12px;border:1px solid var(--l);background:var(--bg);color:var(--t);font:inherit;outline:none}
+.fxp-h input[type=search]:focus{border-color:var(--a)}
 .fxp-l{overflow:auto;flex:1;display:flex;flex-direction:column;gap:6px;padding-bottom:6px;min-height:120px}
 .fxp-g{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--m);margin:10px 2px 2px}
 .fxp-i{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;min-height:48px;padding:10px 14px;border-radius:12px;border:1px solid var(--l);background:var(--p2);color:var(--t);font:inherit;cursor:pointer}
@@ -59282,6 +59283,25 @@ E40L([
   ["El llamado de lo salvaje", "The Call of the Wild"], ["El jardín secreto", "The Secret Garden"], ["Los Miserables", "Les Misérables"], ["La Odisea", "The Odyssey"],
   ["Las mil y una noches", "One Thousand and One Nights"], ["La vuelta al mundo en ochenta días", "Around the World in Eighty Days"], ["Mujercitas", "Little Women"],
 ]);
+(() => {
+  const n = (s) =>
+    s
+      .normalize("NFD")
+      .replace(/[̀-ͯ]/g, "")
+      .toLowerCase()
+      .replace(/^(el|la|los|las) /, "")
+      .replace(/[^a-z0-9 ]/g, "")
+      .trim();
+  const M = {};
+  PD.forEach((x, i) => {
+    if (/metamorfosis/i.test(x[0])) return;
+    const k = n(x[0]);
+    if (M[k] == null) return void (M[k] = i);
+    const o = PD[M[k]];
+    if (!PDX[o[0]] && PDX[x[0]]) PDX[o[0]] = PDX[x[0]];
+    x[2] = 99999;
+  });
+})();
 
 const DOCAT = [
   [/Terror|Suspenso|Thriller/, ["pasillos que crujen", "una luz que parpadea", "el silencio justo antes del golpe", "puertas entreabiertas", "respiraciones contenidas"]],
