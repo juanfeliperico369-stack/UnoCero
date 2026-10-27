@@ -90,3 +90,20 @@ V37.mods.push((P, add) => {
 });
 // Oktoberfest del calendario del documento
 if (!FESTV.some((x) => x[0] == "Oktoberfest")) FESTV.push(["Oktoberfest", [9, 20, 16], RG.eu, "Comedia,Fantasía,Deportes", 3, 1810]);
+// Arquetipos y sexo de los personajes: el reparto de papeles también pesa
+const ARQCOMP = ["Antihéroe", "Antivillano", "Sombra", "Redimido", "Traidor", "Doble", "Bufón trágico", "Mártir"];
+V37.mods.push((P, add) => {
+  const C = (P.cast || []).filter((c) => c && c.i != 2);
+  if (C.length < 2) return;
+  const A = C.map((c) => ARQ[c.a] || "Normal"),
+    dif = new Set(A).size / C.length,
+    gn = (P.gn || []).join(" ");
+  if (dif >= 0.75 && C.length >= 3) add(1, 0.5, L37("personajes con papeles bien distintos", "characters with clearly distinct roles"));
+  else if (dif < 0.45) add(-1, -0.5, L37("personajes repetidos: todos cumplen el mismo papel", "repetitive characters: they all play the same role"));
+  const cx = A.filter((a) => ARQCOMP.includes(a)).length;
+  if (cx) add(Math.min(2, cx * 0.8), /Familiar|Infantil/.test(gn) ? -0.5 : 0, L37("personajes moralmente complejos", "morally complex characters"));
+  if (/Acci|Aventura|Superh|Fantas|Épico/.test(gn) && !A.some((a) => /^(Villano|Antivillano|Tirano|Monstruo|Sombra)$/.test(a))) add(-0.5, -1, L37("le falta un antagonista a la altura", "it lacks a worthy antagonist"));
+  if (/Romance/.test(gn) && !A.some((a) => /^(Amante|Seductor)$/.test(a))) add(0, -0.5, L37("romance sin un personaje enamorado", "romance with no one in love"));
+  const sx = new Set(C.map((c) => c.x).filter(Boolean));
+  if (sx.size >= 2) add(0, 0.5, L37("reparto de distintos sexos", "mixed-gender cast"));
+});
