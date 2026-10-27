@@ -2,7 +2,7 @@
 const XDIC = () => (CFG.idi == "fr" && typeof DIC_FR != "undefined" ? DIC_FR : CFG.idi == "pt" && typeof DIC_PT != "undefined" ? DIC_PT : null);
 const X2C = new Map();
 const XNUM = { años: 1, año: 1, semanas: 1, semana: 1, meses: 1, mes: 1, obras: 1, integrantes: 1, días: 1, opciones: 1, talentos: 1 };
-function trX(t) {
+let trX = function (t) {
   const D = XDIC();
   if (!D || !t || !/[A-Za-zÁÉÍÓÚÑáéíóúñü]/.test(t)) return t;
   const c = X2C.get(t);
@@ -42,7 +42,7 @@ function trX(t) {
   if (X2C.size > 30000) X2C.clear();
   X2C.set(t, r);
   return r;
-}
+};
 function trXNodo(n) {
   if (!XDIC()) return;
   if (n.nodeType == 3) {
@@ -139,3 +139,27 @@ setTimeout(() => {
   heroIdiX();
   idiomaX();
 }, 0);
+(() => {
+  const M = "ene,feb,mar,abr,may,jun,jul,ago,sep,oct,nov,dic".split(","),
+    F = "janv,févr,mars,avr,mai,juin,juil,août,sept,oct,nov,déc".split(","),
+    P = "jan,fev,mar,abr,mai,jun,jul,ago,set,out,nov,dez".split(",");
+  if (typeof DIC_FR == "undefined") return;
+  Object.assign(DIC_FR, { Evento: "Événement", Saltar: "Sauter", "+1 sem": "+1 sem", "toca: dólares de hoy": "touche : dollars d'aujourd'hui", "Hasta un evento": "Jusqu'à un événement" });
+  Object.assign(DIC_PT, { Evento: "Evento", Saltar: "Pular", "toca: dólares de hoy": "toque: dólares de hoje", "Hasta un evento": "Até um evento" });
+  M.forEach((m, i) => {
+    DIC_FR[m] = DIC_FR[m] || F[i];
+    DIC_PT[m] = DIC_PT[m] || P[i];
+  });
+  const re = /^(\d{1,2})(?:\s?[–-]\s?(\d{1,2}))? (ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic)$/;
+  const trX0 = trX;
+  trX = function (t) {
+    const D = XDIC();
+    if (D && t) {
+      const k = t.trim(),
+        m = k.match(/^(\d{1,2} \S+) [–-] (\d{1,2} \S+)$/);
+      if (m) return t.replace(k, [m[1], m[2]].map((x) => x.replace(/\S+$/, (w) => D[w] || w)).join(" – "));
+      if (re.test(k)) return t.replace(k, k.replace(/\S+$/, (w) => D[w] || w));
+    }
+    return trX0(t);
+  };
+})();
