@@ -1,6 +1,20 @@
 // ===== Francés y portugués: traducción de la interfaz sobre el texto en español =====
 const XDIC = () => (CFG.idi == "fr" && typeof DIC_FR != "undefined" ? DIC_FR : CFG.idi == "pt" && typeof DIC_PT != "undefined" ? DIC_PT : null);
 const X2C = new Map();
+const XRE = /[$€£]?\d[\d.,]*\s?[KMB%]?(?![a-záéíóú])/g;
+function xl(D, y) {
+  if (D[y] != null) return D[y];
+  const m = y.match(/^([\s,.;()·]*)([\s\S]*?)([\s,.;()]*)$/),
+    core = m[2];
+  if (core !== y && D[core] != null) return m[1] + D[core] + m[3];
+  const N = [],
+    k = core.replace(XRE, (x) => (N.push(x), "#"));
+  if (N.length && D[k] != null) {
+    let i = 0;
+    return m[1] + D[k].replace(/#/g, () => (N[i] != null ? N[i++] : "")) + m[3];
+  }
+  return null;
+}
 const XNUM = { años: 1, año: 1, semanas: 1, semana: 1, meses: 1, mes: 1, obras: 1, integrantes: 1, días: 1, opciones: 1, talentos: 1 };
 let trX = function (t) {
   const D = XDIC();
@@ -10,7 +24,7 @@ let trX = function (t) {
   const a = t.match(/^\s*/)[0],
     z = t.match(/\s*$/)[0],
     k = t.trim();
-  let r = D[k];
+  let r = xl(D, k);
   if (r == null) {
     const m = k.match(/^(.*?)([:.…!?]+|\s?\(\d+\)|\s\d+\/\d+)$/);
     if (m && D[m[1]] != null) r = D[m[1]] + m[2];
@@ -21,7 +35,7 @@ let trX = function (t) {
     const q = P.map((x, i) => {
       if (i % 2) return x;
       const y = x.trim(),
-        v = D[y] != null ? D[y] : null;
+        v = y ? xl(D, y) : null;
       if (v != null) {
         n++;
         return x.replace(y, v);
