@@ -13648,6 +13648,7 @@ function conArt(x) {
   if (ARF_M.has(q)) a = "el";
   else if (ARF_F.has(q)) a = "la";
   else if (/as$/.test(q)) a = "las";
+  else if (/(iones|dades|tades|tudes|umbres|noches|muertes|mujeres|leyes|flores|redes|voces|luces|raíces|calles|fuentes|mentes|torres|naves)$/.test(q)) a = "las";
   else if (/(es|os|is|us)$/.test(q) && q.length > 3) a = "los";
   else if (/(a|ión|dad|tad|tud|umbre|ez)$/.test(q)) a = "la";
   return a + " " + t;
@@ -17735,7 +17736,7 @@ const lc = (s) => (s ? s[0].toLowerCase() + s.slice(1) : s);
 function sinop(P) {
   const g = (P.gn || [])[0] || "Historia",
     c = (P.cast || []).find((x) => x.i == 0),
-    o = c && c.x == "F" ? "a" : "o";
+    o = c ? (c.x == "F" ? "a" : "o") : (P.n || "").length % 2 ? "a" : "o";
   const lug = P.lug == -2 ? ", en varios lugares" : P.lug != null && CY[P.lug] ? ", en " + CY[P.lug][0] : "",
     ep = EPF[P.ep == null ? 9 : P.ep] || "Hoy";
   const quien = c
