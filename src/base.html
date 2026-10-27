@@ -19960,7 +19960,7 @@ function tpM(id) {
 <canvas id="trd" style="height:190px;margin-top:6px"></canvas>
 ${t.tr && TRA[t.tr] ? `<div class="m">Rasgo «${t.tr}»: ${TRA[t.tr][0] > 0 ? "suma calidad" : TRA[t.tr][0] < 0 ? "resta calidad" : "calidad normal"}${TRA[t.tr][1] > 0.02 ? ", con riesgo de sobrecosto" : TRA[t.tr][1] < 0 ? ", ahorra costos" : ""}${TRA[t.tr][2] > 1.05 ? ", y cobra m\u00E1s" : TRA[t.tr][2] < 1 ? ", y cobra menos" : ""}.</div>` : ""}
 ${(t.vt || []).length ? `<div class="m">Ventajas: ${t.vt.map((k) => VTJ[k][0] + " (" + VTJ[k][1] + ")").join(" \u00B7 ")}</div>` : ""}
-${t.r == 7 ? `<div class="m">Belleza ${t.bel} · papeles recomendados: ${papeles(t).join(", ")}</div>` : ""}<div class="m">Acepta obras hasta ${AG[ACL[t.cla == null ? 7 : t.cla]][0]}${t.age < 18 ? " (menor de edad: solo obras para todo p\u00FAblico y juveniles)" : ""}</div>
+${t.r == 7 ? `<div class="m">Belleza ${t.bel} · papeles recomendados: ${papeles(t).join(", ")}</div>` : ""}<div class="m">Se desenvuelve mejor hasta ${AG[ACL[t.cla == null ? 7 : t.cla]][0]} (m\u00E1s all\u00E1 cobra m\u00E1s y rinde menos)${t.age < 18 ? " (menor de edad: solo obras para todo p\u00FAblico y juveniles)" : ""}</div>
 ${rel.length ? `<div class="m">Relaciones: ${rel.join(" \u00B7 ")}</div>` : ""}
 <h3>Otras habilidades</h3>${OTH.map((n, i) => bar(n, t.ot[i], "#35d0ba")).join("")}
 <h3>Fama por región</h3>${CT.map((c, r) => bar(c, famaR(t, r), "#ffc857")).join("")}
