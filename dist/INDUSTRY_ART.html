@@ -42361,6 +42361,7 @@ const DSC_TF = new Set(sp("Fantasmas,Momias vivientes,Robots asesinos"));
 const DSC_TR = new Set(sp("Sectas,Momias,Exorcismos,Brujas y aquelarres,Robots,Megaciudades,Alquimia,Ocultismo,Dioses,Leyendas urbanas,Tecnología"));
 function dscNat(x, k) {
   x = String(x || "");
+  if (k == "tm" && /^(Pol\u00EDtica|Econom\u00EDa|Ciencia|Filosof\u00EDa|Psicolog\u00EDa|Tecnolog\u00EDa|Memorias|Cocina|Educativo)$/.test(x)) return "";
   if (DSC_R.has(x)) return "r";
   if (DSC_TR.has(x) && k != "g") return "";
   if (DSC_F.has(x) || DSC_TF.has(x)) return "f";
