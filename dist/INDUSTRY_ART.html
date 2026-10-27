@@ -59577,6 +59577,33 @@ vFin = function () {
     `<div class="c"><h3 style="margin:0 0 6px">${T40("Estado anual", "Annual balance sheet")}</h3>${filaV(T40("Caja", "Cash"), fm(S.cash))}${filaV(T40("Valor estimado del catálogo", "Estimated catalog value"), fm(cat))}${filaV(T40("Deudas", "Debts"), fm(deu))}<div class="fila"><span><b>${T40("Patrimonio", "Net worth")}</b></span><b style="color:${act - pas >= 0 ? "var(--a)" : "var(--r)"}">${fm(act - pas)}</b></div><div class="m">${T40("El catálogo vale por lo que aún puede rentar en ventanas, licencias y reestrenos; pierde valor con los años.", "The catalog is worth what it can still earn in windows, licenses and re-releases; it loses value over the years.")}</div></div>`
   );
 };
+V37.comp.push((x) => {
+  if (!x.lgrY) {
+    x.lgrY = {};
+    (x.lgr || []).forEach((i) => (x.lgrY[i] = 0));
+  }
+});
+on("mes", () => {
+  if (!S || S.pre) return;
+  S.lgrY = S.lgrY || {};
+  (S.lgr || []).forEach((i) => S.lgrY[i] == null && (S.lgrY[i] = yr()));
+});
+const ybxL = ybx;
+ybx = function () {
+  const y = S.ys ? S.ys.y : null,
+    r = ybxL.apply(this, arguments),
+    h = document.querySelector("#md .hoja");
+  if (y != null && h && S.lgrY) {
+    const L = Object.keys(S.lgrY)
+      .filter((i) => S.lgrY[i] == y && LOGR[i])
+      .map((i) => LOGR[i]);
+    h.insertAdjacentHTML(
+      "beforeend",
+      `<div class="c"><h3 style="margin:0 0 6px">${ic("trofeo")} ${T40("Logros del año", "Achievements of the year")}</h3>${L.length ? L.map((l) => `<div class="fila"><span><b>${esc(l[0])}</b><span class="m"> · ${esc(l[1])}</span></span></div>`).join("") : `<div class="m">${T40("Este año no desbloqueaste logros nuevos.", "You didn't unlock new achievements this year.")}</div>`}</div>`,
+    );
+  }
+  return r;
+};
 
 function biblioH(i) {
   const x = PD[i];
