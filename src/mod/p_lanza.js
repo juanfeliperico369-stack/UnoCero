@@ -56,7 +56,11 @@ const PLX = [
   ],
 ];
 const plxL = (m) => PLX[m].map((p, i) => [p, i]).filter(([p]) => yr() >= p[2]);
-const plxDe = (P) => (P && P.plx != null && PLX[P.m] ? PLX[P.m][P.plx] : null);
+// Plan a medida: el jugador elige qué ventanas abre y cuántas semanas después del estreno
+const VXM = [["cin", "fis", "tv", "str", "col", "sus"], ["tv", "str", "fis", "col"], ["fis", "col", "sus", "str"], ["sal", "gir", "tv", "str", "fis"], ["rad", "fis", "str", "gir", "col"], ["bol", "aud", "fis", "col"]];
+const VXESP = [0, 2, 4, 8, 12, 16, 26, 52];
+const plxMedida = (L) => ["A medida", "Custom", 0, null, 0, 0, Math.max(0.8, 1 - 0.04 * L.filter((w) => w[1] < 8).length), L.map((w) => [w[0], w[1], w[2] || 26, 1]), [], 0, "Tu propio orden de ventanas: abre cada una cuando quieras.", "Your own window order: open each one whenever you like."];
+const plxDe = (P) => (P && P.plx == -1 && P.plxC ? plxMedida(P.plxC) : P && P.plx != null && PLX[P.m] ? PLX[P.m][P.plx] : null);
 function plxRuta(p) {
   const A = p[7].map((w) => w[0]),
     B = p[8].map((w) => w[0]);
@@ -66,14 +70,36 @@ function plxRuta(p) {
 function plxH(P) {
   const L = plxL(P.m);
   if (!L.length) return "";
-  if (PL.plx == null || !PLX[P.m][PL.plx] || yr() < PLX[P.m][PL.plx][2]) PL.plx = 0;
-  const p = PLX[P.m][PL.plx],
+  if (PL.plx == null || (PL.plx != -1 && (!PLX[P.m][PL.plx] || yr() < PLX[P.m][PL.plx][2]))) PL.plx = 0;
+  PL.cus = PL.cus || [];
+  const p = PL.plx == -1 ? plxMedida(PL.cus) : PLX[P.m][PL.plx],
     ef = [];
   if (p[4]) ef.push(T40("crítica", "critics") + " " + (p[4] > 0 ? "+" : "") + p[4]);
   if (p[5]) ef.push(T40("público", "audience") + " " + (p[5] > 0 ? "+" : "") + p[5]);
   if (p[6] != 1) ef.push(T40("ventas del estreno", "premiere sales") + " " + (p[6] > 1 ? "+" : "−") + Math.round(Math.abs(p[6] - 1) * 100) + " %");
-  return `<div class="c sub plx"><h3 style="margin:0 0 4px">${T40("Plan de salida", "Release path")}</h3><div class="m">${T40("Elige en qué orden llega tu obra a cada ventana: puede empezar por streaming, por la gira o por el disco, no solo por el estreno de siempre.", "Choose the order in which your work reaches each window: it can start on streaming, on tour or on disc, not only with the usual premiere.")}</div><div class="chips">${L.map(([q, i]) => chx("plx", i, esc(LL(q)), PL.plx == i)).join("")}</div><div class="m"><b>${esc(plxRuta(p))}</b></div><div class="m">${esc(LL([p[10], p[11]]))}${ef.length ? " · " + ef.join(" · ") : ""}</div></div>`;
+  return `<div class="c sub plx"><h3 style="margin:0 0 4px">${T40("Plan de salida", "Release path")}</h3><div class="m">${T40("Elige en qué orden llega tu obra a cada ventana: puede empezar por streaming, por la gira o por el disco, no solo por el estreno de siempre.", "Choose the order in which your work reaches each window: it can start on streaming, on tour or on disc, not only with the usual premiere.")}</div><div class="chips">${L.map(([q, i]) => chx("plx", i, esc(LL(q)), PL.plx == i)).join("")}${chx("plx", -1, ic("ajustes") + " " + T40("A medida", "Custom"), PL.plx == -1)}</div>${PL.plx == -1 ? plxCusH(P) : ""}<div class="m"><b>${esc(plxRuta(p))}</b></div><div class="m">${esc(LL([p[10], p[11]]))}${ef.length ? " · " + ef.join(" · ") : ""}</div></div>`;
 }
+function plxCusH(P) {
+  const L = PL.cus,
+    disp = (VXM[P.m] || []).filter((k) => VX[k][3](yr()) > 0 && !L.some((w) => w[0] == k));
+  return `<div class="m">${T40("Elige las ventanas en el orden que quieras y cuándo abre cada una. Abrir muchas al mismo tiempo le quita ventas al estreno.", "Pick the windows in any order and when each opens. Opening many at once takes sales from the premiere.")}</div>${L.map(
+    (w, i) =>
+      `<div class="fila"><span>${i + 1}. ${esc(LL(VX[w[0]]))}</span><span class="bts"><select onchange="plxCusE(${i},+this.value)" aria-label="${T40("Cuándo abre", "When it opens")}">${VXESP.map((e) => `<option value="${e}"${w[1] == e ? " selected" : ""}>${e ? "+" + e + " " + T40("sem", "wk") : T40("al estrenar", "at release")}</option>`).join("")}</select>${bt("plxq", i, ic("cerrar"))}</span></div>`,
+  ).join("")}<div class="chips">${disp.map((k) => chx("plxa", k, ic("mas") + " " + esc(LL(VX[k])), false)).join("")}</div>`;
+}
+function plxCusE(i, e) {
+  if (PL.cus && PL.cus[i]) PL.cus[i][1] = e;
+  if (typeof pu == "function") pu();
+}
+ACT["plxa"] = (v) => {
+  PL.cus = PL.cus || [];
+  if (!PL.cus.some((w) => w[0] == v)) PL.cus.push([v, PL.cus.length ? Math.min(52, PL.cus[PL.cus.length - 1][1] + 8) : 0, 26]);
+  return pl();
+};
+ACT["plxq"] = (v) => {
+  (PL.cus || []).splice(+v, 1);
+  return pl();
+};
 const plPX = pl;
 pl = function () {
   const r = plPX.apply(this, arguments),
@@ -86,7 +112,7 @@ ACT["plx"] = (v) => {
   const P = pj(PL.id);
   if (!P) return;
   PL.plx = +v;
-  const p = PLX[P.m][PL.plx];
+  const p = PL.plx == -1 ? null : PLX[P.m][PL.plx];
   if (p && p[3] != null) PL.rf = p[3];
   if (P.m == 0 && p) PL.fz = p[3] == 2 ? [0, 0, 1] : p[3] == 1 ? [0, 1, 0] : PL.fz && PL.fz[0] ? PL.fz : [1, 1, 1];
   return pl();
@@ -94,13 +120,14 @@ ACT["plx"] = (v) => {
 const rlPX = ACT["rl"];
 ACT["rl"] = () => {
   const P = pj(PL.id),
-    p = P ? PLX[P.m] && PLX[P.m][PL.plx | 0] : null;
+    p = P && PL.plx != -1 ? PLX[P.m] && PLX[P.m][PL.plx | 0] : null;
   if (P && p && p[3] != null) PL.rf = p[3];
   if (P && P.m == 0 && p && p[3] != null) PL.fz = p[3] == 2 ? [0, 0, 1] : p[3] == 1 ? [0, 1, 0] : PL.fz;
   const st0 = P ? P.st : null,
     r = rlPX();
   if (P && P.st != st0) {
     P.plx = PL.plx | 0;
+    if (P.plx == -1) P.plxC = (PL.cus || []).map((w) => w.slice());
     if (P.m == 0 && P.plx == 3 && P.fz) P.fz = [P.fz[0], 0];
   }
   return r;

@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 3 (se instala encima de la entrega anterior, que era la 2). Cada actualización debe subir el versionCode (`VC=4 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 4 (se instala encima de la entrega anterior, que era la 3). Cada actualización debe subir el versionCode (`VC=5 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -164,6 +164,31 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 - **Logo nuevo:** un ensō, el círculo zen pintado de un solo trazo, con cerdas, presión y final de pincel seco, en dorado, coral y magenta: es el arte. En su centro, un triángulo exacto en turquesa: la industria. Está en el ícono de la app (normal, redondo, adaptable y monocromo para los temas de Android 13 o más), en la pestaña del navegador y sobre el título de la portada.
 - **Comparación con la 1.0:** la estrategia de prensa en convenciones, el trasfondo del avatar y los 24 negocios ya estaban en esta versión, que además tiene más negocios.
 
+**Ayudas, calendario, lanzamiento, música y cifras exactas**
+- **Botón «i» en cada opción:** como en la versión 1.0, cada decisión tiene su «i».
+  - Al tocarlo explica cómo funciona esa opción en el juego y trae un dato curioso real de la historia del cine, la televisión, los videojuegos, el teatro, la música o los libros.
+  - Son 129 fichas en español, inglés, francés y portugués. Cubren el creador de los seis medios (tipos, géneros, temas, arcos, clasificación, presupuesto, rodaje, equipo, plataformas, motor, actos, disco, tirada…), el plan de salida y la gestión del estudio (bancos, inversiones, streaming, canal, parques, consola, filiales, casino, piratería, prensa, premios…).
+  - Aparecen solas al lado de cada etiqueta en todas las pantallas. Si la opción ya tenía una nota del juego, la nota se une a la ficha para no repetir el símbolo.
+  - Se cierran tocando la ficha, con Escape o con el botón Atrás del teléfono.
+- **Calendario según el documento:** se sumaron la Semana de la Moda de Milán, París y Nueva York, el Día de la Mujer, el Día de la Tierra, el Día del Libro, las fiestas folclóricas, Burning Man, el Día Internacional de la Paz y la Comic Con. Halloween suma terror y monstruos, y Pascua, lo religioso.
+  - Cada fiesta mueve las ventas de las obras que le sientan: la moda a la música y el teatro, el Día del Libro y la Comic Con a los libros, y Burning Man a la música (+15 %).
+  - Si en una semana caen varias fiestas, cada una suma un poco más.
+- **Lanzamiento en dos pasos:**
+  - **1 · Marketing:** con la obra terminada, se paga la campaña y la obra puede quedar en reposo.
+  - **2 · Fecha y plan de salida:** después se elige la fecha y cómo sale, sin volver a pagar la campaña.
+  - Si pasan más de 12 semanas entre la campaña y el estreno, la expectativa se enfría poco a poco.
+  - El calendario muestra **dos años completos**, mes a mes y semana a semana. Cada semana indica la temporada, la competencia y la fiesta que le sienta a la obra.
+- **Plan de salida a medida:** además de los planes de siempre, se pueden ordenar las ventanas (cines, físico, TV, streaming, gira, radio, digital…) y decidir cuándo abre cada una. Abrir muchas a la vez le quita ventas al estreno.
+- **Música de fondo:** ahora suena. Son cuatro piezas tranquilas y elegantes (Salón, Vals de gala, Nocturno y Horizonte), tocadas en vivo por el propio juego con piano, cuerdas y campanas, con reverberación. Están activas por defecto y en Ajustes hay volumen y elección de pieza («Según la época» cambia sola). Se pausan al salir de la app.
+- **Cifras exactas:**
+  - El presupuesto se puede escribir a mano, al peso: por ejemplo «12.345.678», «45,5 M» o «800 K». El deslizador se coloca en esa cifra y la clase (A, B, C) se recalcula.
+  - Si la cifra se sale del rango de la época, el juego avisa cuál es el mínimo y el máximo.
+  - Los demás deslizadores que muestran un número (episodios, extras, minutos, tramas, año exacto, semanas, habilidad…) tienen al lado una casilla para escribir el valor exacto.
+- **Traducciones:**
+  - Se tradujeron al francés y al portugués el calendario, el plan de salida y sus fechas, los canales de marketing, los ajustes, la música y las misiones de estrenar.
+  - El escáner de idiomas ahora también recorre el creador rápido, los ajustes y el plan de salida de los seis medios.
+  - En francés, los dos puntos llevan el espacio de esa lengua («Prix : …»).
+
 ## Pruebas
 - **Partidas automáticas en Chromium:** 1750–1830, 1780–1840, 1920–1975, 1925–1985, 1990–2035, 1990–2060 y 2026–2120, sin errores ni quiebra.
 - **Prueba de estrés de la interfaz** (`tools/monkey.js`): pulsa los botones de todas las pestañas y de las ventanas que abren. Se corrió en cuatro situaciones, cada una con unas 3.100–3.500 pulsaciones: 1995–2010 en teléfono, 1780–1810 en pantalla de computador, 2080–2100, y 1960–1985 con la interfaz en francés. Cero errores en las cuatro.
@@ -186,7 +211,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Lo que queda pendiente
 - En francés y portugués, las noticias y eventos largos con muchas variables pueden mostrar partes en español. Para cubrirlos, se amplían `src/mod/i_dic*.js` o las reglas de `src/mod/j_idioma.js`.
-- La abreviatura «mar» se usa en el juego para marzo y para martes, así que en portugués puede salir «Mar» donde debería decir «Ter».
+- La abreviatura «mar» se usa en el juego para marzo y para martes. En las fechas del plan de salida ya se distingue, pero en otros textos sueltos el portugués puede mostrar «Mar» donde debería decir «Ter».
 - De la versión 1.0 no se trajo «Quitar anuncios», porque esta versión no tiene anuncios.
 - Probar la app en un teléfono real (no se pudo aquí).
 
@@ -196,4 +221,4 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 - **App Android:** `tools/android.sh dist/INDUSTRY_ART.html dist/INDUSTRY_ART_1.0 <llave.jks> <android.jar> <bundletool.jar>` arma el .apk y el .aab desde `android/`. Necesita Java, las build-tools de Android (variable `BT`), el `android.jar` de la plataforma 36 y bundletool.
 - **Probar:** `node tools/run.js 'await BOT.correr({y0:1990,y1:2010}); return 1'`.
 - **Prueba de estrés:** `node tools/monkey.js <año inicial> <año final> <ancho> [es|en|fr|pt]`.
-- **Cobertura de idiomas:** `node tools/cov2.js fr salida.txt [largo máximo]` recorre las pestañas y el creador detallado de los seis medios y lista los textos que siguen en español.
+- **Cobertura de idiomas:** `node tools/cov2.js fr salida.txt [largo máximo]` recorre las pestañas, el creador (detallado y rápido) de los seis medios, los ajustes y el plan de salida, y lista los textos que siguen en español.

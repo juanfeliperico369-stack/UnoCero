@@ -39,6 +39,45 @@ const { chromium } = require("playwright");
         }
         cx();
       } catch (e) {}
+    for (let m = 0; m < 6; m++)
+      try {
+        S.med = m;
+        ACT.np();
+        W.md = "r";
+        wz();
+        grab();
+        cx();
+      } catch (e) {}
+    try {
+      ajM();
+      grab();
+      cx();
+    } catch (e) {}
+    for (let m = 0; m < 6; m++)
+      try {
+        ACT.enc(rvVivos()[0] + "|" + m);
+        W.md = "r";
+        const P = producir();
+        cx();
+        for (let i = 0; i < 60 && pj(P.id).st < 1; i++) step();
+        ACT.plan(P.id);
+        grab();
+        ACT.plp("fe");
+        grab();
+        ACT.plx("-1");
+        grab();
+        ACT.plp("mk");
+        if (typeof ACT.mkr == "function") ACT.mkr();
+        ACT.det(P.id);
+        grab();
+        ACT.plan(P.id);
+        grab();
+        cx();
+      } catch (e) {}
+    try {
+      const B = [...document.querySelectorAll("#app .inf")].slice(0, 3);
+      B.forEach((x) => (x.click(), grab()));
+    } catch (e) {}
     return [...seen.entries()].sort((a, b) => b[1] - a[1]).map((x) => x[0]);
   }, [lang, +(process.argv[4] || 40)]);
   require("fs").writeFileSync(process.argv[3] || "cov.txt", r.join("\n"));

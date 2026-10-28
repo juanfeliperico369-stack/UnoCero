@@ -15175,7 +15175,7 @@ const estN = (t, r) => {
   const k = Math.floor((((mesT(t) % 12) + 1) % 12) / 3);
   return ESTN[SUR[r] ? (k + 2) % 4 : k];
 };
-function festG(t, gn) {
+function festG(t, gn, m) {
   const n0 = semIni(t),
     n1 = semFin(t),
     y = dnA(n0 + 3).y;
@@ -15184,7 +15184,7 @@ function festG(t, gn) {
   festC(y)
     .concat(festC(y - 1))
     .forEach((f) => {
-      if (f[1] >= n0 && f[0] <= n1 && f[5] > b && (!f[4] || sp(f[4]).some((x) => (gn || []).includes(x)))) {
+      if (f[1] >= n0 && f[0] <= n1 && f[5] > b && (!f[4] || sp(f[4]).some((x) => (gn || []).includes(x) || (x[0] == "@" && m != null && x.slice(1).split("+").includes(String(m)))))) {
         b = f[5];
         n = f[2];
       }
@@ -16280,7 +16280,7 @@ function dflt() {
   const r = cl((0.55 * Math.max(0, S.cash)) / (TB(W.m) * 1.45), 0.02, 1);
   W.bv = BVk(r);
 }
-const BD = () => sig(BRk(W.bv) * TB(W.m));
+const BD = () => (W.bx > 0 && W.bxv === W.bv && W.bxt === TB(W.m) ? W.bx : sig(BRk(W.bv) * TB(W.m)));
 const semProd = (br, ln) => cl(Math.round(4 + 3 * Math.log2(1 + 2 * br) + ((ln || 50) / 100) * 6), 3, 40);
 const alcEd = (ag, m) => {
   const y = yr(),
@@ -21149,23 +21149,23 @@ function pl() {
   const P = pj(PL.id);
   if (!P) return cx();
   const L = MK.map((x, i) => i).filter((i) => mkOk(i) && !([4, 10, 11].includes(i) && P.m != 0));
-  op(`<div class="c"><div class="k"><h2 style="margin:0">Plan de lanzamiento</h2><span class="bts">${bi("plan")}${btx()}</span></div>
+  op(`<div class="c plw" data-paso="${PL.paso || "mk"}"><div class="k"><h2 style="margin:0">Plan de lanzamiento</h2><span class="bts">${bi("plan")}${btx()}</span></div>
 <p class="m">«${esc(P.n)}» · ${MD[P.m][0]} · crítica estimada ${Math.round(P.c / 5) * 5} · público estimado ${Math.round(P.a / 5) * 5}</p>
-<h3>Marketing</h3><div class="m">Cada canal llega a parte del público; sumar canales rinde cada vez menos. Tu público: ${GRUc.filter((g, k) => (AGX[P.age] || AGX[2])[k] >= 0.75).join(", ") || "todas las edades"}. ★ = el canal llega bien a tu público.</div><div class="chips">${L.map((i) => `<button class="ch${PL.mk.includes(i) ? " on" : ""}" data-a="pm" data-v="${i}">${MK[i][0]}${mkFit(i, P) >= 1.03 ? " \u2605" : ""} · ${fm(mkCost(i, P.m, P))}</button>`).join("")}</div>
-<label class="m">Tipo de lanzamiento</label><select id="p-r" onchange="pu()">${RF.map((x, i) => `<option value="${i}"${i == PL.rf ? " selected" : ""}>${x[0]}${i ? " (llega a menos gente)" : ""}</option>`).join("")}</select>
+<div class="pl-mk"><h3>Marketing</h3><div class="m">Cada canal llega a parte del público; sumar canales rinde cada vez menos. Tu público: ${GRUc.filter((g, k) => (AGX[P.age] || AGX[2])[k] >= 0.75).join(", ") || "todas las edades"}. ★ = el canal llega bien a tu público.</div><div class="chips">${L.map((i) => `<button class="ch${PL.mk.includes(i) ? " on" : ""}" data-a="pm" data-v="${i}">${MK[i][0]}${mkFit(i, P) >= 1.03 ? " \u2605" : ""} · ${fm(mkCost(i, P.m, P))}</button>`).join("")}</div>
+</div><div class="pl-fe"><label class="m">Tipo de lanzamiento</label><select id="p-r" onchange="pu()">${RF.map((x, i) => `<option value="${i}"${i == PL.rf ? " selected" : ""}>${x[0]}${i ? " (llega a menos gente)" : ""}</option>`).join("")}</select>
 ${P.m == 0 ? `<label class="m">Regalías para las cadenas de cines: <b id="p-o"></b></label><input type="range" id="p-y" min="30" max="60" value="${PL.roy}" oninput="pu()"><details class="nota"><summary aria-label="Más información"></summary><div class="m">Menos regalías te dejan más de cada entrada, pero las cadenas te dan menos salas.</div></details>` : ""}
-${plV19(P)}<label class="m">Fecha de estreno · temporada y competencia (0 = retener)</label><select id="p-k" onchange="pu()"><option value="0"${PL.k == 0 ? " selected" : ""}>0 · Retener: decidir después</option>${Array.from(
-    { length: 16 },
+</div>${plV19(P)}<div class="pl-fe pl-fecha"><label class="m">Fecha de estreno · temporada y competencia (0 = retener)</label><select id="p-k" onchange="pu()"><option value="0"${PL.k == 0 ? " selected" : ""}>0 · Retener: decidir después</option>${Array.from(
+    { length: 104 },
     (_, i) => {
       const k = i + 1,
         t = S.t + k,
         w = (t % 52) + 1,
-        fe = festG(t, P.gn),
+        fe = festG(t, P.gn, P.m),
         c = compSem(t, P.m),
         d = semIni(t) + diaEst(P.m, S.y0 + Math.floor(t / 52));
       return `<option value="${k}"${k == PL.k ? " selected" : ""}>${DSN[dsem(d)]} ${fD(d)} (sem ${w}) · ×${dec1(tempW(t, P.m), 2)} ${estN(t, S.reg).toLowerCase()} · competencia ${c.lvl < 0 ? "por conocer" : NIV[c.lvl]}${fe ? " \u00B7 " + fe : ""}</option>`;
     },
-  ).join("")}</select><div id="p-s" style="margin-top:10px"></div></div>`);
+  ).join("")}</select></div><div id="p-s" style="margin-top:10px"></div></div>`);
   pu();
 }
 function pu() {
@@ -21473,19 +21473,27 @@ ACT["rl"] = () => {
     cx();
     return toast("\u00AB" + P.n + "\u00BB queda retenida: estr\u00E9nala cuando quieras");
   }
-  const c = mkTot(PL.mk, P),
+  const ya = !!P.mkOk,
+    proK = ya ? (P.proK || []).slice() : null;
+  if (ya) PL.pro = [];
+  const c = ya ? 0 : mkTot(PL.mk, P),
     cx2 = plExtraC(P);
   if (c + cx2 > S.cash) return toast("Fondos insuficientes");
   gasta("marketing", c + cx2);
   plAplica(P);
-  P.mkc = Math.round(c);
+  if (ya) {
+    P.pro = proK;
+    PL.mk = (P.mk || PL.mk).slice();
+  }
+  P.mkc = ya ? P.mkc0 | 0 : Math.round(c);
   P.mk = PL.mk.slice();
   P.mkh = PL.mk.reduce((x, i) => x + MK[i][2], 0);
   P.rf = RF[PL.rf][1];
   P.roy = PL.roy + (P.m == 0 && P.cad ? CAD[P.cad][1] : 0);
   P.rt = S.t + PL.k;
   P.cost = P.paid + P.mkc;
-  P.E = expect(P, P.mk);
+  P.E = ya && P.mkE != null ? P.mkE : expect(P, P.mk);
+  if (!ya) P.mk0 = S.t;
   P.st = 2;
   nws(`«${P.n}» se estrena el ${fD(semIni(P.rt) + diaEst(P.m, S.y0 + Math.floor(P.rt / 52)))} (semana ${(P.rt % 52) + 1}).`);
   cx();
@@ -21639,11 +21647,11 @@ function plV19(P) {
   if (!PL.dub) PL.dub = [0, 1, 2, 3, 4, 5].map((r) => (lgOk(P, r) ? 0 : 1));
   const y = yr(),
     mal = [0, 1, 2, 3, 4, 5].filter((r) => !lgOk(P, r));
-  return `<h3>Promociones</h3><details class="nota"><summary aria-label="Más información"></summary><div class="m">Suben la expectativa y mueven a la crítica y al público; algunas dejan ventas de productos.</div></details><div class="chips">${PRM.map((x, i) => (prmOk(i) ? `<button class="ch${PL.pro.includes(i) ? " on" : ""}" data-a="ppr" data-v="${i}">${x[0]} · ${fm(prmC(i, P))}</button>` : "")).join("")}</div>
-<h3>Estreno por región</h3><details class="nota"><summary aria-label="Más información"></summary><div class="m">Retener = no estrena ahí. Limitado llega a menos salas; escalonado empieza limitado y se amplía en la tercera semana.</div></details>${CT.map((c, r) => `<div class="k" style="flex-wrap:nowrap;gap:6px"><span class="m" style="flex:1">${c}${lgOk(P, r) ? "" : " \u00B7 otro idioma"}</span><select onchange="PL.rm[${r}]=+this.value;pu()">${RMO.map((x, i) => `<option value="${i}"${PL.rm[r] == i ? " selected" : ""}>${x[0]}</option>`).join("")}</select></div>`).join("")}<div class="bts">${bt("prc", "", "Copiar la primera regi\u00F3n a todas")}</div>
+  return `<div class="pl-mk"><h3>Promociones</h3><details class="nota"><summary aria-label="Más información"></summary><div class="m">Suben la expectativa y mueven a la crítica y al público; algunas dejan ventas de productos.</div></details><div class="chips">${PRM.map((x, i) => (prmOk(i) ? `<button class="ch${PL.pro.includes(i) ? " on" : ""}" data-a="ppr" data-v="${i}">${x[0]} · ${fm(prmC(i, P))}</button>` : "")).join("")}</div>
+</div><div class="pl-fe"><h3>Estreno por región</h3><details class="nota"><summary aria-label="Más información"></summary><div class="m">Retener = no estrena ahí. Limitado llega a menos salas; escalonado empieza limitado y se amplía en la tercera semana.</div></details>${CT.map((c, r) => `<div class="k" style="flex-wrap:nowrap;gap:6px"><span class="m" style="flex:1">${c}${lgOk(P, r) ? "" : " \u00B7 otro idioma"}</span><select onchange="PL.rm[${r}]=+this.value;pu()">${RMO.map((x, i) => `<option value="${i}"${PL.rm[r] == i ? " selected" : ""}>${x[0]}</option>`).join("")}</select></div>`).join("")}<div class="bts">${bt("prc", "", "Copiar la primera regi\u00F3n a todas")}</div>
 ${mal.length ? `<h3>Doblaje</h3><div class="m">Tu obra está en ${esc((P.idi || "tu idioma").toLowerCase())}. Sin doblaje llega a menos gente donde se habla otro idioma (−20 %). ${fm(dubC(P))} por región.</div><div class="chips">${mal.map((r) => `<button class="ch${PL.dub[r] ? " on" : ""}" data-a="pdb" data-v="${r}">${CT[r]}</button>`).join("")}</div>` : ""}
 ${P.m == 0 ? `<h3>Contrato con las cadenas</h3><select onchange="PL.cad=+this.value;pu()">${CAD.map((x, i) => `<option value="${i}"${PL.cad == i ? " selected" : ""}>${x[0]} · ${x[4]}</option>`).join("")}</select>` : ""}
-${P.m == 0 && y >= 1950 ? salidaH(P) : ""}`;
+${P.m == 0 && y >= 1950 ? salidaH(P) : ""}</div>`;
 }
 const plExtraC = (P) =>
   (PL.pro || []).reduce((a, i) => a + prmC(i, P), 0) + (PL.dub ? PL.dub.filter((x, r) => x && !lgOk(P, r)).length * dubC(P) : 0);
@@ -39963,7 +39971,7 @@ function ajM() {
   ]
     .map((x) => ch("cfgx", x[0], x[1], CFG.txt == x[0]))
     .join("")}</div>
-<label class="m">Accesibilidad y sonido</label><div class="chips">${ch("cfgb", "dalt", "Colores para daltonismo", CFG.dalt)}${ch("cfgb", "anim", "Animaci\u00F3n", CFG.anim)}${ch("cfgb", "snd", "Sonido", CFG.snd)}${ch("cfgm", "", "M\u00FAsica de fondo", CFG.mus)}${S ? ch("cfgg", "", "Gu\u00EDa de la partida", guiaOn()) : ""}${ch("cfgb", "real", "D\u00F3lares de hoy", CFG.real)}</div>
+<label class="m">Accesibilidad y sonido</label><div class="chips">${ch("cfgb", "dalt", "Colores para daltonismo", CFG.dalt)}${ch("cfgb", "anim", "Animaci\u00F3n", CFG.anim)}${ch("cfgb", "snd", "Sonido", CFG.snd)}${ch("cfgm", "", "M\u00FAsica de fondo", CFG.mus)}${S ? ch("cfgg", "", "Gu\u00EDa de la partida", guiaOn()) : ""}${ch("cfgb", "real", "D\u00F3lares de hoy", CFG.real)}</div>${typeof muxAjH == "function" ? muxAjH() : ""}
 <label class="m">Autoguardado</label><div class="chips">${[
     ["mes", "Cada mes"],
     ["anio", "Cada a\u00F1o"],
@@ -43567,7 +43575,7 @@ function mxTab(rap) {
     return `${mxCh("per", "Perspectiva")}${mxCh("gra", "Gráficos")}${mxCh("fps", "Fluidez")}${mxCh("mod", "Modos de juego", 1)}${req.length ? `<div class="m" style="color:var(--g)">Tus géneros piden: ${req.map((i) => MXT.mod[i][0].toLowerCase()).join(", ")}.</div>` : ""}${mxCh("mun", "Estructura del mundo")}${mxRng("niv", 1, 300, mx.niv || 10, "Niveles, misiones o zonas", mxNivTxt())}${mxCh("dif", "Dificultad")}${mxCh("bsoj", "Banda sonora")}${mxCh("voz", "Voces")}${mxCh("fun", "Funciones", 1)}${notaV("Cada decisión cuesta y suma algo. Lo marcado con ✓ encaja con tus géneros. Unos gráficos viejos para su época restan público (salvo el pixel art desde 2008, que vuelve como estilo). El mundo abierto pide horas de juego; un juego lineal muy largo cansa.")}`;
   }
   if (m == 3) {
-    return `${mxRng("act", 1, 5, mx.act || 1, "Actos")}${mxRng("esc", 1, 12, mx.esc || 4, "Escenas por acto", plural((mx.act || 1) * (mx.esc || 4), "escena", "escenas") + " en total")}${(mx.act || 1) > 1 ? `<div class="chips">${chx("mx", "int|1", "Con intermedio (y bar)", mx.int)}</div>` : ""}<div class="m">${mxTeatroTxt()}</div>${mxCh("fte", "Formato teatral")}${mxCh("set", "Escenografía")}${mxCh("ves", "Vestuario")}${mxCh("bsot", "Música de la obra")}${mxCh("pre", "Precio de la entrada")}${notaV("La entrada popular llena más la sala; la premium deja más si la obra es buena, pero vacía butacas si es floja. El intermedio da un respiro en las obras largas y deja dinero en el bar.")}`;
+    return `${mxRng("act", 1, 5, mx.act || 1, "Actos")}${mxRng("esc", 1, 12, mx.esc || 4, "Escenas por acto", L37(plural((mx.act || 1) * (mx.esc || 4), "escena", "escenas") + " en total", plural((mx.act || 1) * (mx.esc || 4), "scene", "scenes") + " in total"))}${(mx.act || 1) > 1 ? `<div class="chips">${chx("mx", "int|1", "Con intermedio (y bar)", mx.int)}</div>` : ""}<div class="m">${mxTeatroTxt()}</div>${mxCh("fte", "Formato teatral")}${mxCh("set", "Escenografía")}${mxCh("ves", "Vestuario")}${mxCh("bsot", "Música de la obra")}${mxCh("pre", "Precio de la entrada")}${notaV("La entrada popular llena más la sala; la premium deja más si la obra es buena, pero vacía butacas si es floja. El intermedio da un respiro en las obras largas y deja dinero en el bar.")}`;
   }
   if (m == 5) {
     const pg = W.du || 300;
@@ -46777,7 +46785,7 @@ ACT["csr"] = (v) => {
     e = $("#csNum"),
     num = Math.round(cl(+(e ? e.value : 0) || 0, 0, 36));
   const g = v == "rojo" ? n > 0 && rojo : v == "negro" ? n > 0 && !rojo : v == "par" ? n > 0 && n % 2 == 0 : v == "impar" ? n % 2 == 1 : n == num;
-  return casJugar(m, g ? (v == "num" ? 36 : 2) : 0, "La bola cae en el " + n + (n ? (rojo ? " rojo" : " negro") : ""));
+  return casJugar(m, g ? (v == "num" ? 36 : 2) : 0, L37("La bola cae en el " + n + (n ? (rojo ? " rojo" : " negro") : ""), "The ball lands on " + n + (n ? (rojo ? " red" : " black") : "")));
 };
 ACT["csd"] = (v) => {
   const m = casVal();
@@ -54476,7 +54484,7 @@ function lzSemanas(P) {
   for (let k = 1; k <= 16; k++) {
     const t = S.t + k,
       c = compSem(t, P.m),
-      fe = festG(t, P.gn),
+      fe = festG(t, P.gn, P.m),
       s = tempW(t, P.m) * (c.lvl == 2 ? 0.7 : c.lvl == 1 ? 0.87 : 1) * (fe ? 1.12 : 1) * (k < 3 ? 0.9 : 1);
     L.push({ k, s, c, fe });
   }
