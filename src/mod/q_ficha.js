@@ -32,7 +32,9 @@ function docDeP(P) {
   W = wDeP(P);
   try {
     if (typeof wDef == "function") wDef(W);
-    return docDatos();
+    const d = docDatos();
+    d.P = docObra(P);
+    return d;
   } finally {
     W = W0;
   }

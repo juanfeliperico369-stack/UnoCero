@@ -47,3 +47,14 @@ V37.ficha.push((P) =>
     ? `<div class="c sub"><b>${T40("Personajes de las canciones", "Characters in the songs")}</b>${P.pm4.map((c) => `<div class="fila"><span>${esc(c.n)}<span class="m"> · ${esc(ARQ[c.a] || "")}${c.d ? " · " + esc(c.d) : ""}</span></span></div>`).join("")}</div>`
     : "",
 );
+// Secuelas: al producir, el contrato comprado libera al talento del estudio rival
+V37.prod.push((P, W2) => {
+  (W2.cast || []).forEach((c) => {
+    const t = c.t != null && S.tl[c.t];
+    if (t && (c.sob || 1) >= 1.6 && t.ocu > S.t) {
+      t.ocu = 0;
+      if (!S.bot) nws(L37(`Compras el contrato de ${t.n} para que vuelva en «${P.n}».`, `You buy out ${t.n}'s contract so they return in "${P.n}".`));
+    }
+  });
+  if (W2.sob) W2.sob = [];
+});

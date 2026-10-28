@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 2. Cada actualización debe subir el versionCode (`VC=3 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 3 (se instala encima de la entrega anterior, que era la 2). Cada actualización debe subir el versionCode (`VC=4 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -120,6 +120,49 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - Se desgastan, cuestan mantenimiento y se pueden restaurar o demoler. Se gestionan en Construcciones.
 - **Traducciones:** francés y portugués para todo lo nuevo, y además todo el creador en modo detallado (opciones de cada medio, presupuesto por departamentos, notas, encaje, contadores), que antes quedaba en parte en español. Se agregaron reglas para frases con números, contadores y nombres.
 
+**Revisión tras probar la app en el teléfono**
+- **Clasificaciones según el documento:** cada contenido tiene su propia escala y cada clasificación su tope.
+  - Violencia: sin violencia, leve, moderada, intensa, gráfica, sangrienta y explícita.
+  - Lenguaje: normal, leve, rudo, crudo, ofensivo y explícito.
+  - Amor y deseo: amistoso, romántico, apasionado, candente y explícito.
+  - Consumo y miedo también tienen sus niveles.
+  - Con X, todo llega a «explícito»; con 18, la violencia llega a «gráfica»; con R, a «sangrienta».
+  - Lo explícito pesa: a los géneros duros (terror, thriller, bélico, crimen, erótico) les suma audacia; al resto le resta público.
+- **Decisiones que pesan:**
+  - Los 110 tipos de obra que venían sin efecto (cortometraje, animación, sitcom, ópera, manga, mundo abierto…) ahora cambian costo, crítica, público, semanas y ventas.
+  - La predicción del estreno incluye esos efectos: un cortometraje ya no promete lo mismo que una película.
+  - El creador muestra lo que aporta cada tipo elegido.
+- **Género principal:** el primero elegido lleva ★ y se puede cambiar. Pesa el doble: si el público lo pide o lo rechaza, y si tu equipo lo domina.
+- **Eventos con lógica:**
+  - Los costos se miden con lo que mueve tu estudio (tus presupuestos y tu caja), no con el presupuesto típico de la industria.
+  - Ninguna decisión de un evento puede llevarse más del 20 % de la caja.
+  - Más de 60 eventos piden algo concreto para aparecer. Por ejemplo, los cines solo piden más porcentaje si tienes una película en cartelera, y el banco solo ofrece exclusividad si tienes un préstamo.
+- **Avisos:** duran medio segundo (hasta un segundo los largos), son más pequeños y se cierran tocándolos.
+- **Secuelas:** los talentos con contrato en otro estudio o sin ganas de volver sí vuelven.
+  - Con contrato rival hay que comprar su contrato: +60 %.
+  - Si no querían volver, aceptan por +35 %.
+  - Retirados y estudiantes siguen sin poder volver.
+- **Personajes:**
+  - En videojuegos el intérprete es opcional: los personajes pueden no tener voz, con un pequeño costo de público en juegos modernos.
+  - En libros no se contrata intérprete.
+  - Cada personaje nuevo nace con lo que ya decidiste de la obra: edad según géneros y época, arquetipo según su papel (falta un villano, un mentor, un aliado…), motivación según los temas y relación con el protagonista.
+- **Nombres al azar:** un dado en cada personaje pone directamente un nombre del continente elegido arriba (o del lugar de la historia). El botón «Elegir» sigue mostrando opciones.
+- **Videojuegos:**
+  - Se pueden elegir todas las plataformas: cada una de más cuesta 8 %, y desde la quinta, 12 %.
+  - El compositor entra al equipo.
+- **IA en la producción:**
+  - Abarata hasta un 40 % y acorta la posproducción.
+  - Ahora tiene un resultado (excelente, bien, dudoso o completamente mal) según el equipo que la guía.
+  - La ficha muestra el ahorro.
+- **Documento de la idea:** ahora es un Word de verdad (.docx), como el de la otra versión y más completo.
+  - Trae portada con la carátula de la obra, logline y trama en tres actos.
+  - Incluye la curva del arco como imagen y una escaleta con la fortuna en cada momento.
+  - Personajes con arquetipo, motivación, relación e intérprete (lo/la interpreta según el personaje).
+  - Mundo y atmósfera, equipo creativo, producción y, desde la ficha final, los datos del estreno: fecha, recaudación, multiplicador, crítica, público y premios.
+  - También se baja en HTML (para leer, imprimir o guardar como PDF) y en Markdown.
+  - Se corrigieron «rPG», «entre varios lugares», «normal de 20 años», «una historia sobre locura» y la escaleta repetida.
+- **Comparación con la 1.0:** la estrategia de prensa en convenciones, el trasfondo del avatar y los 24 negocios ya estaban en esta versión, que además tiene más negocios.
+
 ## Pruebas
 - **Partidas automáticas en Chromium:** 1750–1830, 1780–1840, 1920–1975, 1925–1985, 1990–2035, 1990–2060 y 2026–2120, sin errores ni quiebra.
 - **Prueba de estrés de la interfaz** (`tools/monkey.js`): pulsa los botones de todas las pestañas y de las ventanas que abren. Se corrió en cuatro situaciones, cada una con unas 3.100–3.500 pulsaciones: 1995–2010 en teléfono, 1780–1810 en pantalla de computador, 2080–2100, y 1960–1985 con la interfaz en francés. Cero errores en las cuatro.
@@ -132,6 +175,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 - **Rendimiento:** traducir al francés o al portugués no hace más lenta la interfaz.
 - **Funciones nuevas una por una:** encargos, exclusivas, música, casino, piratería, TV, streaming, crossover, clasificación, ficha pop, temas, avatar, arquetipos, documento, cronología y balance. Todas sin errores.
 - **Pantallas:** se revisaron a 420 px el documento, los retratos y el tema minimalista.
+- **Revisión del teléfono:** prueba de estrés en español (1995–2012), portugués (1760–1800) y francés (2030–2050, pantalla ancha), sin errores ni textos rotos. Partidas 1700–2120 sin errores ni quiebra. Documento .docx validado con un lector de Word; secuelas con contratos comprados, videojuego sin intérprete, clasificación X y estudio pequeño frente a los eventos.
 - **Ronda final:**
   - Prueba de estrés en español (1995–2012), portugués (1930–1950) y francés (2040–2060, pantalla ancha): entre 3.300 y 3.500 pulsaciones cada una, sin errores ni textos rotos.
   - Partidas automáticas 1700–1760, 1880–1960, 1960–2040 y 2040–2120, sin errores ni quiebra.

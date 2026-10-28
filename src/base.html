@@ -311,7 +311,7 @@ select:focus,input[type=text]:focus,input[type=number]:focus{border-color:var(--
 .caja,.fans{border-radius:14px;background:var(--p)}
 #md{-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .hoja{border-top:1px solid color-mix(in srgb,var(--l) 70%,transparent)}
-#ts{border-radius:14px;font-weight:600}
+#ts{border-radius:12px;font-weight:600;font-size:.85rem;padding:7px 13px;opacity:.96}
 .edificio canvas{box-shadow:0 14px 30px -18px rgba(0,0,0,.7)}
 .tro{border-radius:14px}
 .tag{border-radius:999px}
@@ -5954,7 +5954,7 @@ const ENX = {
   Sinopsis: "Synopsis",
   "Compras la licencia de \u00AB": "You buy the license for \u00AB",
   "Agregas tu material \u00AB": "You add your material \u00AB",
-  "Plataformas (hasta 4)": "Platforms (up to 4)",
+  "Plataformas (todas las que quieras)": "Platforms (as many as you want)",
   "Motor del juego": "Game engine",
   "Todo hecho a mano": "All handmade",
   "Sin motor: cada juego empieza de cero": "No engine: every game starts from scratch",
@@ -7219,6 +7219,7 @@ const ENX = {
   "Quien protagoniza": "The lead",
   "lo que m\u00E1s quiere": "what they want most",
   ", entre varios lugares": ", across several places",
+  ", en varios lugares": ", in several places",
   "tiene casi todo lo que quiere": "has almost everything they want",
   "vive con poco y sue\u00F1a con m\u00E1s": "lives with little and dreams of more",
   "En el camino aparece": "Along the way appears",
@@ -16749,10 +16750,11 @@ function producir() {
   const bz = m[1]
     .map((r) => S.tl[W.crew[r]])
     .concat((W.cast || []).map((c) => S.tl[c.t]))
-    .find((t) => t && (t.es || ocupado(t)));
+    .find((t) => t && (t.es || (ocupado(t) && !(W.cast || []).some((c) => c.t == t.id && (c.sob || 1) >= 1.6))));
   if (bz) return bz.n + (bz.es ? " est\u00E1 estudiando" : " est\u00E1 ocupado con un rival");
-  if (m[1].some((r) => !S.tl[W.crew[r]])) return "Falta completar el equipo";
+  if (m[1].some((r) => !S.tl[W.crew[r]] && !rolOpc(W.m, r))) return "Falta completar el equipo";
   const nr = m[1]
+    .filter((r) => S.tl[W.crew[r]])
     .map((r) => nego(S.tl[W.crew[r]], r, wNo()))
     .concat((W.cast || []).filter((c) => c.t != null && c.i != 2).map((c) => nego(S.tl[c.t], 7, wNo())))
     .find((n) => n.k == 2);
@@ -17062,7 +17064,7 @@ function pjNuevo(i, W2) {
 }
 const pjFee = (c, m) => {
   const t = S.tl[c.t];
-  return t && !t.you && c.i != 2 ? fee(t, 7, m) * IMP[c.i][2] : 0;
+  return t && !t.you && c.i != 2 ? fee(t, 7, m) * IMP[c.i][2] * (c.sob || 1) : 0;
 };
 function actorRec(c, W2, used, lim) {
   let best = null,
@@ -17732,7 +17734,7 @@ const ARF = [
   "Cae, se recupera y vuelve a caer.",
   "Sube, cae y termina m\u00E1s alto que nunca.",
 ];
-const lc = (s) => (s ? s[0].toLowerCase() + s.slice(1) : s);
+const lc = (s) => (s && !/^[A-Z\u00C1\u00C9\u00CD\u00D3\u00DA\u00D1]{2}/.test(s) ? s[0].toLowerCase() + s.slice(1) : s);
 function sinop(P) {
   const g = (P.gn || [])[0] || "Historia",
     c = (P.cast || []).find((x) => x.i == 0),
@@ -17740,7 +17742,7 @@ function sinop(P) {
   const lug = P.lug == -2 ? ", en varios lugares" : P.lug != null && CY[P.lug] ? ", en " + CY[P.lug][0] : "",
     ep = EPF[P.ep == null ? 9 : P.ep] || "Hoy";
   const quien = c
-    ? `${c.n}, ${lc(arqN(c))}${c.e ? " de " + c.e + " a\u00F1os" : ""},`
+    ? `${c.n}, ${ARQ[c.a] == "Normal" ? (c.x == "F" ? "una mujer com\u00FAn" : "un hombre com\u00FAn") : lc(arqN(c))}${c.e ? " de " + c.e + " a\u00F1os" : ""},`
     : ["alguien que no tiene nada que perder", "una persona com\u00FAn"][(P.n || "").length % 2];
   const pm = (P.pm || []).map((x) => PMF[x]).filter(Boolean),
     tm = (P.tm || []).slice(0, 2).map(lc),
@@ -17965,9 +17967,12 @@ function wHead() {
             ? "Guion comprado: \u00AB" + esc(W.gs.n) + "\u00BB"
             : "Obra original: funda una franquicia nueva.";
   const rj =
-    W.rej && W.rej.length
+    (W.rej && W.rej.length
       ? `<div class="m" style="color:var(--r)">No vuelven: ${W.rej.map(esc).join(", ")}. Sus personajes quedan para un nuevo casting.</div>`
-      : "";
+      : "") +
+    (W.sob && W.sob.length
+      ? `<div class="m" style="color:var(--g)">${L37("Vuelven, pero cuestan más: ", "They come back, but cost more: ")}${W.sob.map(esc).join(", ")}. ${L37("Puedes cambiarlos en Personajes si prefieres otro casting.", "You can change them in Characters if you prefer a new casting.")}</div>`
+      : "");
   const enc =
       W.enc != null && S.rv[W.enc]
         ? `<div class="m" style="color:var(--g)">Encargo a ${esc(S.rv[W.enc].n)}: la producen con su equipo, no ocupa tu sede y cobran un 15 %.</div>`
@@ -18187,7 +18192,7 @@ ${idiH()}
   if (tab == 1)
     h += `${(tyNoNarra(W) ? ["tm", "pa"] : ["pm", "tm", "pa", "ar"]).map(pkRow).join("")}${moH()}${hist37H(0)}${epSel()}<!--lug-->${W.m == 1 ? tvH() : duUI()}${wRng("cx", 0, 5, W.cx, "Complejidad")}${wRng("rit", 0, 4, W.rit, "Ritmo")}${[0, 1, 2, 3].includes(W.m) ? wRng("fx", 0, 4, W.fx, "Efectos especiales") : ""}`;
   if (tab == 2)
-    h += `${agChips()}${CONT.map(([k, n], ci) => { const cp = W.ag != null && agPerm(wGn()).includes(+W.ag) ? AGCAP[W.ag][ci] : 3; return wRng("cont." + k, 0, cp, Math.min(W.cont[k], cp), n); }).join("")}<div class="m">La censura de la época puede cortar contenido: si pasa, la clasificación baja sola.</div><div id="w-cla" class="m"></div>`;
+    h += `${agChips()}${CONT.map(([k, n]) => cont6Rng(k, n)).join("")}<div class="m">La censura de la época puede cortar contenido: si pasa, la clasificación baja sola.</div><div id="w-cla" class="m"></div>`;
   if (tab == 3) h += castH();
   if (tab == 4) h += prodH();
   if (tab == 5) h += `${bt("eqr", "", ic("talento") + " Equipo recomendado")}${MD[W.m][1].map(crewSel).join("")}`;
@@ -18403,7 +18408,8 @@ function sm() {
     },
     m = MD[W.m];
   Object.keys(WLB).forEach((k) => set(k, WLB[k]()));
-  CONT.forEach(([k]) => set("cont_" + k, CNIV[W.cont[k]]));
+  c6(W);
+  CONT.forEach(([k]) => set("cont6_" + k, LL([CN6[k][W.cont6[k]], CN6EN[k][W.cont6[k]]])));
   const N = depNotas(Pn);
   DEPS.forEach((x, i) => set("dep_" + i, Math.round(Pn.dep[i] || 0) + " % \u00B7 nota " + (N[i] ? NOTA[N[i].n] : "\u2014")));
   const no = wNo();
@@ -18412,7 +18418,7 @@ function sm() {
       ci = $("#w-i" + r),
       n = t ? nego(t, r, no) : null;
     if (ci) ci.textContent = t ? tinf(t, r, W.m) + (n.w ? " \u00B7 " + n.w : "") : "";
-    if (!t) er.push("Falta " + RO[r]);
+    if (!t && !rolOpc(W.m, r)) er.push("Falta " + RO[r]);
     else if (n.k == 2) er.push(n.w);
   });
   (W.cast || []).forEach((c) => {
@@ -18428,7 +18434,7 @@ function sm() {
   Object.keys(us).forEach((i) => {
     const t = S.tl[i];
     if (t.es) er.push(t.n + " est\u00E1 estudiando");
-    else if (ocupado(t)) er.push(t.n + " est\u00E1 ocupado con un rival");
+    else if (ocupado(t) && !(W.cast || []).some((c) => c.t == t.id && (c.sob || 1) >= 1.6)) er.push(t.n + " est\u00E1 ocupado con un rival");
     else if (us[i] * 10 > t.e) er.push(t.n + " sin energ\u00EDa");
   });
   if (adulto(Pn))
@@ -18509,8 +18515,29 @@ function wv(e) {
       c.na = 0;
     } else {
       c[p[2]] = num;
-      if (p[2] == "t") pjSexo(c, W);
+      if (p[2] == "t") {
+        c.sob = 1;
+        pjSexo(c, W);
+      }
     }
+  } else if (p[0] == "cont6") {
+    c6(W);
+    const k = p[1];
+    let n6 = num | 0;
+    if (k == "s" && ERO(wGn()) && n6 < 2) {
+      n6 = 2;
+      e.value = 2;
+    }
+    if (W.ag != null && agPerm(wGn()).includes(+W.ag)) {
+      const mx = CAP6[k][W.ag];
+      if (n6 > mx) {
+        n6 = mx;
+        e.value = mx;
+        toast(AG[W.ag][0] + L37(" llega hasta \u00AB", " goes up to \u201C") + LL([CN6[k][mx], CN6EN[k][mx]]).toLowerCase() + L37("\u00BB: elige otra clasificaci\u00F3n para m\u00E1s", "\u201D: pick another rating for more"));
+      }
+    }
+    W.cont6[k] = n6;
+    W.cont[k] = CN3[k][n6];
   } else if (p[0] == "cont") {
     W.cont[p[1]] = num;
     if (p[1] == "s" && ERO(wGn()) && num < 2) {
@@ -18847,7 +18874,7 @@ function fichaV17(P) {
     L = P.lin && P.lin.length ? linV(P, P.lin[P.lin.length - 1]) : null;
   const det2 = [
     P.pm && P.pm.length ? "Premisa: " + P.pm.join(", ") : "",
-    P.cont ? "Contenido: " + CONT.map(([k, n]) => n.toLowerCase() + ": " + CNIV[P.cont[k]].toLowerCase()).join(", ") : "",
+    P.cont ? "Contenido: " + cnTxt(P, ", ") : "",
     P.cen ? "la censura cort\u00F3 " + P.cen + " nivel(es)" : "",
     P.sty ? "estilo " + PST[P.sty][0] : "",
     P.fmt >= 0 && FMT[P.fmt] ? FMT[P.fmt][0] : "",
@@ -23916,22 +23943,25 @@ const mmB = (P) => {
 };
 function elencoVuelve(W2) {
   W2.rej = [];
+  W2.sob = [];
   (W2.cast || []).forEach((c) => {
     const t = S.tl[c.t];
     if (!t || t.you) return;
-    const why = t.ret
-      ? "se retir\u00F3"
-      : ocupado(t)
-        ? "trabaja con un rival"
-        : t.es
-          ? "est\u00E1 estudiando"
-          : R() < 0.12 + ((t.mo || 65) < 50 ? 0.25 : 0) + (nivel(t) >= 3 && S.pop < 40 ? 0.15 : 0)
-            ? "no quiere volver"
-            : "";
+    c.sob = 1;
+    const why = t.ret ? "se retir\u00F3" : t.es ? "est\u00E1 estudiando" : "";
     if (why) {
       W2.rej.push(c.n + " (" + t.n + " " + why + ")");
       c.t = null;
       c.rj = 1;
+      return;
+    }
+    // Con contrato en otro estudio o sin ganas de volver, igual pueden volver: cuesta comprar el contrato o convencerlos
+    if (ocupado(t)) {
+      c.sob = 1.6;
+      W2.sob.push(c.n + " (" + t.n + L37(" trabaja con un rival: hay que comprar su contrato, +60 %)", " works with a rival: you must buy out the contract, +60%)"));
+    } else if (R() < 0.12 + ((t.mo || 65) < 50 ? 0.25 : 0) + (nivel(t) >= 3 && S.pop < 40 ? 0.15 : 0)) {
+      c.sob = 1.35;
+      W2.sob.push(c.n + " (" + t.n + L37(" no quer\u00EDa volver: acepta por +35 %)", " didn't want to come back: accepts for +35%)"));
     }
   });
   if (W2.cast && W2.cast[0] && W2.cast[0].i == 0) {
@@ -24018,7 +24048,7 @@ ACT["frcb"] = (v) => {
 };
 const MFG = {
   2: [
-    ["pl", "Plataformas (hasta 4)", null, 0],
+    ["pl", "Plataformas (todas las que quieras)", null, 0],
     [
       "mot",
       "Motor del juego",
@@ -24306,7 +24336,7 @@ function mfCosto(W2) {
     const o = mfO(W2, key);
     if (o) k *= o[3];
   });
-  if (W2.m == 2 && W2.mf.pl) k *= Math.max(0.92, 1 + 0.08 * (W2.mf.pl.length - 2));
+  if (W2.m == 2 && W2.mf.pl) k *= Math.max(0.92, 1 + 0.08 * (W2.mf.pl.length - 2) + 0.04 * Math.max(0, W2.mf.pl.length - 4));
   if (W2.m == 2 && (W2.mf.mot | 0) == 2) k *= 1 - 0.02 * motN();
   return k;
 }
@@ -24474,7 +24504,7 @@ function mfH() {
     if (k == "pl") {
       const sh = plShare(y),
         L = W.mf.pl || [];
-      h += `<label class="m">${n}</label><div class="chips">${PLT.map((p, i) => (sh[i] > 0 ? wCh("wmf", "pl|" + i, p[0] + " \u00B7 " + Math.round(sh[i] * 100) + " %", L.includes(i), !L.includes(i) && L.length >= 4) : "")).join("")}</div><div class="m">Llegas al ${Math.round(sum(L, (i) => sh[i]) * 100)} % de quienes juegan. Cada plataforma de más cuesta 8 %.</div>`;
+      h += `<label class="m">${n}</label><div class="chips">${PLT.map((p, i) => (sh[i] > 0 ? wCh("wmf", "pl|" + i, p[0] + " \u00B7 " + Math.round(sh[i] * 100) + " %", L.includes(i)) : "")).join("")}</div><div class="m">${L37(`Llegas al ${Math.round(sum(L, (i) => sh[i]) * 100)} % de quienes juegan. Cada plataforma de más cuesta 8 %; desde la quinta, 12 %.`, `You reach ${Math.round(sum(L, (i) => sh[i]) * 100)}% of players. Each extra platform costs 8%; from the fifth on, 12%.`)}</div>`;
       return;
     }
     const sel = W.mf[k] | 0;
@@ -24506,7 +24536,7 @@ ACT["wmf"] = (v) => {
       j = L.indexOf(i);
     if (j >= 0) {
       if (L.length > 1) L.splice(j, 1);
-    } else if (L.length < 4) L.push(i);
+    } else L.push(i);
     W.mf.pl = L;
   } else if (mfOk(W.m, k, i, yr())) {
     W.mf[k] = i;
@@ -29561,7 +29591,14 @@ const enCartel = () => S.pj.filter((p) => p.st == 3);
 const evProd = () => S.pj.filter((p) => p.st == 0 && !p.enc);
 const presRes = (x) => x * (cnv(33) ? 0.5 : 1);
 const cc = (f) => Math.round(Math.max(0, S.cash) * f);
-const tbm = (f) => Math.round(TB(medBase()) * f);
+// Los eventos se miden con lo que mueve tu estudio (sus presupuestos y su caja), nunca por encima de la industria
+function escEst() {
+  const tb = TB(medBase()),
+    L = S.pj.filter((p) => !p.enc && !p.rr && p.bud > 0).slice(-6),
+    b = L.length ? sum(L, (p) => p.bud) / L.length : 0;
+  return Math.round(Math.min(tb, Math.max(b, Math.max(0, S.cash) * 0.4, tb * 0.001)));
+}
+const tbm = (f) => Math.round(escEst() * f);
 function evEstrella() {
   const L = [];
   S.pj
@@ -35651,7 +35688,9 @@ function brutoCon(Pn, A, C) {
       ln: Pn.ln,
       cmp: 0,
       k: semProd(Pn.br, Pn.ln) + 2,
-    }) * dfP()
+    }) *
+    dfP() *
+    mfVentas(Pn)
   );
 }
 function predObra(Pn, q, kk, tot) {
@@ -35787,7 +35826,7 @@ function docBeats(Pn) {
     ali = cast.find((x) => x.i != 0 && [1, 4, 8, 18].includes(x.a)) || null;
   const pm = (Pn.pm || []).map((x) => PMF[x]).filter(Boolean),
     pmT = (pm[0] || "se ve obligad{o} a cambiar su vida").replace(/\{o\}/g, o);
-  const lug = Pn.lug == -2 ? ", entre varios lugares" : Pn.lug != null && CY[Pn.lug] ? ", en " + CY[Pn.lug][0] : "",
+  const lug = Pn.lug == -2 ? ", en varios lugares" : Pn.lug != null && CY[Pn.lug] ? ", en " + CY[Pn.lug][0] : "",
     ep = EPF[Pn.ep == null ? 9 : Pn.ep] || "Hoy";
   const pick = (L, k) => L[(H + k * 7) % L.length];
   const sube = [
@@ -35805,7 +35844,7 @@ function docBeats(Pn) {
   const igual = [`el conflicto se complica`, `${n} tiene que elegir entre ${t1} y ${t2}`, `nada sale como ${n} lo planeó`];
   const L = [];
   L.push(
-    `${ep}${lug}, ${n}${c ? ", " + lc(arqN(c)) + (c.e ? " de " + c.e + " a\u00F1os" : "") + "," : ""} ${v[0] >= 1 ? "tiene casi todo lo que quiere" : v[0] <= -1 ? "vive con poco y sue\u00F1a con m\u00E1s" : "lleva una vida en calma"}. En el centro de su historia está ${t1}.`,
+    `${ep}${lug}, ${n}${c ? ", " + (ARQ[c.a] == "Normal" ? (c.x == "F" ? "una mujer com\u00FAn" : "un hombre com\u00FAn") : lc(arqN(c))) + (c.e ? " de " + c.e + " a\u00F1os" : "") + "," : ""} ${v[0] >= 1 ? "tiene casi todo lo que quiere" : v[0] <= -1 ? "vive con poco y sue\u00F1a con m\u00E1s" : "lleva una vida en calma"}. En el centro de su historia está ${t1}.`,
   );
   L.push(`Todo cambia cuando ${n} ${pmT}.${ant ? " En el camino aparece " + ant.n + "." : ""}`);
   for (let i = 2; i <= 4; i++) {
@@ -35888,7 +35927,7 @@ function docDatos() {
     lug: W.lug == -2 ? "Varios lugares" : CY[W.lug] ? CY[W.lug][0] : "",
     idi: W.idi || "",
     cla: AG[Pn.age][0] + " (" + AGN[Pn.age] + ")",
-    cont: CONT.map(([k, n2]) => n2 + ": " + CNIV[Pn.cont[k]].toLowerCase()).join(" \u00B7 "),
+    cont: cnTxt(Object.assign({}, Pn, { cont6: c6(W) }), " \u00B7 ", 1),
     dur: W.m == 1 ? (W.eps || 10) + " episodios de " + (W.emin || 44) + " min" : durH(W.m, W.ln, W),
     cast,
     crew,
@@ -38677,8 +38716,8 @@ function lau(c, x, y, s) {
   c.fillText("\u2605", x, y + s * 0.28);
 }
 const tgl = (P) => {
-  const t = ((P.tm && P.tm[0]) || P.gn[0] || "el destino").toLowerCase();
-  return [`Todo empieza con ${t}`, `Nadie escapa de ${t}`, `Una historia sobre ${t}`, `Cuando ${t} lo cambia todo`, `Más allá de ${t}`][
+  const t = P.tm && P.tm[0] ? conArt(P.tm[0]) : P.gn[0] ? conArt(P.gn[0]) : "el destino";
+  return [`Todo empieza con ${t}`, `Nadie escapa ${/^el /.test(t) ? "del " + t.slice(3) : "de " + t}`, `Una historia sobre ${t}`, `Cuando ${t} lo cambia todo`, `Más allá ${/^el /.test(t) ? "del " + t.slice(3) : "de " + t}`][
     hs(P.n) % 5
   ];
 };
@@ -39592,7 +39631,7 @@ const toast = (t) => {
   const e = $("#ts");
   if (!e) return;
   const n = Date.now();
-  if (t === TSU.t && n - TSU.n < 3500 && e.style.display == "block") return;
+  if (t === TSU.t && n - TSU.n < 1500 && e.style.display == "block") return;
   TSU = { t, n };
   e.textContent = t;
   e.style.display = "block";
@@ -39604,7 +39643,7 @@ const toast = (t) => {
     });
   }
   clearTimeout(tt);
-  tt = setTimeout(() => (e.style.display = "none"), Math.min(4000, Math.max(1700, 1200 + String(t).length * 28)) * (AUTO.on ? 0.6 : 1));
+  tt = setTimeout(() => (e.style.display = "none"), Math.min(1000, 500 + Math.max(0, String(t).length - 40) * 5));
 };
 const hojaAbierta = () => {
   const m = $("#md");
@@ -45710,7 +45749,7 @@ function ev37Aplicar(ef, c, out) {
   Object.keys(ef || {}).forEach((k) => {
     const v = ef[k];
     if (k == "caja") {
-      const m = Math.round(Math.abs(v) * (TB(medBase()) + Math.max(0, S.cash) * 0.5));
+      const m = Math.round(Math.abs(v) * (escEst() + Math.max(0, S.cash) * 0.5));
       if (v < 0) gasta("eventos", m);
       else gana("otros", m);
     } else if (k == "fama") S.pop = cl(S.pop + (v > 0 ? v * 100 * (1 - S.pop / 100) : v * 100));
