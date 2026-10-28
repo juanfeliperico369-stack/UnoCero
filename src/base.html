@@ -17909,6 +17909,8 @@ function wCosto(Pn) {
   };
 }
 const WTAB = ["Idea", "Historia", "Contenido", "Personajes", "Producci\u00F3n", "Equipo"];
+// Orden en que se recorren las pestañas del modo detallado (6 = la pestaña propia del medio)
+const WORD = [0, 1, 2, 3, 6, 4, 5];
 const wSel = (k, L, v, r, dis) =>
   `<select data-k="${k}" onchange="wv(this)"${r ? ' data-r="1"' : ""}${dis ? " disabled" : ""}>${L.map((x) => `<option value="${x[0]}"${String(x[0]) == String(v) ? " selected" : ""}>${esc(x[1])}</option>`).join("")}</select>`;
 const wRng = (k, mn, mx, v, l, st2) =>
@@ -18153,7 +18155,7 @@ function wDet() {
   const y = yr(),
     lk = (i) => y < MD[i][2],
     tab = W.tab | 0;
-  let h = `<div class="c"><div class="subt" role="tablist">${[0, 1, 2, 3, 6, 4, 5].map((i) => (i == 3 && !conPers(W.m) ? "" : wCh("wtab", i, i == 6 ? MXTAB[W.m] : WTAB[i], tab == i))).join("")}</div></div><div class="c">`;
+  let h = `<div class="c"><div class="subt" role="tablist">${WORD.map((i) => wCh("wtab", i, i == 6 ? MXTAB[W.m] : i == 3 && !conPers(W.m) ? WTAB[3] + " (opcional)" : WTAB[i], tab == i)).join("")}</div></div><div class="c">`;
   if (tab == 0)
     h += `<label class="m">Medio</label>${wSel(
       "m",
@@ -53166,8 +53168,9 @@ const wzN41b = wz;
 wz = function () {
   const r = wzN41b.apply(this, arguments),
     h = document.querySelector("#md .hoja");
-  if (h && W && W.tab != null && W.md != "r" && W.tab < WTAB.length - 1 && !h.querySelector(".av41"))
-    h.insertAdjacentHTML("beforeend", `<div class="bts av41" style="margin:10px">${bt("wtab", W.tab + 1, T40("Avanzar", "Next") + ": " + tr40(WTAB[W.tab + 1]) + " " + ic("adelante"), "a")}</div>`);
+  const nx = W && W.tab != null ? WORD[WORD.indexOf(W.tab | 0) + 1] : null;
+  if (h && W && W.tab != null && W.md != "r" && nx != null && !h.querySelector(".av41"))
+    h.insertAdjacentHTML("beforeend", `<div class="bts av41" style="margin:10px">${bt("wtab", nx, T40("Avanzar", "Next") + ": " + tr40(nx == 6 ? MXTAB[W.m] : nx == 3 && !conPers(W.m) ? WTAB[3] + " (opcional)" : WTAB[nx]) + " " + ic("adelante"), "a")}</div>`);
   return r;
 };
 // ---------- Talentos: búsqueda sin tildes, tu avatar siempre visible y protagonista elegible desde la lista ----------
