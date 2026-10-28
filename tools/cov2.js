@@ -7,7 +7,7 @@ const { chromium } = require("playwright");
   const errs = [];
   p.on("pageerror", (e) => errs.push(e.message));
   await p.goto("file://" + require("path").resolve(__dirname, "../dist/INDUSTRY_ART.html") + "?bot=1");
-  const r = await p.evaluate(async (lang) => {
+  const r = await p.evaluate(async ([lang, LARGO]) => {
     await BOT.correr({ sd: "C", y0: 1995, y1: 2012, est: "agresiva" });
     S.bot = 0;
     S.cash = 1e12;
@@ -22,7 +22,7 @@ const { chromium } = require("playwright");
         const t = x.nodeValue.trim();
         if (t.length < 2 || !/[a-záéíóúñ]/i.test(t) || t.length > 160) continue;
         if ((lang == "en" ? trTxt(t) : trX(t)) != t) continue;
-        if (t.length > 40 || /[«»]/.test(t)) continue;
+        if (t.length > LARGO || /[«»]/.test(t)) continue;
         seen.set(t, (seen.get(t) || 0) + 1);
       }
     };
@@ -30,9 +30,17 @@ const { chromium } = require("playwright");
     for (let s = 0; s < 6; s++) for (let k = 0; k < (subs[s] || [""]).length; k++) {
       try { tab = s; SUB[s] = k; cx(); pg(); grab(); } catch (e) {}
     }
-    try { ACT.enc(rvVivos()[0] + "|0"); grab(); for (let i = 0; i < 9; i++) { try { W.tb = i; wz(); grab(); } catch (e) {} } cx(); } catch (e) {}
+    for (let m = 0; m < 6; m++)
+      try {
+        ACT.enc(rvVivos()[0] + "|" + m);
+        W.md = "d";
+        for (const i of WORD) {
+          try { W.tab = i; wz(); grab(); } catch (e) {}
+        }
+        cx();
+      } catch (e) {}
     return [...seen.entries()].sort((a, b) => b[1] - a[1]).map((x) => x[0]);
-  }, lang);
+  }, [lang, +(process.argv[4] || 40)]);
   require("fs").writeFileSync(process.argv[3] || "cov.txt", r.join("\n"));
   console.log(r.length, errs.slice(0, 5));
   await b.close();

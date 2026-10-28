@@ -24,3 +24,21 @@
     guardarB64: (n, t, b64) => guarda(n, b64),
   };
 })();
+// Imprimir o guardar en PDF con el servicio de impresión de Android
+(() => {
+  const W0 = ACT["wdocb"];
+  ACT["wdocb"] = (v0) => {
+    const B = window.AndroidBridge,
+      q = String(v0).split("|"),
+      mo = q.length > 1 ? q[0] : "c",
+      v = q.length > 1 ? q[1] : q[0];
+    if (B && B.imprimir && !["html", "doc", "md"].includes(v)) {
+      const d = DOCX || docDatos();
+      try {
+        B.imprimir(docNom(d, "pdf", mo), trHtml(docHTML(d, 0, mo)));
+        return;
+      } catch (e) {}
+    }
+    return W0(v0);
+  };
+})();

@@ -29,8 +29,8 @@ let trX = function (t) {
     const m = k.match(/^(.*?)([:.…!?]+|\s?\(\d+\)|\s\d+\/\d+)$/);
     if (m && D[m[1]] != null) r = D[m[1]] + m[2];
   }
-  if (r == null && /( · |: | \/ |, | — )/.test(k)) {
-    const P = k.split(/( · |: | \/ | — )/);
+  if (r == null && /( · |: | \/ |, | — | → )/.test(k)) {
+    const P = k.split(/( · |: | \/ | — | → )/);
     let n = 0;
     const q = P.map((x, i) => {
       if (i % 2) return x;

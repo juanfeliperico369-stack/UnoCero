@@ -34849,8 +34849,11 @@ const AVV = [
 on("mes", () => {
   if (!S || S.pre || S.avE != null) return;
   if (R() < 0.06) {
-    S.avE = ri(0, AVV.length - 1);
-    pausa("avatar");
+    const L = AVV.map((_, i) => i).filter((i) => typeof avOk != "function" || avOk(i));
+    if (L.length) {
+      S.avE = pk(L);
+      pausa("avatar");
+    }
   }
   if (S.modo == 1 && !S.ofA && !ocupado(yo()) && R() < 0.3) {
     const me = yo(),
@@ -39584,13 +39587,24 @@ const PV = { lg: { s: 8, c: 6, b: 14, t: 3, f: 1, x: 0, tx: 0, p: 0 }, sn: "INDU
 const bt = (a, v, t, c = "") => `<button class="b ${c}" data-a="${a}" data-v="${v}">${t}</button>`;
 const btx = () => `<button class="b x" data-a="x" aria-label="Cerrar">${ic("cerrar")}</button>`;
 const bi = (k) => `<button class="b i" data-a="ayu" data-v="${k}" aria-label="Ayuda">${ic("ayuda")}</button>`;
+let TSU = { t: "", n: 0 };
 const toast = (t) => {
   const e = $("#ts");
   if (!e) return;
+  const n = Date.now();
+  if (t === TSU.t && n - TSU.n < 3500 && e.style.display == "block") return;
+  TSU = { t, n };
   e.textContent = t;
   e.style.display = "block";
+  if (!e.dataset.cierra) {
+    e.dataset.cierra = 1;
+    e.addEventListener("click", () => {
+      clearTimeout(tt);
+      e.style.display = "none";
+    });
+  }
   clearTimeout(tt);
-  tt = setTimeout(() => (e.style.display = "none"), 2800);
+  tt = setTimeout(() => (e.style.display = "none"), Math.min(4000, Math.max(1700, 1200 + String(t).length * 28)) * (AUTO.on ? 0.6 : 1));
 };
 const hojaAbierta = () => {
   const m = $("#md");

@@ -4,19 +4,18 @@ Creado por OneZero · Infinite Tree.
 
 ## Entregables
 - `dist/INDUSTRY_ART.html`: el juego completo, funciona sin conexión.
-- `dist/INDUSTRY_ART_1.0.apk`: la app Android, montada sobre la app 1.0 que ya existía (Capacitor). La llave de firma es nueva (CN=OneZero, O=Infinite Tree) porque la anterior no venía en los archivos. Si en el teléfono está instalada una versión firmada con otra llave, primero hay que desinstalarla.
+- `dist/INDUSTRY_ART_1.0.aab`: el paquete para subir a Google Play.
+- `dist/INDUSTRY_ART_1.0.apk`: la misma app, para instalar y probar directamente en el teléfono.
+
+La app Android es propia (carpeta `android/`): una pantalla con el juego, sin anuncios, sin compras, sin servicios de terceros y con un solo permiso (Internet, que el WebView necesita aunque el juego no se conecta a nada). Pesa 1,8 MB. Reemplaza al envoltorio de la app 1.0, que traía el SDK de anuncios de Google configurado con el identificador **de prueba** de AdMob, el permiso de identificador publicitario y la biblioteca de compras. Eso contradecía la política de privacidad y podía causar un rechazo en Google Play.
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
-1. **Formato:** Google Play pide un **.aab** (Android App Bundle) para apps nuevas, no un .apk. El .apk de esta entrega sirve para instalar y probar en el teléfono. El .aab no se pudo generar en esta sesión porque no hubo permiso para descargar la herramienta oficial (`bundletool`).
-2. **Envoltorio limpio:** el .apk usa el envoltorio de la app 1.0 (Capacitor), que trae el SDK de anuncios de Google y la biblioteca de compras, aunque el juego no los usa. La política de privacidad del juego dice, con razón, que no hay anuncios ni terceros. Para que todo cuadre en la ficha de Play («Seguridad de los datos») lo recomendable es:
-   - armar la app final con el proyecto Android propio de la V40 (`INDUSTRY_ART_android.zip`, que no tiene anuncios y usa tu llave CN=OneZero);
-   - copiar ahí `dist/INDUSTRY_ART.html` como página del juego;
-   - generar el .aab desde ese proyecto.
-   El juego ya sabe guardar archivos en los dos envoltorios (el puente `AndroidBridge` de la V40 y Capacitor).
-3. **Llave de firma:** el .apk de esta entrega está firmado con una llave nueva. Si publicas con el proyecto de la V40, usa su llave de siempre y guárdala en privado.
-4. **Versión:** la app es 1.0 (versionCode 1 en el envoltorio de la 1.0; el proyecto de la V40 iba en el 47). En Play, cada actualización debe subir el versionCode.
-5. **Ficha de la tienda:** el juego no recoge datos, funciona sin conexión y es apto para todo público según su propio contenido. El contenido adulto existe, pero siempre sugerido. En el cuestionario de clasificación conviene declarar violencia, lenguaje y temas adultos opcionales.
-6. **Probar en un teléfono real:** instalación, guardado y carga, exportar e importar partidas, guardar la ficha pop y el documento de la idea, y el botón Atrás.
+1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
+2. **Versión:** versionName 1.0, versionCode 2. Cada actualización debe subir el versionCode (`VC=3 tools/android.sh …`).
+3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
+4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
+5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
+6. **Probar en un teléfono real** (aquí no hay emulador): instalación, guardado y carga, exportar e importar partidas, guardar la ficha pop y el documento de la idea, imprimir o guardar en PDF, el botón Atrás y el teclado sobre los campos de texto.
 
 ## Qué se corrigió y mejoró (sobre la V40)
 **Pedidos de las capturas**
@@ -108,6 +107,19 @@ Creado por OneZero · Infinite Tree.
 - **Creador:** más espacio entre bloques y etiquetas.
 - **Limpieza:** se quitaron comentarios de desarrollo, marcas de versión y referencias a herramientas. Los créditos dicen solo OneZero · Infinite Tree. La versión es 1.0.
 
+**Ronda final (pedidos de la última revisión)**
+- **Botón «Avanzar» del creador:** seguía el orden interno de las secciones y no el de las pestañas. En música saltaba a «Personajes», que no estaba en la barra; en cine se saltaba la portada. Ahora recorre exactamente las pestañas visibles, en el mismo orden, en los seis medios.
+- **Personajes en música (opcional):** la pestaña aparece como «Personajes (opcional)». Hasta 6 personajes con nombre, arquetipo y quién es en la canción. En un álbum conceptual suben la crítica y el público; en un disco normal, un poco el público. Salen en la ficha de la obra.
+- **Planes de salida cruzados:** cada medio tiene sus planes y el orden de las ventanas se puede invertir (streaming primero y después cines, físico primero, festival y salas limitadas, día y fecha, por entregas…). Música tiene por fin su plan de lanzamiento (sencillo adelanto, radio y disco primero, álbum sorpresa, videoclip viral, gira primero). Cada ventana abre en su semana, recauda por su cuenta y se ve en la ficha.
+- **Documento de la idea en la ficha final:** junto a la ficha pop está «Documento de la idea» (solo la historia o completo; .html, Word, Markdown o imprimir). Las obras nuevas guardan su borrador; las anteriores lo rearman con sus datos.
+- **Avisos:** duran entre 1,7 y 4 segundos según el largo (menos en modo automático), se cierran tocándolos y no se repiten si el mismo aviso llega varias veces seguidas.
+- **Eventos con sentido:** cada evento pide lo que lo haría creíble. Por ejemplo, una escuela solo pide clases si tienes prestigio, años de carrera u obras premiadas; una estrella, una marca, una plataforma o un gigante solo te buscan cuando tu estudio ya es conocido. Lo mismo para los eventos del avatar (discursos, retratos, homenajes, festivales con tu nombre).
+- **Sets permanentes:** una obra con rodaje (cine, series, teatro) que cuesta 3 o más veces el presupuesto típico de su época deja su set en pie, con nombre según género, época y terreno: «Pueblo del Salvaje Oeste», «Nave espacial a escala real», «Castillo y aldea medieval», «Barco pirata y muelle»… Desde 6 veces, además sube un nivel la construcción de Soundstages o de efectos visuales.
+  - Las obras que encajan por terreno, género o época lo reutilizan: entre 12 y 18 % menos de costo, una semana menos de producción y algo más de crítica.
+  - Los rivales lo alquilan cuando no lo usas. Con tres o más sets (desde 1964) se abre un tour para el público.
+  - Se desgastan, cuestan mantenimiento y se pueden restaurar o demoler. Se gestionan en Construcciones.
+- **Traducciones:** francés y portugués para todo lo nuevo, y además todo el creador en modo detallado (opciones de cada medio, presupuesto por departamentos, notas, encaje, contadores), que antes quedaba en parte en español. Se agregaron reglas para frases con números, contadores y nombres.
+
 ## Pruebas
 - **Partidas automáticas en Chromium:** 1750–1830, 1780–1840, 1920–1975, 1925–1985, 1990–2035, 1990–2060 y 2026–2120, sin errores ni quiebra.
 - **Prueba de estrés de la interfaz** (`tools/monkey.js`): pulsa los botones de todas las pestañas y de las ventanas que abren. Se corrió en cuatro situaciones, cada una con unas 3.100–3.500 pulsaciones: 1995–2010 en teléfono, 1780–1810 en pantalla de computador, 2080–2100, y 1960–1985 con la interfaz en francés. Cero errores en las cuatro.
@@ -120,17 +132,23 @@ Creado por OneZero · Infinite Tree.
 - **Rendimiento:** traducir al francés o al portugués no hace más lenta la interfaz.
 - **Funciones nuevas una por una:** encargos, exclusivas, música, casino, piratería, TV, streaming, crossover, clasificación, ficha pop, temas, avatar, arquetipos, documento, cronología y balance. Todas sin errores.
 - **Pantallas:** se revisaron a 420 px el documento, los retratos y el tema minimalista.
+- **Ronda final:**
+  - Prueba de estrés en español (1995–2012), portugués (1930–1950) y francés (2040–2060, pantalla ancha): entre 3.300 y 3.500 pulsaciones cada una, sin errores ni textos rotos.
+  - Partidas automáticas 1700–1760, 1880–1960, 1960–2040 y 2040–2120, sin errores ni quiebra.
+  - Sets: cuatro superproducciones y 20 años simulados, con reutilización, alquiler, tour, desgaste, restauración y demolición.
+  - «Avanzar» en los seis medios, planes de salida en todos los medios, documento de la idea desde la ficha final (obras nuevas y anteriores) y eventos (la escuela no aparece al empezar, sí después de veinte años).
+  - App Android: se simuló el envoltorio en Chromium (mismo origen https y mismo puente): guarda la partida, exporta, guarda documentos, imprime a PDF y el botón Atrás cierra ventanas antes de salir. El .aab pasa la validación oficial (`bundletool validate`).
 
 ## Lo que queda pendiente
 - En francés y portugués, las noticias y eventos largos con muchas variables pueden mostrar partes en español. Para cubrirlos, se amplían `src/mod/i_dic*.js` o las reglas de `src/mod/j_idioma.js`.
 - La abreviatura «mar» se usa en el juego para marzo y para martes, así que en portugués puede salir «Mar» donde debería decir «Ter».
 - De la versión 1.0 no se trajo «Quitar anuncios», porque esta versión no tiene anuncios.
-- Probar el APK en un teléfono real (no se pudo aquí).
+- Probar la app en un teléfono real (no se pudo aquí).
 
 ## Cómo trabajar
 - **Base:** `src/base.html`. Los módulos nuevos van en `src/mod/*.js` y `src/mod/*.css`, que se cargan en orden alfabético.
 - **Armar:** `python3 tools/build.py` genera `dist/INDUSTRY_ART.html`.
-- **APK:** `tools/apk.sh <apk base> dist/INDUSTRY_ART.html <salida> <llave>` (necesita build-tools de Android).
+- **App Android:** `tools/android.sh dist/INDUSTRY_ART.html dist/INDUSTRY_ART_1.0 <llave.jks> <android.jar> <bundletool.jar>` arma el .apk y el .aab desde `android/`. Necesita Java, las build-tools de Android (variable `BT`), el `android.jar` de la plataforma 36 y bundletool.
 - **Probar:** `node tools/run.js 'await BOT.correr({y0:1990,y1:2010}); return 1'`.
 - **Prueba de estrés:** `node tools/monkey.js <año inicial> <año final> <ancho> [es|en|fr|pt]`.
-- **Cobertura de idiomas:** `node tools/cov2.js fr salida.txt` lista los textos que siguen en español.
+- **Cobertura de idiomas:** `node tools/cov2.js fr salida.txt [largo máximo]` recorre las pestañas y el creador detallado de los seis medios y lista los textos que siguen en español.
