@@ -44,3 +44,6 @@
 .hoja label.m{display:block;margin-top:14px}
 .hoja .chips{gap:8px}
 .hoja .c.sub{margin-top:10px}
+/* Logo de la portada */
+.hero .hero-txt canvas.ini-logo{display:block;position:static;inset:auto;width:76px!important;height:76px!important;margin:0 0 4px -6px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
+@media (min-width:900px){.hero .hero-txt canvas.ini-logo{width:96px!important;height:96px!important}}

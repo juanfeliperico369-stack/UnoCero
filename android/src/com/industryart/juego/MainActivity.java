@@ -36,7 +36,7 @@ public class MainActivity extends Activity {
   private static final String HOST = "appassets.androidplatform.net";
   private static final String INICIO = "https://" + HOST + "/index.html";
   private static final int ELEGIR = 7;
-  private static final int FONDO = 0xff0b1020;
+  private static final int FONDO = 0xff0f1228;
   private WebView web;
   private WebView hoja;
   private ValueCallback<Uri[]> elegido;

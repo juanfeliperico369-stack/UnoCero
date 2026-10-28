@@ -161,6 +161,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - Mundo y atmósfera, equipo creativo, producción y, desde la ficha final, los datos del estreno: fecha, recaudación, multiplicador, crítica, público y premios.
   - También se baja en HTML (para leer, imprimir o guardar como PDF) y en Markdown.
   - Se corrigieron «rPG», «entre varios lugares», «normal de 20 años», «una historia sobre locura» y la escaleta repetida.
+- **Logo nuevo:** un ensō, el círculo zen pintado de un solo trazo, con cerdas, presión y final de pincel seco, en dorado, coral y magenta: es el arte. En su centro, un triángulo exacto en turquesa: la industria. Está en el ícono de la app (normal, redondo, adaptable y monocromo para los temas de Android 13 o más), en la pestaña del navegador y sobre el título de la portada.
 - **Comparación con la 1.0:** la estrategia de prensa en convenciones, el trasfondo del avatar y los 24 negocios ya estaban en esta versión, que además tiene más negocios.
 
 ## Pruebas
