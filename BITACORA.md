@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 8 (se instala encima de la entrega anterior, que era la 7). Cada actualización debe subir el versionCode (`VC=9 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 9 (se instala encima de la entrega anterior, que era la 8). Cada actualización debe subir el versionCode (`VC=10 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -261,6 +261,32 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
     - Prueba de estrés en español (3.469 pulsaciones), francés (3.423), portugués (3.522) e inglés (3.094): sin errores ni textos rotos.
     - Traducción estable en francés, portugués e inglés.
     - Partidas 1700–2120 sin errores ni quiebra.
+- **Biblioteca de personajes de la franquicia:**
+  - Una secuela sigue trayendo a todos los personajes de la entrega anterior.
+  - Si quitas a alguno, no se pierde: queda en la biblioteca de la franquicia, y el juego lo avisa al quitarlo.
+  - En el creador, junto a «Traer un personaje existente», está el botón «Biblioteca de la franquicia» con cuántos personajes esperan.
+    - Abre la lista de todos los que pasaron por cualquier entrega, ordenados por papel y con buscador.
+    - Cada uno muestra su arquetipo, especie, edad, intérprete, la última obra donde apareció y en cuántas estuvo.
+    - Se pueden elegir varios a la vez.
+  - **Al volver, cada personaje trae todo lo que tenía:**
+    - Nombre, sexo, especie, arquetipo, motivación, relación y origen.
+    - Su intérprete, si sigue libre; si trabaja con un rival, hay que comprar su contrato.
+    - Su edad avanza con los años que pasaron desde su última aparición.
+    - Si su papel está lleno, entra con el siguiente que tenga lugar.
+  - Los personajes de la franquicia de la obra ya no aparecen en «Traer un personaje existente», porque vuelven desde la biblioteca y no cuentan como prestados.
+  - **Continuidad:** en una secuela, si el intérprete nuevo era de otro sexo, el juego le cambiaba al personaje el nombre y el sexo; Ryan Harrington podía volver como Kayla Robinson. Ahora los personajes de entregas anteriores conservan su nombre y su sexo, y el reparto recomendado busca intérpretes que les correspondan.
+- **Edad libre:**
+  - La edad quedaba fija en 18 años en cualquier obra con contenido sexual «Apasionado» o mayor. Al escribir la primera cifra, la casilla volvía a 18, así que no se podía poner otra edad.
+  - Ahora se escribe cualquier edad en todas las obras.
+  - Solo en una obra erótica o con sexo «Candente» o «Explícito» los personajes deben tener 18 años o más. En ese caso la casilla ya no cambia sola: el resumen avisa qué personajes no cumplen y no deja producir hasta corregirlo.
+- **Arquetipos en orden alfabético:** la lista de arquetipos de cada personaje (y la de los personajes de las canciones) sale ordenada alfabéticamente en el idioma del jugador: «Aliado, Amante, Antihéroe…», «Ally, Antihero, Avenger…», «Allié, Amant, Anti-méchant…». Los guardados no cambian.
+- **Contador del buscador:** dice «1 opción» en vez de «1 opciones», también en los otros idiomas.
+- **Portugués:** el botón «Listo» de las listas salía como «Em breve» («pronto» también es una palabra en español y se traducía otra vez). Ahora dice «Concluir».
+- **Pruebas de esta ronda:**
+  - Secuela con un personaje quitado: queda en la biblioteca y vuelve con su especie, arquetipo y la edad que corresponde, en los cuatro idiomas.
+  - Edad: se escriben 12, 7 y 15 sin que la casilla cambie. En una obra con sexo explícito, el resumen avisa y bloquea la producción.
+  - Prueba de estrés en español (3.520 pulsaciones), francés (3.468), portugués (3.522) e inglés (3.094): sin errores ni textos rotos.
+  - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).

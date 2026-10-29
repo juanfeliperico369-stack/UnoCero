@@ -82,7 +82,8 @@ function presMt() {
 function presFr() {
   const G = {};
   (S.pj || [])
-    .filter((p) => p.st >= 3 && (p.cast || []).length)
+    // Los de la franquicia de la obra no se prestan: vuelven desde su biblioteca
+    .filter((p) => p.st >= 3 && (p.cast || []).length && (W.fid == null || p.fid != W.fid))
     .forEach((p) => {
       const key = p.fid != null ? "f" + p.fid : "p" + p.id;
       const g = (G[key] = G[key] || { k: "fr", i: key, fid: p.fid, n: p.fid != null ? frG(p.fid).n : p.n, a: S.sn || "", y: 0, f: 0, pj: [], vis: {} });

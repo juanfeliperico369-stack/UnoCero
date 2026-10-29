@@ -2242,6 +2242,7 @@ const ENX = {
   "Reparto recomendado": "Recommended cast",
   "Dado a todos": "Roll for all",
   "En una obra para adultos todos los personajes tienen 18 a\u00F1os o m\u00E1s.": "In an adult work every character is 18 or older.",
+  "En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s.": "In an erotic work or one with explicit sex, every character is 18 or older.",
   "Terceros y elenco de apoyo": "Third-tier and supporting cast",
   "nadie en especial": "no one in particular",
   "costo normal": "normal cost",
@@ -17096,6 +17097,13 @@ const ARQF = sp(
   "Hero\u00EDna,Mentora,Villana,Sombra,Aliada,Embaucadora,Guardiana,Heraldo,Amante,Rebelde,Inocente,Sabia,Exploradora,Bufona,Hu\u00E9rfana,Gobernante,Creadora,Maga,Cuidadora,Antihero\u00EDna,Normal",
 );
 const arqN = (c) => (c.x == "F" ? ARQF : ARQ)[c.a] || ARQ[0];
+const arqOrd = (x) => {
+  const L = x == "F" ? ARQF : ARQ,
+    t = (s) => (CFG.idi == "en" ? trTxt(s) : CFG.idi == "fr" || CFG.idi == "pt" ? trX(s) : s);
+  return L.map((a, i) => [i, a, t(a)])
+    .sort((a, b) => a[2].localeCompare(b[2], CFG.idi || "es"))
+    .map(([i, a]) => [i, a]);
+};
 const IMP = [
   ["Protagonista", 10, 1],
   ["Secundario", 15, 0.35],
@@ -17104,7 +17112,7 @@ const IMP = [
   ["Cameo", 5, 0.2],
 ];
 const conPers = (m) => m != 4;
-const adulto = (W2) => ERO(W2.gn || []) || (W2.cont && W2.cont.s >= 2);
+const adulto = (W2) => ERO(W2.gn || []) || (W2.cont && W2.cont.s >= 3);
 function nomPj(sx, na) {
   const L = NMR[NMRde(na == null ? S.sede : na < 0 ? ri(0, CY.length - 1) : na)];
   return pk(L[sx == "F" ? 0 : sx == "M" ? 1 : ri(0, 1)]) + " " + pk(L[2]);
@@ -17146,7 +17154,7 @@ function actorRec(c, W2, used, lim) {
     if (t.ret || t.es || t.e < 10 || used.has(t.id) || ocupado(t) || (t.r != 7 && !(t.you && S.sp.includes(7)))) return;
     if (nego(t, 7, no).k == 2) return;
     const f = fee(t, 7, W2.m) * IMP[c.i][2],
-      v = t.s[7] + (t.ge && t.ge == c.x ? 6 : 0) - (f > lim ? (f / Math.max(1, lim) - 1) * 30 : 0);
+      v = t.s[7] + (t.ge && t.ge == c.x ? 6 : c.ant && t.ge ? -40 : 0) - (f > lim ? (f / Math.max(1, lim) - 1) * 30 : 0);
     if (v > bv) {
       bv = v;
       best = t;
@@ -17156,7 +17164,7 @@ function actorRec(c, W2, used, lim) {
 }
 function pjSexo(c, W2) {
   const t = S.tl[c.t];
-  if (!t || !t.ge || t.ge == c.x || c.mat) return;
+  if (!t || !t.ge || t.ge == c.x || c.mat || c.ant) return;
   c.x = t.ge;
   if (c.na) c.n = nomUnico(c.x, W2, c);
 }
@@ -18380,7 +18388,7 @@ let pjCard = (c, k, ad) =>
     c.x,
   )}${wSel(
     "cast." + k + ".a",
-    (c.x == "F" ? ARQF : ARQ).map((a, i) => [i, a]),
+    arqOrd(c.x),
     c.a,
   )}</div>${k == 0 && c.i == 0 ? prot41() : pjAct(c, k)}${c.i != 2 ? `<div class="k" style="margin-top:4px"><span class="m">${c.t != null && S.tl[c.t] ? "Encaje " + estr5(encajeP(c, S.tl[c.t])) : "Sin int\u00E9rprete"}</span>${bt("tpk", "p|" + k, ic("talento") + " Ver talentos")}</div>` : ""}</div>`;
 const pjBts = (cnt, L) =>
@@ -18389,7 +18397,7 @@ function castH() {
   W.cast = W.cast || [];
   const cnt = IMP.map((_, i) => W.cast.filter((c) => c.i == i).length),
     ad = adulto(Object.assign({}, W, { gn: wGn() }));
-  return `<div class="m">Con nombre y actor: hasta 10 protagonistas, 15 secundarios, 5 invitados especiales y 5 cameos. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra para adultos todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 30, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 3, 4])}
+  return `<div class="m">Con nombre y actor: hasta 10 protagonistas, 15 secundarios, 5 invitados especiales y 5 cameos. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 30, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 3, 4])}
 ${W.cast.map((c, k) => pjCard(c, k, ad)).join("") || '<div class="m">Sin personajes todav\u00EDa.</div>'}`;
 }
 function styH() {
@@ -18508,14 +18516,6 @@ function sm() {
     else if (ocupado(t) && !(W.cast || []).some((c) => c.t == t.id && (c.sob || 1) >= 1.6)) er.push(t.n + " est\u00E1 ocupado con un rival");
     else if (us[i] * 10 > t.e) er.push(t.n + " sin energ\u00EDa");
   });
-  if (adulto(Pn))
-    (W.cast || []).forEach((c, k) => {
-      if (c.e < 18) {
-        c.e = 18;
-        const e = document.querySelector(`[data-k="cast.${k}.e"]`);
-        if (e) e.value = 18;
-      }
-    });
   if (!W.g.length) er.push("Elige un g\u00E9nero");
   if (!W.pa.length && !tyNoNarra(W)) er.push("Elige al menos 1 problem\u00E1tica o argumento");
   if (W.rl && !W.ar.length && !tyNoNarra(W)) er.push("La ficci\u00F3n requiere un arco narrativo");
@@ -22834,7 +22834,7 @@ function wCopia(o, same) {
   const dy2 = yr() - (o.y || yr());
   W.cast =
     conPers(W.m) && o.cast && o.cast.length
-      ? o.cast.map((c) => Object.assign({}, c, { e: c.e + dy2, t: S.tl[c.t] && !S.tl[c.t].ret ? c.t : null }))
+      ? o.cast.map((c) => Object.assign({}, c, { e: c.e + dy2, t: S.tl[c.t] && !S.tl[c.t].ret ? c.t : null, na: 0, ant: 1 }))
       : null;
   if (same && o.m == 1 && o.eps) {
     W.tvF = o.tvF;
@@ -58484,11 +58484,11 @@ function fxpR() {
       h += `<div class="fxp-g">${esc(it.g)}</div>`;
     }
     const on = x.sel.includes(String(it.v));
-    h += `<button class="fxp-i${on ? " on" : ""}" data-a="fxpt" data-v="${i}"${it.off && !on ? " disabled" : ""}><span><b${it.nt ? ' translate="no"' : ""}>${esc(it.l)}</b>${it.s ? `<small>${esc(it.s)}</small>` : ""}</span><i>${on ? "✓" : ""}</i></button>`;
+    h += `<button class="fxp-i${on ? " on" : ""}" data-a="fxpt" data-v="${i}"${it.off && !on ? " disabled" : ""}><span><b${it.nt ? ' translate="no"' : ""}>${esc(it.l)}</b>${it.s ? `<small${it.ns ? ' translate="no"' : ""}>${esc(it.s)}</small>` : ""}</span><i>${on ? "✓" : ""}</i></button>`;
   });
   l.innerHTML = h || `<div class="m">${T40("Nada coincide con tu búsqueda.", "Nothing matches your search.")}</div>`;
   const n = $("#fxpn");
-  if (n) n.textContent = (x.max > 1 ? x.sel.length + (isFinite(x.max) ? "/" + x.max : "") + " · " : "") + L.length + " " + T40("opciones", "options");
+  if (n) n.innerHTML = (x.max > 1 ? x.sel.length + (isFinite(x.max) ? "/" + x.max : "") + " · " : "") + L.length + ` <span>${L.length == 1 ? T40("opción", "option") : T40("opciones", "options")}</span>`;
 }
 function fxpCierra() {
   const d = $("#fxp");
@@ -61978,7 +61978,7 @@ castH = function () {
   if (W.m != 4) return castHO.apply(this, arguments);
   W.pm4 = W.pm4 || [];
   const L = W.pm4,
-    arqO = ARQ.map((a, i) => [i, a]);
+    arqO = arqOrd("M");
   return `<div class="m">${T40("Opcional: los personajes que viven en tus canciones o en el videoclip. En un álbum conceptual le dan hilo a la historia; en un disco normal, color a las letras.", "Optional: the characters who live in your songs or music video. In a concept album they hold the story together; in a regular record they color the lyrics.")}</div>${L.map(
     (c, i) =>
       `<div class="c sub fx-blk"><div class="k"><b>${T40("Personaje", "Character")} ${i + 1}</b><span class="bts">${bt("pm4n", i, ic("dado") + " " + T40("Nombre", "Name"))}${bt("pm4x", i, ic("cerrar"))}</span></div><input type="text" maxlength="40" value="${esc(c.n || "")}" oninput="pm4Set(${i},'n',this.value)" aria-label="${T40("Nombre", "Name")}"><select onchange="pm4Set(${i},'a',+this.value)" aria-label="${T40("Arquetipo", "Archetype")}">${arqO.map(([j, a]) => `<option value="${j}"${(c.a | 0) == j ? " selected" : ""}>${esc(a)}</option>`).join("")}</select><input type="text" maxlength="90" value="${esc(c.d || "")}" placeholder="${T40("Quién es en la canción (opcional)", "Who they are in the song (optional)")}" oninput="pm4Set(${i},'d',this.value)"></div>`,
@@ -63501,7 +63501,7 @@ function presMt() {
 function presFr() {
   const G = {};
   (S.pj || [])
-    .filter((p) => p.st >= 3 && (p.cast || []).length)
+    .filter((p) => p.st >= 3 && (p.cast || []).length && (W.fid == null || p.fid != W.fid))
     .forEach((p) => {
       const key = p.fid != null ? "f" + p.fid : "p" + p.id;
       const g = (G[key] = G[key] || { k: "fr", i: key, fid: p.fid, n: p.fid != null ? frG(p.fid).n : p.n, a: S.sn || "", y: 0, f: 0, pj: [], vis: {} });
@@ -63672,6 +63672,146 @@ V37.mods.push((P, add) => {
   if (a || cr) add(Math.round(cr * 10) / 10, Math.round(Math.min(2.5, a) * 10) / 10, tx4("personajes conocidos", "well-known characters", "personnages connus", "personagens conhecidos") + ": " + C.slice(0, 3).map((c) => c.n).join(", "));
   if (cans) add(-Math.round(Math.min(1.5, cans) * 10) / 10, -Math.round(Math.min(0.8, cans / 2) * 10) / 10, tx4("el público ya los vio demasiado", "audiences have seen them too often", "le public les a trop vus", "o público já os viu demais"));
 });
+
+const bibK = (n) =>
+  String(n || "")
+    .trim()
+    .toLowerCase();
+function bibPjs(f) {
+  if (f == null) return [];
+  const M = {};
+  frPs(f)
+    .filter((p) => p.st >= 1 && (p.cast || []).length)
+    .sort((a, b) => (a.y || 0) - (b.y || 0) || a.id - b.id)
+    .forEach((p) =>
+      p.cast.forEach((c) => {
+        const k = bibK(c.n);
+        if (!k) return;
+        const x = (M[k] = M[k] || { k, ob: 0 });
+        x.ob++;
+        x.c = c;
+        x.p = p;
+      }),
+    );
+  return Object.values(M);
+}
+function bibFuera() {
+  const ya = new Set((W.cast || []).map((c) => bibK(c.n)));
+  return bibPjs(W.fid).filter((x) => !ya.has(x.k));
+}
+const bibTr = (s) => (CFG.idi == "en" ? trTxt(s) : CFG.idi == "fr" || CFG.idi == "pt" ? trX(s) : s);
+function bibSub(x) {
+  const c = x.c,
+    e = Math.max(0, (c.e | 0) + yr() - (x.p.y || yr())),
+    t = S.tl[c.t];
+  return [
+    bibTr(arqN(c)),
+    c.sp ? espN(c.sp) : "",
+    tx4(`${e} años`, `${e} years old`, `${e} ans`, `${e} anos`),
+    t ? t.n : "",
+    tx4(`última vez en «${x.p.n}» (${x.p.y})`, `last seen in "${x.p.n}" (${x.p.y})`, `vu pour la dernière fois dans « ${x.p.n} » (${x.p.y})`, `última vez em «${x.p.n}» (${x.p.y})`),
+    tx4(`${x.ob} ${x.ob == 1 ? "obra" : "obras"}`, `${x.ob} ${x.ob == 1 ? "work" : "works"}`, `${x.ob} ${x.ob == 1 ? "œuvre" : "œuvres"}`, `${x.ob} ${x.ob == 1 ? "obra" : "obras"}`),
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+function bibVuelve(x) {
+  const c = JSON.parse(JSON.stringify(x.c)),
+    n = (i) => (W.cast || []).filter((z) => z.i == i).length,
+    t = S.tl[c.t];
+  c.e = Math.max(0, (c.e | 0) + yr() - (x.p.y || yr()));
+  delete c.rj;
+  c.sob = 1;
+  c.na = 0;
+  c.ant = 1;
+  if (W.m == 5 || !t || t.ret || t.dead || t.es || (W.cast || []).some((z) => z.t == c.t)) c.t = null;
+  else if (!t.you && ocupado(t)) c.sob = 1.6;
+  if (n(c.i) >= IMP[c.i][1]) {
+    const r = [1, 3, 4, 0].find((i) => n(i) < IMP[i][1]);
+    if (r == null) return false;
+    c.i = r;
+  }
+  (W.cast = W.cast || []).push(c);
+  return true;
+}
+const bibBt = () => {
+  if (W.fid == null || !conPers(W.m)) return "";
+  const T = bibPjs(W.fid).length;
+  if (!T) return "";
+  const n = bibFuera().length;
+  return bt("pjbib", "", ic("libro") + " " + tx4("Biblioteca de la franquicia", "Franchise library", "Bibliothèque de la franchise", "Biblioteca da franquia") + ` (${n})`, n ? "a" : "off");
+};
+ACT["pjbib"] = () => {
+  const L = bibFuera(),
+    ord = [0, 1, 3, 4, 2];
+  if (!L.length) return toast(tx4("Todos los personajes de la franquicia ya están en la obra.", "Every character in the franchise is already in the work.", "Tous les personnages de la franchise sont déjà dans l'œuvre.", "Todos os personagens da franquia já estão na obra."));
+  L.sort((a, b) => ord.indexOf(a.c.i) - ord.indexOf(b.c.i) || String(a.c.n).localeCompare(String(b.c.n), CFG.idi || "es"));
+  return fxPick({
+    t: tx4("Biblioteca de personajes", "Character library", "Bibliothèque de personnages", "Biblioteca de personagens") + " · " + frG(W.fid).n,
+    d: tx4(
+      "Todos los personajes que pasaron por la franquicia, también los que quitaste de una secuela. Elige los que vuelven: llegan con su nombre, especie, arquetipo, motivación y su intérprete si está libre, y su edad avanza con los años.",
+      "Every character who has been in the franchise, including the ones you removed from a sequel. Pick who comes back: they arrive with their name, species, archetype, motivation and their performer if available, and their age moves on with the years.",
+      "Tous les personnages passés par la franchise, y compris ceux que tu as retirés d'une suite. Choisis ceux qui reviennent : ils arrivent avec leur nom, leur espèce, leur archétype, leur motivation et leur interprète s'il est libre, et leur âge avance avec les années.",
+      "Todos os personagens que passaram pela franquia, inclusive os que você tirou de uma sequência. Escolha os que voltam: chegam com nome, espécie, arquétipo, motivação e o intérprete, se estiver livre, e a idade avança com os anos.",
+    ),
+    items: L.map((x) => ({ v: x.k, l: x.c.n, nt: 1, ns: 1, s: bibSub(x), g: IMP[x.c.i][0] })),
+    sel: [],
+    max: Infinity,
+    orden: false,
+    ok: (sel) => {
+      let n = 0,
+        f = 0;
+      sel.forEach((k) => {
+        const x = L.find((y) => y.k == k);
+        if (x) bibVuelve(x) ? n++ : f++;
+      });
+      if (n) toast(tx4(`Vuelven ${n} ${n == 1 ? "personaje" : "personajes"}.`, `${n} ${n == 1 ? "character returns" : "characters return"}.`, `${n} ${n == 1 ? "personnage revient" : "personnages reviennent"}.`, `${n == 1 ? "Volta" : "Voltam"} ${n} ${n == 1 ? "personagem" : "personagens"}.`));
+      if (f) toast(tx4(`No hay lugar para ${f} más: el reparto está lleno.`, `No room for ${f} more: the cast is full.`, `Pas de place pour ${f} de plus : la distribution est complète.`, `Não há lugar para mais ${f}: o elenco está cheio.`));
+      return wz();
+    },
+  });
+};
+const castHBib = castH;
+castH = function () {
+  const h = castHBib.apply(this, arguments),
+    b = bibBt();
+  return b ? h.replace(presBt(), presBt().replace(/<\/div>$/, b + "</div>")) : h;
+};
+const rapCastBib = rapCast;
+rapCast = function () {
+  const h = rapCastBib.apply(this, arguments),
+    b = bibBt();
+  return b ? h.replace(presBt(), presBt().replace(/<\/div>$/, b + "</div>")) : h;
+};
+const wcdelBib = ACT["wcdel"];
+ACT["wcdel"] = (v) => {
+  const c = (W.cast || [])[+v],
+    queda = c && W.fid != null && bibPjs(W.fid).some((x) => x.k == bibK(c.n));
+  const r = wcdelBib(v);
+  if (queda) toast(tx4(`${c.n} queda en la biblioteca de la franquicia.`, `${c.n} stays in the franchise library.`, `${c.n} reste dans la bibliothèque de la franchise.`, `${c.n} fica na biblioteca da franquia.`));
+  return r;
+};
+V37.err.push((W2) => {
+  if (!adulto(Object.assign({}, W2, { gn: wGn() }))) return [];
+  const L = (W2.cast || []).filter((c) => (c.e | 0) < 18);
+  return L.length
+    ? [
+        tx4("En una obra erótica o con sexo explícito, todos deben tener 18 años o más: ", "In an erotic work or one with explicit sex, everyone must be 18 or older: ", "Dans une œuvre érotique ou avec du sexe explicite, tous doivent avoir 18 ans ou plus : ", "Numa obra erótica ou com sexo explícito, todos devem ter 18 anos ou mais: ") +
+          L.map((c) => `${c.n} (${c.e | 0})`).join(", "),
+      ]
+    : [];
+});
+(() => {
+  if (typeof DIC_FR == "undefined") return;
+  [
+    ["En una obra erótica o con sexo explícito, todos los personajes tienen 18 años o más.", "Dans une œuvre érotique ou avec du sexe explicite, tous les personnages ont 18 ans ou plus.", "Numa obra erótica ou com sexo explícito, todos os personagens têm 18 anos ou mais."],
+    ["opción", "option", "opção"],
+  ].forEach(([e, f, p]) => {
+    DIC_FR[e] = f;
+    DIC_PT[e] = p;
+  });
+  DIC_PT["Listo"] = "Concluir";
+})();
 
 E40L([
   ["Crossovers oficiales", "Official crossovers"],

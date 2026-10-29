@@ -5,7 +5,7 @@ const nrmS = (s) =>
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase();
 const FXP = { o: null };
-// o = { t: título, items: [{ v, l, s (detalle), g (grupo), off, nt (nombre propio: no se traduce) }], sel: [], max, min, ok(sel), orden: false para no ordenar }
+// o = { t: título, items: [{ v, l, s (detalle), g (grupo), off, nt (nombre propio: no se traduce), ns (detalle ya traducido) }], sel: [], max, min, ok(sel), orden: false para no ordenar }
 function fxPick(o) {
   const x = (FXP.o = Object.assign({ sel: [], max: 1, min: 0, q: "", orden: true }, o));
   x.sel = (x.sel || []).map(String);
@@ -43,11 +43,12 @@ function fxpR() {
       h += `<div class="fxp-g">${esc(it.g)}</div>`;
     }
     const on = x.sel.includes(String(it.v));
-    h += `<button class="fxp-i${on ? " on" : ""}" data-a="fxpt" data-v="${i}"${it.off && !on ? " disabled" : ""}><span><b${it.nt ? ' translate="no"' : ""}>${esc(it.l)}</b>${it.s ? `<small>${esc(it.s)}</small>` : ""}</span><i>${on ? "✓" : ""}</i></button>`;
+    h += `<button class="fxp-i${on ? " on" : ""}" data-a="fxpt" data-v="${i}"${it.off && !on ? " disabled" : ""}><span><b${it.nt ? ' translate="no"' : ""}>${esc(it.l)}</b>${it.s ? `<small${it.ns ? ' translate="no"' : ""}>${esc(it.s)}</small>` : ""}</span><i>${on ? "✓" : ""}</i></button>`;
   });
   l.innerHTML = h || `<div class="m">${T40("Nada coincide con tu búsqueda.", "Nothing matches your search.")}</div>`;
   const n = $("#fxpn");
-  if (n) n.textContent = (x.max > 1 ? x.sel.length + (isFinite(x.max) ? "/" + x.max : "") + " · " : "") + L.length + " " + T40("opciones", "options");
+  // La palabra va en su propio nodo para que se traduzca sola
+  if (n) n.innerHTML = (x.max > 1 ? x.sel.length + (isFinite(x.max) ? "/" + x.max : "") + " · " : "") + L.length + ` <span>${L.length == 1 ? T40("opción", "option") : T40("opciones", "options")}</span>`;
 }
 function fxpCierra() {
   const d = $("#fxp");

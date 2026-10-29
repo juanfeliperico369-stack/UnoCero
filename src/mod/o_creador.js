@@ -4,7 +4,7 @@ castH = function () {
   if (W.m != 4) return castHO.apply(this, arguments);
   W.pm4 = W.pm4 || [];
   const L = W.pm4,
-    arqO = ARQ.map((a, i) => [i, a]);
+    arqO = arqOrd("M");
   return `<div class="m">${T40("Opcional: los personajes que viven en tus canciones o en el videoclip. En un álbum conceptual le dan hilo a la historia; en un disco normal, color a las letras.", "Optional: the characters who live in your songs or music video. In a concept album they hold the story together; in a regular record they color the lyrics.")}</div>${L.map(
     (c, i) =>
       `<div class="c sub fx-blk"><div class="k"><b>${T40("Personaje", "Character")} ${i + 1}</b><span class="bts">${bt("pm4n", i, ic("dado") + " " + T40("Nombre", "Name"))}${bt("pm4x", i, ic("cerrar"))}</span></div><input type="text" maxlength="40" value="${esc(c.n || "")}" oninput="pm4Set(${i},'n',this.value)" aria-label="${T40("Nombre", "Name")}"><select onchange="pm4Set(${i},'a',+this.value)" aria-label="${T40("Arquetipo", "Archetype")}">${arqO.map(([j, a]) => `<option value="${j}"${(c.a | 0) == j ? " selected" : ""}>${esc(a)}</option>`).join("")}</select><input type="text" maxlength="90" value="${esc(c.d || "")}" placeholder="${T40("Quién es en la canción (opcional)", "Who they are in the song (optional)")}" oninput="pm4Set(${i},'d',this.value)"></div>`,

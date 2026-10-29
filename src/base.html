@@ -2172,6 +2172,7 @@ const ENX = {
   "Reparto recomendado": "Recommended cast",
   "Dado a todos": "Roll for all",
   "En una obra para adultos todos los personajes tienen 18 a\u00F1os o m\u00E1s.": "In an adult work every character is 18 or older.",
+  "En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s.": "In an erotic work or one with explicit sex, every character is 18 or older.",
   "Terceros y elenco de apoyo": "Third-tier and supporting cast",
   "nadie en especial": "no one in particular",
   "costo normal": "normal cost",
@@ -17026,6 +17027,14 @@ const ARQF = sp(
   "Hero\u00EDna,Mentora,Villana,Sombra,Aliada,Embaucadora,Guardiana,Heraldo,Amante,Rebelde,Inocente,Sabia,Exploradora,Bufona,Hu\u00E9rfana,Gobernante,Creadora,Maga,Cuidadora,Antihero\u00EDna,Normal",
 );
 const arqN = (c) => (c.x == "F" ? ARQF : ARQ)[c.a] || ARQ[0];
+// Arquetipos en orden alfabético del idioma del jugador; el número guardado de cada uno no cambia
+const arqOrd = (x) => {
+  const L = x == "F" ? ARQF : ARQ,
+    t = (s) => (CFG.idi == "en" ? trTxt(s) : CFG.idi == "fr" || CFG.idi == "pt" ? trX(s) : s);
+  return L.map((a, i) => [i, a, t(a)])
+    .sort((a, b) => a[2].localeCompare(b[2], CFG.idi || "es"))
+    .map(([i, a]) => [i, a]);
+};
 const IMP = [
   ["Protagonista", 10, 1],
   ["Secundario", 15, 0.35],
@@ -17034,7 +17043,7 @@ const IMP = [
   ["Cameo", 5, 0.2],
 ];
 const conPers = (m) => m != 4;
-const adulto = (W2) => ERO(W2.gn || []) || (W2.cont && W2.cont.s >= 2);
+const adulto = (W2) => ERO(W2.gn || []) || (W2.cont && W2.cont.s >= 3);
 function nomPj(sx, na) {
   const L = NMR[NMRde(na == null ? S.sede : na < 0 ? ri(0, CY.length - 1) : na)];
   return pk(L[sx == "F" ? 0 : sx == "M" ? 1 : ri(0, 1)]) + " " + pk(L[2]);
@@ -17076,7 +17085,7 @@ function actorRec(c, W2, used, lim) {
     if (t.ret || t.es || t.e < 10 || used.has(t.id) || ocupado(t) || (t.r != 7 && !(t.you && S.sp.includes(7)))) return;
     if (nego(t, 7, no).k == 2) return;
     const f = fee(t, 7, W2.m) * IMP[c.i][2],
-      v = t.s[7] + (t.ge && t.ge == c.x ? 6 : 0) - (f > lim ? (f / Math.max(1, lim) - 1) * 30 : 0);
+      v = t.s[7] + (t.ge && t.ge == c.x ? 6 : c.ant && t.ge ? -40 : 0) - (f > lim ? (f / Math.max(1, lim) - 1) * 30 : 0);
     if (v > bv) {
       bv = v;
       best = t;
@@ -17086,7 +17095,7 @@ function actorRec(c, W2, used, lim) {
 }
 function pjSexo(c, W2) {
   const t = S.tl[c.t];
-  if (!t || !t.ge || t.ge == c.x || c.mat) return;
+  if (!t || !t.ge || t.ge == c.x || c.mat || c.ant) return;
   c.x = t.ge;
   if (c.na) c.n = nomUnico(c.x, W2, c);
 }
@@ -18311,7 +18320,7 @@ let pjCard = (c, k, ad) =>
     c.x,
   )}${wSel(
     "cast." + k + ".a",
-    (c.x == "F" ? ARQF : ARQ).map((a, i) => [i, a]),
+    arqOrd(c.x),
     c.a,
   )}</div>${k == 0 && c.i == 0 ? prot41() : pjAct(c, k)}${c.i != 2 ? `<div class="k" style="margin-top:4px"><span class="m">${c.t != null && S.tl[c.t] ? "Encaje " + estr5(encajeP(c, S.tl[c.t])) : "Sin int\u00E9rprete"}</span>${bt("tpk", "p|" + k, ic("talento") + " Ver talentos")}</div>` : ""}</div>`;
 const pjBts = (cnt, L) =>
@@ -18320,7 +18329,7 @@ function castH() {
   W.cast = W.cast || [];
   const cnt = IMP.map((_, i) => W.cast.filter((c) => c.i == i).length),
     ad = adulto(Object.assign({}, W, { gn: wGn() }));
-  return `<div class="m">Con nombre y actor: hasta 10 protagonistas, 15 secundarios, 5 invitados especiales y 5 cameos. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra para adultos todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 30, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 3, 4])}
+  return `<div class="m">Con nombre y actor: hasta 10 protagonistas, 15 secundarios, 5 invitados especiales y 5 cameos. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 30, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 3, 4])}
 ${W.cast.map((c, k) => pjCard(c, k, ad)).join("") || '<div class="m">Sin personajes todav\u00EDa.</div>'}`;
 }
 function styH() {
@@ -18439,14 +18448,6 @@ function sm() {
     else if (ocupado(t) && !(W.cast || []).some((c) => c.t == t.id && (c.sob || 1) >= 1.6)) er.push(t.n + " est\u00E1 ocupado con un rival");
     else if (us[i] * 10 > t.e) er.push(t.n + " sin energ\u00EDa");
   });
-  if (adulto(Pn))
-    (W.cast || []).forEach((c, k) => {
-      if (c.e < 18) {
-        c.e = 18;
-        const e = document.querySelector(`[data-k="cast.${k}.e"]`);
-        if (e) e.value = 18;
-      }
-    });
   if (!W.g.length) er.push("Elige un g\u00E9nero");
   if (!W.pa.length && !tyNoNarra(W)) er.push("Elige al menos 1 problem\u00E1tica o argumento");
   if (W.rl && !W.ar.length && !tyNoNarra(W)) er.push("La ficci\u00F3n requiere un arco narrativo");
@@ -22765,7 +22766,7 @@ function wCopia(o, same) {
   const dy2 = yr() - (o.y || yr());
   W.cast =
     conPers(W.m) && o.cast && o.cast.length
-      ? o.cast.map((c) => Object.assign({}, c, { e: c.e + dy2, t: S.tl[c.t] && !S.tl[c.t].ret ? c.t : null }))
+      ? o.cast.map((c) => Object.assign({}, c, { e: c.e + dy2, t: S.tl[c.t] && !S.tl[c.t].ret ? c.t : null, na: 0, ant: 1 }))
       : null;
   if (same && o.m == 1 && o.eps) {
     W.tvF = o.tvF;
