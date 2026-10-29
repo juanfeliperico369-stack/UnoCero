@@ -25,7 +25,11 @@
   // Solo si el diccionario no tenía la frase entera
   const Q = [
     [/^Préstamo de (.+?)( \(.+\))?(:?)$/, (m) => [`Prêt de ${m[1]}${m[2] ? " " + n(m[2].trim()) : ""}${m[3] ? " :" : ""}`, `Empréstimo de ${m[1]}${m[2] ? " " + n(m[2].trim()) : ""}${m[3]}`]],
-    [/^([^+:]+?) \+ ([^+:]+?)(: [★☆½]+)?$/, (m) => [`${n(m[1])} + ${n(m[2])}${m[3] ? " " + m[3].trim().replace(":", " :") : ""}`.replace("  ", " "), `${n(m[1])} + ${n(m[2])}${m[3] || ""}`]],
+    [/^([^+:]+?) \+ ([^+:]+?) ?: ([★☆½]+)$|^([^+:]+?) \+ ([^+:]+?)$/, (m) => {
+      const a = n((m[1] || m[4]).trim()),
+        b = n((m[2] || m[5]).trim());
+      return [`${a} + ${b}${m[3] ? " : " + m[3] : ""}`, `${a} + ${b}${m[3] ? ": " + m[3] : ""}`];
+    }],
   ];
   const t0 = trX;
   trX = function (t) {
@@ -43,6 +47,46 @@
         const m = k.match(re);
         if (m) return t.replace(k, f(m)[CFG.idi == "fr" ? 0 : 1]);
       }
+    }
+    return r;
+  };
+})();
+(() => {
+  if (typeof DIC_FR == "undefined") return;
+  const C = { Milán: ["Milan", "Milão"], París: ["Paris", "Paris"], "Nueva York": ["New York", "Nova York"] };
+  const re = /^Entre bastidores de la Semana de la Moda de (Milán|París|Nueva York), una diseñadora desconocida anota en su cuaderno los vestuarios de «(.+)»\. Antes de irse, dice: «algún día la moda tendrá su propia industria»\. Hilo y aguja para otra historia\.$/;
+  const t0 = trX;
+  trX = function (t) {
+    const m = XDIC() && t ? t.trim().match(re) : null;
+    if (!m) return t0.apply(this, arguments);
+    return CFG.idi == "fr"
+      ? `Dans les coulisses de la Fashion Week de ${C[m[1]][0]}, une créatrice inconnue dessine dans son carnet les costumes de «${m[2]}». Avant de partir, elle dit : «un jour, la mode aura sa propre industrie». Fil et aiguille pour une autre histoire.`
+      : `Nos bastidores da Semana de Moda de ${C[m[1]][1]}, uma estilista desconhecida anota no caderno os figurinos de «${m[2]}». Antes de ir embora, diz: «um dia a moda terá sua própria indústria». Linha e agulha para outra história.`;
+  };
+})();
+// Inglés: un texto que ya está traducido no se vuelve a traducir («reality show show», «Azul… (Blue) (Blue)»)
+(() => {
+  let V = null,
+    nV = -1;
+  const OUT = new Set(),
+    t0 = trTxt;
+  trTxt = function (t) {
+    if (IDI != "en" || !t) return t0(t);
+    enIni();
+    if (nV != ENM.size) {
+      V = new Set(ENM.values());
+      nV = ENM.size;
+    }
+    const k = t.trim();
+    if (!ENM.has(k)) {
+      if (V.has(k) || OUT.has(k)) return t;
+      const m = k.match(/^(.{0,40}?(?:· |: ))(.+)$/);
+      if (m && V.has(m[2]) && !ENM.has(m[2])) return t.replace(k, t0(m[1]) + m[2]);
+    }
+    const r = t0(t);
+    if (r !== t) {
+      if (OUT.size > 50000) OUT.clear();
+      OUT.add(r.trim());
     }
     return r;
   };

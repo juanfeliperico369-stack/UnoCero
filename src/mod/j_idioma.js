@@ -33,7 +33,7 @@ let trX = function (t) {
     const P = k.split(/( · |: | \/ | — | → )/);
     let n = 0;
     const q = P.map((x, i) => {
-      if (i % 2) return x == ": " && CFG.idi == "fr" ? " : " : x;
+      if (i % 2) return x == ": " && CFG.idi == "fr" && !/\s$/.test(P[i - 1]) ? " : " : x;
       const y = x.trim(),
         v = y ? xl(D, y) : null;
       if (v != null) {

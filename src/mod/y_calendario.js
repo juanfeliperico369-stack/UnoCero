@@ -49,3 +49,26 @@ V37.ventas.push((P) => {
   const k = f ? f[4] : 2;
   return Math.min(1.3, 1 + (k - 1) * 0.025) * (P.m == 4 && festEn(P.rt).includes("Burning Man") ? 1.15 : 1);
 });
+// Las semanas de la moda guardan un secreto: quien estrena en ellas deja una pista para otra industria
+const MODAF = ["Semana de la Moda de Milán", "Semana de la Moda de París", "Semana de la Moda de Nueva York"];
+V37.estreno.push((P) => {
+  if (!S || S.bot) return;
+  const f = festEn(S.t).find((x) => MODAF.includes(x));
+  if (!f) return;
+  P.moda = f;
+  S.moda = (S.moda || 0) + 1;
+  if (S.moda > 1) return;
+  const c = f.replace("Semana de la Moda de ", "");
+  nws(
+    L37(
+      `Entre bastidores de la Semana de la Moda de ${c}, una diseñadora desconocida anota en su cuaderno los vestuarios de «${P.n}». Antes de irse, dice: «algún día la moda tendrá su propia industria». Hilo y aguja para otra historia.`,
+      `Backstage at ${trTxt(f)}, an unknown designer sketches the costumes of "${P.n}" in her notebook. Before leaving, she says: "one day fashion will have its own industry." Thread and needle for another story.`,
+    ),
+  );
+});
+LOGR.push(["Hilo y aguja", "Estrena una obra durante una Semana de la Moda", () => S.pj.some((p) => p.moda), "Un secreto del calendario"]);
+E40L([
+  ["Hilo y aguja", "Thread and needle"],
+  ["Estrena una obra durante una Semana de la Moda", "Release a work during a Fashion Week"],
+  ["Un secreto del calendario", "A secret in the calendar"],
+]);

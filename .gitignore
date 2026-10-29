@@ -1,2 +1,4 @@
 dist/.code.js
 node_modules/
+*.jks
+*.keystore

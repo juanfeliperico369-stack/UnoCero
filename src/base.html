@@ -35592,7 +35592,7 @@ ${retosH()}${camp()}${misH()}
 <div class="c"><div class="k"><h3 style="margin:0">${ic("estrella")} Logros ${nl}/${LOGR.length}</h3></div><div class="m">Cada logro suma 5 de legado.</div>${LOGR.map(
     (l, i) => {
       const on2 = (S.lgr || []).includes(i);
-      return `<div class="fila"><span>${on2 ? ic("ok") + " " : ""}<b${on2 ? "" : ' style="color:var(--m)"'}>${esc(l[0])}</b><span class="m"> · ${esc(l[1])}</span></span></div>`;
+      return `<div class="fila"><span>${on2 ? ic("ok") + " " : ""}<b${on2 ? "" : ' style="color:var(--m)"'}>${esc(l[3] && !on2 ? "???" : l[0])}</b><span class="m"> · ${esc(l[3] && !on2 ? l[3] : l[1])}</span></span></div>`;
     },
   ).join("")}</div>${hitos()}`;
 }

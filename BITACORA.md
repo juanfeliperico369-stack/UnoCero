@@ -7,7 +7,7 @@ Creado por OneZero · Infinite Tree.
 - `dist/INDUSTRY_ART_1.0.aab`: el paquete para subir a Google Play.
 - `dist/INDUSTRY_ART_1.0.apk`: la misma app, para instalar y probar directamente en el teléfono.
 
-La app Android es propia (carpeta `android/`): una pantalla con el juego, sin anuncios, sin compras, sin servicios de terceros y con un solo permiso (Internet, que el WebView necesita aunque el juego no se conecta a nada). Pesa 1,8 MB. Reemplaza al envoltorio de la app 1.0, que traía el SDK de anuncios de Google configurado con el identificador **de prueba** de AdMob, el permiso de identificador publicitario y la biblioteca de compras. Eso contradecía la política de privacidad y podía causar un rechazo en Google Play.
+La app Android es propia (carpeta `android/`): una pantalla con el juego, sin anuncios, sin compras, sin servicios de terceros y con un solo permiso (Internet, que el WebView necesita aunque el juego no se conecta a nada). Pesa 2,2 MB. Reemplaza al envoltorio de la app 1.0, que traía el SDK de anuncios de Google configurado con el identificador **de prueba** de AdMob, el permiso de identificador publicitario y la biblioteca de compras. Eso contradecía la política de privacidad y podía causar un rechazo en Google Play.
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
@@ -173,6 +173,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 - **Calendario según el documento:** se sumaron la Semana de la Moda de Milán, París y Nueva York, el Día de la Mujer, el Día de la Tierra, el Día del Libro, las fiestas folclóricas, Burning Man, el Día Internacional de la Paz y la Comic Con. Halloween suma terror y monstruos, y Pascua, lo religioso.
   - Cada fiesta mueve las ventas de las obras que le sientan: la moda a la música y el teatro, el Día del Libro y la Comic Con a los libros, y Burning Man a la música (+15 %).
   - Si en una semana caen varias fiestas, cada una suma un poco más.
+  - **Secreto de la Semana de la Moda:** quien estrena una obra durante la Semana de la Moda de Milán, París o Nueva York recibe una noticia única: una diseñadora desconocida toma nota de los vestuarios y anuncia que «algún día la moda tendrá su propia industria». También desbloquea un logro oculto («???» hasta conseguirlo). Es la pista que deja esta versión para INDUSTRY ART 2.
 - **Lanzamiento en dos pasos:**
   - **1 · Marketing:** con la obra terminada, se paga la campaña y la obra puede quedar en reposo.
   - **2 · Fecha y plan de salida:** después se elige la fecha y cómo sale, sin volver a pagar la campaña.
@@ -209,6 +210,16 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - «Avanzar» en los seis medios, planes de salida en todos los medios, documento de la idea desde la ficha final (obras nuevas y anteriores) y eventos (la escuela no aparece al empezar, sí después de veinte años).
   - App Android: se simuló el envoltorio en Chromium (mismo origen https y mismo puente): guarda la partida, exporta, guarda documentos, imprime a PDF y el botón Atrás cierra ventanas antes de salir. El .aab pasa la validación oficial (`bundletool validate`).
 
+- **Ronda de ayudas, calendario, lanzamiento y música:**
+  - Prueba de estrés en español (1995–2012, 3.453 pulsaciones), francés (2040–2060, pantalla ancha, 3.453), portugués (1930–1950, 3.243) e inglés (1985–2000, 3.433): sin errores ni textos rotos.
+  - **Estabilidad de la traducción:** se tradujo dos veces cada texto visible de las pestañas, los creadores, los ajustes, las ayudas y el plan de salida en los cuatro idiomas, y ya ninguno cambia. Así se corrigieron tres fallos que podían congelar la pantalla o repetir palabras:
+    - En francés, el espacio antes de los dos puntos se volvía a añadir en cada pasada.
+    - En inglés salían «reality show show», «The The Matrix» y «Azul… (Blue) (Blue)».
+    - Ahora un texto ya traducido no se traduce otra vez.
+  - Partidas automáticas 1700–1780, 1880–1960, 1960–2040 y 2040–2120: sin errores, sin quiebra y sin «undefined» ni «NaN» en pantalla.
+  - Presupuesto exacto en los cuatro idiomas y en «dólares de hoy»; ayudas que se cierran con Atrás y Escape; campaña en reposo, estreno 60 semanas después sin volver a pagar y estreno en una Semana de la Moda con su logro oculto.
+  - El .aab pasa `bundletool validate`, y el juego dentro del .apk es idéntico byte a byte a `dist/INDUSTRY_ART.html`.
+
 ## Lo que queda pendiente
 - En francés y portugués, las noticias y eventos largos con muchas variables pueden mostrar partes en español. Para cubrirlos, se amplían `src/mod/i_dic*.js` o las reglas de `src/mod/j_idioma.js`.
 - La abreviatura «mar» se usa en el juego para marzo y para martes. En las fechas del plan de salida ya se distingue, pero en otros textos sueltos el portugués puede mostrar «Mar» donde debería decir «Ter».
@@ -222,3 +233,4 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 - **Probar:** `node tools/run.js 'await BOT.correr({y0:1990,y1:2010}); return 1'`.
 - **Prueba de estrés:** `node tools/monkey.js <año inicial> <año final> <ancho> [es|en|fr|pt]`.
 - **Cobertura de idiomas:** `node tools/cov2.js fr salida.txt [largo máximo]` recorre las pestañas, el creador (detallado y rápido) de los seis medios, los ajustes y el plan de salida, y lista los textos que siguen en español.
+- **Estabilidad de la traducción:** `node tools/estable.js fr salida.txt` lista los textos que cambiarían si se tradujeran otra vez. Debe salir vacío: un texto inestable hace que la traducción de la pantalla no termine nunca.

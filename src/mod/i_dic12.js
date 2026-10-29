@@ -108,6 +108,9 @@
     ["Presupuesto exacto", "Budget exact", "Orçamento exato"],
     ["Número exacto", "Nombre exact", "Número exato"],
     ["Misión cumplida", "Mission accomplie", "Missão cumprida"],
+    ["Hilo y aguja", "Fil et aiguille", "Linha e agulha"],
+    ["Estrena una obra durante una Semana de la Moda", "Sors une œuvre pendant une Fashion Week", "Estreie uma obra durante uma Semana de Moda"],
+    ["Un secreto del calendario", "Un secret du calendrier", "Um segredo do calendário"],
     ["Música: detalles", "Musique : détails", "Música: detalhes"],
     ["Una misión vence pronto: míralo en Estudio → Metas.", "Une mission arrive bientôt à échéance : regarde dans Studio → Objectifs.", "Uma missão vence em breve: veja em Estúdio → Metas."],
   ].forEach(([e, f, p]) => {

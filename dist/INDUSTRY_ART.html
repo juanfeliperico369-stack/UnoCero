@@ -35658,7 +35658,7 @@ ${retosH()}${camp()}${misH()}
 <div class="c"><div class="k"><h3 style="margin:0">${ic("estrella")} Logros ${nl}/${LOGR.length}</h3></div><div class="m">Cada logro suma 5 de legado.</div>${LOGR.map(
     (l, i) => {
       const on2 = (S.lgr || []).includes(i);
-      return `<div class="fila"><span>${on2 ? ic("ok") + " " : ""}<b${on2 ? "" : ' style="color:var(--m)"'}>${esc(l[0])}</b><span class="m"> · ${esc(l[1])}</span></span></div>`;
+      return `<div class="fila"><span>${on2 ? ic("ok") + " " : ""}<b${on2 ? "" : ' style="color:var(--m)"'}>${esc(l[3] && !on2 ? "???" : l[0])}</b><span class="m"> · ${esc(l[3] && !on2 ? l[3] : l[1])}</span></span></div>`;
     },
   ).join("")}</div>${hitos()}`;
 }
@@ -60496,6 +60496,9 @@ E40L([
     ["Presupuesto exacto", "Budget exact", "Orçamento exato"],
     ["Número exacto", "Nombre exact", "Número exato"],
     ["Misión cumplida", "Mission accomplie", "Missão cumprida"],
+    ["Hilo y aguja", "Fil et aiguille", "Linha e agulha"],
+    ["Estrena una obra durante una Semana de la Moda", "Sors une œuvre pendant une Fashion Week", "Estreie uma obra durante uma Semana de Moda"],
+    ["Un secreto del calendario", "Un secret du calendrier", "Um segredo do calendário"],
     ["Música: detalles", "Musique : détails", "Música: detalhes"],
     ["Una misión vence pronto: míralo en Estudio → Metas.", "Une mission arrive bientôt à échéance : regarde dans Studio → Objectifs.", "Uma missão vence em breve: veja em Estúdio → Metas."],
   ].forEach(([e, f, p]) => {
@@ -60715,7 +60718,7 @@ let trX = function (t) {
     const P = k.split(/( · |: | \/ | — | → )/);
     let n = 0;
     const q = P.map((x, i) => {
-      if (i % 2) return x == ": " && CFG.idi == "fr" ? " : " : x;
+      if (i % 2) return x == ": " && CFG.idi == "fr" && !/\s$/.test(P[i - 1]) ? " : " : x;
       const y = x.trim(),
         v = y ? xl(D, y) : null;
       if (v != null) {
@@ -61077,7 +61080,11 @@ setTimeout(() => {
   ];
   const Q = [
     [/^Préstamo de (.+?)( \(.+\))?(:?)$/, (m) => [`Prêt de ${m[1]}${m[2] ? " " + n(m[2].trim()) : ""}${m[3] ? " :" : ""}`, `Empréstimo de ${m[1]}${m[2] ? " " + n(m[2].trim()) : ""}${m[3]}`]],
-    [/^([^+:]+?) \+ ([^+:]+?)(: [★☆½]+)?$/, (m) => [`${n(m[1])} + ${n(m[2])}${m[3] ? " " + m[3].trim().replace(":", " :") : ""}`.replace("  ", " "), `${n(m[1])} + ${n(m[2])}${m[3] || ""}`]],
+    [/^([^+:]+?) \+ ([^+:]+?) ?: ([★☆½]+)$|^([^+:]+?) \+ ([^+:]+?)$/, (m) => {
+      const a = n((m[1] || m[4]).trim()),
+        b = n((m[2] || m[5]).trim());
+      return [`${a} + ${b}${m[3] ? " : " + m[3] : ""}`, `${a} + ${b}${m[3] ? ": " + m[3] : ""}`];
+    }],
   ];
   const t0 = trX;
   trX = function (t) {
@@ -61095,6 +61102,45 @@ setTimeout(() => {
         const m = k.match(re);
         if (m) return t.replace(k, f(m)[CFG.idi == "fr" ? 0 : 1]);
       }
+    }
+    return r;
+  };
+})();
+(() => {
+  if (typeof DIC_FR == "undefined") return;
+  const C = { Milán: ["Milan", "Milão"], París: ["Paris", "Paris"], "Nueva York": ["New York", "Nova York"] };
+  const re = /^Entre bastidores de la Semana de la Moda de (Milán|París|Nueva York), una diseñadora desconocida anota en su cuaderno los vestuarios de «(.+)»\. Antes de irse, dice: «algún día la moda tendrá su propia industria»\. Hilo y aguja para otra historia\.$/;
+  const t0 = trX;
+  trX = function (t) {
+    const m = XDIC() && t ? t.trim().match(re) : null;
+    if (!m) return t0.apply(this, arguments);
+    return CFG.idi == "fr"
+      ? `Dans les coulisses de la Fashion Week de ${C[m[1]][0]}, une créatrice inconnue dessine dans son carnet les costumes de «${m[2]}». Avant de partir, elle dit : «un jour, la mode aura sa propre industrie». Fil et aiguille pour une autre histoire.`
+      : `Nos bastidores da Semana de Moda de ${C[m[1]][1]}, uma estilista desconhecida anota no caderno os figurinos de «${m[2]}». Antes de ir embora, diz: «um dia a moda terá sua própria indústria». Linha e agulha para outra história.`;
+  };
+})();
+(() => {
+  let V = null,
+    nV = -1;
+  const OUT = new Set(),
+    t0 = trTxt;
+  trTxt = function (t) {
+    if (IDI != "en" || !t) return t0(t);
+    enIni();
+    if (nV != ENM.size) {
+      V = new Set(ENM.values());
+      nV = ENM.size;
+    }
+    const k = t.trim();
+    if (!ENM.has(k)) {
+      if (V.has(k) || OUT.has(k)) return t;
+      const m = k.match(/^(.{0,40}?(?:· |: ))(.+)$/);
+      if (m && V.has(m[2]) && !ENM.has(m[2])) return t.replace(k, t0(m[1]) + m[2]);
+    }
+    const r = t0(t);
+    if (r !== t) {
+      if (OUT.size > 50000) OUT.clear();
+      OUT.add(r.trim());
     }
     return r;
   };
@@ -63584,6 +63630,28 @@ V37.ventas.push((P) => {
   const k = f ? f[4] : 2;
   return Math.min(1.3, 1 + (k - 1) * 0.025) * (P.m == 4 && festEn(P.rt).includes("Burning Man") ? 1.15 : 1);
 });
+const MODAF = ["Semana de la Moda de Milán", "Semana de la Moda de París", "Semana de la Moda de Nueva York"];
+V37.estreno.push((P) => {
+  if (!S || S.bot) return;
+  const f = festEn(S.t).find((x) => MODAF.includes(x));
+  if (!f) return;
+  P.moda = f;
+  S.moda = (S.moda || 0) + 1;
+  if (S.moda > 1) return;
+  const c = f.replace("Semana de la Moda de ", "");
+  nws(
+    L37(
+      `Entre bastidores de la Semana de la Moda de ${c}, una diseñadora desconocida anota en su cuaderno los vestuarios de «${P.n}». Antes de irse, dice: «algún día la moda tendrá su propia industria». Hilo y aguja para otra historia.`,
+      `Backstage at ${trTxt(f)}, an unknown designer sketches the costumes of "${P.n}" in her notebook. Before leaving, she says: "one day fashion will have its own industry." Thread and needle for another story.`,
+    ),
+  );
+});
+LOGR.push(["Hilo y aguja", "Estrena una obra durante una Semana de la Moda", () => S.pj.some((p) => p.moda), "Un secreto del calendario"]);
+E40L([
+  ["Hilo y aguja", "Thread and needle"],
+  ["Estrena una obra durante una Semana de la Moda", "Release a work during a Fashion Week"],
+  ["Un secreto del calendario", "A secret in the calendar"],
+]);
 
 const planB = ACT["plan"];
 ACT["plan"] = (v) => {
