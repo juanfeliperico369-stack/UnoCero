@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 6 (se instala encima de la entrega anterior, que era la 5). Cada actualización debe subir el versionCode (`VC=7 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 7 (se instala encima de la entrega anterior, que era la 6). Cada actualización debe subir el versionCode (`VC=8 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -221,11 +221,20 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - Presupuesto exacto en los cuatro idiomas y en «dólares de hoy»; ayudas que se cierran con Atrás y Escape; campaña en reposo, estreno 60 semanas después sin volver a pagar y estreno en una Semana de la Moda con su logro oculto.
   - El .aab pasa `bundletool validate`, y el juego dentro del .apk es idéntico byte a byte a `dist/INDUSTRY_ART.html`.
 
-- **Especie o forma de cada personaje:** en la tarjeta de cada personaje se elige qué es. Hay 16 formas: humano, animal, animal que habla, extraterrestre, robot o androide, monstruo, no muerto, cambiaformas, dios o ser mitológico, criatura fantástica, espíritu o fantasma, ángel o demonio, superhumano o mutante, objeto con vida, planta o naturaleza viva y concepto encarnado (la Muerte, el Tiempo).
+- **Especie o forma de cada personaje:** en la tarjeta de cada personaje se elige qué es. Hay 16 formas: humano, animal, animal que habla, extraterrestre, robot o androide, monstruo, monstruo no muerto (vampiro, zombi, momia), monstruo cambiaformas (hombre lobo), dios o ser mitológico, criatura fantástica, espíritu o fantasma, ángel o demonio, superhumano o mutante, objeto con vida, planta o naturaleza viva y concepto encarnado (la Muerte, el Tiempo).
   - **Costo:** en imagen real, los no humanos cuestan más (de +2 % a +7 % por personaje principal; los secundarios cuentan menos). Pasa del maquillaje a la animatrónica y los efectos, con un tope de +25 % y una semana más si el gasto es grande. En animación no cuestan nada. En captura de movimiento o actores digitales cuestan la mitad, en teatro y videojuegos menos, y en libros y música nada.
   - **Encaje:** si la especie encaja con los géneros de la obra (un dragón en fantasía, un extraterrestre en ciencia ficción) suma público y crítica. Si no encaja, resta, salvo en comedia, surrealismo o experimental. En una obra de realidad, los seres imposibles restan credibilidad. Tres o más especies en fantasía, ciencia ficción o aventura dan «un mundo poblado de criaturas».
   - **Personajes nuevos:** nacen con una especie que le sienta a la obra. Una animación infantil trae animales que hablan u objetos con vida; el terror, monstruos y espíritus; los superhéroes, mutantes. Un dado propone otra especie al azar.
   - **Documento y ayuda:** el documento de la idea muestra la especie de cada personaje, y tiene su ayuda «i» con un dato curioso, en los cuatro idiomas.
+- **Personajes prestados (como Drácula en una película de Batman):** en el creador, el botón «Traer un personaje existente» lleva a tu historia un personaje de otra obra sin adaptar la original. Llega con su nombre, su sexo y su especie.
+  - **Dominio público:** los personajes de las obras cuyos derechos ya vencieron. Son gratis.
+  - **Obras famosas:** los personajes de las obras reales de la historia (Batman, Superman, Spider-Man…). Si sus derechos siguen vigentes, cobran una licencia de +3 % a +10 % del presupuesto según su fama (los secundarios, menos); si ya cumplieron 95 años, son gratis.
+  - **Tus franquicias:** los personajes de tus obras estrenadas, con su especie, edad y arquetipo. Cuando el préstamo se estrena, su saga gana interés.
+  - **Tus derechos y material:** los personajes de lo que compraste o creaste.
+  - **Efectos:** un personaje conocido atrae público según su fama, y los clásicos suman un poco de crítica. Si lo usas en muchas obras, el público se cansa: «el público ya los vio demasiado». Si le cambias el nombre, deja de reconocerse.
+  - **Origen visible:** la tarjeta y el documento de la idea muestran de dónde viene: «De «Drácula» · dominio público».
+  - **Especie de cada personaje del catálogo:** los personajes de las 333 obras de dominio público y de las obras reales traen su especie asignada, también al adaptar la obra completa. El conde Drácula es «Monstruo no muerto»; la criatura de Frankenstein, «Monstruo»; el Espantapájaros, un objeto con vida; el Hombre de Hojalata, un robot; Pinocho, un objeto con vida; el Grillo Parlante, un animal que habla; Superman, un extraterrestre; Spider-Man, un superhumano.
+  - Para que se lean como monstruos, «No muerto» pasó a llamarse «Monstruo no muerto» y «Cambiaformas», «Monstruo cambiaformas».
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).

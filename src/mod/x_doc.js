@@ -40,7 +40,7 @@ docDatos = function () {
       ext: (W.cast || []).filter((c) => c.i == 2).length,
       ad: adulto(Object.assign({}, W, { gn: wGn() })),
       m: W.m,
-      cast: (Pn.cast || []).map((c) => ({ n: c.n, x: c.x, e: c.e, sp: c.sp | 0, rol: IMP[c.i][0], arq: arqN(c), d: arqD(c), mot: c.mot | 0, rel: c.rel | 0, i: c.i, act: c.t != null && S.tl[c.t] ? S.tl[c.t].n + (S.tl[c.t].you ? " (" + T40("tú", "you") + ")" : "") : "" })),
+      cast: (Pn.cast || []).map((c) => ({ n: c.n, x: c.x, e: c.e, sp: c.sp | 0, pr: c.pr && c.n == c.pr.n ? c.pr : null, rol: IMP[c.i][0], arq: arqN(c), d: arqD(c), mot: c.mot | 0, rel: c.rel | 0, i: c.i, act: c.t != null && S.tl[c.t] ? S.tl[c.t].n + (S.tl[c.t].you ? " (" + T40("tú", "you") + ")" : "") : "" })),
       brTxt: L37(`×${dec1(Pn.br || 1, 2)} del típico de ${yr()}`, `×${dec1(Pn.br || 1, 2)} the typical in ${yr()}`),
     };
   } catch (e) {
@@ -203,6 +203,7 @@ function docModelo(d, modo) {
           c.mot && PJMOT[c.mot] ? T40("Motivación", "Motivation") + ": " + lc(PJMOT[c.mot]) : "",
           c.rel && PJREL[c.rel] ? T40("Relación con el protagonista", "Relationship to the lead") + ": " + lc(PJREL[c.rel]) : "",
           co && c.act ? docInterp(c) + c.act : "",
+          c.pr && typeof presTxt == "function" ? presTxt(c.pr) : "",
         ]
           .filter(Boolean)
           .join(". ") + ".",
