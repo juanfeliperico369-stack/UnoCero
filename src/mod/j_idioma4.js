@@ -109,6 +109,8 @@
     ["clasificación usual", "classification habituelle", "classificação usual"],
     ["mira las obras del año anterior", "regarde les œuvres de l'année précédente", "olha as obras do ano anterior"],
     ["las fuentes solo dan el año", "les sources ne donnent que l'année", "as fontes só dão o ano"],
+    ["Secuela", "Suite", "Sequência"],
+    ["Precuela", "Préquelle", "Prequela"],
   ].forEach(([e, f, p]) => {
     if (f) DIC_FR[e] = DIC_FR[e] || f;
     if (p) DIC_PT[e] = DIC_PT[e] || p;
@@ -130,6 +132,18 @@
     [/^prefiere (.+) \(rumor\)$/, (m) => [`préfère ${w(m[1])} (rumeur)`, `prefere ${w(m[1])} (rumor)`]],
     [/^pesa más en (.+)$/, (m) => [`compte davantage en ${lista(m[1])}`, `pesa mais em ${lista(m[1])}`]],
     [/^clasificación usual (.+)$/, (m) => [`classification habituelle ${m[1]}`, `classificação usual ${m[1]}`]],
+    // Origen de la obra y crónica de la franquicia
+    [/^franquicia «([^«»]+)»$/, (m) => [`franchise «${m[1]}»`, `franquia «${m[1]}»`]],
+    [/^crossover con («[^·]+»)$/, (m) => [`crossover avec ${m[1]}`, `crossover com ${m[1]}`]],
+    [/^Adaptación de «([^«»]+)» \(([^()]+?) de ([^()]+), ([^()]+?)\)$/, (m) => {
+      const y = m[4].replace(" a. C.", fr() ? " av. J.-C." : " a.C.");
+      return [`Adaptation de «${m[1]}» (${w(m[2])} de ${m[3]}, ${y})`, `Adaptação de «${m[1]}» (${w(m[2])} de ${m[3]}, ${y})`];
+    }],
+    [/^(Secuela|Precuela|Spin-off|Historia paralela|Remake|Soft reboot|Reboot|Adaptación|Crossover) de «([^«»]+)»$/, (m) => [`${w(m[1])} de «${m[2]}»`, `${w(m[1])} de «${m[2]}»`]],
+    [/^(Separada de|Crossover con|Crossover oficial con|Ya no es oficial con) «([^«»]+)» \((-?\d+)\)$/, (m) => {
+      const k = ["Separada de", "Crossover con", "Crossover oficial con", "Ya no es oficial con"].indexOf(m[1]);
+      return [`${["Séparée de", "Crossover avec", "Crossover officiel avec", "N'est plus officiel avec"][k]} «${m[2]}» (${m[3]})`, `${["Separada de", "Crossover com", "Crossover oficial com", "Já não é oficial com"][k]} «${m[2]}» (${m[3]})`];
+    }],
   ];
   const P = SEG0.concat(CITA, [
     [

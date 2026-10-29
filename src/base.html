@@ -22609,7 +22609,7 @@ function frNew(P) {
     S.adN = (S.adN | 0) + 1;
   }
   if (P.src != null && F.x != null) {
-    P.xf = [F.x];
+    P.xf = uniq((P.xf || []).concat([F.x]));
     P.xj = 1;
   }
   cnAdd(P);
@@ -22851,7 +22851,7 @@ function frM(f) {
     F.xh.length
       ? `<div class="m">${F.xh
           .slice(-4)
-          .map((x) => (x.j ? "Crossover con" : "Separada de") + " \u00AB" + esc(frG(x.f).n) + "\u00BB (" + x.y + ")")
+          .map((x) => ["Separada de", "Crossover con", "Crossover oficial con", "Ya no es oficial con"][x.j | 0] + " \u00AB" + esc(frG(x.f).n) + "\u00BB (" + x.y + ")")
           .join(" \u00B7 ")}</div>`
       : ""
   }</div></div>
@@ -22867,7 +22867,7 @@ function frM(f) {
   ]
     .map((x) => `<div><div class="m">${x[0]}</div><b>${x[1]}</b></div>`)
     .join("")}</div>
-<div class="k" style="margin-top:10px;justify-content:flex-start">${jo ? bt("xos", f, "Separar franquicias", "r") : est ? bt("xom", f, ic("cruce") + " Crossover") : ""}${!sold && !jo && est ? bt("frs", f, FRS.sell ? "Ocultar venta" : ic("dinero") + " Vender") : ""}</div>${FRS.sell ? frSellH(f) : ""}
+<div class="k" style="margin-top:10px;justify-content:flex-start">${jo ? bt("xos", f, "Separar franquicias", "r") : ""}${!sold && !jo && est ? bt("frs", f, FRS.sell ? "Ocultar venta" : ic("dinero") + " Vender") : ""}</div>${FRS.sell ? frSellH(f) : ""}
 ${off.map(([o, k]) => `<div class="c k sub"><div style="display:flex;gap:8px;align-items:center"><canvas class="rl" data-r="${o.r}" style="width:34px;height:34px;flex:none"></canvas><div><b>${esc(S.rv[o.r].n)}</b><div class="m">Ofrece ${fm(o.p)} · vence sem ${(o.e % 52) + 1}</div></div></div><span>${bt("fra", k, "Aceptar", "a")} ${bt("frr", k, ic("cerrar"))}</span></div>`).join("")}</div>
 <div class="c"><h3 style="margin:0">Canon · orden cronológico</h3><details class="nota"><summary aria-label="Más información"></summary><div class="m">Editable. Cada continuidad es una línea y las ramas salen de la obra que las originó. Toca una obra para moverla.</div></details><div style="overflow-x:auto;margin-top:8px;border-radius:10px" id="tlw"><canvas id="tlc" style="display:block"></canvas></div><div class="m" style="margin-top:6px">${lgnd(C, jo ? f : null)}</div><div id="frsp" style="margin-top:8px">${frSP(f)}</div></div>
 <div class="c"><h3 style="margin:0">Origen · fecha de lanzamiento</h3><div class="m">Orden real de estreno; no se puede editar.</div><div style="overflow-x:auto;margin-top:8px;border-radius:10px"><canvas id="tlo" style="display:block"></canvas></div></div>
@@ -54821,8 +54821,11 @@ vMerc40 = function () {
   const ban = `<div class="c"><h3 style="margin:0 0 6px">${ic("dinero")} ${E40("Bancos", "Banks")}</h3><div class="m">${L37("Cada banco paga dividendos cada mes. Más de 3 bancos activan multas antimonopolio.", "Each bank pays monthly dividends. More than 3 banks trigger antitrust fines.")}</div>${BAN40.map((n, i) => `<div class="fila"><span>${esc(n)}</span>${S.ban40 && S.ban40[i] ? `<b style="color:var(--a)">${L37("tuyo", "yours")}</b>` : bt("ban", i, L37("Comprar", "Buy") + " · " + fm(banP(i)), S.cash >= banP(i) ? "" : "off")}</div>`).join("")}</div>`;
   return vMercN40.apply(this, arguments) + red + dir + ban;
 };
-// ---------- Crossovers de hasta 3 franquicias (tuyas o licenciadas a rivales) en una obra ----------
-E40L([["Crossover con otras franquicias (hasta 3)", "Crossover with other franchises (up to 3)"]]);
+// ---------- Crossovers sin límite de franquicias (tuyas o licenciadas a rivales) en una obra ----------
+E40L([
+  ["Crossover con otras franquicias (hasta 3)", "Crossover with other franchises (up to 3)"],
+  ["Crossover con otras franquicias", "Crossover with other franchises"],
+]);
 function xo40H() {
   const own = frList().filter((f) => f != W.fid && frPs(f).some((p) => p.st >= 3)).slice(0, 20),
     riv = [];
@@ -54831,14 +54834,14 @@ function xo40H() {
   W.xo40 = W.xo40 || [];
   const n = W.xo40.length,
     on = (k) => W.xo40.includes(k);
-  return `<label class="m">${E40("Crossover con otras franquicias (hasta 3)", "Crossover with other franchises (up to 3)")} · ${n}/3</label><div class="chips">${own.map((f) => chx("wxo", "f" + f, ic("franquicia") + " " + esc(frG(f).n), on("f" + f), !on("f" + f) && n >= 3)).join("")}${riv.slice(0, 12).map(([i, h]) => chx("wxo", "r" + i + "|" + encodeURIComponent(h), esc(h) + " · " + esc(S.rv[i].n) + " (" + L37("licencia", "license") + ")", on("r" + i + "|" + encodeURIComponent(h)), !on("r" + i + "|" + encodeURIComponent(h)) && n >= 3)).join("")}</div>${n ? `<div class="m">${L37("Cada franquicia suma público y expectativa; las de rivales cuestan una licencia. Con 3, la crítica teme que sea demasiado.", "Each franchise adds audience and hype; rivals' ones cost a license. With 3, critics fear it's too much.")}</div>` : ""}`;
+  return `<label class="m">${E40("Crossover con otras franquicias", "Crossover with other franchises")}${n ? " · " + n : ""}</label><div class="chips">${own.map((f) => chx("wxo", "f" + f, ic("franquicia") + " " + esc(frG(f).n), on("f" + f))).join("")}${riv.slice(0, 12).map(([i, h]) => chx("wxo", "r" + i + "|" + encodeURIComponent(h), esc(h) + " · " + esc(S.rv[i].n) + " (" + L37("licencia", "license") + ")", on("r" + i + "|" + encodeURIComponent(h)))).join("")}</div>${n ? `<div class="m">${L37("Sin límite: cada franquicia suma público y expectativa; las de rivales cuestan una licencia. Desde 4, la crítica teme que sea demasiado.", "No limit: each franchise adds audience and hype; rivals' ones cost a license. From 4 on, critics fear it's too much.")}</div>` : ""}`;
 }
 ACT["wxo"] = (v) => {
   W.xo40 = W.xo40 || [];
   const k = String(v),
     j = W.xo40.indexOf(k);
   if (j >= 0) W.xo40.splice(j, 1);
-  else if (W.xo40.length < 3) W.xo40.push(k);
+  else W.xo40.push(k);
   return wz();
 };
 const mxTabX40 = mxTab;
@@ -54858,7 +54861,8 @@ V37.prod.push((P, W2) => {
 V37.mods.push((P, add) => {
   const n = Array.isArray(P.xo40) ? P.xo40.length : P.xo40 | 0;
   if (!n) return;
-  add(n >= 3 ? -0.5 : 0, Math.min(2.5, n), L37("crossover de franquicias", "franchise crossover"));
+  // Más franquicias, más público; desde la cuarta la crítica lo ve como un evento recargado
+  add(n >= 4 ? -Math.min(1.5, 0.25 * (n - 3)) : 0, Math.round(Math.min(6, 1.2 * Math.pow(n, 0.75)) * 10) / 10, L37("crossover de franquicias", "franchise crossover"));
 });
 
 

@@ -140,10 +140,10 @@ function presOp() {
       .join("")}</div></div>`;
   op(
     `<div translate="no"><div class="c"><div class="k"><h2 style="margin:0">${tx4("Traer un personaje", "Bring in a character", "Faire venir un personnage", "Trazer um personagem")}</h2>${bt("wpresx", "", tx4("Volver al creador", "Back to the creator", "Retour au créateur", "Voltar ao criador"))}</div><div class="m">${tx4(
-      "Toma un personaje de otra obra y llévalo a tu historia sin adaptar la original, como Drácula en una película de Batman. Llega con su nombre, su sexo y su especie. Los de dominio público son gratis; los de obras con derechos vigentes cobran licencia. Los famosos atraen público, pero si los repites demasiado el público se cansa.",
-      "Take a character from another work and bring it into your story without adapting the original, like Dracula in a Batman film. It arrives with its name, sex and species. Public domain characters are free; those from works still under copyright charge a license. Famous ones draw audiences, but overuse them and people tire.",
-      "Prends un personnage d'une autre œuvre et amène-le dans ton histoire sans adapter l'originale, comme Dracula dans un film de Batman. Il arrive avec son nom, son sexe et son espèce. Ceux du domaine public sont gratuits ; ceux d'œuvres encore protégées demandent une licence. Les célèbres attirent le public, mais à force de les répéter, il se lasse.",
-      "Pegue um personagem de outra obra e leve-o para a sua história sem adaptar a original, como o Drácula num filme do Batman. Ele chega com nome, sexo e espécie. Os de domínio público são grátis; os de obras com direitos vigentes cobram licença. Os famosos atraem público, mas, se você os repetir demais, o público se cansa.",
+      "Toma un personaje de otra obra y llévalo a tu historia sin adaptar la original, como Drácula en una película de Batman. Llega con su nombre, su sexo y su especie. Los de dominio público son gratis; los de obras con derechos vigentes cobran licencia. Los famosos atraen público, pero si los repites demasiado el público se cansa. Tomar un personaje no es un crossover: solo llega el personaje.",
+      "Take a character from another work and bring it into your story without adapting the original, like Dracula in a Batman film. It arrives with its name, sex and species. Public domain characters are free; those from works still under copyright charge a license. Famous ones draw audiences, but overuse them and people tire. Borrowing a character isn't a crossover: only the character comes along.",
+      "Prends un personnage d'une autre œuvre et amène-le dans ton histoire sans adapter l'originale, comme Dracula dans un film de Batman. Il arrive avec son nom, son sexe et son espèce. Ceux du domaine public sont gratuits ; ceux d'œuvres encore protégées demandent une licence. Les célèbres attirent le public, mais à force de les répéter, il se lasse. Emprunter un personnage n'est pas un crossover : seul le personnage vient.",
+      "Pegue um personagem de outra obra e leve-o para a sua história sem adaptar a original, como o Drácula num filme do Batman. Ele chega com nome, sexo e espécie. Os de domínio público são grátis; os de obras com direitos vigentes cobram licença. Os famosos atraem público, mas, se você os repetir demais, o público se cansa. Pegar um personagem não é um crossover: só o personagem vem.",
     )}</div><div class="chips">${T.map(([k, n]) => chx("wpresk", k, n, PRES.k == k)).join("")}</div><div class="k" style="gap:6px"><input type="search" value="${esc(PRES.q)}" placeholder="${tx4("Buscar obra o personaje", "Search a work or character", "Chercher une œuvre ou un personnage", "Buscar obra ou personagem")}" onchange="act('wpresq',this.value)" onkeydown="if(event.key=='Enter'){event.preventDefault();act('wpresq',this.value)}" style="flex:1">${bt("wpresq", "", ic("buscar"))}</div></div>${
       vis.map(fila).join("") ||
       `<div class="c"><div class="m">${
@@ -258,11 +258,4 @@ V37.mods.push((P, add) => {
   if (a || cr) add(Math.round(cr * 10) / 10, Math.round(Math.min(2.5, a) * 10) / 10, tx4("personajes conocidos", "well-known characters", "personnages connus", "personagens conhecidos") + ": " + C.slice(0, 3).map((c) => c.n).join(", "));
   if (cans) add(-Math.round(Math.min(1.5, cans) * 10) / 10, -Math.round(Math.min(0.8, cans / 2) * 10) / 10, tx4("el público ya los vio demasiado", "audiences have seen them too often", "le public les a trop vus", "o público já os viu demais"));
 });
-// Al estrenar, un personaje de tu franquicia le da vida a su saga
-V37.estreno.push((P) => {
-  const F = new Set((P.cast || []).filter((c) => presVivo(c) && c.pr.k == "fr" && c.pr.fid != null && c.pr.fid != P.fid).map((c) => c.pr.fid));
-  F.forEach((f) => {
-    const g = frG(f);
-    g.hyB = (g.hyB || 0) + 0.3;
-  });
-});
+// Un personaje prestado no convierte la obra en crossover: no une franquicias ni canons ni da hype a otra saga

@@ -22678,7 +22678,7 @@ function frNew(P) {
     S.adN = (S.adN | 0) + 1;
   }
   if (P.src != null && F.x != null) {
-    P.xf = [F.x];
+    P.xf = uniq((P.xf || []).concat([F.x]));
     P.xj = 1;
   }
   cnAdd(P);
@@ -22920,7 +22920,7 @@ function frM(f) {
     F.xh.length
       ? `<div class="m">${F.xh
           .slice(-4)
-          .map((x) => (x.j ? "Crossover con" : "Separada de") + " \u00AB" + esc(frG(x.f).n) + "\u00BB (" + x.y + ")")
+          .map((x) => ["Separada de", "Crossover con", "Crossover oficial con", "Ya no es oficial con"][x.j | 0] + " \u00AB" + esc(frG(x.f).n) + "\u00BB (" + x.y + ")")
           .join(" \u00B7 ")}</div>`
       : ""
   }</div></div>
@@ -22936,7 +22936,7 @@ function frM(f) {
   ]
     .map((x) => `<div><div class="m">${x[0]}</div><b>${x[1]}</b></div>`)
     .join("")}</div>
-<div class="k" style="margin-top:10px;justify-content:flex-start">${jo ? bt("xos", f, "Separar franquicias", "r") : est ? bt("xom", f, ic("cruce") + " Crossover") : ""}${!sold && !jo && est ? bt("frs", f, FRS.sell ? "Ocultar venta" : ic("dinero") + " Vender") : ""}</div>${FRS.sell ? frSellH(f) : ""}
+<div class="k" style="margin-top:10px;justify-content:flex-start">${jo ? bt("xos", f, "Separar franquicias", "r") : ""}${!sold && !jo && est ? bt("frs", f, FRS.sell ? "Ocultar venta" : ic("dinero") + " Vender") : ""}</div>${FRS.sell ? frSellH(f) : ""}
 ${off.map(([o, k]) => `<div class="c k sub"><div style="display:flex;gap:8px;align-items:center"><canvas class="rl" data-r="${o.r}" style="width:34px;height:34px;flex:none"></canvas><div><b>${esc(S.rv[o.r].n)}</b><div class="m">Ofrece ${fm(o.p)} · vence sem ${(o.e % 52) + 1}</div></div></div><span>${bt("fra", k, "Aceptar", "a")} ${bt("frr", k, ic("cerrar"))}</span></div>`).join("")}</div>
 <div class="c"><h3 style="margin:0">Canon · orden cronológico</h3><details class="nota"><summary aria-label="Más información"></summary><div class="m">Editable. Cada continuidad es una línea y las ramas salen de la obra que las originó. Toca una obra para moverla.</div></details><div style="overflow-x:auto;margin-top:8px;border-radius:10px" id="tlw"><canvas id="tlc" style="display:block"></canvas></div><div class="m" style="margin-top:6px">${lgnd(C, jo ? f : null)}</div><div id="frsp" style="margin-top:8px">${frSP(f)}</div></div>
 <div class="c"><h3 style="margin:0">Origen · fecha de lanzamiento</h3><div class="m">Orden real de estreno; no se puede editar.</div><div style="overflow-x:auto;margin-top:8px;border-radius:10px"><canvas id="tlo" style="display:block"></canvas></div></div>
@@ -54339,7 +54339,10 @@ vMerc40 = function () {
   const ban = `<div class="c"><h3 style="margin:0 0 6px">${ic("dinero")} ${E40("Bancos", "Banks")}</h3><div class="m">${L37("Cada banco paga dividendos cada mes. Más de 3 bancos activan multas antimonopolio.", "Each bank pays monthly dividends. More than 3 banks trigger antitrust fines.")}</div>${BAN40.map((n, i) => `<div class="fila"><span>${esc(n)}</span>${S.ban40 && S.ban40[i] ? `<b style="color:var(--a)">${L37("tuyo", "yours")}</b>` : bt("ban", i, L37("Comprar", "Buy") + " · " + fm(banP(i)), S.cash >= banP(i) ? "" : "off")}</div>`).join("")}</div>`;
   return vMercN40.apply(this, arguments) + red + dir + ban;
 };
-E40L([["Crossover con otras franquicias (hasta 3)", "Crossover with other franchises (up to 3)"]]);
+E40L([
+  ["Crossover con otras franquicias (hasta 3)", "Crossover with other franchises (up to 3)"],
+  ["Crossover con otras franquicias", "Crossover with other franchises"],
+]);
 function xo40H() {
   const own = frList().filter((f) => f != W.fid && frPs(f).some((p) => p.st >= 3)).slice(0, 20),
     riv = [];
@@ -54348,14 +54351,14 @@ function xo40H() {
   W.xo40 = W.xo40 || [];
   const n = W.xo40.length,
     on = (k) => W.xo40.includes(k);
-  return `<label class="m">${E40("Crossover con otras franquicias (hasta 3)", "Crossover with other franchises (up to 3)")} · ${n}/3</label><div class="chips">${own.map((f) => chx("wxo", "f" + f, ic("franquicia") + " " + esc(frG(f).n), on("f" + f), !on("f" + f) && n >= 3)).join("")}${riv.slice(0, 12).map(([i, h]) => chx("wxo", "r" + i + "|" + encodeURIComponent(h), esc(h) + " · " + esc(S.rv[i].n) + " (" + L37("licencia", "license") + ")", on("r" + i + "|" + encodeURIComponent(h)), !on("r" + i + "|" + encodeURIComponent(h)) && n >= 3)).join("")}</div>${n ? `<div class="m">${L37("Cada franquicia suma público y expectativa; las de rivales cuestan una licencia. Con 3, la crítica teme que sea demasiado.", "Each franchise adds audience and hype; rivals' ones cost a license. With 3, critics fear it's too much.")}</div>` : ""}`;
+  return `<label class="m">${E40("Crossover con otras franquicias", "Crossover with other franchises")}${n ? " · " + n : ""}</label><div class="chips">${own.map((f) => chx("wxo", "f" + f, ic("franquicia") + " " + esc(frG(f).n), on("f" + f))).join("")}${riv.slice(0, 12).map(([i, h]) => chx("wxo", "r" + i + "|" + encodeURIComponent(h), esc(h) + " · " + esc(S.rv[i].n) + " (" + L37("licencia", "license") + ")", on("r" + i + "|" + encodeURIComponent(h)))).join("")}</div>${n ? `<div class="m">${L37("Sin límite: cada franquicia suma público y expectativa; las de rivales cuestan una licencia. Desde 4, la crítica teme que sea demasiado.", "No limit: each franchise adds audience and hype; rivals' ones cost a license. From 4 on, critics fear it's too much.")}</div>` : ""}`;
 }
 ACT["wxo"] = (v) => {
   W.xo40 = W.xo40 || [];
   const k = String(v),
     j = W.xo40.indexOf(k);
   if (j >= 0) W.xo40.splice(j, 1);
-  else if (W.xo40.length < 3) W.xo40.push(k);
+  else W.xo40.push(k);
   return wz();
 };
 const mxTabX40 = mxTab;
@@ -54375,7 +54378,7 @@ V37.prod.push((P, W2) => {
 V37.mods.push((P, add) => {
   const n = Array.isArray(P.xo40) ? P.xo40.length : P.xo40 | 0;
   if (!n) return;
-  add(n >= 3 ? -0.5 : 0, Math.min(2.5, n), L37("crossover de franquicias", "franchise crossover"));
+  add(n >= 4 ? -Math.min(1.5, 0.25 * (n - 3)) : 0, Math.round(Math.min(6, 1.2 * Math.pow(n, 0.75)) * 10) / 10, L37("crossover de franquicias", "franchise crossover"));
 });
 
 
@@ -58481,11 +58484,11 @@ function fxpR() {
       h += `<div class="fxp-g">${esc(it.g)}</div>`;
     }
     const on = x.sel.includes(String(it.v));
-    h += `<button class="fxp-i${on ? " on" : ""}" data-a="fxpt" data-v="${i}"${it.off && !on ? " disabled" : ""}><span><b>${esc(it.l)}</b>${it.s ? `<small>${esc(it.s)}</small>` : ""}</span><i>${on ? "✓" : ""}</i></button>`;
+    h += `<button class="fxp-i${on ? " on" : ""}" data-a="fxpt" data-v="${i}"${it.off && !on ? " disabled" : ""}><span><b${it.nt ? ' translate="no"' : ""}>${esc(it.l)}</b>${it.s ? `<small>${esc(it.s)}</small>` : ""}</span><i>${on ? "✓" : ""}</i></button>`;
   });
   l.innerHTML = h || `<div class="m">${T40("Nada coincide con tu búsqueda.", "Nothing matches your search.")}</div>`;
   const n = $("#fxpn");
-  if (n) n.textContent = (x.max > 1 ? x.sel.length + "/" + x.max + " · " : "") + L.length + " " + T40("opciones", "options");
+  if (n) n.textContent = (x.max > 1 ? x.sel.length + (isFinite(x.max) ? "/" + x.max : "") + " · " : "") + L.length + " " + T40("opciones", "options");
 }
 function fxpCierra() {
   const d = $("#fxp");
@@ -58610,8 +58613,12 @@ V37.mods.push((P, add) => {
 
 function xoOpts40() {
   const own = frList().filter((f) => f != W.fid && frPs(f).some((p) => p.st >= 3)),
-    L = own.map((f) => ({ v: "f" + f, l: frG(f).n, g: T40("Tus franquicias", "Your franchises") }));
-  rvVivos().forEach((i) => (S.rv[i].hits || []).forEach((h) => !S.rv[i].ind && L.push({ v: "r" + i + "|" + encodeURIComponent(h), l: h, s: S.rv[i].n + " · " + L37("licencia", "license"), g: T40("Franquicias de rivales (licencia)", "Rival franchises (license)") })));
+    of = (f) => W.fid != null && xoEsOf(W.fid, f),
+    L = own
+      .filter(of)
+      .map((f) => ({ v: "f" + f, l: frG(f).n, nt: 1, s: T40("Oficial · entra en el canon de ambas", "Official · joins both canons"), g: T40("Crossovers oficiales", "Official crossovers") }))
+      .concat(own.filter((f) => !of(f)).map((f) => ({ v: "f" + f, l: frG(f).n, nt: 1, s: T40("No oficial · no entra en su canon", "Unofficial · stays out of its canon"), g: T40("Tus franquicias", "Your franchises") })));
+  rvVivos().forEach((i) => (S.rv[i].hits || []).forEach((h) => !S.rv[i].ind && L.push({ v: "r" + i + "|" + encodeURIComponent(h), l: h, nt: 1, s: S.rv[i].n + " · " + L37("licencia", "license"), g: T40("Franquicias de rivales (licencia)", "Rival franchises (license)") })));
   return L;
 }
 xo40H = function () {
@@ -58619,15 +58626,18 @@ xo40H = function () {
   if (!O.length) return "";
   W.xo40 = (W.xo40 || []).filter((k) => O.some((o) => o.v == k));
   const n = W.xo40.length;
-  return `<div class="c sub fx-blk"><div class="k"><b>${E40("Crossover con otras franquicias (hasta 3)", "Crossover with other franchises (up to 3)")}</b><span class="m">${n}/3</span></div>${n ? `<div class="chips">${W.xo40.map((k) => `<button class="ch on" data-a="wxo" data-v="${esc(k)}">${esc((O.find((o) => o.v == k) || { l: k }).l)} ✕</button>`).join("")}</div>` : `<div class="m">${T40("Sin crossover.", "No crossover.")}</div>`}<button class="b" data-a="xo4p">${ic("franquicia")} ${T40("Elegir franquicias", "Choose franchises")} (${O.length})</button>${n ? `<div class="m">${L37("Cada franquicia suma público y expectativa; las de rivales cuestan una licencia. Con 3, la crítica teme que sea demasiado.", "Each franchise adds audience and hype; rivals' ones cost a license. With 3, critics fear it's too much.")}</div>` : ""}</div>`;
+  return `<div class="c sub fx-blk"><div class="k"><b>${E40("Crossover con otras franquicias", "Crossover with other franchises")}</b><span class="m">${n || ""}</span></div>${n ? `<div class="chips">${W.xo40.map((k) => `<button class="ch on" data-a="wxo" data-v="${esc(k)}" translate="no">${esc((O.find((o) => o.v == k) || { l: k }).l)} ✕</button>`).join("")}</div>` : `<div class="m">${T40("Sin crossover.", "No crossover.")}</div>`}<button class="b" data-a="xo4p">${ic("franquicia")} ${T40("Elegir franquicias", "Choose franchises")} (${O.length})</button><div class="m">${L37(
+    "Sin límite de franquicias: cada una suma público y expectativa; las de rivales cuestan una licencia y desde 4 la crítica teme que sea demasiado. Solo los crossovers oficiales, que se eligen dentro de cada franquicia, ponen la obra en el canon de ambas.",
+    "No limit on franchises: each adds audience and hype; rivals' ones cost a license and from 4 on critics fear it's too much. Only official crossovers, chosen inside each franchise, put the work in both canons.",
+  )}</div></div>`;
 };
 ACT["xo4p"] = () =>
   fxPick({
     t: T40("Crossover", "Crossover"),
-    d: T40("Elige hasta 3 franquicias para cruzar con tu obra.", "Pick up to 3 franchises to cross over with your work."),
+    d: T40("Elige todas las franquicias que quieras cruzar con tu obra.", "Pick as many franchises as you want to cross over with your work."),
     items: xoOpts40(),
     sel: W.xo40 || [],
-    max: 3,
+    max: Infinity,
     ok: (s) => {
       W.xo40 = s;
       return wz();
@@ -61353,6 +61363,8 @@ function mesC(i, x) {
     ["clasificación usual", "classification habituelle", "classificação usual"],
     ["mira las obras del año anterior", "regarde les œuvres de l'année précédente", "olha as obras do ano anterior"],
     ["las fuentes solo dan el año", "les sources ne donnent que l'année", "as fontes só dão o ano"],
+    ["Secuela", "Suite", "Sequência"],
+    ["Precuela", "Préquelle", "Prequela"],
   ].forEach(([e, f, p]) => {
     if (f) DIC_FR[e] = DIC_FR[e] || f;
     if (p) DIC_PT[e] = DIC_PT[e] || p;
@@ -61374,6 +61386,17 @@ function mesC(i, x) {
     [/^prefiere (.+) \(rumor\)$/, (m) => [`préfère ${w(m[1])} (rumeur)`, `prefere ${w(m[1])} (rumor)`]],
     [/^pesa más en (.+)$/, (m) => [`compte davantage en ${lista(m[1])}`, `pesa mais em ${lista(m[1])}`]],
     [/^clasificación usual (.+)$/, (m) => [`classification habituelle ${m[1]}`, `classificação usual ${m[1]}`]],
+    [/^franquicia «([^«»]+)»$/, (m) => [`franchise «${m[1]}»`, `franquia «${m[1]}»`]],
+    [/^crossover con («[^·]+»)$/, (m) => [`crossover avec ${m[1]}`, `crossover com ${m[1]}`]],
+    [/^Adaptación de «([^«»]+)» \(([^()]+?) de ([^()]+), ([^()]+?)\)$/, (m) => {
+      const y = m[4].replace(" a. C.", fr() ? " av. J.-C." : " a.C.");
+      return [`Adaptation de «${m[1]}» (${w(m[2])} de ${m[3]}, ${y})`, `Adaptação de «${m[1]}» (${w(m[2])} de ${m[3]}, ${y})`];
+    }],
+    [/^(Secuela|Precuela|Spin-off|Historia paralela|Remake|Soft reboot|Reboot|Adaptación|Crossover) de «([^«»]+)»$/, (m) => [`${w(m[1])} de «${m[2]}»`, `${w(m[1])} de «${m[2]}»`]],
+    [/^(Separada de|Crossover con|Crossover oficial con|Ya no es oficial con) «([^«»]+)» \((-?\d+)\)$/, (m) => {
+      const k = ["Separada de", "Crossover con", "Crossover oficial con", "Ya no es oficial con"].indexOf(m[1]);
+      return [`${["Séparée de", "Crossover avec", "Crossover officiel avec", "N'est plus officiel avec"][k]} «${m[2]}» (${m[3]})`, `${["Separada de", "Crossover com", "Crossover oficial com", "Já não é oficial com"][k]} «${m[2]}» (${m[3]})`];
+    }],
   ];
   const P = SEG0.concat(CITA, [
     [
@@ -62956,7 +62979,8 @@ const INFX = [
   ["Corriente artística", ["El movimiento estético que sigue la obra (expresionismo, neorrealismo, juegos de autor…). Cuando es novedad en su época, la crítica lo premia.", "The aesthetic movement the work follows. When it's new in its era, critics reward it.", "Le mouvement esthétique suivi par l'œuvre. Quand il est nouveau, la critique le récompense.", "O movimento estético que a obra segue. Quando é novidade, a crítica o premia."], ["En «El gabinete del doctor Caligari» (1920), las sombras y la luz se pintaron directamente sobre los decorados.", "In \"The Cabinet of Dr. Caligari\" (1920), shadows and light were painted directly onto the sets.", "Dans « Le Cabinet du docteur Caligari » (1920), les ombres étaient peintes sur les décors.", "Em \"O Gabinete do Dr. Caligari\" (1920), as sombras foram pintadas nos cenários."]],
   ["Tipo de ficción|Naturaleza", ["Ficción o realidad. La realidad (documental, biografía, crónica) limita los temas a lo verosímil; la ficción permite cualquier mundo.", "Fiction or reality. Reality (documentary, biography) limits themes to the plausible; fiction allows any world.", "Fiction ou réalité. La réalité limite les thèmes au vraisemblable.", "Ficção ou realidade. A realidade limita os temas ao verossímil."], ["«Nanuk, el esquimal» (1922), considerado el primer gran documental, recreó escenas: Nanuk ya no cazaba con arpón.", "\"Nanook of the North\" (1922), often called the first great documentary, staged scenes: Nanook no longer hunted with a harpoon.", "« Nanouk l'Esquimau » (1922) recréait des scènes : Nanouk ne chassait plus au harpon.", "\"Nanook, o Esquimó\" (1922) recriou cenas: Nanook já não caçava com arpão."]],
   ["Moraleja de la historia|Moraleja", ["La idea que deja la obra al final. Una moraleja clara gusta al público familiar; un final abierto, a la crítica.", "The idea the work leaves at the end. A clear moral pleases family audiences; an open ending pleases critics.", "L'idée que laisse l'œuvre. Une morale claire plaît aux familles ; une fin ouverte, à la critique.", "A ideia que a obra deixa. Uma moral clara agrada às famílias; um final aberto, à crítica."], ["Muchas de las moralejas finales de las fábulas de Esopo las añadieron editores siglos después.", "Many of the closing morals of Aesop's fables were added by editors centuries later.", "Beaucoup de morales des fables d'Ésope furent ajoutées des siècles plus tard.", "Muitas morais das fábulas de Esopo foram acrescentadas séculos depois."]],
-  ["Crossover con otras franquicias|Crossover", ["Junta personajes de dos franquicias tuyas. Suma a los fans de ambas, pero si una está desgastada, arrastra a la otra.", "Brings together characters from two of your franchises. It adds both fan bases, but a worn-out one drags the other.", "Réunit les personnages de deux de tes franchises.", "Junta personagens de duas franquias suas."], ["«Frankenstein contra el Hombre Lobo» (1943) fue uno de los primeros crossovers del cine: Universal juntó a dos de sus monstruos.", "\"Frankenstein Meets the Wolf Man\" (1943) was one of cinema's first crossovers.", "« Frankenstein rencontre le loup-garou » (1943) fut l'un des premiers crossovers.", "\"Frankenstein Encontra o Lobisomem\" (1943) foi um dos primeiros crossovers."]],
+  ["Crossover con otras franquicias|Crossover", ["Junta en una obra todas las franquicias que quieras, tuyas o de rivales con licencia: no hay límite. Cada una suma a sus fans, pero desde la cuarta la crítica lo ve recargado. Solo entra al canon de la otra si el crossover es oficial.", "Brings together as many franchises as you want in one work, yours or rivals' under license: there's no limit. Each adds its fans, but from the fourth on critics find it overloaded. It only joins the other canon if the crossover is official.", "Réunit dans une œuvre autant de franchises que tu veux, les tiennes ou celles des rivaux sous licence : aucune limite. Chacune apporte ses fans, mais dès la quatrième la critique trouve ça surchargé. L'œuvre n'entre dans l'autre canon que si le crossover est officiel.", "Junta numa obra quantas franquias você quiser, suas ou de rivais com licença: não há limite. Cada uma soma seus fãs, mas a partir da quarta a crítica acha exagerado. Só entra no cânone da outra se o crossover for oficial."], ["«Frankenstein contra el Hombre Lobo» (1943) fue uno de los primeros crossovers del cine: Universal juntó a dos de sus monstruos.", "\"Frankenstein Meets the Wolf Man\" (1943) was one of cinema's first crossovers: Universal put two of its monsters together.", "« Frankenstein rencontre le loup-garou » (1943) fut l'un des premiers crossovers du cinéma : Universal réunit deux de ses monstres.", "\"Frankenstein Encontra o Lobisomem\" (1943) foi um dos primeiros crossovers do cinema: a Universal juntou dois de seus monstros."]],
+  ["Crossovers oficiales", ["Se eligen dentro de cada franquicia y no tienen límite. Las obras que cruzan franquicias oficiales entran al canon de ambas, suman coherencia y reparten entusiasmo en cada estreno. Traer un personaje prestado no es un crossover.", "Chosen inside each franchise, with no limit. Works that cross official franchises join both canons, gain coherence and share excitement at every release. Bringing in a borrowed character isn't a crossover.", "Se choisissent dans chaque franchise, sans limite. Les œuvres qui croisent des franchises officielles entrent dans les deux canons, gagnent en cohérence et partagent l'enthousiasme à chaque sortie. Faire venir un personnage emprunté n'est pas un crossover.", "Escolhem-se dentro de cada franquia, sem limite. As obras que cruzam franquias oficiais entram no cânone das duas, ganham coerência e dividem o entusiasmo a cada estreia. Trazer um personagem emprestado não é crossover."], ["«Avengers: Endgame» (2019) cerró once años y más de veinte películas que Marvel había conectado de forma oficial en un mismo canon.", "\"Avengers: Endgame\" (2019) closed eleven years and more than twenty films Marvel had officially connected in one canon.", "« Avengers: Endgame » (2019) a conclu onze ans et plus de vingt films que Marvel avait reliés officiellement dans un même canon.", "\"Vingadores: Ultimato\" (2019) fechou onze anos e mais de vinte filmes que a Marvel tinha ligado oficialmente num mesmo cânone."]],
   ["Nombre de la franquicia|Título", ["El nombre de tu obra y de su franquicia. Las secuelas heredan los fans, pero también el desgaste.", "Your work's and franchise's name. Sequels inherit the fans, and also the fatigue.", "Le nom de ton œuvre et de sa franchise.", "O nome da sua obra e da franquia."], ["James Bond lleva más de 25 películas desde 1962: es una de las franquicias más largas del cine.", "James Bond has had over 25 films since 1962, one of cinema's longest franchises.", "James Bond compte plus de 25 films depuis 1962.", "James Bond tem mais de 25 filmes desde 1962."]],
   ["Público objetivo|Afinar a quién le hablas", ["A quién le hablas: edad, sexo y comunidad. Afinar el público sube el interés de ese grupo pero puede alejar a otros.", "Who you're talking to: age, sex and community. Narrowing the audience lifts that group but may push others away.", "À qui tu t'adresses. Cibler un public le motive davantage mais peut éloigner les autres.", "Com quem você fala. Focar um público o anima mais, mas pode afastar outros."], ["Los estudios de Hollywood hacían funciones de prueba con público desde los años 20; hoy pueden cambiar finales enteros.", "Hollywood studios ran test screenings from the 1920s; today they can change entire endings.", "Les studios faisaient des projections test dès les années 1920.", "Os estúdios faziam sessões de teste desde os anos 1920."]],
   ["Tono", ["El ánimo de la obra: oscuro, cómico, reflexivo… Cada tono mueve distinto a la crítica y al público.", "The work's mood: dark, comic, reflective… Each tone moves critics and audiences differently.", "L'humeur de l'œuvre. Chaque ton touche différemment la critique et le public.", "O clima da obra. Cada tom move diferente a crítica e o público."], ["«Dr. Strangelove» (1964) iba a ser un drama serio hasta que Kubrick decidió contarlo como comedia negra.", "\"Dr. Strangelove\" (1964) was meant to be a serious drama until Kubrick made it a black comedy.", "« Docteur Folamour » (1964) devait être un drame sérieux.", "\"Dr. Fantástico\" (1964) seria um drama sério até Kubrick torná-lo comédia."], "md"],
@@ -63535,10 +63559,10 @@ function presOp() {
       .join("")}</div></div>`;
   op(
     `<div translate="no"><div class="c"><div class="k"><h2 style="margin:0">${tx4("Traer un personaje", "Bring in a character", "Faire venir un personnage", "Trazer um personagem")}</h2>${bt("wpresx", "", tx4("Volver al creador", "Back to the creator", "Retour au créateur", "Voltar ao criador"))}</div><div class="m">${tx4(
-      "Toma un personaje de otra obra y llévalo a tu historia sin adaptar la original, como Drácula en una película de Batman. Llega con su nombre, su sexo y su especie. Los de dominio público son gratis; los de obras con derechos vigentes cobran licencia. Los famosos atraen público, pero si los repites demasiado el público se cansa.",
-      "Take a character from another work and bring it into your story without adapting the original, like Dracula in a Batman film. It arrives with its name, sex and species. Public domain characters are free; those from works still under copyright charge a license. Famous ones draw audiences, but overuse them and people tire.",
-      "Prends un personnage d'une autre œuvre et amène-le dans ton histoire sans adapter l'originale, comme Dracula dans un film de Batman. Il arrive avec son nom, son sexe et son espèce. Ceux du domaine public sont gratuits ; ceux d'œuvres encore protégées demandent une licence. Les célèbres attirent le public, mais à force de les répéter, il se lasse.",
-      "Pegue um personagem de outra obra e leve-o para a sua história sem adaptar a original, como o Drácula num filme do Batman. Ele chega com nome, sexo e espécie. Os de domínio público são grátis; os de obras com direitos vigentes cobram licença. Os famosos atraem público, mas, se você os repetir demais, o público se cansa.",
+      "Toma un personaje de otra obra y llévalo a tu historia sin adaptar la original, como Drácula en una película de Batman. Llega con su nombre, su sexo y su especie. Los de dominio público son gratis; los de obras con derechos vigentes cobran licencia. Los famosos atraen público, pero si los repites demasiado el público se cansa. Tomar un personaje no es un crossover: solo llega el personaje.",
+      "Take a character from another work and bring it into your story without adapting the original, like Dracula in a Batman film. It arrives with its name, sex and species. Public domain characters are free; those from works still under copyright charge a license. Famous ones draw audiences, but overuse them and people tire. Borrowing a character isn't a crossover: only the character comes along.",
+      "Prends un personnage d'une autre œuvre et amène-le dans ton histoire sans adapter l'originale, comme Dracula dans un film de Batman. Il arrive avec son nom, son sexe et son espèce. Ceux du domaine public sont gratuits ; ceux d'œuvres encore protégées demandent une licence. Les célèbres attirent le public, mais à force de les répéter, il se lasse. Emprunter un personnage n'est pas un crossover : seul le personnage vient.",
+      "Pegue um personagem de outra obra e leve-o para a sua história sem adaptar a original, como o Drácula num filme do Batman. Ele chega com nome, sexo e espécie. Os de domínio público são grátis; os de obras com direitos vigentes cobram licença. Os famosos atraem público, mas, se você os repetir demais, o público se cansa. Pegar um personagem não é um crossover: só o personagem vem.",
     )}</div><div class="chips">${T.map(([k, n]) => chx("wpresk", k, n, PRES.k == k)).join("")}</div><div class="k" style="gap:6px"><input type="search" value="${esc(PRES.q)}" placeholder="${tx4("Buscar obra o personaje", "Search a work or character", "Chercher une œuvre ou un personnage", "Buscar obra ou personagem")}" onchange="act('wpresq',this.value)" onkeydown="if(event.key=='Enter'){event.preventDefault();act('wpresq',this.value)}" style="flex:1">${bt("wpresq", "", ic("buscar"))}</div></div>${
       vis.map(fila).join("") ||
       `<div class="c"><div class="m">${
@@ -63648,13 +63672,230 @@ V37.mods.push((P, add) => {
   if (a || cr) add(Math.round(cr * 10) / 10, Math.round(Math.min(2.5, a) * 10) / 10, tx4("personajes conocidos", "well-known characters", "personnages connus", "personagens conhecidos") + ": " + C.slice(0, 3).map((c) => c.n).join(", "));
   if (cans) add(-Math.round(Math.min(1.5, cans) * 10) / 10, -Math.round(Math.min(0.8, cans / 2) * 10) / 10, tx4("el público ya los vio demasiado", "audiences have seen them too often", "le public les a trop vus", "o público já os viu demais"));
 });
-V37.estreno.push((P) => {
-  const F = new Set((P.cast || []).filter((c) => presVivo(c) && c.pr.k == "fr" && c.pr.fid != null && c.pr.fid != P.fid).map((c) => c.pr.fid));
-  F.forEach((f) => {
-    const g = frG(f);
-    g.hyB = (g.hyB || 0) + 0.3;
+
+E40L([
+  ["Crossovers oficiales", "Official crossovers"],
+  ["Elegir crossovers oficiales", "Choose official crossovers"],
+  ["Unir canons", "Merge canons"],
+  ["Crossover oficial con", "Official crossover with"],
+  ["Ya no es oficial con", "No longer official with"],
+  ["crossover oficial", "official crossover"],
+  ["Oficial · entra en el canon de ambas", "Official · joins both canons"],
+  ["No oficial · no entra en su canon", "Unofficial · stays out of its canon"],
+  ["Elige todas las franquicias que quieras cruzar con tu obra.", "Pick as many franchises as you want to cross over with your work."],
+  ["Sin crossovers oficiales todavía.", "No official crossovers yet."],
+]);
+const xoOf = (f) => {
+  const F = frG(f);
+  F.xo = (F.xo || []).map(Number).filter((g, i, a) => g != +f && a.indexOf(g) == i && S.pj.some((p) => p.fid == g));
+  return F.xo;
+};
+function xoEsOf(a, b) {
+  a = +a;
+  b = +b;
+  if (a == b || !S.fr || !S.fr[a]) return false;
+  const A = S.fr[a],
+    u = uniDe(a);
+  return (A.xo || []).includes(b) || A.x == b || !!(u && u.f.includes(b));
+}
+function xoAdd(a, b, q) {
+  a = +a;
+  b = +b;
+  if (a == b || xoOf(a).includes(b)) return 0;
+  const A = frG(a),
+    B = frG(b),
+    y = yr();
+  A.xo.push(b);
+  xoOf(b).push(a);
+  A.xh.push({ f: b, y, j: 2 });
+  B.xh.push({ f: a, y, j: 2 });
+  let n = 0;
+  S.pj.forEach((p) => {
+    const o = p.fid == a ? b : p.fid == b ? a : null;
+    if (o == null || !(p.xu40 || []).includes(o)) return;
+    p.xu40 = p.xu40.filter((g) => g != o);
+    if (!p.xu40.length) delete p.xu40;
+    p.xf = uniq((p.xf || []).concat([o]));
+    const C = cnOf(o),
+      s = p.src != null ? cnF(C, p.src) : null;
+    cnPut(C, p, s ? null : p.fid);
+    n++;
   });
+  frFix(a);
+  frFix(b);
+  S.xoN = (S.xoN | 0) + 1;
+  A.hyB = (A.hyB || 0) + 1;
+  B.hyB = (B.hyB || 0) + 1;
+  if (!q)
+    nws(
+      tx4(
+        `Crossover oficial: «${A.n}» × «${B.n}»${n ? ". " + n + (n == 1 ? " obra en conjunto entra" : " obras en conjunto entran") + " al canon de ambas" : ""}.`,
+        `Official crossover: "${A.n}" × "${B.n}"${n ? ". " + n + (n == 1 ? " joint work joins" : " joint works join") + " both canons" : ""}.`,
+        `Crossover officiel : « ${A.n} » × « ${B.n} »${n ? ". " + n + (n == 1 ? " œuvre commune entre" : " œuvres communes entrent") + " dans les deux canons" : ""}.`,
+        `Crossover oficial: «${A.n}» × «${B.n}»${n ? ". " + n + (n == 1 ? " obra em conjunto entra" : " obras em conjunto entram") + " no cânone das duas" : ""}.`,
+      ),
+    );
+  return n;
+}
+function xoQuita(a, b, q) {
+  a = +a;
+  b = +b;
+  if (!xoOf(a).includes(b)) return;
+  const A = frG(a),
+    B = frG(b),
+    y = yr();
+  A.xo = A.xo.filter((g) => g != b);
+  B.xo = xoOf(b).filter((g) => g != a);
+  A.xh.push({ f: b, y, j: 3 });
+  B.xh.push({ f: a, y, j: 3 });
+  if (!q)
+    nws(
+      tx4(
+        `«${A.n}» y «${B.n}» dejan de ser crossover oficial; lo que ya estrenaron juntas sigue en ambos canons.`,
+        `"${A.n}" and "${B.n}" are no longer an official crossover; what they already released together stays in both canons.`,
+        `« ${A.n} » et « ${B.n} » ne sont plus un crossover officiel ; ce qu'elles ont déjà sorti ensemble reste dans les deux canons.`,
+        `«${A.n}» e «${B.n}» deixam de ser crossover oficial; o que já lançaram juntas continua nos dois cânones.`,
+      ),
+    );
+}
+V37.prod.push((P, W2) => {
+  if (!P.xf || !P.xf.length) return;
+  const fid = W2.fid || null,
+    no = P.xf.filter((g) => fid == null || !xoEsOf(fid, g));
+  if (!no.length) return;
+  P.xu40 = uniq((P.xu40 || []).concat(no));
+  P.xf = P.xf.filter((g) => !no.includes(g));
+  if (!P.xf.length) delete P.xf;
 });
+V37.mods.push((P, add) => {
+  const k = (P.xf || []).filter((g) => P.fid != null && xoEsOf(P.fid, g)).length;
+  if (k) add(0.5, Math.round(Math.min(2, 0.6 * k) * 10) / 10, L37("crossover oficial", "official crossover"));
+});
+V37.estreno.push((P) => {
+  if (P.fid == null || !S.fr || !S.fr[P.fid]) return;
+  xoOf(P.fid).forEach((g) => (frG(g).hyB = (frG(g).hyB || 0) + 0.25));
+});
+const porgX9 = porg;
+porg = function (P) {
+  const h = porgX9.apply(this, arguments),
+    u = (P.xu40 || []).map((f) => "«" + frG(f).n + "»").join(", "),
+    r = (P.xr40 || []).map((n) => "«" + n + "»").join(", ");
+  return (
+    h +
+    (u ? `<span translate="no"> · ${tx4("crossover no oficial con ", "unofficial crossover with ", "crossover non officiel avec ", "crossover não oficial com ")}${esc(u)}</span>` : "") +
+    (r ? `<span translate="no"> · ${tx4("crossover con licencia: ", "licensed crossover: ", "crossover sous licence : ", "crossover licenciado: ")}${esc(r)}</span>` : "")
+  );
+};
+function xoCard(f) {
+  f = +f;
+  if (!frEst(f)) return "";
+  const L = frList().filter((g) => g != f && xoEsOf(f, g));
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("cruce")} ${T40("Crossovers oficiales", "Official crossovers")} <span class="m">· ${L.length}</span></h3></div><div class="m" translate="no">${tx4(
+    "Sin límite. Las obras que cruzan franquicias oficiales entran al canon de ambas y suman a sus fans; un personaje prestado no cuenta como crossover.",
+    "No limit. Works that cross official franchises join both canons and add to their fans; a borrowed character doesn't count as a crossover.",
+    "Sans limite. Les œuvres qui croisent des franchises officielles entrent dans les deux canons et touchent leurs fans ; un personnage emprunté ne compte pas comme un crossover.",
+    "Sem limite. As obras que cruzam franquias oficiais entram no cânone das duas e somam aos seus fãs; um personagem emprestado não conta como crossover.",
+  )}</div>${L.length ? `<div class="chips" translate="no">${L.map((g) => `<button class="ch on" data-a="fro" data-v="${g}">${ic("franquicia")} ${esc(frG(g).n)}</button>`).join("")}</div>` : `<div class="m">${T40("Sin crossovers oficiales todavía.", "No official crossovers yet.")}</div>`}<div class="bts" style="margin-top:6px">${bt("xoo", f, ic("cruce") + " " + T40("Elegir crossovers oficiales", "Choose official crossovers"))}${frG(f).x == null ? bt("xom", f, T40("Unir canons", "Merge canons")) : ""}</div></div>`;
+}
+const frExtraX9 = frExtra;
+frExtra = function (f) {
+  let h = "";
+  try {
+    h = xoCard(f);
+  } catch (e) {
+    console.error("xoCard", e);
+  }
+  return h + frExtraX9.apply(this, arguments);
+};
+function xoOM(f) {
+  f = +f;
+  const F = frG(f),
+    of = xoOf(f),
+    L = frList().filter((g) => g != f && frEst(g) && (of.includes(g) || !xoEsOf(f, g)));
+  if (!L.length) return toast(T40("Necesitas otra franquicia tuya con al menos una obra estrenada.", "You need another franchise of yours with at least one released work."));
+  return fxPick({
+    t: T40("Crossovers oficiales", "Official crossovers"),
+    d: tx4(
+      `Elige con cuántas franquicias tuyas hace crossover oficial «${esc(F.n)}»: no hay límite. Las obras que las crucen entrarán al canon de ambas, también las que ya hiciste juntas. Cruzarlas en el creador sin hacerlas oficiales es un crossover no oficial, y traer un personaje prestado no es crossover.`,
+      `Choose how many of your franchises "${esc(F.n)}" officially crosses over with: there's no limit. Works that cross them will join both canons, including the ones you already made together. Crossing them in the creator without making them official is an unofficial crossover, and bringing in a borrowed character isn't a crossover.`,
+      `Choisis avec combien de tes franchises « ${esc(F.n)} » fait un crossover officiel : il n'y a pas de limite. Les œuvres qui les croisent entreront dans les deux canons, y compris celles que tu as déjà faites ensemble. Les croiser dans le créateur sans les rendre officielles donne un crossover non officiel, et faire venir un personnage emprunté n'est pas un crossover.`,
+      `Escolha com quantas franquias suas «${esc(F.n)}» faz crossover oficial: não há limite. As obras que as cruzarem entrarão no cânone das duas, inclusive as que você já fez juntas. Cruzá-las no criador sem torná-las oficiais é um crossover não oficial, e trazer um personagem emprestado não é crossover.`,
+    ),
+    items: L.map((g) => {
+      const T = frT(g);
+      return {
+        v: g,
+        l: frG(g).n,
+        nt: 1,
+        s: tx4(`${T.n} ${T.n == 1 ? "obra" : "obras"} · popularidad ${frH(g)} %`, `${T.n} ${T.n == 1 ? "work" : "works"} · popularity ${frH(g)}%`, `${T.n} ${T.n == 1 ? "œuvre" : "œuvres"} · popularité ${frH(g)} %`, `${T.n} ${T.n == 1 ? "obra" : "obras"} · popularidade ${frH(g)} %`),
+        g: of.includes(g) ? T40("Crossovers oficiales", "Official crossovers") : T40("Tus franquicias", "Your franchises"),
+      };
+    }),
+    sel: of.map(String),
+    max: Infinity,
+    ok: (sel) => {
+      const N = sel.map(Number),
+        fuera = xoOf(f).filter((g) => !N.includes(g)),
+        nuevas = N.filter((g) => frEst(g) && !xoOf(f).includes(g));
+      fuera.forEach((g) => xoQuita(f, g, nuevas.length + fuera.length > 1));
+      let n = 0;
+      nuevas.forEach((g) => (n += xoAdd(f, g, nuevas.length + fuera.length > 1)));
+      if (nuevas.length + fuera.length > 1) {
+        const nm = (L) => L.map((g) => "«" + frG(g).n + "»").join(", ");
+        if (nuevas.length)
+          nws(
+            tx4(
+              `«${F.n}» hace crossover oficial con ${nm(nuevas)}${n ? ". " + n + (n == 1 ? " obra en conjunto entra" : " obras en conjunto entran") + " a sus canons" : ""}.`,
+              `"${F.n}" makes an official crossover with ${nm(nuevas)}${n ? ". " + n + (n == 1 ? " joint work joins" : " joint works join") + " their canons" : ""}.`,
+              `« ${F.n} » fait un crossover officiel avec ${nm(nuevas)}${n ? ". " + n + (n == 1 ? " œuvre commune entre" : " œuvres communes entrent") + " dans leurs canons" : ""}.`,
+              `«${F.n}» faz crossover oficial com ${nm(nuevas)}${n ? ". " + n + (n == 1 ? " obra em conjunto entra" : " obras em conjunto entram") + " em seus cânones" : ""}.`,
+            ),
+          );
+        if (fuera.length)
+          nws(
+            tx4(
+              `«${F.n}» deja de tener crossover oficial con ${nm(fuera)}.`,
+              `"${F.n}" no longer has an official crossover with ${nm(fuera)}.`,
+              `« ${F.n} » n'a plus de crossover officiel avec ${nm(fuera)}.`,
+              `«${F.n}» deixa de ter crossover oficial com ${nm(fuera)}.`,
+            ),
+          );
+      }
+      return frM(f);
+    },
+  });
+}
+ACT["xoo"] = (v) => xoOM(v);
+(() => {
+  if (typeof DIC_FR == "undefined") return;
+  [
+    ["Crossover con otras franquicias", "Crossover avec d'autres franchises", "Crossover com outras franquias"],
+    ["Crossovers oficiales", "Crossovers officiels", "Crossovers oficiais"],
+    ["Elegir crossovers oficiales", "Choisir les crossovers officiels", "Escolher crossovers oficiais"],
+    ["Sin crossovers oficiales todavía.", "Pas encore de crossover officiel.", "Ainda sem crossovers oficiais."],
+    ["Crossover oficial con", "Crossover officiel avec", "Crossover oficial com"],
+    ["Ya no es oficial con", "N'est plus officiel avec", "Já não é oficial com"],
+    ["crossover oficial", "crossover officiel", "crossover oficial"],
+    ["Oficial · entra en el canon de ambas", "Officiel · entre dans les deux canons", "Oficial · entra no cânone das duas"],
+    ["No oficial · no entra en su canon", "Non officiel · reste hors de son canon", "Não oficial · fica fora do seu cânone"],
+    ["Elige todas las franquicias que quieras cruzar con tu obra.", "Choisis toutes les franchises que tu veux croiser avec ton œuvre.", "Escolha todas as franquias que quiser cruzar com sua obra."],
+    ["Necesitas otra franquicia tuya con al menos una obra estrenada.", "Il te faut une autre franchise avec au moins une œuvre sortie.", "Você precisa de outra franquia sua com pelo menos uma obra lançada."],
+    ["Unir canons", "Fusionner les canons", "Unir cânones"],
+    [
+      "Sin límite de franquicias: cada una suma público y expectativa; las de rivales cuestan una licencia y desde 4 la crítica teme que sea demasiado. Solo los crossovers oficiales, que se eligen dentro de cada franquicia, ponen la obra en el canon de ambas.",
+      "Sans limite de franchises : chacune ajoute du public et de l'attente ; celles des rivaux coûtent une licence et à partir de 4 la critique craint l'excès. Seuls les crossovers officiels, choisis dans chaque franchise, placent l'œuvre dans les deux canons.",
+      "Sem limite de franquias: cada uma soma público e expectativa; as de rivais custam uma licença e a partir de 4 a crítica teme que seja demais. Só os crossovers oficiais, escolhidos dentro de cada franquia, colocam a obra no cânone das duas.",
+    ],
+    [
+      "Sin límite: cada franquicia suma público y expectativa; las de rivales cuestan una licencia. Desde 4, la crítica teme que sea demasiado.",
+      "Sans limite : chaque franchise ajoute du public et de l'attente ; celles des rivaux coûtent une licence. À partir de 4, la critique craint l'excès.",
+      "Sem limite: cada franquia soma público e expectativa; as de rivais custam uma licença. A partir de 4, a crítica teme que seja demais.",
+    ],
+  ].forEach(([e, f, p]) => {
+    DIC_FR[e] = f;
+    DIC_PT[e] = p;
+  });
+})();
 
 const docT = (t) => {
   t = String(t == null ? "" : t);

@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 7 (se instala encima de la entrega anterior, que era la 6). Cada actualización debe subir el versionCode (`VC=8 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 8 (se instala encima de la entrega anterior, que era la 7). Cada actualización debe subir el versionCode (`VC=9 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -229,12 +229,38 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 - **Personajes prestados (como Drácula en una película de Batman):** en el creador, el botón «Traer un personaje existente» lleva a tu historia un personaje de otra obra sin adaptar la original. Llega con su nombre, su sexo y su especie.
   - **Dominio público:** los personajes de las obras cuyos derechos ya vencieron. Son gratis.
   - **Obras famosas:** los personajes de las obras reales de la historia (Batman, Superman, Spider-Man…). Si sus derechos siguen vigentes, cobran una licencia de +3 % a +10 % del presupuesto según su fama (los secundarios, menos); si ya cumplieron 95 años, son gratis.
-  - **Tus franquicias:** los personajes de tus obras estrenadas, con su especie, edad y arquetipo. Cuando el préstamo se estrena, su saga gana interés.
+  - **Tus franquicias:** los personajes de tus obras estrenadas, con su especie, edad y arquetipo.
   - **Tus derechos y material:** los personajes de lo que compraste o creaste.
   - **Efectos:** un personaje conocido atrae público según su fama, y los clásicos suman un poco de crítica. Si lo usas en muchas obras, el público se cansa: «el público ya los vio demasiado». Si le cambias el nombre, deja de reconocerse.
   - **Origen visible:** la tarjeta y el documento de la idea muestran de dónde viene: «De «Drácula» · dominio público».
   - **Especie de cada personaje del catálogo:** los personajes de las 333 obras de dominio público y de las obras reales traen su especie asignada, también al adaptar la obra completa. El conde Drácula es «Monstruo no muerto»; la criatura de Frankenstein, «Monstruo»; el Espantapájaros, un objeto con vida; el Hombre de Hojalata, un robot; Pinocho, un objeto con vida; el Grillo Parlante, un animal que habla; Superman, un extraterrestre; Spider-Man, un superhumano.
   - Para que se lean como monstruos, «No muerto» pasó a llamarse «Monstruo no muerto» y «Cambiaformas», «Monstruo cambiaformas».
+  - **Un préstamo no es un crossover:** se toma el personaje y nada más. No une franquicias, no entra al canon de otra saga ni le da interés. Lo dice el selector de personajes.
+- **Crossovers sin límite y crossovers oficiales:**
+  - **En el creador, sin tope:** antes se podían cruzar hasta 3 franquicias; ahora todas las que quieras, tuyas o de rivales con licencia, desde una lista con buscador.
+    - Cada franquicia suma público, cada vez un poco menos, hasta +6.
+    - Las tuyas cuestan +3 % del presupuesto y las de rivales +6 %.
+    - Desde la cuarta, la crítica lo ve recargado: −0,25 por cada una de más, hasta −1,5.
+  - **Crossovers oficiales, dentro de cada franquicia:** la ficha de la franquicia tiene «Crossovers oficiales». Ahí se eligen, sin límite y con buscador, las franquicias con las que hace crossover oficial. Se pueden quitar cuando quieras.
+    - **Si es oficial:** la obra que las cruza entra al canon de ambas y hereda la expectativa de sus fans. Suma +0,5 de crítica y hasta +2 de público («crossover oficial»).
+    - **Si no es oficial:** la obra sigue siendo un crossover, pero no entra al canon de la otra. Su ficha dice «crossover no oficial con «…»», y los de rivales, «crossover con licencia».
+    - **Al oficializar:** las obras que ya cruzaban las dos franquicias entran al canon de ambas.
+    - **Al quitarlo:** lo ya estrenado se queda en ambos canons.
+    - **En cada estreno,** los socios oficiales de la franquicia ganan un poco de interés.
+  - Las franquicias de un mismo universo compartido, o con canon unido, ya cuentan como oficiales. Unir canons sigue en la misma ficha.
+  - En el creador, la lista de crossovers muestra primero los oficiales de la franquicia de la obra.
+  - La crónica de la franquicia anota cada «Crossover oficial con «…» (año)» y cada «Ya no es oficial con «…» (año)».
+  - Se corrigió que al hacer una secuela dentro de un canon unido se borraran los crossovers elegidos en el creador.
+  - **Traducción:**
+    - En francés y portugués ahora salen traducidos el origen de cada obra («Suite de «…» · franchise «…»», «Adaptação de «…» (Romance de …)») y la crónica de la franquicia.
+    - «Secuela» y «Precuela» faltaban: «Suite» y «Préquelle», «Sequência» y «Prequela».
+    - Los nombres de las franquicias ya no se traducen a medias en las listas (antes salía «City of humo»).
+  - **Pruebas:**
+    - Una secuela con una franquicia oficial, otra no oficial y una de un rival queda en el canon correcto de cada una. Al oficializar la segunda, la obra entra a su canon.
+    - Una obra con 12 franquicias a la vez se produce sin errores.
+    - Prueba de estrés en español (3.469 pulsaciones), francés (3.423), portugués (3.522) e inglés (3.094): sin errores ni textos rotos.
+    - Traducción estable en francés, portugués e inglés.
+    - Partidas 1700–2120 sin errores ni quiebra.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).

@@ -5,7 +5,7 @@ const nrmS = (s) =>
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase();
 const FXP = { o: null };
-// o = { t: título, items: [{ v, l, s (detalle), g (grupo), off }], sel: [], max, min, ok(sel), orden: false para no ordenar }
+// o = { t: título, items: [{ v, l, s (detalle), g (grupo), off, nt (nombre propio: no se traduce) }], sel: [], max, min, ok(sel), orden: false para no ordenar }
 function fxPick(o) {
   const x = (FXP.o = Object.assign({ sel: [], max: 1, min: 0, q: "", orden: true }, o));
   x.sel = (x.sel || []).map(String);
@@ -43,11 +43,11 @@ function fxpR() {
       h += `<div class="fxp-g">${esc(it.g)}</div>`;
     }
     const on = x.sel.includes(String(it.v));
-    h += `<button class="fxp-i${on ? " on" : ""}" data-a="fxpt" data-v="${i}"${it.off && !on ? " disabled" : ""}><span><b>${esc(it.l)}</b>${it.s ? `<small>${esc(it.s)}</small>` : ""}</span><i>${on ? "✓" : ""}</i></button>`;
+    h += `<button class="fxp-i${on ? " on" : ""}" data-a="fxpt" data-v="${i}"${it.off && !on ? " disabled" : ""}><span><b${it.nt ? ' translate="no"' : ""}>${esc(it.l)}</b>${it.s ? `<small>${esc(it.s)}</small>` : ""}</span><i>${on ? "✓" : ""}</i></button>`;
   });
   l.innerHTML = h || `<div class="m">${T40("Nada coincide con tu búsqueda.", "Nothing matches your search.")}</div>`;
   const n = $("#fxpn");
-  if (n) n.textContent = (x.max > 1 ? x.sel.length + "/" + x.max + " · " : "") + L.length + " " + T40("opciones", "options");
+  if (n) n.textContent = (x.max > 1 ? x.sel.length + (isFinite(x.max) ? "/" + x.max : "") + " · " : "") + L.length + " " + T40("opciones", "options");
 }
 function fxpCierra() {
   const d = $("#fxp");
@@ -174,11 +174,15 @@ V37.mods.push((P, add) => {
   if (g) add(-Math.min(6, g * 0.8), -Math.min(3, g * 0.4), L37("talentos fuera de su clasificación", "talent outside their comfort rating"));
 });
 
-// ---------- Crossover: un botón que abre la lista completa ----------
+// ---------- Crossover: un botón que abre la lista completa, sin límite de franquicias ----------
 function xoOpts40() {
   const own = frList().filter((f) => f != W.fid && frPs(f).some((p) => p.st >= 3)),
-    L = own.map((f) => ({ v: "f" + f, l: frG(f).n, g: T40("Tus franquicias", "Your franchises") }));
-  rvVivos().forEach((i) => (S.rv[i].hits || []).forEach((h) => !S.rv[i].ind && L.push({ v: "r" + i + "|" + encodeURIComponent(h), l: h, s: S.rv[i].n + " · " + L37("licencia", "license"), g: T40("Franquicias de rivales (licencia)", "Rival franchises (license)") })));
+    of = (f) => W.fid != null && xoEsOf(W.fid, f),
+    L = own
+      .filter(of)
+      .map((f) => ({ v: "f" + f, l: frG(f).n, nt: 1, s: T40("Oficial · entra en el canon de ambas", "Official · joins both canons"), g: T40("Crossovers oficiales", "Official crossovers") }))
+      .concat(own.filter((f) => !of(f)).map((f) => ({ v: "f" + f, l: frG(f).n, nt: 1, s: T40("No oficial · no entra en su canon", "Unofficial · stays out of its canon"), g: T40("Tus franquicias", "Your franchises") })));
+  rvVivos().forEach((i) => (S.rv[i].hits || []).forEach((h) => !S.rv[i].ind && L.push({ v: "r" + i + "|" + encodeURIComponent(h), l: h, nt: 1, s: S.rv[i].n + " · " + L37("licencia", "license"), g: T40("Franquicias de rivales (licencia)", "Rival franchises (license)") })));
   return L;
 }
 xo40H = function () {
@@ -186,15 +190,18 @@ xo40H = function () {
   if (!O.length) return "";
   W.xo40 = (W.xo40 || []).filter((k) => O.some((o) => o.v == k));
   const n = W.xo40.length;
-  return `<div class="c sub fx-blk"><div class="k"><b>${E40("Crossover con otras franquicias (hasta 3)", "Crossover with other franchises (up to 3)")}</b><span class="m">${n}/3</span></div>${n ? `<div class="chips">${W.xo40.map((k) => `<button class="ch on" data-a="wxo" data-v="${esc(k)}">${esc((O.find((o) => o.v == k) || { l: k }).l)} ✕</button>`).join("")}</div>` : `<div class="m">${T40("Sin crossover.", "No crossover.")}</div>`}<button class="b" data-a="xo4p">${ic("franquicia")} ${T40("Elegir franquicias", "Choose franchises")} (${O.length})</button>${n ? `<div class="m">${L37("Cada franquicia suma público y expectativa; las de rivales cuestan una licencia. Con 3, la crítica teme que sea demasiado.", "Each franchise adds audience and hype; rivals' ones cost a license. With 3, critics fear it's too much.")}</div>` : ""}</div>`;
+  return `<div class="c sub fx-blk"><div class="k"><b>${E40("Crossover con otras franquicias", "Crossover with other franchises")}</b><span class="m">${n || ""}</span></div>${n ? `<div class="chips">${W.xo40.map((k) => `<button class="ch on" data-a="wxo" data-v="${esc(k)}" translate="no">${esc((O.find((o) => o.v == k) || { l: k }).l)} ✕</button>`).join("")}</div>` : `<div class="m">${T40("Sin crossover.", "No crossover.")}</div>`}<button class="b" data-a="xo4p">${ic("franquicia")} ${T40("Elegir franquicias", "Choose franchises")} (${O.length})</button><div class="m">${L37(
+    "Sin límite de franquicias: cada una suma público y expectativa; las de rivales cuestan una licencia y desde 4 la crítica teme que sea demasiado. Solo los crossovers oficiales, que se eligen dentro de cada franquicia, ponen la obra en el canon de ambas.",
+    "No limit on franchises: each adds audience and hype; rivals' ones cost a license and from 4 on critics fear it's too much. Only official crossovers, chosen inside each franchise, put the work in both canons.",
+  )}</div></div>`;
 };
 ACT["xo4p"] = () =>
   fxPick({
     t: T40("Crossover", "Crossover"),
-    d: T40("Elige hasta 3 franquicias para cruzar con tu obra.", "Pick up to 3 franchises to cross over with your work."),
+    d: T40("Elige todas las franquicias que quieras cruzar con tu obra.", "Pick as many franchises as you want to cross over with your work."),
     items: xoOpts40(),
     sel: W.xo40 || [],
-    max: 3,
+    max: Infinity,
     ok: (s) => {
       W.xo40 = s;
       return wz();
