@@ -40,7 +40,7 @@ docDatos = function () {
       ext: (W.cast || []).filter((c) => c.i == 2).length,
       ad: adulto(Object.assign({}, W, { gn: wGn() })),
       m: W.m,
-      cast: (Pn.cast || []).map((c) => ({ n: c.n, x: c.x, e: c.e, rol: IMP[c.i][0], arq: arqN(c), d: arqD(c), mot: c.mot | 0, rel: c.rel | 0, i: c.i, act: c.t != null && S.tl[c.t] ? S.tl[c.t].n + (S.tl[c.t].you ? " (" + T40("tú", "you") + ")" : "") : "" })),
+      cast: (Pn.cast || []).map((c) => ({ n: c.n, x: c.x, e: c.e, sp: c.sp | 0, rol: IMP[c.i][0], arq: arqN(c), d: arqD(c), mot: c.mot | 0, rel: c.rel | 0, i: c.i, act: c.t != null && S.tl[c.t] ? S.tl[c.t].n + (S.tl[c.t].you ? " (" + T40("tú", "you") + ")" : "") : "" })),
       brTxt: L37(`×${dec1(Pn.br || 1, 2)} del típico de ${yr()}`, `×${dec1(Pn.br || 1, 2)} the typical in ${yr()}`),
     };
   } catch (e) {
@@ -196,7 +196,7 @@ function docModelo(d, modo) {
   const cast = x.cast && x.cast.length ? x.cast : (d.cast || []).map((c) => Object.assign({}, c, { i: 0 }));
   if (cast.length) {
     cast.forEach((c) => {
-      B.push({ k: "pj", n: c.n, s: [c.rol, c.e ? c.e + " " + T40("años", "years old") : "", c.x == "F" ? T40("mujer", "woman") : c.x == "M" ? T40("hombre", "man") : ""].filter(Boolean).join(" · ") });
+      B.push({ k: "pj", n: c.n, s: [c.rol, c.sp && typeof espN == "function" ? espN(c.sp) : "", c.e ? c.e + " " + T40("años", "years old") : "", c.x == "F" ? T40("mujer", "woman") : c.x == "M" ? T40("hombre", "man") : ""].filter(Boolean).join(" · ") });
       Q(
         [
           T40("Arquetipo", "Archetype") + ": " + c.arq + (c.d ? " — " + lc(c.d.replace(/\.$/, "")) : ""),
