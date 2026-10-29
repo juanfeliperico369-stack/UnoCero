@@ -7,11 +7,11 @@ Creado por OneZero · Infinite Tree.
 - `dist/INDUSTRY_ART_1.0.aab`: el paquete para subir a Google Play.
 - `dist/INDUSTRY_ART_1.0.apk`: la misma app, para instalar y probar directamente en el teléfono.
 
-La app Android es propia (carpeta `android/`): una pantalla con el juego, sin anuncios, sin compras, sin servicios de terceros y con un solo permiso (Internet, que el WebView necesita aunque el juego no se conecta a nada). Pesa 2,2 MB. Reemplaza al envoltorio de la app 1.0, que traía el SDK de anuncios de Google configurado con el identificador **de prueba** de AdMob, el permiso de identificador publicitario y la biblioteca de compras. Eso contradecía la política de privacidad y podía causar un rechazo en Google Play.
+La app Android es propia (carpeta `android/`): una pantalla con el juego, sin anuncios, sin compras, sin servicios de terceros y con un solo permiso (Internet, que el WebView necesita aunque el juego no se conecta a nada). Pesa 2,3 MB. Reemplaza al envoltorio de la app 1.0, que traía el SDK de anuncios de Google configurado con el identificador **de prueba** de AdMob, el permiso de identificador publicitario y la biblioteca de compras. Eso contradecía la política de privacidad y podía causar un rechazo en Google Play.
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 4 (se instala encima de la entrega anterior, que era la 3). Cada actualización debe subir el versionCode (`VC=5 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 5 (se instala encima de la entrega anterior, que era la 4). Cada actualización debe subir el versionCode (`VC=6 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -212,7 +212,8 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 - **Ronda de ayudas, calendario, lanzamiento y música:**
   - Prueba de estrés en español (1995–2012, 3.453 pulsaciones), francés (2040–2060, pantalla ancha, 3.453), portugués (1930–1950, 3.243) e inglés (1985–2000, 3.433): sin errores ni textos rotos.
-  - **Estabilidad de la traducción:** se tradujo dos veces cada texto visible de las pestañas, los creadores, los ajustes, las ayudas y el plan de salida en los cuatro idiomas, y ya ninguno cambia. Así se corrigieron tres fallos que podían congelar la pantalla o repetir palabras:
+  - **Textos largos sin traducir:** `node tools/huecos.js salida.json` juega 17 años en español y lista los trozos que el francés o el portugués dejan en español (los números van como «#»).
+- **Estabilidad de la traducción:** se tradujo dos veces cada texto visible de las pestañas, los creadores, los ajustes, las ayudas y el plan de salida en los cuatro idiomas, y ya ninguno cambia. Así se corrigieron tres fallos que podían congelar la pantalla o repetir palabras:
     - En francés, el espacio antes de los dos puntos se volvía a añadir en cada pasada.
     - En inglés salían «reality show show», «The The Matrix» y «Azul… (Blue) (Blue)».
     - Ahora un texto ya traducido no se traduce otra vez.
@@ -220,11 +221,26 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - Presupuesto exacto en los cuatro idiomas y en «dólares de hoy»; ayudas que se cierran con Atrás y Escape; campaña en reposo, estreno 60 semanas después sin volver a pagar y estreno en una Semana de la Moda con su logro oculto.
   - El .aab pasa `bundletool validate`, y el juego dentro del .apk es idéntico byte a byte a `dist/INDUSTRY_ART.html`.
 
+- **Lo que estaba pendiente, resuelto:**
+  - **Francés y portugués completos en los textos largos:**
+    - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).
+    - Se tradujeron también las ayudas de los negocios (bancos, filiales, sedes, parques, inversiones, piratería, casino, inventos, construcciones), las metas, los logros y las listas de subgéneros, temas y épocas.
+    - Las noticias y cartas con nombres que cambian en cada partida salen enteras en el idioma del jugador: estrenos de rivales, fechas apartadas, filtraciones, fallecimientos, ideas que te proponen, festivales, rumores del jurado, la biografía del estudio y las cartas de los fans.
+    - Se ordenaron en `src/mod/i_dic12.js`, `i_dic13.js`, `j_idioma3.js` y `j_idioma4.js`.
+  - **Días y meses:**
+    - El calendario muestra los días y meses propios de cada idioma: «lun mar mer», «seg ter qua» o «Mon Tue Wed».
+    - Las fechas en francés y portugués salen completas: «Lundi 3 janvier 2011», «Segunda-feira 3 de janeiro de 2011».
+    - Se corrigió el «mar» de martes que en francés salía como «mars», y en inglés el «Mar» de marzo que salía como «Sea».
+  - **Traducción estable:** cada texto traducido queda igual si se traduce otra vez. Dos casos en francés podían congelar la pantalla: el punto de «nov.» y el espacio antes de los dos puntos («Premium  : ») se añadían una y otra vez.
+  - **Español:** «inclina a la equilibrio» pasó a «busca el equilibrio»; también se distinguen «inclina a la crítica» e «inclina al público».
+- **Pruebas de esta ronda:**
+  - Prueba de estrés en español (3.426 pulsaciones), francés (3.489, pantalla ancha), portugués (3.313) e inglés (3.426): sin errores ni textos rotos.
+  - Partidas 1700–2120 sin errores ni quiebra.
+  - Recorrido de todas las pestañas en francés y portugués tras 17 años de partida, sin bloqueos.
+
 ## Lo que queda pendiente
-- En francés y portugués, las noticias y eventos largos con muchas variables pueden mostrar partes en español. Para cubrirlos, se amplían `src/mod/i_dic*.js` o las reglas de `src/mod/j_idioma.js`.
-- La abreviatura «mar» se usa en el juego para marzo y para martes. En las fechas del plan de salida ya se distingue, pero en otros textos sueltos el portugués puede mostrar «Mar» donde debería decir «Ter».
+- Probar la app en un teléfono real. Aquí no se puede: el contenedor no tiene la aceleración que necesita el emulador de Android. El envoltorio se probó en Chromium con el mismo origen y el mismo puente.
 - De la versión 1.0 no se trajo «Quitar anuncios», porque esta versión no tiene anuncios.
-- Probar la app en un teléfono real (no se pudo aquí).
 
 ## Cómo trabajar
 - **Base:** `src/base.html`. Los módulos nuevos van en `src/mod/*.js` y `src/mod/*.css`, que se cargan en orden alfabético.
@@ -233,4 +249,5 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 - **Probar:** `node tools/run.js 'await BOT.correr({y0:1990,y1:2010}); return 1'`.
 - **Prueba de estrés:** `node tools/monkey.js <año inicial> <año final> <ancho> [es|en|fr|pt]`.
 - **Cobertura de idiomas:** `node tools/cov2.js fr salida.txt [largo máximo]` recorre las pestañas, el creador (detallado y rápido) de los seis medios, los ajustes y el plan de salida, y lista los textos que siguen en español.
+- **Textos largos sin traducir:** `node tools/huecos.js salida.json` juega 17 años en español y lista los trozos que el francés o el portugués dejan en español (los números van como «#»).
 - **Estabilidad de la traducción:** `node tools/estable.js fr salida.txt` lista los textos que cambiarían si se tradujeran otra vez. Debe salir vacío: un texto inestable hace que la traducción de la pantalla no termine nunca.

@@ -57,8 +57,11 @@ let trX = function (t) {
   X2C.set(t, r);
   return r;
 };
+// Lo marcado con translate="no" ya viene en el idioma correcto (días y meses del calendario)
+const XNO = (x) => x && x.closest && x.closest('[translate="no"]');
 function trXNodo(n) {
   if (!XDIC()) return;
+  if (XNO(n.nodeType == 3 ? n.parentElement : n)) return;
   if (n.nodeType == 3) {
     const v = trX(n.nodeValue);
     if (v != n.nodeValue) n.nodeValue = v;
@@ -74,7 +77,7 @@ function trXNodo(n) {
       }
     });
   at(n);
-  const it = document.createTreeWalker(n, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  const it = document.createTreeWalker(n, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, { acceptNode: (x) => (x.nodeType == 1 && x.getAttribute("translate") == "no" ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
   let x = it.nextNode();
   while (x) {
     if (x.nodeType == 3) {

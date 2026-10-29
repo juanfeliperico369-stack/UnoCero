@@ -4,7 +4,7 @@
 # Variables: BT (build-tools), VC (versionCode), VN (versionName), KSPASS y KSALIAS (llave).
 set -e
 BT=${BT:-/tmp/bt/android-14}
-VC=${VC:-4}
+VC=${VC:-5}
 VN=${VN:-1.0}
 KSPASS=${KSPASS:-industryart}
 KSALIAS=${KSALIAS:-industryart}

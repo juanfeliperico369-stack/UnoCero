@@ -65,9 +65,9 @@
       const b = xl0(D, m[1]);
       if (b != null) return b + " " + m[2];
     }
-    m = y.match(/^(.+?):$/);
+    m = y.match(/^(.+?)\s?:$/);
     if (m) {
-      const b = xl(D, m[1]);
+      const b = xl(D, m[1].trim());
       if (b != null) return b + (fr ? " :" : ":");
     }
     return null;

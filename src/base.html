@@ -9210,6 +9210,8 @@ function trTxt(t) {
 const TRATR = ["placeholder", "aria-label", "title"];
 function trNodo(n) {
   if (IDI != "en") return;
+  const pe = n.nodeType == 3 ? n.parentElement : n;
+  if (pe && pe.closest && pe.closest('[translate="no"]')) return;
   if (n.nodeType == 3) {
     const v = trTxt(n.nodeValue);
     if (v != n.nodeValue) n.nodeValue = v;
@@ -9224,7 +9226,7 @@ function trNodo(n) {
     }
   });
   if (n.tagName == "INPUT" && (n.type == "button" || n.type == "submit") && n.value) n.value = trTxt(n.value);
-  const it = document.createTreeWalker(n, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  const it = document.createTreeWalker(n, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, { acceptNode: (x) => (x.nodeType == 1 && x.getAttribute("translate") == "no" ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
   let x = it.nextNode();
   while (x) {
     if (x.nodeType == 3) {
@@ -13204,7 +13206,7 @@ function vTax() {
     "",
   )}<details class="nota"><summary aria-label="Más información"></summary><div class="m">Número = estrellas (1 choca · 3 neutro · 4 bien · 5 muy bien).</div></details></div>`;
   return `<div class="c"><div class="k"><h3 style="margin:0">Taxonomía</h3>${bi("taxonomia")}</div><div class="chips">${MD.map((d, i) => `<button class="ch${i == m ? " on" : ""}" data-a="txv" data-v="${i}">${d[0]}</button>`).join("")}</div></div>
-<div class="c"><h3 style="margin:0 0 6px">Familias de géneros · ${MD[m][0]}</h3>${TXM[m].map((f) => `<div class="c sub"><b>${esc(f[0])}</b><div class="m">${f[1].map(esc).join(", ")}</div><div class="m">Público: ${esc(f[3])} · inclina a la ${esc(f[4]).toLowerCase()} · temporada: ${esc(f[5]).toLowerCase()} · costo ${esc(f[6]).toLowerCase()} · clasificación usual ${esc(f[7])}</div></div>`).join("")}</div>
+<div class="c"><h3 style="margin:0 0 6px">Familias de géneros · ${MD[m][0]}</h3>${TXM[m].map((f) => `<div class="c sub"><b>${esc(f[0])}</b><div class="m">${f[1].map(esc).join(", ")}</div><div class="m">Público: ${esc(f[3])}${{ Crítica: " · inclina a la crítica", Público: " · inclina al público", Equilibrio: " · busca el equilibrio" }[f[4]] || ""}${f[5] ? " · temporada: " + esc(f[5]).toLowerCase() : ""}${f[6] ? " · costo " + esc(f[6]).toLowerCase() : ""} · clasificación usual ${esc(f[7])}</div></div>`).join("")}</div>
 <div class="c">${enc}</div>${fam(TXSB.slice(0, SBM0), "Subg\u00E9neros propios")}${fam(TXSB.slice(SBM0), "G\u00E9neros de cada medio que sirven de subg\u00E9nero")}${fam(TXTM, "Temas")}${fam(TXPA, "Problem\u00E1ticas y argumentos")}${fam(TXPR, "Premisas y tropos")}${fam(TXFX, "Tipos de ficci\u00F3n")}${fam(
     [
       ["Arcos", DX.ar[0]],
@@ -15224,7 +15226,7 @@ function calCab() {
     }[CAL.v] || "Calendario";
   return `<div class="c"><div class="k"><h3 style="margin:0">${t}</h3>${bi("calendario")}</div>
 <div class="chips">${VCAL.map((x) => `<button class="ch${CAL.v == x[0] ? " on" : ""}" data-a="cv" data-v="${x[0]}">${x[1]}</button>`).join("")}</div>
-<div class="calnav">${bt("cnav", -1, ic("atras"), "")}${bt("cnav", 0, "Hoy")}${bt("cnav", 1, ic("adelante"))}<select id="cmes" aria-label="Mes">${MESL.map((x, i) => `<option value="${i + 1}"${i + 1 == a.m ? " selected" : ""}>${cap1(x).slice(0, 3)}</option>`).join("")}</select><input type="number" id="canio" min="1700" max="2300" value="${a.y}" aria-label="Año">${bt("cir", "", "Ir")}</div>
+<div class="calnav">${bt("cnav", -1, ic("atras"), "")}${bt("cnav", 0, "Hoy")}${bt("cnav", 1, ic("adelante"))}<select id="cmes" aria-label="Mes" translate="no">${MESL.map((x, i) => `<option value="${i + 1}"${i + 1 == a.m ? " selected" : ""}>${mesC(i, x)}</option>`).join("")}</select><input type="number" id="canio" min="1700" max="2300" value="${a.y}" aria-label="Año">${bt("cir", "", "Ir")}</div>
 <details style="margin-top:6px"><summary class="m">Filtros</summary><div class="chips">${Object.keys(CKT)
     .map(
       (k) =>
@@ -15244,7 +15246,7 @@ function calMes() {
     h1 = semFin(S.t);
   const off = CFG.dom ? (dsem(n0) + 1) % 7 : dsem(n0),
     cab = CFG.dom ? [6, 0, 1, 2, 3, 4, 5] : [0, 1, 2, 3, 4, 5, 6];
-  let h = cab.map((i) => `<div class="cdn">${DSN[i]}</div>`).join("");
+  let h = cab.map((i) => `<div class="cdn" translate="no">${dsnC(i)}</div>`).join("");
   for (let i = 0; i < off; i++) h += '<div class="cd v"></div>';
   for (let d = 1; d <= dim; d++) {
     const n = n0 + d - 1,

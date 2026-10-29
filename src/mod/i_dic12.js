@@ -119,6 +119,13 @@
   });
 })();
 E40L([
+  ["inclina a la crítica", "leans toward critics"],
+  ["inclina al público", "leans toward the audience"],
+  ["busca el equilibrio", "seeks a balance"],
+  ["competencia tranquila", "light competition"],
+  ["competencia movida", "busy competition"],
+  ["competencia saturada", "crowded competition"],
+  ["competencia por conocer", "competition not yet known"],
   ["fiction", "fiction"],
   ["reality", "reality"],
   ["detalles", "details"],
