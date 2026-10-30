@@ -17046,6 +17046,7 @@ const IMP = [
   ["Cameo", Infinity, 0.2],
 ];
 const conPers = (m) => m != 4;
+const pjLider = (W2) => W2.m != 4 && W2.cast && W2.cast[0] && W2.cast[0].i == 0 && !W2.cast[0].vir;
 const adulto = (W2) => ERO(W2.gn || []) || (W2.cont && W2.cont.s >= 3);
 function nomPj(sx, na) {
   const L = NMR[NMRde(na == null ? S.sede : na < 0 ? ri(0, CY.length - 1) : na)];
@@ -17103,18 +17104,14 @@ function pjSexo(c, W2) {
   if (c.na) c.n = nomUnico(c.x, W2, c);
 }
 function repartoRec(W2) {
-  if (!conPers(W2.m)) {
-    W2.cast = [];
-    return;
-  }
   if (!W2.cast || !W2.cast.length) {
     W2.cast = [];
-    [0, 1, 1].forEach((i) => W2.cast.push(pjNuevo(i, W2)));
+    if (conPers(W2.m)) [0, 1, 1].forEach((i) => W2.cast.push(pjNuevo(i, W2)));
   }
   const used = new Set(Object.values(W2.crew || {}).filter((x) => x != null)),
     lim = BD() * 0.02;
   W2.cast.forEach((c, k) => {
-    if (c.i == 2) {
+    if (c.i == 2 || c.vir) {
       c.t = null;
       return;
     }
@@ -17122,7 +17119,7 @@ function repartoRec(W2) {
       used.add(c.t);
       return;
     }
-    if (k == 0 && W2.crew && W2.crew[7] != null) {
+    if (k == 0 && pjLider(W2) && W2.crew && W2.crew[7] != null) {
       c.t = W2.crew[7];
       pjSexo(c, W2);
       return;
@@ -17888,6 +17885,8 @@ function wP() {
     cast: (W.cast || []).map((c) => Object.assign({}, c)),
   });
 }
+// Costo de cada personaje con nombre según el medio: cine, serie, videojuego, teatro, música, libro
+const PJK = [0.004, 0.004, 0.006, 0.003, 0.002, 0.0005];
 function wCosto(Pn) {
   const m = MD[W.m],
     y = yr();
@@ -17898,10 +17897,11 @@ function wCosto(Pn) {
     if (t) f += feeN(t, r, W.m, no, W.pc && W.pc[r]);
   });
   const fc2 = (W.cast || []).reduce((a, c, k) => a + (k == 0 && c.t == W.crew[7] ? 0 : pjFee(c, W.m) * nego(S.tl[c.t], 7, no).x), 0),
-    nPj = (W.cast || []).filter((c) => c.i != 2).length + (W.cs || 0);
+    nNom = (W.cast || []).filter((c) => c.i != 2).length,
+    nPj = nNom + (W.cs || 0);
   const k = (1 - (0.4 * W.ai) / 100) * xc(W),
     kp = costoK(W, y);
-  const prod = Pn.bud * kp + Math.max(0, nPj - 1) * Pn.bud * 0.004 + (W.nx || 0) * Pn.bud * 0.00015 + (V37.extra ? V37.extra(W) : 0);
+  const prod = Pn.bud * kp + Math.max(0, nPj - 1) * Pn.bud * 0.004 + nNom * Pn.bud * (PJK[W.m] - 0.004) + (W.nx || 0) * Pn.bud * 0.00015 + (V37.extra ? V37.extra(W) : 0);
   const mu = muCosto(W);
   return {
     f: f + fc2,
@@ -18325,7 +18325,7 @@ let pjCard = (c, k, ad) =>
     "cast." + k + ".a",
     arqOrd(c.x),
     c.a,
-  )}</div>${k == 0 && c.i == 0 ? prot41() : pjAct(c, k)}${c.i != 2 ? `<div class="k" style="margin-top:4px"><span class="m">${c.t != null && S.tl[c.t] ? "Encaje " + estr5(encajeP(c, S.tl[c.t])) : "Sin int\u00E9rprete"}</span>${bt("tpk", "p|" + k, ic("talento") + " Ver talentos")}</div>` : ""}</div>`;
+  )}</div>${k == 0 && c.i == 0 && W.m != 4 ? prot41() : pjAct(c, k)}${c.i != 2 ? `<div class="k" style="margin-top:4px"><span class="m">${c.t != null && S.tl[c.t] ? "Encaje " + estr5(encajeP(c, S.tl[c.t])) : "Sin int\u00E9rprete"}</span>${bt("tpk", "p|" + k, ic("talento") + " Ver talentos")}</div>` : ""}</div>`;
 const pjBts = (cnt, L) =>
   `<div class="bts">${bt("wcrec", "", ic("estrella") + " Reparto recomendado")}${bt("wcdz", "", ic("dado") + " Dado a todos")}${L.map((i) => bt("wcadd", i, ic("mas") + " " + IMP[i][0] + (cnt[i] ? " (" + cnt[i] + ")" : ""))).join("")}</div>`;
 function castH() {
@@ -18509,7 +18509,7 @@ function wv(e) {
     p = k.split(".");
   if (p[0] == "crew") {
     W.crew[+p[1]] = num == null ? void 0 : num;
-    if (+p[1] == 7 && W.cast && W.cast[0] && W.cast[0].i == 0) {
+    if (+p[1] == 7 && pjLider(W)) {
       W.cast[0].t = num;
       pjSexo(W.cast[0], W);
     }
@@ -18824,7 +18824,7 @@ ACT["wcadd"] = (v) => {
 };
 ACT["wcdel"] = (v) => {
   (W.cast || []).splice(+v, 1);
-  if (W.cast[0] && W.cast[0].i == 0) W.cast[0].t = W.crew[7];
+  if (pjLider(W)) W.cast[0].t = W.crew[7];
   return wz();
 };
 ACT["eqr"] = () => {
@@ -20411,7 +20411,7 @@ ACT["tpe"] = (v) => {
   if (!TPK || !S.tl[id]) return wzVuelve();
   if (TPK.k == "c") {
     W.crew[TPK.i] = id;
-    if (TPK.i == 7 && W.cast && W.cast[0] && W.cast[0].i == 0) {
+    if (TPK.i == 7 && pjLider(W)) {
       W.cast[0].t = id;
       pjSexo(W.cast[0], W);
     }
@@ -22767,7 +22767,7 @@ function wCopia(o, same) {
   W.dep = null;
   const dy2 = yr() - (o.y || yr());
   W.cast =
-    conPers(W.m) && o.cast && o.cast.length
+    o.cast && o.cast.length
       ? o.cast.map((c) => Object.assign({}, c, { e: c.e + dy2, t: S.tl[c.t] && !S.tl[c.t].ret ? c.t : null, na: 0, ant: 1 }))
       : null;
   if (same && o.m == 1 && o.eps) {
@@ -23977,7 +23977,7 @@ function elencoVuelve(W2) {
       W2.sob.push(c.n + " (" + t.n + L37(" no quer\u00EDa volver: acepta por +35 %)", " didn't want to come back: accepts for +35%)"));
     }
   });
-  if (W2.cast && W2.cast[0] && W2.cast[0].i == 0) {
+  if (pjLider(W2)) {
     if (W2.cast[0].t != null) W2.crew[7] = W2.cast[0].t;
   }
 }
@@ -26006,12 +26006,13 @@ const pjParse = (s) =>
     .split(/[,\n]/)
     .map((x) => x.trim())
     .filter(Boolean)
-    .slice(0, 12)
     .map((x) => {
+      // «Nombre:F» o «Nombre:M:6»: el tercer dato es la especie (ver ESPX)
       const p = x.split(/:|\s+\(/);
       const n = p[0].trim(),
-        sx = (p[1] || "").replace(/\)/, "").trim().toUpperCase();
-      return [n, sx == "F" || sx == "M" ? sx : "X"];
+        sx = (p[1] || "").replace(/\)/, "").trim().toUpperCase(),
+        sp = p[2] != null && /^\d+$/.test(p[2].trim()) ? +p[2].trim() : null;
+      return sp != null ? [n, sx == "F" || sx == "M" ? sx : "X", { sp }] : [n, sx == "F" || sx == "M" ? sx : "X"];
     });
 function matDet(m) {
   let tm = m.tm,
@@ -26051,8 +26052,8 @@ function matAplica(m) {
       .slice(0, 3);
   if (t.length) W.tm = t;
   if (p.length) W.pa = p;
-  if (d.pj.length && conPers(W.m)) {
-    W.cast = d.pj.slice(0, 8).map((p, k) => {
+  if (d.pj.length) {
+    W.cast = d.pj.map((p, k) => {
       const c = pjNuevo(k == 0 ? 0 : 1, W);
       c.n = p[0];
       c.x = p[1] == "X" ? (R() < 0.5 ? "F" : "M") : p[1];
@@ -50549,7 +50550,7 @@ const pjCard40 = pjCard;
 pjCard = function (c, k, ad) {
   let h = pjCard40.apply(this, arguments);
   const roles = [0, 1, 3, 4]
-      .map((i) => `<button class="ch mini${c.i == i ? " on" : ""}" data-a="wcrol" data-v="${k}|${i}" title="${esc(IMP[i][0])}">${["P", "S", "", "I", "C"][i]}</button>`)
+      .map((i) => `<button class="ch mini${c.i == i ? " on" : ""}" data-a="wcrol" data-v="${k}|${i}" title="${esc(IMP[i][0])}">${IMP[i][0]}</button>`)
       .join(""),
     extra = `<div class="pj-x"><div class="k" style="gap:6px"><span class="m">${E40("Papel", "Role")}</span><span class="chips" style="margin:0">${c.i == 2 ? "" : roles}</span>${c.i != 2 && !(k == 0 && c.i == 0) ? bt("wcbest", k, ic("estrella") + " " + E40("Al mejor", "Best fit")) : ""}</div>${
       c.i == 2

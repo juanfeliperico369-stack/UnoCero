@@ -22,15 +22,23 @@ const pm4Hist = (L) => {
   return (R.has(1) || R.has(5)) && (R.has(2) || R.has(3)) && (R.has(4) || R.has(6));
 };
 const castHO = castH;
+// Personajes de las canciones: usan el creador de personajes universal, con su papel en las letras
 castH = function () {
   if (W.m != 4) return castHO.apply(this, arguments);
-  W.pm4 = W.pm4 || [];
-  const L = W.pm4,
-    arqO = arqOrd("M");
-  return `<div class="m">${T40("Opcional: los personajes que viven en tus canciones o en el videoclip. En un álbum conceptual le dan hilo a la historia; en un disco normal, color a las letras.", "Optional: the characters who live in your songs or music video. In a concept album they hold the story together; in a regular record they color the lyrics.")}</div>${L.map(
-    (c, i) =>
-      `<div class="c sub fx-blk"><div class="k"><b>${T40("Personaje", "Character")} ${i + 1}</b><span class="bts">${bt("cpm4n", i, ic("dado") + " " + T40("Nombre", "Name"))}${bt("cpm4x", i, ic("cerrar"))}</span></div><input type="text" maxlength="40" value="${esc(c.n || "")}" oninput="pm4Set(${i},'n',this.value)" aria-label="${T40("Nombre", "Name")}"><select onchange="pm4Set(${i},'a',+this.value)" aria-label="${T40("Arquetipo", "Archetype")}">${arqO.map(([j, a]) => `<option value="${j}"${(c.a | 0) == j ? " selected" : ""}>${esc(a)}</option>`).join("")}</select><select onchange="pm4Set(${i},'r',+this.value)" translate="no" aria-label="${esc(pm4Rol(0))}">${PM4R.map((_, r) => `<option value="${r}"${(c.r | 0) == r ? " selected" : ""}>${esc(tx4("Papel en las letras: ", "Role in the lyrics: ", "Rôle dans les paroles : ", "Papel nas letras: ") + pm4Rol(r))}</option>`).join("")}</select>${c.d && !c.r ? `<div class="m">${esc(c.d)}</div>` : ""}${c.pr ? `<div class="m pj-pre" translate="no">${ic("material")} ${esc(presVivo(c) ? presTxt(c.pr) : tx4("Le cambiaste el nombre: ya no se reconoce como ", "You renamed it: no longer recognized as ", "Tu l'as renommé : on ne le reconnaît plus comme ", "Você mudou o nome: já não é reconhecido como ") + c.pr.n)}</div>` : ""}</div>`,
-  ).join("")}${
+  W.cast = W.cast || [];
+  // Los que una versión anterior guardaba aparte pasan al reparto
+  if ((W.pm4 || []).length) {
+    W.pm4.forEach((o) => {
+      const c = pjNuevo(1, Object.assign({}, W, { gn: wGn() }));
+      Object.assign(c, { n: o.n, a: o.a | 0, r: o.r | 0, na: 0, vir: 1, t: null }, o.pr ? { pr: o.pr } : {});
+      W.cast.push(c);
+    });
+    W.pm4 = [];
+  }
+  const L = W.cast,
+    cnt = IMP.map((_, i) => L.filter((c) => c.i == i).length),
+    ad = adulto(Object.assign({}, W, { gn: wGn() }));
+  return `<div class="m">${T40("Opcional: los personajes que viven en tus canciones o en el videoclip. En un álbum conceptual le dan hilo a la historia; en un disco normal, color a las letras.", "Optional: the characters who live in your songs or music video. In a concept album they hold the story together; in a regular record they color the lyrics.")}</div>${pjBts(cnt, [0, 1, 3, 4])}${L.map((c, k) => pjCard(c, k, ad)).join("") || `<div class="m">${T40("Sin personajes todavía.", "No characters yet.")}</div>`}${
     L.length
       ? `<div class="m" translate="no">${tx4(
           "El papel dice qué hace cada uno en las letras. En un álbum conceptual, si hay una voz o un héroe, alguien a quien se le canta o un amor perdido, y un rival o un recuerdo, la historia queda completa: +1 de crítica. En un disco normal, las canciones dedicadas a alguien suman público.",
@@ -39,7 +47,7 @@ castH = function () {
           "O papel diz o que cada um faz nas letras. Num álbum conceitual, com uma voz ou um herói, alguém a quem se canta ou um amor perdido, e um rival ou uma lembrança, a história fica completa: +1 de crítica. Num disco normal, as canções dedicadas a alguém somam público.",
         )}${pm4Hist(L) ? " ✓" : ""}</div>`
       : ""
-  }<div class="bts">${bt("cpm4a", "", ic("mas") + " " + T40("Agregar personaje", "Add character"))}</div>`;
+  }`;
 };
 // Música de ficción: el álbum conceptual y su arco se eligen al principio, junto a la naturaleza de la obra
 function mxConcH() {
@@ -71,34 +79,19 @@ ACT["mx"] = (v) => {
   if (String(v).split("|")[0] == "conc" && W.mx && !W.mx.conc && W.rl && !(W.ar || []).length) W.ar = [0];
   return mxActC(v);
 };
-function pm4Set(i, k, v) {
-  const c = (W.pm4 || [])[i];
-  if (!c) return;
-  c[k] = v;
-  if (k == "r") wz();
-}
-ACT["cpm4a"] = () => {
-  W.pm4 = W.pm4 || [];
-  const F = RU() < 0.5;
-  W.pm4.push({ n: nomPj(F ? "F" : "M"), a: ri(0, 20), r: pm4Sug(W.pm4) });
+// Papel en las letras de cada personaje del reparto
+ACT["wcr4"] = (v) => {
+  const [k, r] = String(v).split("|").map(Number),
+    c = (W.cast || [])[k];
+  if (c) c.r = r;
   return wz();
 };
-ACT["cpm4x"] = (v) => {
-  W.pm4 = (W.pm4 || []).filter((_, i) => i != +v);
-  return wz();
-};
-ACT["cpm4n"] = (v) => {
-  const c = (W.pm4 || [])[+v];
-  if (!c) return;
-  c.n = nomPj(RU() < 0.5 ? "F" : "M");
-  return wz();
-};
+// En música, el resumen de las canciones sale del reparto (y de lo que haya quedado aparte de una versión anterior)
 V37.prod.push((P, W2) => {
-  if (W2.m == 4 && W2.pm4 && W2.pm4.length)
-    P.pm4 = W2.pm4
-      .filter((c) => c && String(c.n || "").trim())
-      .map((c) => Object.assign({ n: String(c.n).slice(0, 40), a: c.a | 0, r: c.r | 0, d: String(c.d || "").slice(0, 90) }, c.pr ? { pr: c.pr } : {}));
-  if (W2.m == 4) W2.pm4 = [];
+  if (W2.m != 4) return;
+  const L = (W2.cast || []).concat(W2.pm4 || []).filter((c) => c && String(c.n || "").trim());
+  if (L.length) P.pm4 = L.map((c) => Object.assign({ n: String(c.n).slice(0, 40), a: c.a | 0, r: c.r | 0, d: String(c.d || "").slice(0, 90) }, c.pr ? { pr: c.pr } : {}));
+  W2.pm4 = [];
 });
 V37.mods.push((P, add) => {
   if (P.m != 4 || !P.pm4 || !P.pm4.length) return;
@@ -111,7 +104,9 @@ V37.mods.push((P, add) => {
 });
 V37.ficha.push((P) =>
   P.m == 4 && P.pm4 && P.pm4.length
-    ? `<div class="c sub"><b>${T40("Personajes de las canciones", "Characters in the songs")}</b>${P.pm4.map((c) => `<div class="fila"><span translate="no">${esc(c.n)}<span class="m"> · ${esc(bibTr(ARQ[c.a] || ""))}${c.r ? " · " + esc(pm4Rol(c.r)) : c.d ? " · " + esc(c.d) : ""}${c.pr ? " · " + esc(presTxt(c.pr)) : ""}</span></span></div>`).join("")}</div>`
+    ? (P.cast || []).length
+      ? `<div class="c sub"><b>${T40("Papel en las letras", "Role in the lyrics")}</b>${P.pm4.map((c) => `<div class="fila"><span translate="no">${esc(c.n)}<span class="m"> · ${esc(pm4Rol(c.r))}</span></span></div>`).join("")}</div>`
+      : `<div class="c sub"><b>${T40("Personajes de las canciones", "Characters in the songs")}</b>${P.pm4.map((c) => `<div class="fila"><span translate="no">${esc(c.n)}<span class="m"> · ${esc(bibTr(ARQ[c.a] || ""))}${c.r ? " · " + esc(pm4Rol(c.r)) : c.d ? " · " + esc(c.d) : ""}${c.pr ? " · " + esc(presTxt(c.pr)) : ""}</span></span></div>`).join("")}</div>`
     : "",
 );
 // Secuelas: al producir, el contrato comprado libera al talento del estudio rival

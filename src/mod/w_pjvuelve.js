@@ -57,7 +57,7 @@ function bibVuelve(x) {
   (W.cast = W.cast || []).push(c);
 }
 const bibBt = () => {
-  if (W.fid == null || !conPers(W.m)) return "";
+  if (W.fid == null) return "";
   const T = bibPjs(W.fid).length;
   if (!T) return "";
   const n = bibFuera().length;

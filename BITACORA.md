@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 10 (se instala encima de la entrega anterior, que era la 9). Cada actualización debe subir el versionCode (`VC=11 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 11 (se instala encima de la entrega anterior, que era la 10). Cada actualización debe subir el versionCode (`VC=12 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -320,6 +320,36 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
     - En un disco de ficción, el conceptual y su arco se eligen en la primera pestaña, sin aviso al final.
     - Prueba de estrés en español (3.476 pulsaciones), francés (3.464), portugués (3.461) e inglés (3.117): sin errores ni textos rotos.
     - Traducción estable en francés, portugués e inglés, también en los temas nuevos. Partidas 1700–2120 sin errores ni quiebra.
+- **Creador de personajes universal:** el mismo creador en los seis medios, sin quitar ninguna opción.
+  - **Papel con botones claros:** «Protagonista», «Secundario», «Invitado especial» y «Cameo», con el nombre completo en vez de una letra.
+  - **¿Lo interpreta alguien o es virtual?** Cada personaje tiene dos botones, con el sentido de cada medio:
+    - **Cine y series:** «Lo interpreta un actor» o «Digital, sin actor». En animación: «Con actor de voz» o «Sin voz».
+    - **Videojuegos:** «Con intérprete (voz o captura)» o «Virtual, sin voz».
+    - **Teatro:** «Lo interpreta un actor» o «Títere, voz o proyección».
+    - **Música:** «Lo actúa alguien en el videoclip» o «Solo vive en la letra». Los personajes de las canciones nacen virtuales, y si alguien los actúa se elige el talento.
+    - **Libros:** todos son de papel, sin botones ni intérprete, como antes.
+    - Si es virtual se quitan el selector de intérprete y la línea de encaje. Si el primer protagonista es virtual, deja de ir atado al intérprete del equipo.
+  - **Música en el mismo creador:** los personajes de las canciones ahora están en el reparto, con todo lo de los demás medios: papel, edad, sexo, arquetipo, especie, motivación, relación, origen si es prestado y biblioteca de la franquicia. Además mantienen su papel en las letras.
+    - En un disco, el primer protagonista no cambia al solista: tiene su propio intérprete.
+    - Los personajes que una versión anterior guardaba aparte pasan solos al reparto.
+  - **Sin tope y con costo según el medio:**
+    - Cada personaje con nombre suma al costo: 0,6 % del presupuesto en videojuegos, 0,4 % en cine y series, 0,3 % en teatro, 0,2 % en música y 0,05 % en un libro. Cada intérprete cobra además su cachet.
+    - Un personaje virtual en imagen real cuesta efectos digitales (hasta +2,5 % si es protagonista). En teatro cuesta títeres o proyecciones, a la mitad. En animación y videojuegos no tiene costo extra.
+    - Arriba de los personajes se explica todo esto en los cuatro idiomas.
+  - Al adaptar una obra llegan todos sus personajes, no solo los primeros 8. El catálogo ya no corta la lista en 12.
+  - Las secuelas de un disco también traen a sus personajes.
+- **Catálogo de dominio público completo:** las 374 obras del catálogo tenían 1.383 personajes, muchas con 1 a 4 y elencos a medias. Ahora tienen 5.581 personajes reales de cada obra, con su sexo y su especie. Las novelas, obras de teatro, epopeyas y leyendas traen de 10 a 30; los cuentos y poemas, los pocos que de verdad tienen.
+    - Por ejemplo: «La Odisea» pasó de 6 personajes a 28 (Odiseo, Penélope, Telémaco, Atenea, Polifemo, Circe, Calipso, Nausícaa, Poseidón, Tiresias, Argos, Escila, Caribdis, las sirenas…). «Guerra y paz» pasó de 4 a 27, «Drácula» de 5 a 16 (con las novias de Drácula, Renfield y el capitán del Deméter) y «Frankenstein» de 5 a 18.
+    - **Especie de cada uno:** los dioses, monstruos, fantasmas, demonios, animales que hablan, robots y criaturas llegan con su especie al adaptar la obra o al traerlos a otra historia.
+    - **Lo que faltaba:** las 41 obras que no tenían temas ni sinopsis ahora los tienen, y 4 sinopsis muy cortas se completaron.
+    - **Traducciones:** 987 textos nuevos traducidos al inglés, francés y portugués, entre nombres descriptivos («la criatura» → «the creature», «la créature», «a criatura») y sinopsis.
+    - **Correcciones del catálogo:** en «El fantasma de la ópera», «el fantasma» y Erik eran el mismo personaje repetido. El criado de «El burlador de Sevilla» se llama Catalinón. Escamillo y Micaela son de la ópera de Bizet, no de la novela de Mérimée.
+- **Pruebas de esta ronda:**
+  - El creador universal en los seis medios y en los cuatro idiomas: botones de papel, interpretado o virtual con el texto de cada medio, intérprete elegido en un personaje de canción, producción de un disco con un personaje actuado y otro virtual, y secuela de un disco con sus personajes.
+  - Adaptar «Drácula» trae a sus 16 personajes con su especie.
+  - Las 987 traducciones nuevas del catálogo no cambian si se traducen otra vez.
+  - Prueba de estrés en español (3.464 pulsaciones), francés (3.434), portugués (3.472) e inglés (3.103): sin errores ni textos rotos.
+  - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).
