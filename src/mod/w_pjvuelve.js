@@ -46,7 +46,6 @@ function bibSub(x) {
 // Vuelve con todo lo que tenía: nombre, sexo, especie, arquetipo, motivación, relación, origen y su intérprete si está libre; la edad avanza con los años
 function bibVuelve(x) {
   const c = JSON.parse(JSON.stringify(x.c)),
-    n = (i) => (W.cast || []).filter((z) => z.i == i).length,
     t = S.tl[c.t];
   c.e = Math.max(0, (c.e | 0) + yr() - (x.p.y || yr()));
   delete c.rj;
@@ -55,13 +54,7 @@ function bibVuelve(x) {
   c.ant = 1;
   if (W.m == 5 || !t || t.ret || t.dead || t.es || (W.cast || []).some((z) => z.t == c.t)) c.t = null;
   else if (!t.you && ocupado(t)) c.sob = 1.6;
-  if (n(c.i) >= IMP[c.i][1]) {
-    const r = [1, 3, 4, 0].find((i) => n(i) < IMP[i][1]);
-    if (r == null) return false;
-    c.i = r;
-  }
   (W.cast = W.cast || []).push(c);
-  return true;
 }
 const bibBt = () => {
   if (W.fid == null || !conPers(W.m)) return "";
@@ -88,14 +81,15 @@ ACT["pjbib"] = () => {
     max: Infinity,
     orden: false,
     ok: (sel) => {
-      let n = 0,
-        f = 0;
+      let n = 0;
       sel.forEach((k) => {
         const x = L.find((y) => y.k == k);
-        if (x) bibVuelve(x) ? n++ : f++;
+        if (x) {
+          bibVuelve(x);
+          n++;
+        }
       });
       if (n) toast(tx4(`Vuelven ${n} ${n == 1 ? "personaje" : "personajes"}.`, `${n} ${n == 1 ? "character returns" : "characters return"}.`, `${n} ${n == 1 ? "personnage revient" : "personnages reviennent"}.`, `${n == 1 ? "Volta" : "Voltam"} ${n} ${n == 1 ? "personagem" : "personagens"}.`));
-      if (f) toast(tx4(`No hay lugar para ${f} más: el reparto está lleno.`, `No room for ${f} more: the cast is full.`, `Pas de place pour ${f} de plus : la distribution est complète.`, `Não há lugar para mais ${f}: o elenco está cheio.`));
       return wz();
     },
   });
@@ -138,6 +132,13 @@ V37.err.push((W2) => {
   [
     ["En una obra erótica o con sexo explícito, todos los personajes tienen 18 años o más.", "Dans une œuvre érotique ou avec du sexe explicite, tous les personnages ont 18 ans ou plus.", "Numa obra erótica ou com sexo explícito, todos os personagens têm 18 anos ou mais."],
     ["opción", "option", "opção"],
+    ["sencillo", "single", "single"],
+    ["sencillos", "singles", "singles"],
+    [
+      "Con nombre y actor: todos los protagonistas, secundarios, invitados especiales y cameos que quieras. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.",
+      "Avec nom et acteur : autant de protagonistes, de seconds rôles, d'invités spéciaux et de caméos que tu veux. Les tiers et les figurants ne sont que des nombres. Le premier protagoniste est joué par l'interprète de l'équipe.",
+      "Com nome e ator: quantos protagonistas, coadjuvantes, convidados especiais e participações especiais você quiser. Os terciários e os figurantes são só números. O primeiro protagonista é interpretado pelo intérprete da equipe.",
+    ],
   ].forEach(([e, f, p]) => {
     DIC_FR[e] = f;
     DIC_PT[e] = p;

@@ -63,6 +63,7 @@ const tx4 = (e, n, f, p) => [e, n, f, p][espL()];
 // Licencia de un personaje con derechos vigentes: de 3 % a 10 % del presupuesto si es protagonista
 const presFee = (f) => 0.03 + (cl(f | 0, 0, 100) / 100) * 0.07;
 const presVivo = (c) => c && c.pr && c.n == c.pr.n;
+const presDe = (X) => (X.m == 4 ? X.pm4 || [] : X.cast || []);
 const presPago = (c) => presVivo(c) && c.pr.k == "re" && !c.pr.lib;
 // Fuentes: dominio público, tus derechos y material, tus franquicias y obras reales (con licencia si sus derechos siguen vigentes)
 function presPD() {
@@ -130,7 +131,7 @@ function presOp() {
   const q = PRES.q.toLowerCase().trim(),
     L0 = presFuente(PRES.k),
     L = L0.filter((o) => !q || (o.n + " " + o.a + " " + o.pj.map((p) => p[0]).join(" ")).toLowerCase().includes(q)),
-    ya = new Set((W.cast || []).map((c) => c.n)),
+    ya = new Set(presDe(W).map((c) => c.n)),
     vis = L.slice(0, PRES.n);
   const fila = (o) =>
     `<div class="c sub"><div class="k"><b>${esc(o.n)}</b><span class="m" style="color:var(--g)">${o.f ? estrellas(Math.max(1, Math.round(o.f / 20))) : ""}</span></div><div class="m">${esc([o.a, o.y ? yrs0(o.y) : "", presEstado(o)].filter(Boolean).join(" · "))}</div><div class="chips">${o.pj
@@ -183,10 +184,20 @@ ACT["wpresp"] = (v) => {
     o = presFuente(k).find((x) => String(x.i) == i),
     p = o && o.pj[+j];
   if (!p) return;
+  const pr = { k: o.k, n: p[0], t: o.n, a: o.a || "", y: o.y || 0, f: o.f | 0, lib: o.k == "re" ? (o.lib ? 1 : 0) : 1, fid: o.k == "fr" ? o.fid : null };
+  // En música llega como personaje de las canciones
+  if (W.m == 4) {
+    W.pm4 = W.pm4 || [];
+    if (W.pm4.some((c) => c.n == p[0])) return toast(tx4("Ya está en tus canciones", "Already in your songs", "Déjà dans tes chansons", "Já está nas suas canções"));
+    const sp = p[2] ? p[2].sp | 0 : espDe(p[0], o.n),
+      a = p[2] && p[2].a != null ? p[2].a : Math.max(0, ARQ.indexOf([5, 6, 7].includes(sp) ? "Monstruo" : "Normal"));
+    W.pm4.push({ n: p[0], a, r: 9, pr });
+    toast(tx4(`${p[0]} llega a tus canciones`, `${p[0]} joins your songs`, `${p[0]} rejoint tes chansons`, `${p[0]} chega às suas canções`));
+    return wz();
+  }
   W.cast = W.cast || [];
   if (W.cast.some((c) => c.n == p[0])) return toast(tx4("Ya está en tu reparto", "Already in your cast", "Déjà dans ta distribution", "Já está no seu elenco"));
   const rol = W.cast.some((c) => c.i == 0) ? 1 : 0;
-  if (W.cast.filter((c) => c.i == rol).length >= IMP[rol][1]) return toast(tx4("Máximo ", "Maximum ", "Maximum ", "Máximo ") + IMP[rol][1]);
   const c = pjNuevo(rol, Object.assign({}, W, { gn: wGn() })),
     d = p[2];
   c.n = p[0];
@@ -198,7 +209,7 @@ ACT["wpresp"] = (v) => {
     if (d.a != null) c.a = d.a;
     if (d.mot != null) c.mot = d.mot;
   } else c.sp = espDe(p[0], o.n);
-  c.pr = { k: o.k, n: p[0], t: o.n, a: o.a || "", y: o.y || 0, f: o.f | 0, lib: o.k == "re" ? (o.lib ? 1 : 0) : 1, fid: o.k == "fr" ? o.fid : null };
+  c.pr = pr;
   W.cast.push(c);
   W.cast.sort((a, b) => a.i - b.i);
   toast(tx4(`${c.n} llega a tu historia`, `${c.n} joins your story`, `${c.n} rejoint ton histoire`, `${c.n} chega à sua história`));
@@ -237,14 +248,14 @@ rapCast = function () {
   return conPers(W.m) ? presBt() + h : h;
 };
 // Costo de las licencias
-V37.costo.push((W2) => 1 + Math.min(0.25, (W2.cast || []).reduce((t, c) => t + (presPago(c) ? presFee(c.pr.f) * (ESPW[c.i] != null ? ESPW[c.i] : 0.3) : 0), 0)));
+V37.costo.push((W2) => 1 + Math.min(0.25, presDe(W2).reduce((t, c) => t + (presPago(c) ? presFee(c.pr.f) * (ESPW[c.i] != null ? ESPW[c.i] : 0.3) : 0), 0)));
 // Cuántas obras tuyas ya usaron a ese personaje prestado
 function presUsos(n, id) {
-  return (S.pj || []).filter((p) => p.id != id && p.st >= 1 && (p.cast || []).some((c) => c.pr && c.n == n)).length;
+  return (S.pj || []).filter((p) => p.id != id && p.st >= 1 && presDe(p).some((c) => c.pr && c.n == n)).length;
 }
 // Reconocimiento del público, prestigio de los clásicos y desgaste por abuso
 V37.mods.push((P, add) => {
-  const C = (P.cast || []).filter((c) => presVivo(c) && c.i != 2);
+  const C = presDe(P).filter((c) => presVivo(c) && c.i != 2);
   if (!C.length) return;
   let a = 0,
     cr = 0,

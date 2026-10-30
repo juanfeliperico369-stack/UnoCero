@@ -243,6 +243,8 @@ sale de la lista de canciones.|découle de la liste des chansons.|sai da lista d
 Cada canción con su nombre, su duración y, si quieres, una colaboración. La duración del disco sale de la lista.|Chaque chanson avec son nom, sa durée et, si tu veux, une collaboration. La durée du disque découle de la liste.|Cada canção com seu nome, sua duração e, se quiser, uma colaboração. A duração do disco sai da lista.
 máx. # min y # canciones|max. # min et # chansons|máx. # min e # canções
 #/# sencillos|#/# singles|#/# singles
+# sencillo|# single|# single
+# sencillos|# singles|# singles
 Nombres al azar|Noms au hasard|Nomes aleatórios
 Ajustar duraciones al formato|Ajuster les durées au format|Ajustar durações ao formato
 Estudio de grabación|Studio d'enregistrement|Estúdio de gravação

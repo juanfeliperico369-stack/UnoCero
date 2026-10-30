@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 9 (se instala encima de la entrega anterior, que era la 8). Cada actualización debe subir el versionCode (`VC=10 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 10 (se instala encima de la entrega anterior, que era la 9). Cada actualización debe subir el versionCode (`VC=11 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -272,7 +272,6 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
     - Nombre, sexo, especie, arquetipo, motivación, relación y origen.
     - Su intérprete, si sigue libre; si trabaja con un rival, hay que comprar su contrato.
     - Su edad avanza con los años que pasaron desde su última aparición.
-    - Si su papel está lleno, entra con el siguiente que tenga lugar.
   - Los personajes de la franquicia de la obra ya no aparecen en «Traer un personaje existente», porque vuelven desde la biblioteca y no cuentan como prestados.
   - **Continuidad:** en una secuela, si el intérprete nuevo era de otro sexo, el juego le cambiaba al personaje el nombre y el sexo; Ryan Harrington podía volver como Kayla Robinson. Ahora los personajes de entregas anteriores conservan su nombre y su sexo, y el reparto recomendado busca intérpretes que les correspondan.
 - **Edad libre:**
@@ -287,6 +286,40 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - Edad: se escriben 12, 7 y 15 sin que la casilla cambie. En una obra con sexo explícito, el resumen avisa y bloquea la producción.
   - Prueba de estrés en español (3.520 pulsaciones), francés (3.468), portugués (3.522) e inglés (3.094): sin errores ni textos rotos.
   - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
+- **Música, personajes y sencillos (probado en un teléfono):**
+  - **Personajes prestados en música:** en un disco, «Traer un personaje existente» los guardaba en el reparto de cine, que la música no muestra. No aparecían y podían cobrar licencia sin estar. Ahora llegan a los personajes de las canciones con su arquetipo, su origen («De «Drácula» · dominio público») y el papel «personaje de leyenda o de ficción». Pagan licencia solo si sus derechos siguen vigentes y suman público por su fama.
+  - **Papel en las letras con opciones:** la casilla libre «Quién es en la canción» no decía para qué servía. Ahora es una lista: quien canta, a quien se le canta, el amor perdido, el rival o el villano, el héroe de la historia, un recuerdo, la familia, los amigos o la banda, un personaje de leyenda o de ficción, y la multitud o el pueblo.
+    - Cada personaje nuevo propone el papel que falta.
+    - Debajo se explica el efecto: en un álbum conceptual, si hay una voz o un héroe, alguien a quien se le canta o un amor perdido, y un rival o un recuerdo, la historia queda completa (+1 de crítica, con ✓ al cumplirse). En un disco normal, las canciones dedicadas a alguien suman público (hasta +1).
+    - La ficha de la obra muestra el papel y el origen de cada uno.
+  - **Sin tope de personajes:**
+    - Los personajes de las canciones ya no se limitan a 6.
+    - En las demás obras se pueden tener todos los protagonistas, secundarios, invitados especiales y cameos que quieras (antes 10, 15, 5 y 5). Cada uno con intérprete cobra su cachet.
+  - **Sin tope de sencillos:** cualquier canción del disco puede salir como sencillo (antes 1 a 6 según el formato). Solo las partituras y los jingles no llevan sencillos.
+    - Cada sencillo sigue sumando público (hasta +2,4) y cuesta un 4 % más de promoción.
+    - Se quitó el selector «Sencillos» del álbum y del EP («Un sencillo», «Sin sencillo», «Tres sencillos»), que repetía lo que ya marca la lista de canciones y se sumaba dos veces.
+  - **Ficción en música: el arco al principio:** en un disco de ficción, el álbum conceptual se marcaba en la pestaña de música, casi al final, y recién ahí el juego pedía un arco narrativo que estaba en una pestaña anterior, así que había que volver.
+    - Ahora, al elegir la naturaleza de la obra, aparece «Álbum conceptual (cuenta una historia)». Si se marca, el arco narrativo se elige ahí mismo.
+    - Al volverse conceptual un disco de ficción, ya trae un arco elegido, así que el aviso del final no aparece.
+    - En el modo rápido, el mismo botón aparece en el paso «Arco de la historia y moraleja».
+  - **71 temas nuevos** (484 en total), en cinco grupos, en los cuatro idiomas:
+    - **Amor y desamor:** desamor, primer amor, amor no correspondido, amor a distancia, amor prohibido, celos, deseo, infidelidad, ruptura, reconciliación, divorcio…
+    - **Canciones de la vida:** nostalgia, melancolía, euforia, fiesta y noche, baile, verano, juventud perdida, ciudad natal, el barrio, la carretera, vida de gira, fama y excesos, autoestima, empoderamiento, superación, orgullo, canción protesta, despedida, reencuentro, raíces, patria…
+    - **Vida cotidiana:** rutina, mudanzas, vecinos, compañeros de piso, vida en pareja, maternidad, paternidad, adopción, abuelos, cocina y comida, jubilación, herencias, enfermedad, cuidar a los nuestros.
+    - **El mundo de hoy:** redes sociales, influencers, teletrabajo, pandemias, cambio climático, crisis de vivienda, noticias falsas, criptomonedas, gentrificación, privacidad, consumismo, salud mental, diversidad, feminismo, derechos LGBTQ+.
+    - **Aventura y misterio:** tesoros perdidos, mapas y expediciones, islas desiertas, naufragios, atracos, espías, conspiraciones, sociedades secretas, enigmas, fugas, duelos, cazarrecompensas.
+    - Se agregan al final de la lista: los temas ya elegidos no cambian.
+    - El buscador de temas no ponía en ninguna categoría a los 49 temas y 26 subgéneros agregados en versiones anteriores (religiones, cultos, animales, política); solo aparecían en «Todas». Ahora todos tienen su categoría.
+  - **Botones que se pisaban:** cuatro acciones compartían nombre con otra, y la última anulaba a la primera.
+    - Elegir talento en «Proponer tu propio proyecto» agregaba un personaje de canción.
+    - La «Rueda de prensa» de una convención organizaba tu propio Fest y lo cobraba.
+    - Marcar un idioma de doblaje en el plan de salida pedía un préstamo al banco.
+    - Ahora cada botón hace lo suyo.
+  - **Pruebas:**
+    - En los cuatro idiomas, un disco con 8 sencillos y 9 personajes de canciones, Drácula traído a las canciones con su origen, y 15 protagonistas en una película.
+    - En un disco de ficción, el conceptual y su arco se eligen en la primera pestaña, sin aviso al final.
+    - Prueba de estrés en español (3.476 pulsaciones), francés (3.464), portugués (3.461) e inglés (3.117): sin errores ni textos rotos.
+    - Traducción estable en francés, portugués e inglés, también en los temas nuevos. Partidas 1700–2120 sin errores ni quiebra.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).

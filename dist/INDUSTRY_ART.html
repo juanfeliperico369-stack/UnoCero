@@ -2367,6 +2367,8 @@ const ENX = {
   "\u2014 sin actor \u2014": "\u2014 no actor \u2014",
   "Con nombre y actor: hasta 10 protagonistas, 15 secundarios, 5 invitados especiales y 5 cameos. Los terceros y los extras son solo n\u00FAmeros. El primer protagonista lo interpreta el int\u00E9rprete del equipo.":
     "With name and actor: up to 10 leads, 15 supporting, 5 special guests and 5 cameos. Third-tier and extras are just numbers. The team's performer plays the first lead.",
+  "Con nombre y actor: todos los protagonistas, secundarios, invitados especiales y cameos que quieras. Los terceros y los extras son solo n\u00FAmeros. El primer protagonista lo interpreta el int\u00E9rprete del equipo.":
+    "With name and actor: as many leads, supporting characters, special guests and cameos as you want. Third-tier and extras are just numbers. The team's performer plays the first lead.",
   "Estilo de producci\u00F3n": "Production style",
   "Lo aman:": "Loved by:",
   "\u00B7 lo rechazan:": "\u00B7 rejected by:",
@@ -17105,11 +17107,11 @@ const arqOrd = (x) => {
     .map(([i, a]) => [i, a]);
 };
 const IMP = [
-  ["Protagonista", 10, 1],
-  ["Secundario", 15, 0.35],
-  ["Extra", 20, 0],
-  ["Invitado especial", 5, 0.25],
-  ["Cameo", 5, 0.2],
+  ["Protagonista", Infinity, 1],
+  ["Secundario", Infinity, 0.35],
+  ["Extra", Infinity, 0],
+  ["Invitado especial", Infinity, 0.25],
+  ["Cameo", Infinity, 0.2],
 ];
 const conPers = (m) => m != 4;
 const adulto = (W2) => ERO(W2.gn || []) || (W2.cont && W2.cont.s >= 3);
@@ -18392,12 +18394,12 @@ let pjCard = (c, k, ad) =>
     c.a,
   )}</div>${k == 0 && c.i == 0 ? prot41() : pjAct(c, k)}${c.i != 2 ? `<div class="k" style="margin-top:4px"><span class="m">${c.t != null && S.tl[c.t] ? "Encaje " + estr5(encajeP(c, S.tl[c.t])) : "Sin int\u00E9rprete"}</span>${bt("tpk", "p|" + k, ic("talento") + " Ver talentos")}</div>` : ""}</div>`;
 const pjBts = (cnt, L) =>
-  `<div class="bts">${bt("wcrec", "", ic("estrella") + " Reparto recomendado")}${bt("wcdz", "", ic("dado") + " Dado a todos")}${L.map((i) => bt("wcadd", i, ic("mas") + " " + IMP[i][0] + " (" + cnt[i] + "/" + IMP[i][1] + ")", cnt[i] >= IMP[i][1] ? "off" : "")).join("")}</div>`;
+  `<div class="bts">${bt("wcrec", "", ic("estrella") + " Reparto recomendado")}${bt("wcdz", "", ic("dado") + " Dado a todos")}${L.map((i) => bt("wcadd", i, ic("mas") + " " + IMP[i][0] + (cnt[i] ? " (" + cnt[i] + ")" : ""))).join("")}</div>`;
 function castH() {
   W.cast = W.cast || [];
   const cnt = IMP.map((_, i) => W.cast.filter((c) => c.i == i).length),
     ad = adulto(Object.assign({}, W, { gn: wGn() }));
-  return `<div class="m">Con nombre y actor: hasta 10 protagonistas, 15 secundarios, 5 invitados especiales y 5 cameos. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 30, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 3, 4])}
+  return `<div class="m">Con nombre y actor: todos los protagonistas, secundarios, invitados especiales y cameos que quieras. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 30, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 3, 4])}
 ${W.cast.map((c, k) => pjCard(c, k, ad)).join("") || '<div class="m">Sin personajes todav\u00EDa.</div>'}`;
 }
 function styH() {
@@ -18882,7 +18884,6 @@ ACT["wsala"] = () => {
 ACT["wcadd"] = (v) => {
   const i = +v;
   W.cast = W.cast || [];
-  if (W.cast.filter((c) => c.i == i).length >= IMP[i][1]) return toast("M\u00E1ximo " + IMP[i][1]);
   const c = pjNuevo(i, Object.assign({}, W, { gn: wGn() }));
   W.cast.push(c);
   W.cast.sort((a, b) => a.i - b.i);
@@ -26614,10 +26615,10 @@ function bancoH() {
   const L = S.lo || [],
     y = yr();
   return `<div class="c"><div class="k"><h3 style="margin:0">${ic("libro")} Bancos y préstamos</h3>${bi("bancos")}</div><details class="nota"><summary aria-label="Más información"></summary><div class="m">Cuanto más prestigio, más te prestan. La cuota sale cada semana (interés más capital).</div></details>
-${BAN.map((b, i) => (y < b[1] ? "" : `<div class="fila"><span>${b[0]} · ${dec1(banTasa(i) * 100, 1)} % al año${banOk(i) ? " \u00B7 te presta hasta " + fm(Math.max(0, credLim(i))) : " \u00B7 pide prestigio " + b[4] + " y puntaje " + b[5]}</span>${bt("pdb", i, "Pedir", banOk(i) && credLim(i) > 0 ? "a" : "off")}</div>`)).join("")}
+${BAN.map((b, i) => (y < b[1] ? "" : `<div class="fila"><span>${b[0]} · ${dec1(banTasa(i) * 100, 1)} % al año${banOk(i) ? " \u00B7 te presta hasta " + fm(Math.max(0, credLim(i))) : " \u00B7 pide prestigio " + b[4] + " y puntaje " + b[5]}</span>${bt("banp", i, "Pedir", banOk(i) && credLim(i) > 0 ? "a" : "off")}</div>`)).join("")}
 ${L.length ? `<h3>Tus préstamos</h3>${L.map((l, i) => `<div class="fila"><span>${BAN[l.b][0]}${l.por ? " \u00B7 " + esc(l.por) : ""} · debes ${fm(l.n)} · cuota ${fm(l.c)}/sem · ${l.w} sem</span>${bt("pgl", i, "Pagar todo", S.cash >= l.n ? "" : "off")}</div>`).join("")}` : '<div class="m">No tienes pr\u00E9stamos.</div>'}</div>`;
 }
-ACT["pdb"] = (v) => {
+ACT["banp"] = (v) => {
   const b = +v,
     lim = credLim(b);
   if (!banOk(b) || lim <= 0) return toast("Este banco no te presta ahora");
@@ -29046,9 +29047,9 @@ const cvCosto = () => Math.round(TB(medBase()) * 0.05);
 function cvH() {
   const ok = yr() >= 1970,
     hecha = S.cvP == yr();
-  return `<div class="c k"><div><b>${esc(S.sn)} Fest</b><details class="nota"><summary aria-label="Más información"></summary><div class="m">Tu propia convención: vende entradas según tus fans y suma expectativa a tus obras que vienen. Una vez al año, desde 1970.</div></details></div>${ok && !hecha ? bt("cvp", "", "Organizar \u00B7 " + fm(cvCosto()), S.cash >= cvCosto() ? "a" : "off") : `<span class="m">${ok ? "ya la hiciste este a\u00F1o" : "desde 1970"}</span>`}</div>`;
+  return `<div class="c k"><div><b>${esc(S.sn)} Fest</b><details class="nota"><summary aria-label="Más información"></summary><div class="m">Tu propia convención: vende entradas según tus fans y suma expectativa a tus obras que vienen. Una vez al año, desde 1970.</div></details></div>${ok && !hecha ? bt("cvfest", "", "Organizar \u00B7 " + fm(cvCosto()), S.cash >= cvCosto() ? "a" : "off") : `<span class="m">${ok ? "ya la hiciste este a\u00F1o" : "desde 1970"}</span>`}</div>`;
 }
-ACT["cvp"] = () => {
+ACT["cvfest"] = () => {
   const c = cvCosto();
   if (S.cvP == yr() || yr() < 1970) return;
   if (S.cash < c) return toast("Fondos insuficientes");
@@ -43215,9 +43216,8 @@ function mxMusica(W2) {
     while (mx.can.length < L[0]) mx.can.push(mxCancion(W2, mx.can.length));
     if (mx.can.length > L[1]) mx.can.length = L[1];
     if (!mx.can.some((c) => c.sg) && L[3]) mx.can[0].sg = 1;
-    let ns = 0;
     mx.can.forEach((c) => {
-      if (c.sg && ++ns > L[3]) c.sg = 0;
+      if (c.sg && !L[3]) c.sg = 0;
     });
   }
   const seg = sum(mx.can, (c) => c.s || 0);
@@ -43431,12 +43431,12 @@ function mxCanH(full) {
 <div class="k" style="flex-wrap:nowrap;gap:6px"><select data-k="can.${i}.ft" onchange="mxv(this)" aria-label="Colaboración"><option value="">— sin colaboración —</option>${fts
         .concat(c.ft != null && S.tl[c.ft] && !fts.includes(S.tl[c.ft]) ? [S.tl[c.ft]] : [])
         .map((t) => `<option value="${t.id}"${c.ft == t.id ? " selected" : ""}>ft. ${esc(t.n)} · ${NIVT[nivel(t)][0]} · ${fm(fee(t, t0r(t), 4) * 0.35)}</option>`)
-        .join("")}</select>${L[3] ? chx("mxsg", i, c.sg ? "Sencillo ★" : "Sencillo", c.sg, !c.sg && ns >= L[3]) : ""}</div></div>`;
+        .join("")}</select>${L[3] ? chx("mxsg", i, c.sg ? "Sencillo ★" : "Sencillo", c.sg) : ""}</div></div>`;
     })
     .join("");
   const over = tot > L[2] + 0.01,
     pocas = mx.can.length < L[0];
-  return `<div class="k"><b>${plural(mx.can.length, "canción", "canciones")} · ${minSeg(tot * 60)}</b><span class="m">${duTipo(4, Math.round(tot))} · máx. ${L[2]} min y ${L[1]} canciones${L[3] ? " · " + ns + "/" + L[3] + " sencillos" : ""}</span></div>${barV((tot / L[2]) * 100, over ? "var(--r)" : "")}${over ? `<div class="m" style="color:var(--r)">No cabe en el formato: quita canciones o acórtalas (o elige otro formato).</div>` : ""}${pocas ? `<div class="m" style="color:var(--r)">Este formato pide al menos ${L[0]} canciones.</div>` : ""}${filas}${full ? `<div class="bts">${mx.can.length < L[1] && edm != 10 ? bt("mxca", "", ic("mas") + " Canción") : ""}${bt("mxcdz", "", ic("dado") + " Nombres al azar")}${bt("mxcaj", "", "Ajustar duraciones al formato")}</div>` : ""}`;
+  return `<div class="k"><b>${plural(mx.can.length, "canción", "canciones")} · ${minSeg(tot * 60)}</b><span class="m">${duTipo(4, Math.round(tot))} · máx. ${L[2]} min y ${L[1]} canciones${L[3] && ns ? " · " + plural(ns, "sencillo", "sencillos") : ""}</span></div>${barV((tot / L[2]) * 100, over ? "var(--r)" : "")}${over ? `<div class="m" style="color:var(--r)">No cabe en el formato: quita canciones o acórtalas (o elige otro formato).</div>` : ""}${pocas ? `<div class="m" style="color:var(--r)">Este formato pide al menos ${L[0]} canciones.</div>` : ""}${filas}${full ? `<div class="bts">${mx.can.length < L[1] && edm != 10 ? bt("mxca", "", ic("mas") + " Canción") : ""}${bt("mxcdz", "", ic("dado") + " Nombres al azar")}${bt("mxcaj", "", "Ajustar duraciones al formato")}</div>` : ""}`;
 }
 ACT["mxca"] = () => {
   W.mx.can.push(mxCancion(W, W.mx.can.length));
@@ -43471,7 +43471,7 @@ ACT["mxsg"] = (v) => {
   const c = W.mx.can[+v],
     L = mxLim((W.mf && W.mf.edm) | 0);
   if (!c) return;
-  if (!c.sg && W.mx.can.filter((x) => x.sg).length >= L[3]) return tst("Máximo " + L[3] + " sencillos en este formato");
+  if (!L[3]) return;
   c.sg = c.sg ? 0 : 1;
   return wz();
 };
@@ -50161,8 +50161,6 @@ ACT["wcrol"] = (v) => {
   const [k, i] = String(v).split("|").map(Number),
     c = (W.cast || [])[k];
   if (!c || c.i == i) return;
-  const n = W.cast.filter((x) => x.i == i).length;
-  if (n >= IMP[i][1]) return toast(L37("Ya tienes el máximo de ese papel", "You already have the maximum for that role"));
   if (k == 0 && c.i == 0) return toast(L37("El primer protagonista lo interpreta el intérprete del equipo", "The first lead is played by the crew's performer"));
   c.i = i;
   return wz();
@@ -50704,8 +50702,8 @@ const TYPX = {
   "Teatro inmersivo": ["inmer"],
   Circo: ["circo"],
   Improvisación: ["impro"],
-  "Álbum musical": ["sencillo", "productor", "lujo"],
-  EP: ["sencillo", "productor"],
+  "Álbum musical": ["productor", "lujo"],
+  EP: ["productor"],
   "Álbum conceptual": ["productor", "lujo"],
   Singles: ["remix"],
   Jingles: ["jingle"],
@@ -60110,6 +60108,8 @@ sale de la lista de canciones.|découle de la liste des chansons.|sai da lista d
 Cada canción con su nombre, su duración y, si quieres, una colaboración. La duración del disco sale de la lista.|Chaque chanson avec son nom, sa durée et, si tu veux, une collaboration. La durée du disque découle de la liste.|Cada canção com seu nome, sua duração e, se quiser, uma colaboração. A duração do disco sai da lista.
 máx. # min y # canciones|max. # min et # chansons|máx. # min e # canções
 #/# sencillos|#/# singles|#/# singles
+# sencillo|# single|# single
+# sencillos|# singles|# singles
 Nombres al azar|Noms au hasard|Nomes aleatórios
 Ajustar duraciones al formato|Ajuster les durées au format|Ajustar durações ao formato
 Estudio de grabación|Studio d'enregistrement|Estúdio de gravação
@@ -61973,6 +61973,25 @@ ACT["wtyp"] = () => {
   });
 };
 
+const PM4R = [
+  ["Sin definir", "Undefined", "Non défini", "Indefinido"],
+  ["Quien canta: la voz de la canción", "The singer: the song's voice", "Celui qui chante : la voix de la chanson", "Quem canta: a voz da canção"],
+  ["A quien se le canta", "The one being sung to", "Celui à qui l'on chante", "A quem se canta"],
+  ["El amor perdido", "The lost love", "L'amour perdu", "O amor perdido"],
+  ["El rival o el villano", "The rival or the villain", "Le rival ou le méchant", "O rival ou o vilão"],
+  ["El héroe de la historia", "The hero of the story", "Le héros de l'histoire", "O herói da história"],
+  ["Un recuerdo: alguien que ya no está", "A memory: someone who is gone", "Un souvenir : quelqu'un qui n'est plus là", "Uma lembrança: alguém que já não está"],
+  ["La familia", "The family", "La famille", "A família"],
+  ["Los amigos o la banda", "The friends or the gang", "Les amis ou la bande", "Os amigos ou a turma"],
+  ["Un personaje de leyenda o de ficción", "A character from legend or fiction", "Un personnage de légende ou de fiction", "Um personagem de lenda ou de ficção"],
+  ["La multitud o el pueblo", "The crowd or the people", "La foule ou le peuple", "A multidão ou o povo"],
+];
+const pm4Rol = (r) => (PM4R[r | 0] || PM4R[0])[espL()];
+const pm4Sug = (L) => [1, 2, 4, 3, 5, 6, 8, 7, 10, 9].find((r) => !L.some((c) => c.r == r)) || 0;
+const pm4Hist = (L) => {
+  const R = new Set(L.map((c) => c.r | 0));
+  return (R.has(1) || R.has(5)) && (R.has(2) || R.has(3)) && (R.has(4) || R.has(6));
+};
 const castHO = castH;
 castH = function () {
   if (W.m != 4) return castHO.apply(this, arguments);
@@ -61981,33 +62000,73 @@ castH = function () {
     arqO = arqOrd("M");
   return `<div class="m">${T40("Opcional: los personajes que viven en tus canciones o en el videoclip. En un álbum conceptual le dan hilo a la historia; en un disco normal, color a las letras.", "Optional: the characters who live in your songs or music video. In a concept album they hold the story together; in a regular record they color the lyrics.")}</div>${L.map(
     (c, i) =>
-      `<div class="c sub fx-blk"><div class="k"><b>${T40("Personaje", "Character")} ${i + 1}</b><span class="bts">${bt("pm4n", i, ic("dado") + " " + T40("Nombre", "Name"))}${bt("pm4x", i, ic("cerrar"))}</span></div><input type="text" maxlength="40" value="${esc(c.n || "")}" oninput="pm4Set(${i},'n',this.value)" aria-label="${T40("Nombre", "Name")}"><select onchange="pm4Set(${i},'a',+this.value)" aria-label="${T40("Arquetipo", "Archetype")}">${arqO.map(([j, a]) => `<option value="${j}"${(c.a | 0) == j ? " selected" : ""}>${esc(a)}</option>`).join("")}</select><input type="text" maxlength="90" value="${esc(c.d || "")}" placeholder="${T40("Quién es en la canción (opcional)", "Who they are in the song (optional)")}" oninput="pm4Set(${i},'d',this.value)"></div>`,
-  ).join("")}${L.length < 6 ? `<div class="bts">${bt("pm4a", "", ic("mas") + " " + T40("Agregar personaje", "Add character") + ` (${L.length}/6)`)}</div>` : ""}`;
+      `<div class="c sub fx-blk"><div class="k"><b>${T40("Personaje", "Character")} ${i + 1}</b><span class="bts">${bt("cpm4n", i, ic("dado") + " " + T40("Nombre", "Name"))}${bt("cpm4x", i, ic("cerrar"))}</span></div><input type="text" maxlength="40" value="${esc(c.n || "")}" oninput="pm4Set(${i},'n',this.value)" aria-label="${T40("Nombre", "Name")}"><select onchange="pm4Set(${i},'a',+this.value)" aria-label="${T40("Arquetipo", "Archetype")}">${arqO.map(([j, a]) => `<option value="${j}"${(c.a | 0) == j ? " selected" : ""}>${esc(a)}</option>`).join("")}</select><select onchange="pm4Set(${i},'r',+this.value)" translate="no" aria-label="${esc(pm4Rol(0))}">${PM4R.map((_, r) => `<option value="${r}"${(c.r | 0) == r ? " selected" : ""}>${esc(tx4("Papel en las letras: ", "Role in the lyrics: ", "Rôle dans les paroles : ", "Papel nas letras: ") + pm4Rol(r))}</option>`).join("")}</select>${c.d && !c.r ? `<div class="m">${esc(c.d)}</div>` : ""}${c.pr ? `<div class="m pj-pre" translate="no">${ic("material")} ${esc(presVivo(c) ? presTxt(c.pr) : tx4("Le cambiaste el nombre: ya no se reconoce como ", "You renamed it: no longer recognized as ", "Tu l'as renommé : on ne le reconnaît plus comme ", "Você mudou o nome: já não é reconhecido como ") + c.pr.n)}</div>` : ""}</div>`,
+  ).join("")}${
+    L.length
+      ? `<div class="m" translate="no">${tx4(
+          "El papel dice qué hace cada uno en las letras. En un álbum conceptual, si hay una voz o un héroe, alguien a quien se le canta o un amor perdido, y un rival o un recuerdo, la historia queda completa: +1 de crítica. En un disco normal, las canciones dedicadas a alguien suman público.",
+          "The role says what each one does in the lyrics. In a concept album, with a voice or a hero, someone being sung to or a lost love, and a rival or a memory, the story is complete: +1 critics. On a regular record, songs dedicated to someone add audience.",
+          "Le rôle dit ce que fait chacun dans les paroles. Dans un album concept, avec une voix ou un héros, quelqu'un à qui l'on chante ou un amour perdu, et un rival ou un souvenir, l'histoire est complète : +1 de critique. Sur un disque normal, les chansons dédiées à quelqu'un ajoutent du public.",
+          "O papel diz o que cada um faz nas letras. Num álbum conceitual, com uma voz ou um herói, alguém a quem se canta ou um amor perdido, e um rival ou uma lembrança, a história fica completa: +1 de crítica. Num disco normal, as canções dedicadas a alguém somam público.",
+        )}${pm4Hist(L) ? " ✓" : ""}</div>`
+      : ""
+  }<div class="bts">${bt("cpm4a", "", ic("mas") + " " + T40("Agregar personaje", "Add character"))}</div>`;
+};
+function mxConcH() {
+  const mx = W.mx;
+  if (!mx) return "";
+  return `<div class="c sub fx-blk"><div class="chips">${chx("mx", "conc|1", "Álbum conceptual (cuenta una historia)", mx.conc, mx.can && mx.can.length < 6)}</div>${
+    mx.conc ? pkRow("ar") : `<div class="m">${T40("Si el disco cuenta una historia, márcalo como álbum conceptual y elige aquí su arco narrativo.", "If the record tells a story, mark it as a concept album and choose its narrative arc here.")}</div>`
+  }</div>`;
+}
+const wDetMx = wDet;
+wDet = function () {
+  let h = wDetMx.apply(this, arguments);
+  if (W.m != 4 || !W.mx) return h;
+  const tab = W.tab | 0;
+  if (tab == 0) {
+    const k = wCh("fic", 0, "Realidad", !W.rl) + "</span></div>";
+    if (h.includes(k)) h = h.replace(k, k + mxConcH());
+  } else if (tab == 1) h = h.replace(pkRow("ar"), "");
+  return h;
+};
+const rapArMx = rapAr;
+rapAr = function () {
+  const h = rapArMx.apply(this, arguments);
+  return W.m == 4 && W.mx ? mxConcH().replace(pkRow("ar"), "") + h : h;
+};
+const mxActC = ACT["mx"];
+ACT["mx"] = (v) => {
+  if (String(v).split("|")[0] == "conc" && W.mx && !W.mx.conc && W.rl && !(W.ar || []).length) W.ar = [0];
+  return mxActC(v);
 };
 function pm4Set(i, k, v) {
   const c = (W.pm4 || [])[i];
   if (!c) return;
   c[k] = v;
+  if (k == "r") wz();
 }
-ACT["pm4a"] = () => {
+ACT["cpm4a"] = () => {
   W.pm4 = W.pm4 || [];
-  if (W.pm4.length >= 6) return;
   const F = RU() < 0.5;
-  W.pm4.push({ n: nomPj(F ? "F" : "M"), a: ri(0, 20), d: "" });
+  W.pm4.push({ n: nomPj(F ? "F" : "M"), a: ri(0, 20), r: pm4Sug(W.pm4) });
   return wz();
 };
-ACT["pm4x"] = (v) => {
+ACT["cpm4x"] = (v) => {
   W.pm4 = (W.pm4 || []).filter((_, i) => i != +v);
   return wz();
 };
-ACT["pm4n"] = (v) => {
+ACT["cpm4n"] = (v) => {
   const c = (W.pm4 || [])[+v];
   if (!c) return;
   c.n = nomPj(RU() < 0.5 ? "F" : "M");
   return wz();
 };
 V37.prod.push((P, W2) => {
-  if (W2.m == 4 && W2.pm4 && W2.pm4.length) P.pm4 = W2.pm4.filter((c) => c && String(c.n || "").trim()).map((c) => ({ n: String(c.n).slice(0, 40), a: c.a | 0, d: String(c.d || "").slice(0, 90) }));
+  if (W2.m == 4 && W2.pm4 && W2.pm4.length)
+    P.pm4 = W2.pm4
+      .filter((c) => c && String(c.n || "").trim())
+      .map((c) => Object.assign({ n: String(c.n).slice(0, 40), a: c.a | 0, r: c.r | 0, d: String(c.d || "").slice(0, 90) }, c.pr ? { pr: c.pr } : {}));
   if (W2.m == 4) W2.pm4 = [];
 });
 V37.mods.push((P, add) => {
@@ -62015,10 +62074,13 @@ V37.mods.push((P, add) => {
   const conc = tyNom(P).some((n) => /conceptual|Ópera rock/i.test(n));
   if (conc) add(Math.min(2, P.pm4.length * 0.5), 0.5, L37("personajes que dan hilo al álbum", "characters that tie the album together"));
   else add(0, Math.min(1, P.pm4.length * 0.3), L37("personajes en las letras", "characters in the lyrics"));
+  if (conc && pm4Hist(P.pm4)) add(1, 0, tx4("una historia completa en las canciones", "a complete story across the songs", "une histoire complète dans les chansons", "uma história completa nas canções"));
+  const ded = P.pm4.filter((c) => c.r == 2 || c.r == 3).length;
+  if (!conc && ded) add(0, Math.min(1, ded * 0.5), tx4("canciones dedicadas a alguien", "songs dedicated to someone", "chansons dédiées à quelqu'un", "canções dedicadas a alguém"));
 });
 V37.ficha.push((P) =>
   P.m == 4 && P.pm4 && P.pm4.length
-    ? `<div class="c sub"><b>${T40("Personajes de las canciones", "Characters in the songs")}</b>${P.pm4.map((c) => `<div class="fila"><span>${esc(c.n)}<span class="m"> · ${esc(ARQ[c.a] || "")}${c.d ? " · " + esc(c.d) : ""}</span></span></div>`).join("")}</div>`
+    ? `<div class="c sub"><b>${T40("Personajes de las canciones", "Characters in the songs")}</b>${P.pm4.map((c) => `<div class="fila"><span translate="no">${esc(c.n)}<span class="m"> · ${esc(bibTr(ARQ[c.a] || ""))}${c.r ? " · " + esc(pm4Rol(c.r)) : c.d ? " · " + esc(c.d) : ""}${c.pr ? " · " + esc(presTxt(c.pr)) : ""}</span></span></div>`).join("")}</div>`
     : "",
 );
 V37.prod.push((P, W2) => {
@@ -63483,6 +63545,7 @@ matAplica = function (m) {
 const tx4 = (e, n, f, p) => [e, n, f, p][espL()];
 const presFee = (f) => 0.03 + (cl(f | 0, 0, 100) / 100) * 0.07;
 const presVivo = (c) => c && c.pr && c.n == c.pr.n;
+const presDe = (X) => (X.m == 4 ? X.pm4 || [] : X.cast || []);
 const presPago = (c) => presVivo(c) && c.pr.k == "re" && !c.pr.lib;
 function presPD() {
   const out = [];
@@ -63548,7 +63611,7 @@ function presOp() {
   const q = PRES.q.toLowerCase().trim(),
     L0 = presFuente(PRES.k),
     L = L0.filter((o) => !q || (o.n + " " + o.a + " " + o.pj.map((p) => p[0]).join(" ")).toLowerCase().includes(q)),
-    ya = new Set((W.cast || []).map((c) => c.n)),
+    ya = new Set(presDe(W).map((c) => c.n)),
     vis = L.slice(0, PRES.n);
   const fila = (o) =>
     `<div class="c sub"><div class="k"><b>${esc(o.n)}</b><span class="m" style="color:var(--g)">${o.f ? estrellas(Math.max(1, Math.round(o.f / 20))) : ""}</span></div><div class="m">${esc([o.a, o.y ? yrs0(o.y) : "", presEstado(o)].filter(Boolean).join(" · "))}</div><div class="chips">${o.pj
@@ -63601,10 +63664,19 @@ ACT["wpresp"] = (v) => {
     o = presFuente(k).find((x) => String(x.i) == i),
     p = o && o.pj[+j];
   if (!p) return;
+  const pr = { k: o.k, n: p[0], t: o.n, a: o.a || "", y: o.y || 0, f: o.f | 0, lib: o.k == "re" ? (o.lib ? 1 : 0) : 1, fid: o.k == "fr" ? o.fid : null };
+  if (W.m == 4) {
+    W.pm4 = W.pm4 || [];
+    if (W.pm4.some((c) => c.n == p[0])) return toast(tx4("Ya está en tus canciones", "Already in your songs", "Déjà dans tes chansons", "Já está nas suas canções"));
+    const sp = p[2] ? p[2].sp | 0 : espDe(p[0], o.n),
+      a = p[2] && p[2].a != null ? p[2].a : Math.max(0, ARQ.indexOf([5, 6, 7].includes(sp) ? "Monstruo" : "Normal"));
+    W.pm4.push({ n: p[0], a, r: 9, pr });
+    toast(tx4(`${p[0]} llega a tus canciones`, `${p[0]} joins your songs`, `${p[0]} rejoint tes chansons`, `${p[0]} chega às suas canções`));
+    return wz();
+  }
   W.cast = W.cast || [];
   if (W.cast.some((c) => c.n == p[0])) return toast(tx4("Ya está en tu reparto", "Already in your cast", "Déjà dans ta distribution", "Já está no seu elenco"));
   const rol = W.cast.some((c) => c.i == 0) ? 1 : 0;
-  if (W.cast.filter((c) => c.i == rol).length >= IMP[rol][1]) return toast(tx4("Máximo ", "Maximum ", "Maximum ", "Máximo ") + IMP[rol][1]);
   const c = pjNuevo(rol, Object.assign({}, W, { gn: wGn() })),
     d = p[2];
   c.n = p[0];
@@ -63616,7 +63688,7 @@ ACT["wpresp"] = (v) => {
     if (d.a != null) c.a = d.a;
     if (d.mot != null) c.mot = d.mot;
   } else c.sp = espDe(p[0], o.n);
-  c.pr = { k: o.k, n: p[0], t: o.n, a: o.a || "", y: o.y || 0, f: o.f | 0, lib: o.k == "re" ? (o.lib ? 1 : 0) : 1, fid: o.k == "fr" ? o.fid : null };
+  c.pr = pr;
   W.cast.push(c);
   W.cast.sort((a, b) => a.i - b.i);
   toast(tx4(`${c.n} llega a tu historia`, `${c.n} joins your story`, `${c.n} rejoint ton histoire`, `${c.n} chega à sua história`));
@@ -63652,12 +63724,12 @@ rapCast = function () {
   const h = rapCastPre.apply(this, arguments);
   return conPers(W.m) ? presBt() + h : h;
 };
-V37.costo.push((W2) => 1 + Math.min(0.25, (W2.cast || []).reduce((t, c) => t + (presPago(c) ? presFee(c.pr.f) * (ESPW[c.i] != null ? ESPW[c.i] : 0.3) : 0), 0)));
+V37.costo.push((W2) => 1 + Math.min(0.25, presDe(W2).reduce((t, c) => t + (presPago(c) ? presFee(c.pr.f) * (ESPW[c.i] != null ? ESPW[c.i] : 0.3) : 0), 0)));
 function presUsos(n, id) {
-  return (S.pj || []).filter((p) => p.id != id && p.st >= 1 && (p.cast || []).some((c) => c.pr && c.n == n)).length;
+  return (S.pj || []).filter((p) => p.id != id && p.st >= 1 && presDe(p).some((c) => c.pr && c.n == n)).length;
 }
 V37.mods.push((P, add) => {
-  const C = (P.cast || []).filter((c) => presVivo(c) && c.i != 2);
+  const C = presDe(P).filter((c) => presVivo(c) && c.i != 2);
   if (!C.length) return;
   let a = 0,
     cr = 0,
@@ -63717,7 +63789,6 @@ function bibSub(x) {
 }
 function bibVuelve(x) {
   const c = JSON.parse(JSON.stringify(x.c)),
-    n = (i) => (W.cast || []).filter((z) => z.i == i).length,
     t = S.tl[c.t];
   c.e = Math.max(0, (c.e | 0) + yr() - (x.p.y || yr()));
   delete c.rj;
@@ -63726,13 +63797,7 @@ function bibVuelve(x) {
   c.ant = 1;
   if (W.m == 5 || !t || t.ret || t.dead || t.es || (W.cast || []).some((z) => z.t == c.t)) c.t = null;
   else if (!t.you && ocupado(t)) c.sob = 1.6;
-  if (n(c.i) >= IMP[c.i][1]) {
-    const r = [1, 3, 4, 0].find((i) => n(i) < IMP[i][1]);
-    if (r == null) return false;
-    c.i = r;
-  }
   (W.cast = W.cast || []).push(c);
-  return true;
 }
 const bibBt = () => {
   if (W.fid == null || !conPers(W.m)) return "";
@@ -63759,14 +63824,15 @@ ACT["pjbib"] = () => {
     max: Infinity,
     orden: false,
     ok: (sel) => {
-      let n = 0,
-        f = 0;
+      let n = 0;
       sel.forEach((k) => {
         const x = L.find((y) => y.k == k);
-        if (x) bibVuelve(x) ? n++ : f++;
+        if (x) {
+          bibVuelve(x);
+          n++;
+        }
       });
       if (n) toast(tx4(`Vuelven ${n} ${n == 1 ? "personaje" : "personajes"}.`, `${n} ${n == 1 ? "character returns" : "characters return"}.`, `${n} ${n == 1 ? "personnage revient" : "personnages reviennent"}.`, `${n == 1 ? "Volta" : "Voltam"} ${n} ${n == 1 ? "personagem" : "personagens"}.`));
-      if (f) toast(tx4(`No hay lugar para ${f} más: el reparto está lleno.`, `No room for ${f} more: the cast is full.`, `Pas de place pour ${f} de plus : la distribution est complète.`, `Não há lugar para mais ${f}: o elenco está cheio.`));
       return wz();
     },
   });
@@ -63806,6 +63872,13 @@ V37.err.push((W2) => {
   [
     ["En una obra erótica o con sexo explícito, todos los personajes tienen 18 años o más.", "Dans une œuvre érotique ou avec du sexe explicite, tous les personnages ont 18 ans ou plus.", "Numa obra erótica ou com sexo explícito, todos os personagens têm 18 anos ou mais."],
     ["opción", "option", "opção"],
+    ["sencillo", "single", "single"],
+    ["sencillos", "singles", "singles"],
+    [
+      "Con nombre y actor: todos los protagonistas, secundarios, invitados especiales y cameos que quieras. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.",
+      "Avec nom et acteur : autant de protagonistes, de seconds rôles, d'invités spéciaux et de caméos que tu veux. Les tiers et les figurants ne sont que des nombres. Le premier protagoniste est joué par l'interprète de l'équipe.",
+      "Com nome e ator: quantos protagonistas, coadjuvantes, convidados especiais e participações especiais você quiser. Os terciários e os figurantes são só números. O primeiro protagonista é interpretado pelo intérprete da equipe.",
+    ],
   ].forEach(([e, f, p]) => {
     DIC_FR[e] = f;
     DIC_PT[e] = p;
@@ -65237,6 +65310,156 @@ document.addEventListener("visibilitychange", () => {
   else if (CFG.mus) MUX.ctx.resume().catch(() => {});
 });
 E40L(MUXP.map((x) => [x.n, x.en]).concat(MUXP.map((x) => x.d)));
+
+(() => {
+  const G = [
+    [
+      ["Amor y desamor", "Love and heartbreak", "Amour et chagrin", "Amor e desamor"],
+      [
+        ["Desamor", "Heartbreak", "Chagrin d'amour", "Desamor"],
+        ["Primer amor", "First love", "Premier amour", "Primeiro amor"],
+        ["Amor no correspondido", "Unrequited love", "Amour non partagé", "Amor não correspondido"],
+        ["Amor a distancia", "Long-distance love", "Amour à distance", "Amor à distância"],
+        ["Amor prohibido", "Forbidden love", "Amour interdit", "Amor proibido"],
+        ["Celos", "Jealousy", "Jalousie", "Ciúme"],
+        ["Deseo", "Desire", "Désir", "Desejo"],
+        ["Seducción", "Seduction", "Séduction", "Sedução"],
+        ["Infidelidad", "Infidelity", "Infidélité", "Infidelidade"],
+        ["Ruptura", "Breakup", "Rupture", "Término"],
+        ["Reconciliación", "Reconciliation", "Réconciliation", "Reconciliação"],
+        ["Bodas", "Weddings", "Mariages", "Casamentos"],
+        ["Divorcio", "Divorce", "Divorce", "Divórcio"],
+        ["Amor maduro", "Love later in life", "Amour tardif", "Amor maduro"],
+      ],
+    ],
+    [
+      ["Canciones de la vida", "Songs of life", "Chansons de la vie", "Canções da vida"],
+      [
+        ["Nostalgia", "Nostalgia", "Nostalgie", "Nostalgia"],
+        ["Melancolía", "Melancholy", "Mélancolie", "Melancolia"],
+        ["Euforia", "Euphoria", "Euphorie", "Euforia"],
+        ["Fiesta y noche", "Parties and nightlife", "Fête et nuit", "Festa e noite"],
+        ["Baile", "Dance", "Danse", "Dança"],
+        ["Verano", "Summer", "Été", "Verão"],
+        ["Juventud perdida", "Lost youth", "Jeunesse perdue", "Juventude perdida"],
+        ["Ciudad natal", "Hometown", "Ville natale", "Cidade natal"],
+        ["El barrio", "The neighborhood", "Le quartier", "O bairro"],
+        ["La carretera", "The open road", "La route", "A estrada"],
+        ["Vida de gira", "Life on tour", "Vie de tournée", "Vida de turnê"],
+        ["Fama y excesos", "Fame and excess", "Gloire et excès", "Fama e excessos"],
+        ["Autoestima", "Self-esteem", "Estime de soi", "Autoestima"],
+        ["Empoderamiento", "Empowerment", "Émancipation", "Empoderamento"],
+        ["Superación", "Overcoming", "Dépassement de soi", "Superação"],
+        ["Orgullo", "Pride", "Fierté", "Orgulho"],
+        ["Canción protesta", "Protest song", "Chanson engagée", "Canção de protesto"],
+        ["Desahogo", "Letting it all out", "Exutoire", "Desabafo"],
+        ["Gratitud", "Gratitude", "Gratitude", "Gratidão"],
+        ["Despedida", "Farewell", "Adieu", "Despedida"],
+        ["Reencuentro", "Reunion", "Retrouvailles", "Reencontro"],
+        ["Raíces", "Roots", "Racines", "Raízes"],
+        ["Patria", "Homeland", "Patrie", "Pátria"],
+      ],
+    ],
+    [
+      ["Vida cotidiana", "Everyday life", "Vie quotidienne", "Vida cotidiana"],
+      [
+        ["Rutina", "Routine", "Routine", "Rotina"],
+        ["Mudanzas", "Moving house", "Déménagements", "Mudanças"],
+        ["Vecinos", "Neighbors", "Voisins", "Vizinhos"],
+        ["Compañeros de piso", "Roommates", "Colocataires", "Colegas de apartamento"],
+        ["Vida en pareja", "Life as a couple", "Vie de couple", "Vida a dois"],
+        ["Maternidad", "Motherhood", "Maternité", "Maternidade"],
+        ["Paternidad", "Fatherhood", "Paternité", "Paternidade"],
+        ["Adopción", "Adoption", "Adoption", "Adoção"],
+        ["Abuelos", "Grandparents", "Grands-parents", "Avós"],
+        ["Cocina y comida", "Food and cooking", "Cuisine et repas", "Comida e cozinha"],
+        ["Jubilación", "Retirement", "Retraite", "Aposentadoria"],
+        ["Herencias", "Inheritances", "Héritages", "Heranças"],
+        ["Enfermedad", "Illness", "Maladie", "Doença"],
+        ["Cuidar a los nuestros", "Caring for loved ones", "Prendre soin des siens", "Cuidar dos nossos"],
+      ],
+    ],
+    [
+      ["El mundo de hoy", "Today's world", "Le monde d'aujourd'hui", "O mundo de hoje"],
+      [
+        ["Redes sociales", "Social media", "Réseaux sociaux", "Redes sociais"],
+        ["Influencers", "Influencers", "Influenceurs", "Influenciadores"],
+        ["Teletrabajo", "Remote work", "Télétravail", "Trabalho remoto"],
+        ["Pandemias", "Pandemics", "Pandémies", "Pandemias"],
+        ["Cambio climático", "Climate change", "Changement climatique", "Mudança climática"],
+        ["Crisis de vivienda", "Housing crisis", "Crise du logement", "Crise de moradia"],
+        ["Noticias falsas", "Fake news", "Fausses nouvelles", "Notícias falsas"],
+        ["Criptomonedas", "Cryptocurrencies", "Cryptomonnaies", "Criptomoedas"],
+        ["Gentrificación", "Gentrification", "Gentrification", "Gentrificação"],
+        ["Privacidad", "Privacy", "Vie privée", "Privacidade"],
+        ["Consumismo", "Consumerism", "Consumérisme", "Consumismo"],
+        ["Salud mental", "Mental health", "Santé mentale", "Saúde mental"],
+        ["Diversidad", "Diversity", "Diversité", "Diversidade"],
+        ["Feminismo", "Feminism", "Féminisme", "Feminismo"],
+        ["Derechos LGBTQ+", "LGBTQ+ rights", "Droits LGBTQ+", "Direitos LGBTQ+"],
+      ],
+    ],
+    [
+      ["Aventura y misterio", "Adventure and mystery", "Aventure et mystère", "Aventura e mistério"],
+      [
+        ["Tesoros perdidos", "Lost treasures", "Trésors perdus", "Tesouros perdidos"],
+        ["Mapas y expediciones", "Maps and expeditions", "Cartes et expéditions", "Mapas e expedições"],
+        ["Islas desiertas", "Desert islands", "Îles désertes", "Ilhas desertas"],
+        ["Naufragios", "Shipwrecks", "Naufrages", "Naufrágios"],
+        ["Atracos", "Heists", "Braquages", "Assaltos"],
+        ["Espías", "Spies", "Espions", "Espiões"],
+        ["Conspiraciones", "Conspiracies", "Complots", "Conspirações"],
+        ["Sociedades secretas", "Secret societies", "Sociétés secrètes", "Sociedades secretas"],
+        ["Enigmas", "Riddles", "Énigmes", "Enigmas"],
+        ["Fugas", "Escapes", "Évasions", "Fugas"],
+        ["Duelos", "Duels", "Duels", "Duelos"],
+        ["Cazarrecompensas", "Bounty hunters", "Chasseurs de primes", "Caçadores de recompensas"],
+      ],
+    ],
+  ];
+  const ya = new Set(DX.tm),
+    tr = [];
+  G.forEach(([g, L]) => {
+    const n = L.filter((x) => !ya.has(x[0]));
+    if (!n.length) return;
+    TXTM.push([g[0], n.map((x) => x[0])]);
+    n.forEach((x) => DX.tm.push(x[0]));
+    tr.push(g, ...n);
+  });
+  E40L(tr.map((x) => [x[0], x[1]]));
+  Object.assign(GTAG, {
+    "Religiones y espiritualidad": 14,
+    "Cultos y crimen": 7,
+    "Fe, cultos y crimen": 14,
+    Animales: 13,
+    "Política": 8,
+    "Amor y desamor": 5,
+    "Canciones de la vida": 12,
+    "Vida cotidiana": 4,
+    "El mundo de hoy": 8,
+    "Aventura y misterio": 10,
+  });
+  const grupoDe = {};
+  TXTM.forEach(([g, L]) => L.forEach((x) => (grupoDe[x] = grupoDe[x] || g)));
+  for (let i = ETX.tm.length; i < DX.tm.length; i++) {
+    const g = GTAG[grupoDe[DX.tm[i]]];
+    ETX.tm.push(etqDe(DX.tm[i], g != null ? g : null));
+  }
+  const sbDe = {};
+  TXSB.forEach((f) => f[1].forEach((x) => (sbDe[x] = sbDe[x] || f)));
+  for (let i = ETX.sb.length; i < DX.sb.length; i++) {
+    const f = sbDe[DX.sb[i]],
+      g = !f ? null : GTAG[f[0]] != null ? GTAG[f[0]] : f[2] != null ? (f[2] >= 0 ? ETQE[f[2]] : 12) : null;
+    ETX.sb.push(etqDe(DX.sb[i], g));
+  }
+  if (typeof DIC_FR == "undefined") return;
+  tr.concat([
+    ["Si el disco cuenta una historia, márcalo como álbum conceptual y elige aquí su arco narrativo.", "", "Si le disque raconte une histoire, marque-le comme album concept et choisis ici son arc narratif.", "Se o disco conta uma história, marque-o como álbum conceitual e escolha aqui o seu arco narrativo."],
+  ]).forEach(([e, , f, p]) => {
+    DIC_FR[e] = DIC_FR[e] || f;
+    DIC_PT[e] = DIC_PT[e] || p;
+  });
+})();
 
 
 aplicarCfg();

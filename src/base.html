@@ -2297,6 +2297,8 @@ const ENX = {
   "\u2014 sin actor \u2014": "\u2014 no actor \u2014",
   "Con nombre y actor: hasta 10 protagonistas, 15 secundarios, 5 invitados especiales y 5 cameos. Los terceros y los extras son solo n\u00FAmeros. El primer protagonista lo interpreta el int\u00E9rprete del equipo.":
     "With name and actor: up to 10 leads, 15 supporting, 5 special guests and 5 cameos. Third-tier and extras are just numbers. The team's performer plays the first lead.",
+  "Con nombre y actor: todos los protagonistas, secundarios, invitados especiales y cameos que quieras. Los terceros y los extras son solo n\u00FAmeros. El primer protagonista lo interpreta el int\u00E9rprete del equipo.":
+    "With name and actor: as many leads, supporting characters, special guests and cameos as you want. Third-tier and extras are just numbers. The team's performer plays the first lead.",
   "Estilo de producci\u00F3n": "Production style",
   "Lo aman:": "Loved by:",
   "\u00B7 lo rechazan:": "\u00B7 rejected by:",
@@ -17035,12 +17037,13 @@ const arqOrd = (x) => {
     .sort((a, b) => a[2].localeCompare(b[2], CFG.idi || "es"))
     .map(([i, a]) => [i, a]);
 };
+// [papel, tope (ya no hay), peso del cachet]
 const IMP = [
-  ["Protagonista", 10, 1],
-  ["Secundario", 15, 0.35],
-  ["Extra", 20, 0],
-  ["Invitado especial", 5, 0.25],
-  ["Cameo", 5, 0.2],
+  ["Protagonista", Infinity, 1],
+  ["Secundario", Infinity, 0.35],
+  ["Extra", Infinity, 0],
+  ["Invitado especial", Infinity, 0.25],
+  ["Cameo", Infinity, 0.2],
 ];
 const conPers = (m) => m != 4;
 const adulto = (W2) => ERO(W2.gn || []) || (W2.cont && W2.cont.s >= 3);
@@ -18324,12 +18327,12 @@ let pjCard = (c, k, ad) =>
     c.a,
   )}</div>${k == 0 && c.i == 0 ? prot41() : pjAct(c, k)}${c.i != 2 ? `<div class="k" style="margin-top:4px"><span class="m">${c.t != null && S.tl[c.t] ? "Encaje " + estr5(encajeP(c, S.tl[c.t])) : "Sin int\u00E9rprete"}</span>${bt("tpk", "p|" + k, ic("talento") + " Ver talentos")}</div>` : ""}</div>`;
 const pjBts = (cnt, L) =>
-  `<div class="bts">${bt("wcrec", "", ic("estrella") + " Reparto recomendado")}${bt("wcdz", "", ic("dado") + " Dado a todos")}${L.map((i) => bt("wcadd", i, ic("mas") + " " + IMP[i][0] + " (" + cnt[i] + "/" + IMP[i][1] + ")", cnt[i] >= IMP[i][1] ? "off" : "")).join("")}</div>`;
+  `<div class="bts">${bt("wcrec", "", ic("estrella") + " Reparto recomendado")}${bt("wcdz", "", ic("dado") + " Dado a todos")}${L.map((i) => bt("wcadd", i, ic("mas") + " " + IMP[i][0] + (cnt[i] ? " (" + cnt[i] + ")" : ""))).join("")}</div>`;
 function castH() {
   W.cast = W.cast || [];
   const cnt = IMP.map((_, i) => W.cast.filter((c) => c.i == i).length),
     ad = adulto(Object.assign({}, W, { gn: wGn() }));
-  return `<div class="m">Con nombre y actor: hasta 10 protagonistas, 15 secundarios, 5 invitados especiales y 5 cameos. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 30, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 3, 4])}
+  return `<div class="m">Con nombre y actor: todos los protagonistas, secundarios, invitados especiales y cameos que quieras. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 30, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 3, 4])}
 ${W.cast.map((c, k) => pjCard(c, k, ad)).join("") || '<div class="m">Sin personajes todav\u00EDa.</div>'}`;
 }
 function styH() {
@@ -18814,7 +18817,6 @@ ACT["wsala"] = () => {
 ACT["wcadd"] = (v) => {
   const i = +v;
   W.cast = W.cast || [];
-  if (W.cast.filter((c) => c.i == i).length >= IMP[i][1]) return toast("M\u00E1ximo " + IMP[i][1]);
   const c = pjNuevo(i, Object.assign({}, W, { gn: wGn() }));
   W.cast.push(c);
   W.cast.sort((a, b) => a.i - b.i);
@@ -26548,10 +26550,10 @@ function bancoH() {
   const L = S.lo || [],
     y = yr();
   return `<div class="c"><div class="k"><h3 style="margin:0">${ic("libro")} Bancos y préstamos</h3>${bi("bancos")}</div><details class="nota"><summary aria-label="Más información"></summary><div class="m">Cuanto más prestigio, más te prestan. La cuota sale cada semana (interés más capital).</div></details>
-${BAN.map((b, i) => (y < b[1] ? "" : `<div class="fila"><span>${b[0]} · ${dec1(banTasa(i) * 100, 1)} % al año${banOk(i) ? " \u00B7 te presta hasta " + fm(Math.max(0, credLim(i))) : " \u00B7 pide prestigio " + b[4] + " y puntaje " + b[5]}</span>${bt("pdb", i, "Pedir", banOk(i) && credLim(i) > 0 ? "a" : "off")}</div>`)).join("")}
+${BAN.map((b, i) => (y < b[1] ? "" : `<div class="fila"><span>${b[0]} · ${dec1(banTasa(i) * 100, 1)} % al año${banOk(i) ? " \u00B7 te presta hasta " + fm(Math.max(0, credLim(i))) : " \u00B7 pide prestigio " + b[4] + " y puntaje " + b[5]}</span>${bt("banp", i, "Pedir", banOk(i) && credLim(i) > 0 ? "a" : "off")}</div>`)).join("")}
 ${L.length ? `<h3>Tus préstamos</h3>${L.map((l, i) => `<div class="fila"><span>${BAN[l.b][0]}${l.por ? " \u00B7 " + esc(l.por) : ""} · debes ${fm(l.n)} · cuota ${fm(l.c)}/sem · ${l.w} sem</span>${bt("pgl", i, "Pagar todo", S.cash >= l.n ? "" : "off")}</div>`).join("")}` : '<div class="m">No tienes pr\u00E9stamos.</div>'}</div>`;
 }
-ACT["pdb"] = (v) => {
+ACT["banp"] = (v) => {
   const b = +v,
     lim = credLim(b);
   if (!banOk(b) || lim <= 0) return toast("Este banco no te presta ahora");
@@ -28980,9 +28982,9 @@ const cvCosto = () => Math.round(TB(medBase()) * 0.05);
 function cvH() {
   const ok = yr() >= 1970,
     hecha = S.cvP == yr();
-  return `<div class="c k"><div><b>${esc(S.sn)} Fest</b><details class="nota"><summary aria-label="Más información"></summary><div class="m">Tu propia convención: vende entradas según tus fans y suma expectativa a tus obras que vienen. Una vez al año, desde 1970.</div></details></div>${ok && !hecha ? bt("cvp", "", "Organizar \u00B7 " + fm(cvCosto()), S.cash >= cvCosto() ? "a" : "off") : `<span class="m">${ok ? "ya la hiciste este a\u00F1o" : "desde 1970"}</span>`}</div>`;
+  return `<div class="c k"><div><b>${esc(S.sn)} Fest</b><details class="nota"><summary aria-label="Más información"></summary><div class="m">Tu propia convención: vende entradas según tus fans y suma expectativa a tus obras que vienen. Una vez al año, desde 1970.</div></details></div>${ok && !hecha ? bt("cvfest", "", "Organizar \u00B7 " + fm(cvCosto()), S.cash >= cvCosto() ? "a" : "off") : `<span class="m">${ok ? "ya la hiciste este a\u00F1o" : "desde 1970"}</span>`}</div>`;
 }
-ACT["cvp"] = () => {
+ACT["cvfest"] = () => {
   const c = cvCosto();
   if (S.cvP == yr() || yr() < 1970) return;
   if (S.cash < c) return toast("Fondos insuficientes");
@@ -43236,7 +43238,7 @@ const mxAf = (k, i, gn) => {
 const mxO = (P, k, d) => (P.mx && P.mx[k] != null ? MXT[k][P.mx[k]] : MXT[k][d || 0]);
 
 // ---------------- Música ----------------
-// Límites por edición: [mín. canciones, máx. canciones, máx. minutos, máx. sencillos]
+// Límites por edición: [mín. canciones, máx. canciones, máx. minutos, lleva sencillos (0 = no; sin tope)]
 function mxLim(edm, y) {
   y = y || yr();
   return (
@@ -43284,9 +43286,8 @@ function mxMusica(W2) {
     while (mx.can.length < L[0]) mx.can.push(mxCancion(W2, mx.can.length));
     if (mx.can.length > L[1]) mx.can.length = L[1];
     if (!mx.can.some((c) => c.sg) && L[3]) mx.can[0].sg = 1;
-    let ns = 0;
     mx.can.forEach((c) => {
-      if (c.sg && ++ns > L[3]) c.sg = 0;
+      if (c.sg && !L[3]) c.sg = 0;
     });
   }
   const seg = sum(mx.can, (c) => c.s || 0);
@@ -43506,12 +43507,12 @@ function mxCanH(full) {
 <div class="k" style="flex-wrap:nowrap;gap:6px"><select data-k="can.${i}.ft" onchange="mxv(this)" aria-label="Colaboración"><option value="">— sin colaboración —</option>${fts
         .concat(c.ft != null && S.tl[c.ft] && !fts.includes(S.tl[c.ft]) ? [S.tl[c.ft]] : [])
         .map((t) => `<option value="${t.id}"${c.ft == t.id ? " selected" : ""}>ft. ${esc(t.n)} · ${NIVT[nivel(t)][0]} · ${fm(fee(t, t0r(t), 4) * 0.35)}</option>`)
-        .join("")}</select>${L[3] ? chx("mxsg", i, c.sg ? "Sencillo ★" : "Sencillo", c.sg, !c.sg && ns >= L[3]) : ""}</div></div>`;
+        .join("")}</select>${L[3] ? chx("mxsg", i, c.sg ? "Sencillo ★" : "Sencillo", c.sg) : ""}</div></div>`;
     })
     .join("");
   const over = tot > L[2] + 0.01,
     pocas = mx.can.length < L[0];
-  return `<div class="k"><b>${plural(mx.can.length, "canción", "canciones")} · ${minSeg(tot * 60)}</b><span class="m">${duTipo(4, Math.round(tot))} · máx. ${L[2]} min y ${L[1]} canciones${L[3] ? " · " + ns + "/" + L[3] + " sencillos" : ""}</span></div>${barV((tot / L[2]) * 100, over ? "var(--r)" : "")}${over ? `<div class="m" style="color:var(--r)">No cabe en el formato: quita canciones o acórtalas (o elige otro formato).</div>` : ""}${pocas ? `<div class="m" style="color:var(--r)">Este formato pide al menos ${L[0]} canciones.</div>` : ""}${filas}${full ? `<div class="bts">${mx.can.length < L[1] && edm != 10 ? bt("mxca", "", ic("mas") + " Canción") : ""}${bt("mxcdz", "", ic("dado") + " Nombres al azar")}${bt("mxcaj", "", "Ajustar duraciones al formato")}</div>` : ""}`;
+  return `<div class="k"><b>${plural(mx.can.length, "canción", "canciones")} · ${minSeg(tot * 60)}</b><span class="m">${duTipo(4, Math.round(tot))} · máx. ${L[2]} min y ${L[1]} canciones${L[3] && ns ? " · " + plural(ns, "sencillo", "sencillos") : ""}</span></div>${barV((tot / L[2]) * 100, over ? "var(--r)" : "")}${over ? `<div class="m" style="color:var(--r)">No cabe en el formato: quita canciones o acórtalas (o elige otro formato).</div>` : ""}${pocas ? `<div class="m" style="color:var(--r)">Este formato pide al menos ${L[0]} canciones.</div>` : ""}${filas}${full ? `<div class="bts">${mx.can.length < L[1] && edm != 10 ? bt("mxca", "", ic("mas") + " Canción") : ""}${bt("mxcdz", "", ic("dado") + " Nombres al azar")}${bt("mxcaj", "", "Ajustar duraciones al formato")}</div>` : ""}`;
 }
 ACT["mxca"] = () => {
   W.mx.can.push(mxCancion(W, W.mx.can.length));
@@ -43546,7 +43547,7 @@ ACT["mxsg"] = (v) => {
   const c = W.mx.can[+v],
     L = mxLim((W.mf && W.mf.edm) | 0);
   if (!c) return;
-  if (!c.sg && W.mx.can.filter((x) => x.sg).length >= L[3]) return tst("Máximo " + L[3] + " sencillos en este formato");
+  if (!L[3]) return;
   c.sg = c.sg ? 0 : 1;
   return wz();
 };
@@ -50515,8 +50516,6 @@ ACT["wcrol"] = (v) => {
   const [k, i] = String(v).split("|").map(Number),
     c = (W.cast || [])[k];
   if (!c || c.i == i) return;
-  const n = W.cast.filter((x) => x.i == i).length;
-  if (n >= IMP[i][1]) return toast(L37("Ya tienes el máximo de ese papel", "You already have the maximum for that role"));
   if (k == 0 && c.i == 0) return toast(L37("El primer protagonista lo interpreta el intérprete del equipo", "The first lead is played by the crew's performer"));
   c.i = i;
   return wz();
@@ -51074,8 +51073,8 @@ const TYPX = {
   "Teatro inmersivo": ["inmer"],
   Circo: ["circo"],
   Improvisación: ["impro"],
-  "Álbum musical": ["sencillo", "productor", "lujo"],
-  EP: ["sencillo", "productor"],
+  "Álbum musical": ["productor", "lujo"],
+  EP: ["productor"],
   "Álbum conceptual": ["productor", "lujo"],
   Singles: ["remix"],
   Jingles: ["jingle"],
