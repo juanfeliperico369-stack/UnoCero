@@ -33,7 +33,8 @@ let trX = function (t) {
     const P = k.split(/( · |: | \/ | — | → )/);
     let n = 0;
     const q = P.map((x, i) => {
-      if (i % 2) return x == ": " && CFG.idi == "fr" && !/\s$/.test(P[i - 1]) ? " : " : x;
+      // Al principio del texto no se agrega el espacio: el nombre que va antes está en otro nodo y se sumaría una y otra vez
+      if (i % 2) return x == ": " && CFG.idi == "fr" && P[i - 1] && !/\s$/.test(P[i - 1]) ? " : " : x;
       const y = x.trim(),
         v = y ? xl(D, y) : null;
       if (v != null) {
@@ -190,7 +191,8 @@ setTimeout(() => {
     [/^(.+?) gana la ventaja «(.+)»\.?$/, "$1 obtient l'atout «$2»", "$1 ganha a vantagem «$2»"],
     [/^(.+?) ofrece comprar la franquicia «(.+)»\.?$/, "$1 propose de racheter la franchise «$2»", "$1 oferece comprar a franquia «$2»"],
     [/^(.+?) se reestructura tras un mal año\.?$/, "$1 se restructure après une mauvaise année", "$1 se reestrutura após um ano ruim"],
-    [/^(.+?) compra a (.+?)\.?$/, "$1 rachète $2", "$1 compra $2"],
+    // Solo con un nombre propio después («Lumen compra a Aurora Films»): así no toca el portugués «compra a rede»
+    [/^(.+?) compra a ([A-ZÁÉÍÓÚÑ].+?)\.?$/, "$1 rachète $2", "$1 compra $2"],
     [/^(.+?) te propone una idea\.?$/, "$1 te propose une idée", "$1 propõe uma ideia a você"],
     [/^comprado por (.+?) en (\d+)$/, "racheté par $1 en $2", "comprado por $1 em $2"],
     [/^quebró en (\d+)$/, "a fait faillite en $1", "faliu em $1"],

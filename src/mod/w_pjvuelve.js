@@ -65,7 +65,7 @@ const bibBt = () => {
 };
 ACT["pjbib"] = () => {
   const L = bibFuera(),
-    ord = [0, 1, 3, 4, 2];
+    ord = [0, 1, 5, 3, 4, 2];
   if (!L.length) return toast(tx4("Todos los personajes de la franquicia ya están en la obra.", "Every character in the franchise is already in the work.", "Tous les personnages de la franchise sont déjà dans l'œuvre.", "Todos os personagens da franquia já estão na obra."));
   L.sort((a, b) => ord.indexOf(a.c.i) - ord.indexOf(b.c.i) || String(a.c.n).localeCompare(String(b.c.n), CFG.idi || "es"));
   return fxPick({

@@ -27,7 +27,7 @@ costo +#|coût +#|custo +#
 costo −#|coût −#|custo −#
 crítica −#|critique −#|crítica −#
 público −#|public −#|público −#
-−# sem|−# sem.|−# sem.
+−# sem|−# sem|−# sem
 ventas +#|ventes +#|vendas +#
 ventas −#|ventes −#|vendas −#
 sin cambios|sans changement|sem mudanças

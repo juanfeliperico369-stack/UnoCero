@@ -26,56 +26,120 @@ const CULT = [
   ["Desconocida", "Unknown", /Ciencia|Misterio|Terror|Fantas/],
 ];
 E40L(AFI.map((x) => [x[0], x[1]]).concat(CULT.map((x) => [x[0], x[1]]), [["Audiencia focal", "Focal audience"], ["Afición", "Fandom"], ["Cultura", "Culture"], ["Ninguna", "None"], ["Comunidad LGBTQ+", "LGBTQ+ community"]]));
+// Público objetivo y audiencia focal del documento: hasta 5 en conjunto entre edades, aficionados, culturas, sexo e identidad, y alcance
+const POBX = [
+  ["xm", "Masculino", "Male", "Masculin", "Masculino"],
+  ["xf", "Femenino", "Female", "Féminin", "Feminino"],
+  ["xl", "LGBTQ+", "LGBTQ+", "LGBTQ+", "LGBTQ+"],
+  ["ag", "Global", "Global", "Mondial", "Global"],
+  ["an", "General", "General", "Général", "Geral"],
+];
+const POBMAX = 5;
+// Lista de elecciones; las partidas viejas tenían una edad, un sexo, una afición, una cultura y LGBTQ+ por separado
+function pobL(X) {
+  const o = (X && X.pob) || {};
+  if (Array.isArray(o.L)) return o.L;
+  const L = [];
+  if (o.e >= 0) L.push("e" + o.e);
+  if (o.x == 1) L.push("xf");
+  if (o.x == 2) L.push("xm");
+  if (o.f >= 0) L.push("f" + o.f);
+  if (o.c >= 0) L.push("c" + o.c);
+  if (o.l) L.push("xl");
+  return L;
+}
+// Los campos de siempre siguen al día para lo que ya los usaba
+function pobSet(L) {
+  W.pob = W.pob || {};
+  const P = W.pob,
+    pr = (k) => L.filter((x) => x[0] == k && x[1] != "f" && /\d/.test(x)).map((x) => +x.slice(1));
+  P.L = L.slice(0, POBMAX);
+  P.e = pr("e")[0] != null ? pr("e")[0] : -1;
+  P.x = L.includes("xf") && !L.includes("xm") ? 1 : L.includes("xm") && !L.includes("xf") ? 2 : 0;
+  P.f = pr("f")[0] != null ? pr("f")[0] : -1;
+  P.c = pr("c")[0] != null ? pr("c")[0] : -1;
+  P.l = L.includes("xl") ? 1 : 0;
+}
+// Edades del público objetivo (Familiar suma niños, adultos y maduros)
+function pobEdades(P) {
+  const L = pobL(P),
+    E = L.filter((x) => /^e\d$/.test(x)).map((x) => +x.slice(1));
+  return L.includes("ef") ? uniq(E.concat([0, 3, 4])) : E;
+}
+function pobNom(k) {
+  const L = espL();
+  if (k == "ef") return ["Familiar", "Family", "Familial", "Familiar"][L];
+  if (/^e\d$/.test(k)) return bibTr(GRU[+k.slice(1)] || "");
+  if (/^f\d$/.test(k)) return L == 1 ? AFI[+k.slice(1)][1] : bibTr(AFI[+k.slice(1)][0]);
+  if (/^c\d+$/.test(k)) return (L == 1 ? CULT[+k.slice(1)][1] : bibTr(CULT[+k.slice(1)][0])) || "";
+  const x = POBX.find((z) => z[0] == k);
+  return x ? x[1 + L] : k;
+}
+const pobTxt = (X) => pobL(X).map(pobNom).join(", ") || tx4("Todo el público", "Everyone", "Tout le public", "Todo o público");
 function pubFH() {
   if (!W) return "";
-  W.pob = W.pob || {};
-  const f = W.pob.f == null ? -1 : W.pob.f,
-    c = W.pob.c == null ? -1 : W.pob.c;
-  return `<div class="c sub fx-blk"><b>${T40("Audiencia focal", "Focal audience")}</b><div class="m">${T40("Afinar a quién le hablas: rinde más con ese público y un poco menos con el resto.", "Narrow who you speak to: it earns more with that audience and a little less with the rest.")}</div><label class="m">${T40("Afición", "Fandom")}</label><div class="chips">${chx("pobf", -1, T40("Ninguna", "None"), f < 0)}${AFI.map((a, i) => chx("pobf", i, LL(a), f == i)).join("")}</div><label class="m">${T40("Cultura", "Culture")}</label><button class="b sel-b" data-a="pobc">${c >= 0 ? `<b>${esc(LL(CULT[c]))}</b>` : T40("Ninguna", "None")}</button><div class="chips">${chx("pobl", W.pob.l ? 0 : 1, T40("Comunidad LGBTQ+", "LGBTQ+ community"), !!W.pob.l)}</div></div>`;
+  const L = pobL(W);
+  return `<div class="c sub fx-blk"><div class="k"><b>${T40("Público objetivo y audiencia focal", "Target and focal audience")}</b><span class="m">${L.length}/${POBMAX}</span></div><div class="m">${T40(
+    "Elige hasta 5 en conjunto entre edades, aficionados, culturas, sexo e identidad, y alcance. Rinde más con ese público y un poco menos con el resto.",
+    "Pick up to 5 in total among ages, fans, cultures, sex and identity, and reach. It earns more with that audience and a little less with the rest.",
+  )}</div>${L.length ? `<div class="chips" translate="no">${L.map((k) => `<button class="ch on" data-a="pobx" data-v="${k}">${esc(pobNom(k))} ✕</button>`).join("")}</div>` : `<div class="m">${tx4("Todo el público.", "Everyone.", "Tout le public.", "Todo o público.")}</div>`}<button class="b" data-a="pobp">${ic("talento")} ${T40("Elegir público", "Choose audience")}</button></div>`;
 }
 const mxTabPF = mxTab;
-mxTab = function () {
-  return mxTabPF.apply(this, arguments) + pubFH();
+mxTab = function (rap) {
+  return mxTabPF.apply(this, arguments) + (rap ? pubFH() : "");
 };
-ACT["pobf"] = (v) => {
-  W.pob = W.pob || {};
-  W.pob.f = +v;
+ACT["pobx"] = (v) => {
+  pobSet(pobL(W).filter((k) => k != v));
   return wz();
 };
-ACT["pobl"] = (v) => {
-  W.pob = W.pob || {};
-  W.pob.l = +v;
-  return wz();
-};
-ACT["pobc"] = () =>
-  fxPick({
-    t: T40("Cultura focal", "Focal culture"),
-    items: [{ v: -1, l: T40("Ninguna", "None") }].concat(CULT.map((c, i) => ({ v: i, l: LL(c) }))),
+ACT["pobp"] = () => {
+  const G = [tx4("Edades", "Ages", "Âges", "Idades"), tx4("Aficionados", "Fans", "Passionnés", "Fãs"), tx4("Culturas", "Cultures", "Cultures", "Culturas"), tx4("Sexo e identidad", "Sex and identity", "Sexe et identité", "Sexo e identidade"), tx4("Alcance", "Reach", "Portée", "Alcance")],
+    it = (v, g, n) => ({ v, l: pobNom(v), g: n + " " + G[g], nt: 1 }),
+    items = GRU.map((_, i) => it("e" + i, 0, 1))
+      .concat([it("ef", 0, 1)], AFI.map((_, i) => it("f" + i, 1, 2)), CULT.map((_, i) => it("c" + i, 2, 3)), ["xm", "xf", "xl"].map((k) => it(k, 3, 4)), ["ag", "an"].map((k) => it(k, 4, 5)))
+      .map((x) => Object.assign(x, { g: x.g.replace(/^\d /, "") }));
+  return fxPick({
+    t: T40("Público objetivo y audiencia focal", "Target and focal audience"),
+    d: tx4("Hasta 5 en conjunto.", "Up to 5 in total.", "Jusqu'à 5 au total.", "Até 5 no total."),
+    items,
+    sel: pobL(W),
+    max: POBMAX,
     orden: false,
-    sel: [String(W.pob && W.pob.c != null ? W.pob.c : -1)],
     ok: (s) => {
-      W.pob = W.pob || {};
-      W.pob.c = +s[0];
-      wz();
+      pobSet(s);
+      return wz();
     },
   });
+};
 V37.prod.push((P, W2) => {
-  if (W2.pob) P.pob = Object.assign({}, P.pob || {}, { f: W2.pob.f, c: W2.pob.c, l: W2.pob.l });
+  if (W2.pob) P.pob = Object.assign({}, P.pob || {}, W2.pob, { L: pobL(W2).slice() });
 });
 V37.ventas.push((P) => {
-  const o = P.pob || {};
+  const L = pobL(P),
+    y = P.y || yr();
   let k = 1;
-  if (o.f >= 0 && AFI[o.f]) k *= AFI[o.f][2] == P.m ? 1.05 : 0.97;
-  if (o.c >= 0 && CULT[o.c]) k *= 0.97;
-  if (o.l) k *= (P.y || yr()) < 1975 ? 0.94 : (P.y || yr()) < 2000 ? 0.99 : 1.02;
+  L.forEach((x) => {
+    if (/^f\d$/.test(x)) k *= AFI[+x.slice(1)][2] == P.m ? 1.05 : 0.98;
+    if (/^c\d+$/.test(x) && !L.includes("ag")) k *= 0.98;
+  });
+  if (L.includes("xl")) k *= y < 1975 ? 0.94 : y < 2000 ? 0.99 : 1.02;
+  if (L.includes("ag")) k *= y >= 1990 ? 1.04 : 1;
   return k;
 });
 V37.mods.push((P, add) => {
-  const o = P.pob || {},
-    gn = (P.gn || []).join(" ");
-  if (o.f >= 0 && AFI[o.f] && AFI[o.f][2] == P.m) add(1, 1, L37(`le habla a los ${AFI[o.f][0].toLowerCase()}`, `speaks to ${AFI[o.f][1].toLowerCase()}`));
-  if (o.c >= 0 && CULT[o.c]) CULT[o.c][2].test(gn) ? add(1, 1.5, L37("conecta con su cultura focal", "connects with its focal culture")) : add(-0.5, 0, L37("la cultura focal no le va a sus géneros", "the focal culture doesn't fit its genres"));
-  if (o.l && (P.y || yr()) >= 1990) add(0.5, 0.5, L37("representación LGBTQ+", "LGBTQ+ representation"));
+  const L = pobL(P),
+    gn = (P.gn || []).join(" "),
+    y = P.y || yr();
+  const fa = L.filter((x) => /^f\d$/.test(x) && AFI[+x.slice(1)][2] == P.m);
+  if (fa.length) add(1, 1, L37(`le habla a los ${AFI[+fa[0].slice(1)][0].toLowerCase()}`, `speaks to ${AFI[+fa[0].slice(1)][1].toLowerCase()}`));
+  let ok = 0,
+    mal = 0;
+  L.filter((x) => /^c\d+$/.test(x)).forEach((x) => (CULT[+x.slice(1)][2].test(gn) ? ok++ : mal++));
+  if (ok) add(Math.min(2, ok), Math.min(2.5, ok * 1.5), L37("conecta con su cultura focal", "connects with its focal culture"));
+  if (mal) add(-Math.min(1.5, mal * 0.5), 0, L37("la cultura focal no le va a sus géneros", "the focal culture doesn't fit its genres"));
+  if (L.includes("xl") && y >= 1990) add(0.5, 0.5, L37("representación LGBTQ+", "LGBTQ+ representation"));
+  if ((L.includes("xf") && /Romance|Drama|Musical/.test(gn)) || (L.includes("xm") && /Acci|Bélico|Deport|Western/.test(gn))) add(0, 0.5, tx4("sabe a quién le habla", "knows who it speaks to", "sait à qui il parle", "sabe com quem fala"));
+  if (L.includes("ag") && y >= 1990) add(0, 0.5, tx4("pensada para el mundo", "made for the world", "pensée pour le monde", "pensada para o mundo"));
 });
 // Tonos del documento que faltaban
 [

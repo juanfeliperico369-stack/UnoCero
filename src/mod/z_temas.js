@@ -152,3 +152,24 @@
     DIC_PT[e] = DIC_PT[e] || p;
   });
 })();
+// Traducciones que cambiaban al traducirse otra vez (el observador de la pantalla las repetía sin fin o las dejaba a medias)
+(() => {
+  if (typeof DIC_FR == "undefined") return;
+  [
+    ["-# sem", "-# sem", "-# sem"],
+    ["−# sem", "−# sem", "−# sem"],
+    ["Vie", "Vie", null],
+    ["Ancha", null, "Ampla"],
+    ["novela corta", null, "novela curta"],
+    ["Novela corta", null, "Novela curta"],
+    ["Você compra a rede", null, "Você compra a rede"],
+    ["Seu canal compra a exclusiva", null, "Seu canal compra a exclusiva"],
+    ["Seu canal compra a exclusiva:", null, "Seu canal compra a exclusiva:"],
+  ].forEach(([e, f, p]) => {
+    if (f != null) DIC_FR[e] = f;
+    if (p != null) DIC_PT[e] = p;
+  });
+  const k = "Un pueblo entero se levanta contra el comendador que abusa de todos y, ante el juez, cada vecino responde lo mismo: «Fuenteovejuna lo hizo».";
+  if (DIC_FR[k]) DIC_FR[k] = DIC_FR[k].replace("«Fuenteovejuna lo hizo»", "«C'est Fuenteovejuna»");
+  if (DIC_PT[k]) DIC_PT[k] = DIC_PT[k].replace("«Fuenteovejuna lo hizo»", "«Foi Fuenteovejuna»");
+})();

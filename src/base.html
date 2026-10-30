@@ -15527,7 +15527,8 @@ const mkCost = (i, m, P) => {
 function mkFit(i, P) {
   if (!P || !MKA[i]) return 1;
   let a = (AGX[P.age] || AGX[2]).slice();
-  if (P.pob && P.pob.e >= 0) a = a.map((x, g) => (g == P.pob.e ? x * 2 : x * 0.6));
+  const E = pobEdades(P);
+  if (E.length) a = a.map((x, g) => (E.includes(g) ? x * 2 : x * 0.6));
   const s = a.reduce((x, y) => x + y, 0) || 1;
   return 0.7 + (0.45 * a.reduce((x, w, g) => x + w * MKA[i][g], 0)) / s;
 }
@@ -17044,6 +17045,7 @@ const IMP = [
   ["Extra", Infinity, 0],
   ["Invitado especial", Infinity, 0.25],
   ["Cameo", Infinity, 0.2],
+  ["Tercero", Infinity, 0.15],
 ];
 const conPers = (m) => m != 4;
 const pjLider = (W2) => W2.m != 4 && W2.cast && W2.cast[0] && W2.cast[0].i == 0 && !W2.cast[0].vir;
@@ -18194,15 +18196,7 @@ function wDet() {
       W.pr,
     )}
 ${idiH()}
-<label class="m">Público objetivo</label><div class="k" style="flex-wrap:nowrap;gap:6px">${wSel("pob.e", [[-1, "Todas las edades"]].concat(GRU.map((g, i) => [i, g])), W.pob.e)}${wSel(
-      "pob.x",
-      [
-        [0, "Todos"],
-        [1, "Mujeres"],
-        [2, "Hombres"],
-      ],
-      W.pob.x,
-    )}</div>`;
+${pubFH()}`;
   if (tab == 1)
     h += `${(tyNoNarra(W) ? ["tm", "pa"] : ["pm", "tm", "pa", "ar"]).map(pkRow).join("")}${moH()}${hist37H(0)}${epSel()}<!--lug-->${W.m == 1 ? tvH() : duUI()}${wRng("cx", 0, 5, W.cx, "Complejidad")}${wRng("rit", 0, 4, W.rit, "Ritmo")}${[0, 1, 2, 3].includes(W.m) ? wRng("fx", 0, 4, W.fx, "Efectos especiales") : ""}`;
   if (tab == 2)
@@ -18332,7 +18326,7 @@ function castH() {
   W.cast = W.cast || [];
   const cnt = IMP.map((_, i) => W.cast.filter((c) => c.i == i).length),
     ad = adulto(Object.assign({}, W, { gn: wGn() }));
-  return `<div class="m">Con nombre y actor: todos los protagonistas, secundarios, invitados especiales y cameos que quieras. Los terceros y los extras son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 30, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 3, 4])}
+  return `<div class="m">Con nombre y actor: todos los protagonistas, secundarios, terceros, invitados especiales y cameos que quieras. Los extras y el elenco de apoyo son solo números. El primer protagonista lo interpreta el intérprete del equipo.${ad ? " En una obra er\u00F3tica o con sexo expl\u00EDcito, todos los personajes tienen 18 a\u00F1os o m\u00E1s." : ""}</div>${wRng("cs", 0, 50, W.cs, "Terceros y elenco de apoyo")}${wRng("nx", 0, 500, W.nx, "Extras")}${pjBts(cnt, [0, 1, 5, 3, 4])}
 ${W.cast.map((c, k) => pjCard(c, k, ad)).join("") || '<div class="m">Sin personajes todav\u00EDa.</div>'}`;
 }
 function styH() {
@@ -18385,7 +18379,7 @@ ${
 ${conRodaje(W.m) ? rodH(0) : ""}
 <div class="chips" style="margin-top:8px">${wCh("wext", "", "Estudio externo de efectos y animaci\u00F3n (+8 %)", W.ext)}</div>
 ${finH()}<label class="m">Pulido</label><div class="chips">${POL.map((p, i) => wCh("wpol", i, p[1] + (p[0] ? " (" + (p[0] > 0 ? "+" : "") + p[0] + " sem)" : ""), (W.pol | 0) == i)).join("")}</div>
-${y >= 2022 ? wRng("ai", 0, 100, W.ai, "Uso de IA") : ""}${conPers(W.m) ? "" : wRng("cs", 1, 30, W.cs, "M\u00FAsicos y equipo de apoyo")}<label class="m">Mercado principal</label>${wSel("mc", [[-1, "Global"]].concat(CT.map((c, i) => [i, c])), W.mc)}${muH()}${mfH()}`;
+${y >= 2022 ? wRng("ai", 0, 100, W.ai, "Uso de IA") : ""}${conPers(W.m) ? "" : wRng("cs", 1, 50, W.cs, "M\u00FAsicos de apoyo")}<label class="m">Mercado principal</label>${wSel("mc", [[-1, "Global"]].concat(CT.map((c, i) => [i, c])), W.mc)}${muH()}${mfH()}`;
 }
 function wz() {
   wDef(W);
@@ -23847,7 +23841,7 @@ function frPjs(f) {
         x.ob++;
         x.t = c.t;
         x.i = Math.min(x.i, c.i);
-        x.p += (((p.a || 50) + (p.c || 50)) / 2) * [1, 0.6, 0, 0.4, 0.3][c.i] * (p.fan ? 1.1 : 1);
+        x.p += (((p.a || 50) + (p.c || 50)) / 2) * [1, 0.6, 0, 0.4, 0.3, 0.2][c.i] * (p.fan ? 1.1 : 1);
       }),
     );
   return Object.keys(M)
@@ -24514,6 +24508,7 @@ function mfH() {
   const y = yr();
   let h = `<h3>Opciones de ${MD[W.m][0].toLowerCase()}</h3>`;
   G.forEach(([k, n, O]) => {
+    if (W.m == 4 && (k == "por" || (k == "edm" && edmTipo(W).length < 2))) return;
     if (k == "pl") {
       const sh = plShare(y),
         L = W.mf.pl || [];
@@ -24521,7 +24516,7 @@ function mfH() {
       return;
     }
     const sel = W.mf[k] | 0;
-    h += `<label class="m">${n}</label><div class="chips">${O.map((o, i) => ((y < o[1] || (o[2] && y >= o[2])) && !(k == "mot" && i == 2) && !(k == "imp" && i == 1) && !(k == "art" && i == 1) ? "" : wCh("wmf", k + "|" + i, o[0], sel == i, !mfOk(W.m, k, i, y)))).join("")}</div>${O[sel] && O[sel][7] ? `<div class="m">${esc(O[sel][7])}</div>` : ""}`;
+    h += `<label class="m">${n}</label><div class="chips">${O.map((o, i) => ((y < o[1] || (o[2] && y >= o[2])) && !(k == "mot" && i == 2) && !(k == "imp" && i == 1) && !(k == "art" && i == 1) || (k == "edm" && W.m == 4 && !edmTipo(W).includes(i)) ? "" : wCh("wmf", k + "|" + i, o[0], sel == i, !mfOk(W.m, k, i, y)))).join("")}</div>${O[sel] && O[sel][7] ? `<div class="m">${esc(O[sel][7])}</div>` : ""}`;
     if (k == "mot" && y >= 1985)
       h += `<div class="k"><span class="m">${S.mot ? "Tu motor: " + motN() + " \u2605" + (motN() < S.mot.n ? " (envejece: mej\u00F3ralo)" : "") : "A\u00FAn no tienes motor propio"}</span>${motN() < 5 ? bt("mot", "", (S.mot ? "Mejorar" : "Crear") + " \u00B7 " + fm(motCosto())) : ""}</div>`;
     if (k == "art" && S.band)
@@ -35966,9 +35961,7 @@ function docDatos() {
     pol: POL[W.pol | 0][1],
     cx: CXL[W.cx == null ? 2 : W.cx],
     fxl: [0, 1, 2, 3].includes(W.m) ? FXL[W.fx == null ? 2 : W.fx] : "",
-    pob:
-      (W.pob && W.pob.e >= 0 ? GRU[W.pob.e] : "Todas las edades") +
-      (W.pob && W.pob.x ? " \u00B7 " + ["", "mujeres", "hombres"][W.pob.x] : ""),
+    pob: pobTxt(W),
     cProd: fm(Math.round(c0.prod * c0.k)),
     cTal: fm(Math.round(c0.f * c0.k)),
     cMu: c0.mu ? fm(Math.round(c0.mu * c0.k)) : "",
@@ -50549,7 +50542,7 @@ ACT["wcmot"] = (v) => {
 const pjCard40 = pjCard;
 pjCard = function (c, k, ad) {
   let h = pjCard40.apply(this, arguments);
-  const roles = [0, 1, 3, 4]
+  const roles = [0, 1, 3, 4, 5]
       .map((i) => `<button class="ch mini${c.i == i ? " on" : ""}" data-a="wcrol" data-v="${k}|${i}" title="${esc(IMP[i][0])}">${IMP[i][0]}</button>`)
       .join(""),
     extra = `<div class="pj-x"><div class="k" style="gap:6px"><span class="m">${E40("Papel", "Role")}</span><span class="chips" style="margin:0">${c.i == 2 ? "" : roles}</span>${c.i != 2 && !(k == 0 && c.i == 0) ? bt("wcbest", k, ic("estrella") + " " + E40("Al mejor", "Best fit")) : ""}</div>${
@@ -50647,7 +50640,7 @@ function rodH(rap) {
     cyH += `<label class="m">${E40("Más países (hasta 3)", "More countries (up to 3)")}</label><div class="w-fila3">${Array.from({ length: n }, (_, i) => `<select onchange="rodCy(${i},this.value)">${opC(W.cy2[i] == null ? "" : W.cy2[i], 1)}</select>`).join("")}</div>${W.lug >= 0 && (W.cy == W.lug || W.cy2.includes(W.lug)) ? `<div class="m" style="color:var(--a)">${L37("Se rueda donde ocurre la historia: +0,5 de crítica.", "Shot where the story happens: +0.5 critics.")}</div>` : ""}`;
   }
   const almH = `<label class="m">${E40("Almacén de sets", "Set warehouse")}</label><div class="m">${sets.length ? sets.map((i) => (TER[i] ? esc(TER[i][0]) : "")).filter(Boolean).join(" · ") + " — " + L37("ruedas en set con 10 % menos de costo en esos terrenos.", "you shoot on set at 10% less cost on those terrains.") : L37("Vacío: cada obra rodada en set guarda aquí sus decorados.", "Empty: every work shot on a set stores its scenery here.")}</div>`;
-  const exH = conPers(W.m) ? `${wRng("nx", 0, 500, W.nx, L37("Extras", "Extras"))}${wRng("cs", 0, 30, W.cs, L37("Terceros y elenco de apoyo", "Supporting cast and third parties"))}` : "";
+  const exH = conPers(W.m) ? `${wRng("nx", 0, 500, W.nx, L37("Extras", "Extras"))}${wRng("cs", 0, 50, W.cs, L37("Terceros y elenco de apoyo", "Supporting cast and third parties"))}` : "";
   return `${rap ? "" : `<h3>${L37("Rodaje", "Shooting")}</h3>`}${metH}${terH}${cyH}${almH}${exH}`;
 }
 ACT["wter"] = (v) => {
@@ -52417,7 +52410,7 @@ function musica41H() {
     lista41H(4, T40("Lista de éxitos de la semana", "This week's hit chart")) +
     `<div class="c"><h3 style="margin:0 0 6px">${T40("Bandas y solistas", "Bands and solo artists")}</h3>${
       B.map((b) => `<div class="c sub"><div class="k"><button class="lnk" data-a="bn4p" data-v="${b.id}"><b>${esc(b.n)}</b></button><span class="m">${bndA41(b) != 1 ? bndLbl41(b) : b.m.length + " " + T40("integrantes", "members")}${b.sep ? " · " + T40("separada", "split") : ""}</span></div><div class="m">${T40("Fans", "Fans")} ${nfc(b.fans)} · ${T40("relación", "bond")} ${b.rel} · ${T40("práctica", "practice")} ${b.pr}${b.g && b.g.h > S.t ? " · " + T40("de gira", "on tour") + " " + (b.g.h - S.t) + " " + T40("sem", "wk") : ""}</div><div class="bts">${bt("bn4p", b.id, T40("Perfil", "Profile"))}${b.sep ? bt("bn4u", b.id, T40("Reunirlos", "Reunite") + " · " + fm(Math.round(TB(4) * 0.3)), "a") : bt("bn4e", b.id, T40("Ensayar", "Rehearse")) + (b.g && b.g.h > S.t ? "" : GBN41.map((g, k) => (yr() >= g[5] ? bt("bn4g", b.id + "|" + k, LL(g) + " · " + fm(Math.round(TB(4) * g[3]))) : "")).join(""))}</div></div>`).join("") || `<div class="m">${T40("Firma una banda o un solista para grabar discos con tu sello.", "Sign a band or solo artist to record with your label.")}</div>`
-    }<details class="c sub"${BSEL41.length ? " open" : ""}><summary><b>${T40("Firmar banda o solista", "Sign a band or solo artist")}</b></summary>${cand.map((t) => `<div class="fila"><span>${lnk41(t)}<span class="m"> · ${esc(RO[t.r])} · ${t.age} ${T40("años", "yrs")} · ${T40("música", "music")} ${bndMus41(t)}</span></span>${chx("bn4s", t.id, BSEL41.includes(t.id) ? "✔" : "+", BSEL41.includes(t.id))}</div>`).join("")}<input type="text" id="bn4n" maxlength="40" placeholder="${T40("Nombre (si lo dejas vacío se inventa)", "Name (left empty, one is invented)")}"><div class="m">${T40("Contrato", "Contract")} ${fm(bndC41(BSEL41))} · 5 ${T40("años", "years")} · ${L37("la banda cobra el 15 % de sus discos", "the band takes 15% of its records")}</div><div class="bts">${ART41.map((n, a) => bt("bn4f", a, T40("Firmar", "Sign") + " · " + LL(n) + " (" + ARTN41[a][0] + (ARTN41[a][1] > ARTN41[a][0] ? "–" + ARTN41[a][1] : "") + ")", bndOk41(a) && S.cash >= bndC41(BSEL41) ? "a" : "off")).join("")}</div></details></div>`
+    }<details class="c sub"${BSEL41.length ? " open" : ""}><summary><b>${T40("Firmar banda o solista", "Sign a band or solo artist")}</b></summary>${cand.map((t) => `<div class="fila"><span>${lnk41(t)}<span class="m"> · ${esc(RO[t.r])} · ${t.age} ${T40("años", "yrs")} · ${T40("música", "music")} ${bndMus41(t)}</span></span>${chx("bn4s", t.id, BSEL41.includes(t.id) ? "✔" : "+", BSEL41.includes(t.id))}</div>`).join("")}<input type="text" id="bn4n" maxlength="40" placeholder="${T40("Nombre (si lo dejas vacío se inventa)", "Name (left empty, one is invented)")}"><div class="m">${T40("Contrato", "Contract")} ${fm(bndC41(BSEL41))} · 5 ${T40("años", "years")} · ${L37("la banda cobra el 15 % de sus discos", "the band takes 15% of its records")}</div><div class="bts">${ART41.map((n, a) => a == 6 ? "" : bt("bn4f", a, T40("Firmar", "Sign") + " · " + LL(n) + " (" + ARTN41[a][0] + (ARTN41[a][1] > ARTN41[a][0] ? "–" + ARTN41[a][1] : "") + ")", bndOk41(a) && S.cash >= bndC41(BSEL41) ? "a" : "off")).join("")}</div></details></div>`
   );
 }
 ACT["bn4s"] = (v) => {
@@ -52522,6 +52515,8 @@ ACT["bn4w"] = (v) => {
   W.bnd41 = v === "" ? null : +v;
   const b = W.bnd41 != null ? bndDe41(W.bnd41) : null;
   if (b) {
+    W.mf = W.mf || {};
+    W.mf.art = bndA41(b);
     const L = b.m.map((id) => S.tl[id]).filter((t) => t && t.e >= 10);
     const v7 = L.slice().sort((a, c) => c.s[7] - a.s[7])[0],
       v5 = L.slice().sort((a, c) => c.s[5] - a.s[5])[0];
@@ -52765,12 +52760,18 @@ function crea41(m) {
   let h = cov41H();
   if (m == 0) h += `<div class="c sub"><h4 style="margin:0 0 6px">${T40("Formato de sala", "Theater format")}</h4><div class="chips">${FMT41.map((x, i) => (yr() >= x[2] ? chx("fmt4", i, LL(x) + (x[3] ? " · +" + Math.round(x[3] * 100) + " %" : ""), (W.fmt41 | 0) == i) : "")).join("")}</div></div>`;
   if (m == 4) {
+    // Todos los artistas firmados, agrupados por tipo: elegir uno fija el tipo de intérprete
     const a = (W.mf && W.mf.art) | 0,
-      B = bnd41().filter((b) => !b.sep && b.h > S.t && bndA41(b) == a);
-    h += `<div class="c sub"><h4 style="margin:0 0 6px">${T40("Intérprete firmado", "Signed act")} · ${LL(ART41[a])}</h4>${
-      B.length
-        ? `<select onchange="act('bn4w',this.value)"><option value="">— ${a == 0 ? T40("el intérprete que elijas en Equipo", "the performer you pick in Crew") : T40("ninguno", "none")} —</option>${B.map((b) => `<option value="${b.id}"${W.bnd41 == b.id ? " selected" : ""}>${esc(b.n)} · ${nfc(b.fans)} ${T40("fans", "fans")}</option>`).join("")}</select><div class="m">${L37("Si eliges uno, sus integrantes pasan al equipo y el intérprete del Equipo queda opcional (para los videos). Suma por su práctica y sus fans; cobra el 15 %.", "If you pick one, its members join the crew and the Crew performer becomes optional (for the videos). It adds by its practice and fans; it takes 15%.")}</div>`
-        : `<div class="m">${a == 0 ? T40("El solista será el intérprete que elijas en Equipo, o firma solistas en Obras → Música.", "The soloist will be the performer you pick in Crew, or sign soloists in Works → Music.") : T40("No tienes de este tipo firmados: fírmalos en Obras → Música.", "You have none of this kind signed: sign them in Works → Music.")}</div>`
+      B = bnd41().filter((b) => !b.sep && b.h > S.t);
+    h += `<div class="c sub"><h4 style="margin:0 0 6px">${T40("Intérprete firmado", "Signed act")}</h4>${
+      a == 6
+        ? `<div class="m">${T40("Lo canta el solista intérprete que contratas en Equipo.", "Sung by the solo performer you hire in Crew.")}</div>`
+        : B.length
+          ? `<select onchange="act('bn4w',this.value)"><option value="">— ${T40("ninguno: lo canta el intérprete del Equipo", "none: the Crew performer sings")} —</option>${ART41.map((n, k) => {
+              const L = B.filter((b) => bndA41(b) == k);
+              return L.length ? `<optgroup label="${esc(LL(n))}">${L.map((b) => `<option value="${b.id}"${W.bnd41 == b.id ? " selected" : ""}>${esc(b.n)} · ${nfc(b.fans)} ${T40("fans", "fans")}</option>`).join("")}</optgroup>` : "";
+            }).join("")}</select><div class="m">${L37("Si eliges uno, sus integrantes pasan al equipo y el intérprete del Equipo queda opcional (para los videos). Suma por su práctica y sus fans; cobra el 15 %.", "If you pick one, its members join the crew and the Crew performer becomes optional (for the videos). It adds by its practice and fans; it takes 15%.")}</div>`
+          : `<div class="m">${T40("Todavía no tienes solistas, bandas, dúos, grupos vocales, orquestas ni DJs firmados: fírmalos en Obras → Música. Mientras, lo canta el intérprete del Equipo.", "You have no solo artists, bands, duos, vocal groups, orchestras or DJs signed yet: sign them in Works → Music. Meanwhile, the Crew performer sings.")}</div>`
     }</div>`;
   }
   if (m == 2 && mot41Sel()) h += `<div class="m">${T40("Motor activo", "Active engine")}: ${esc(mot41Sel().n)} ${"★".repeat(mot41Ahora(mot41Sel()))} · ${T40("servidores", "servers")}: ${LL(SRV41[S.srv40 | 0])}</div>`;

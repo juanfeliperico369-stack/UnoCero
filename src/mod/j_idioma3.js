@@ -84,8 +84,10 @@
     const k = t.trim();
     // «Mar» junto a una fecha es marzo, no el mar
     if (k == "Mar") return t;
+    // Lo que ya salió traducido no se vuelve a traducir aunque también sea una clave («Reality» no pasa a «Reality show»)
+    if (OUT.has(k)) return t;
     if (!ENM.has(k)) {
-      if (V.has(k) || OUT.has(k)) return t;
+      if (V.has(k)) return t;
       const m = k.match(/^(.{0,40}?(?:· |: ))(.+)$/);
       if (m && V.has(m[2]) && !ENM.has(m[2])) return t.replace(k, t0(m[1]) + m[2]);
     }

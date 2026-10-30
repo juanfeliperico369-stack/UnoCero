@@ -2,25 +2,25 @@
 // Especie de cada personaje conocido del catálogo y de las obras reales (lo que no está aquí se deduce del nombre)
 const ESPNOM = {
   // Monstruos
-  "la criatura": 5, "La criatura": 5, Grendel: 5, "la madre de Grendel": 5, Polifemo: 5, Humbaba: 5, "Vucub Caquix": 5, "el ogro": 5, Calibán: 5, Cthulhu: 5, "los morlocks": 5, "El caballero completo": 5, "la Patasola": 5, "la Bestia": 5, "el Golem": 5, Zahhak: 5, Godzilla: 5, Creeper: 5, Enderman: 5, "Monstruo de las galletas": 5, Gollum: 5, Ganon: 5, Bowser: 5, "El bebé": 5,
+  "la criatura": 5, "La criatura": 5, Grendel: 5, "la madre de Grendel": 5, Polifemo: 16, Humbaba: 5, "Vucub Caquix": 9, "el ogro": 5, Calibán: 5, Cthulhu: 5, "los morlocks": 19, "El caballero completo": 5, "la Patasola": 5, "la Bestia": 5, "el Golem": 5, Zahhak: 5, Godzilla: 34, Creeper: 5, Enderman: 5, "Monstruo de las galletas": 5, Gollum: 5, Ganon: 5, Bowser: 5, "El bebé": 5,
   // Monstruos no muertos
   "el conde Drácula": 6, "lord Ruthven": 6, Carmilla: 6, "Sir Francis Varney": 6, "Ben Cortman": 6, Ruth: 6, "el vetala": 6, "Los zombis": 6, "La vampira": 6,
   // Monstruos cambiaformas
-  "el doctor Jekyll": 7, "Edward Hyde": 7, "Bai Suzhen": 7, Xiaoqing: 7, Manago: 7, "Saúl Montenegro": 7, Scytale: 7,
+  "el doctor Jekyll": 7, "Edward Hyde": 7, "Bai Suzhen": 7, Xiaoqing: 7, Manago: 7, "Saúl Montenegro": 35, Scytale: 7,
   // Dioses y seres mitológicos
-  Atenea: 8, Circe: 8, Afrodita: 8, Ishtar: 8, Enkidu: 8, Gilgamesh: 8, Hanuman: 8, Krishna: 8, Rama: 8, "Sun Wukong": 8, "Zhu Bajie": 8, "Sha Wujing": 8, Odín: 8, Thor: 8, Loki: 8, Freya: 8, Baldr: 8, Hera: 8, Hércules: 8, Heracles: 8, Apolo: 8, Dafne: 8, Narciso: 8, Eco: 8, Hades: 8, Perséfone: 8, Caronte: 8, Quetzalcóatl: 8, Tezcatlipoca: 8, Xólotl: 8, Anansi: 8, Nyame: 8, Hunahpú: 8, Ixbalanqué: 8, Ixquic: 8, "los señores de Xibalbá": 8, "Caballero Verde": 8, "la Reina de la Noche": 8, "Reina de la Noche": 8, "Baba Yagá": 8, "la Madremonte": 8, "el Mohán": 8, "la mujer de los ojos verdes": 8, Ondina: 8, Kühleborn: 8, "La mujer de la nieve": 8, Väinämöinen: 8, Louhi: 8, Mwindo: 8, Nkuba: 8, Muisa: 8, Kahindo: 8, "El rey de amarillo": 8, Ares: 8, "Diana Prince": 8, "Mujer Maravilla": 8, Gandalf: 8, Haku: 8, "La Madre del Río": 8,
+  Atenea: 8, Circe: 8, Afrodita: 8, Ishtar: 8, Enkidu: 16, Gilgamesh: 30, Hanuman: 8, Krishna: 8, Rama: 8, "Sun Wukong": 8, "Zhu Bajie": 35, "Sha Wujing": 11, Odín: 8, Thor: 8, Loki: 8, Freya: 8, Baldr: 8, Hera: 8, Hércules: 30, Heracles: 30, Apolo: 8, Dafne: 16, Narciso: 16, Eco: 16, Hades: 8, Perséfone: 8, Caronte: 16, Quetzalcóatl: 8, Tezcatlipoca: 8, Xólotl: 8, Anansi: 2, Nyame: 8, Hunahpú: 30, Ixbalanqué: 30, Ixquic: 8, "los señores de Xibalbá": 8, "Caballero Verde": 9, "la Reina de la Noche": 31, "Reina de la Noche": 31, "Baba Yagá": 31, "la Madremonte": 32, "el Mohán": 32, "la mujer de los ojos verdes": 32, Ondina: 32, Kühleborn: 32, "La mujer de la nieve": 18, Väinämöinen: 30, Louhi: 31, Mwindo: 12, Nkuba: 8, Muisa: 8, Kahindo: 8, "El rey de amarillo": 8, Ares: 8, "Diana Prince": 30, "Mujer Maravilla": 30, Gandalf: 31, Haku: 32, "La Madre del Río": 32,
   // Criaturas fantásticas
-  Puck: 9, Oberón: 9, Titania: 9, "el hada madrina": 9, "las hadas madrinas": 9, "el hada malvada": 9, "el Hada Azul": 9, Campanita: 9, Rumpelstiltskin: 9, "la sirenita": 9, "la bruja del mar": 9, "la Reina de las Nieves": 9, "el dragón": 9, "El gigante": 9, "Esposa del gigante": 9, Gargantúa: 9, Pantagruel: 9, "el emperador de Liliput": 9, Glumdalclitch: 9, "Urganda la Desconocida": 9, "las tres brujas": 9, "Rey de la montaña": 9, "El Sombrerón": 9, "Hada de Azúcar": 9, Gruñón: 9, Sabio: 9, Tontín: 9, "Bilbo Bolsón": 9, "Frodo Bolsón": 9, Samsagaz: 9, "Thorin Escudo de Roble": 9, Gimli: 9, Legolas: 9, Galadriel: 9, Arwen: 9, Smaug: 9, "El fauno": 9, Yubaba: 9, Pikachu: 9, Toad: 9, "El hada": 9, "Pari Banu": 9, "El dragón de cobre": 9,
+  Puck: 24, Oberón: 24, Titania: 24, "el hada madrina": 24, "las hadas madrinas": 24, "el hada malvada": 24, "el Hada Azul": 24, Campanita: 24, Rumpelstiltskin: 9, "la sirenita": 28, "la bruja del mar": 31, "la Reina de las Nieves": 9, "el dragón": 29, "El gigante": 27, "Esposa del gigante": 27, Gargantúa: 27, Pantagruel: 27, "el emperador de Liliput": 9, Glumdalclitch: 27, "Urganda la Desconocida": 31, "las tres brujas": 31, "Rey de la montaña": 9, "El Sombrerón": 9, "Hada de Azúcar": 24, Gruñón: 26, Sabio: 26, Tontín: 26, "Bilbo Bolsón": 9, "Frodo Bolsón": 9, Samsagaz: 9, "Thorin Escudo de Roble": 26, Gimli: 26, Legolas: 25, Galadriel: 25, Arwen: 25, Smaug: 29, "El fauno": 35, Yubaba: 31, Pikachu: 9, Toad: 9, "El hada": 24, "Pari Banu": 24, "El dragón de cobre": 29,
   // Espíritus y fantasmas
-  "la Llorona": 10, "sus hijos": 10, "el Silbón": 10, "el Cadejo blanco": 10, "el Cadejo negro": 10, "el jinete sin cabeza": 10, "el fantasma de la Navidad pasada": 10, "Jacob Marley": 10, "Fantasma de Marley": 10, "Fantasma de las Navidades Pasadas": 10, "Sir Simon": 10, "Peter Quint": 10, "Señorita Jessel": 10, Ariel: 10, "Nie Xiaoqian": 10, Oiwa: 10, Virgilio: 10, Francesca: 10, "Pedro Páramo": 10, "Susana San Juan": 10, "Dolores Preciado": 10, "Eduviges Dyada": 10, "el capitán holandés": 10, "Nic-Nac": 10, Seele: 10, "Sin Cara": 10, Blinky: 10, Pinky: 10, Inky: 10, Clyde: 10, "El fantasma de Don Ernesto": 10, "Los fantasmas de las obras": 10, "El guardián del umbral": 10, "La figura del espejo": 10, "La dama del radiador": 10,
+  "la Llorona": 10, "sus hijos": 10, "el Silbón": 10, "el Cadejo blanco": 18, "el Cadejo negro": 18, "el jinete sin cabeza": 10, "el fantasma de la Navidad pasada": 18, "Jacob Marley": 10, "Fantasma de Marley": 10, "Fantasma de las Navidades Pasadas": 18, "Sir Simon": 10, "Peter Quint": 10, "Señorita Jessel": 10, Ariel: 18, "Nie Xiaoqian": 10, Oiwa: 10, Virgilio: 10, Francesca: 10, "Pedro Páramo": 10, "Susana San Juan": 10, "Dolores Preciado": 10, "Eduviges Dyada": 10, "el capitán holandés": 10, "Nic-Nac": 18, Seele: 18, "Sin Cara": 18, Blinky: 10, Pinky: 10, Inky: 10, Clyde: 10, "El fantasma de Don Ernesto": 10, "Los fantasmas de las obras": 10, "El guardián del umbral": 18, "La figura del espejo": 10, "La dama del radiador": 10,
   // Ángeles y demonios
-  Satanás: 11, Lucifer: 11, "el arcángel Miguel": 11, Mefistófeles: 11, Woland: 11, Behemot: 11, Ravana: 11, Maldoror: 11, Sauron: 11,
+  Satanás: 11, Lucifer: 11, "el arcángel Miguel": 17, Mefistófeles: 11, Woland: 11, Behemot: 11, Ravana: 11, Maldoror: 11, Sauron: 11,
   // Superhumanos
-  Griffin: 12, Sansón: 12, "Monkey D. Luffy": 12, Hulk: 12, "Capitán América": 12, "Peter Parker": 12, "Duende Verde": 12, "Reed Richards": 12, "Sue Storm": 12, "Johnny Storm": 12, "Ben Grimm": 12, Flash: 12, Aquaman: 12, "Linterna Verde": 12, Neo: 12, Hayt: 12,
+  Griffin: 19, Sansón: 12, "Monkey D. Luffy": 12, Hulk: 19, "Capitán América": 12, "Peter Parker": 19, "Duende Verde": 19, "Reed Richards": 19, "Sue Storm": 19, "Johnny Storm": 19, "Ben Grimm": 19, Flash: 19, Aquaman: 12, "Linterna Verde": 12, Neo: 12, Hayt: 23,
   // Extraterrestres
   Kaguya: 3, "Tars Tarkas": 3, "Dejah Thoris": 3, "Ford Prefect": 3, "Zaphod Beeblebrox": 3, "Thomas Jerome Newton": 3, Harey: 3, Hari: 3, Estraven: 3, "Rey Argaven": 3, Tibe: 3, Spock: 3, Neytiri: 3, Superman: 3, "Clark Kent": 3, "Jor-El": 3, Thanos: 3, Gokú: 3, Vegeta: 3, Piccolo: 3, "Los selenitas": 3, "Rey de los selenitas": 3, "El alien": 3, Invasores: 3, Eros: 3, Tanna: 3, "Sun Ra": 3,
   // Robots y androides
-  Marvin: 4, "Roy Baty": 4, "Rachael Rosen": 4, "Pris Stratton": 4, "Roy Batty": 4, Rachael: 4, Pris: 4, "HAL 9000": 4, Robbie: 4, Speedy: 4, Astroboy: 4, Uran: 4, "Agente Smith": 4, "El Oráculo": 4, Olimpia: 4, "el Hombre de Hojalata": 4, "Hombre de hojalata": 4, "El robot conserje": 4, "El robot Tuk": 4, "La IA de navegación": 4, "La productora sintética": 4,
+  Marvin: 4, "Roy Baty": 20, "Rachael Rosen": 20, "Pris Stratton": 20, "Roy Batty": 20, Rachael: 20, Pris: 20, "HAL 9000": 22, Robbie: 4, Speedy: 4, Astroboy: 4, Uran: 4, "Agente Smith": 22, "El Oráculo": 22, Olimpia: 20, "el Hombre de Hojalata": 21, "Hombre de hojalata": 4, "El robot conserje": 4, "El robot Tuk": 4, "La IA de navegación": 22, "La productora sintética": 20,
   // Objetos con vida
   Pinocho: 13, "el Cascanueces": 13, "El cascanueces": 13, "el Príncipe Feliz": 13, "el Espantapájaros": 13, Espantapájaros: 13, "la Reina de Corazones": 13, "La reina de corazones": 13, "Arpa mágica": 13, "Muñeca encantada": 13, Woody: 13, "Buzz Lightyear": 13, Jessie: 13, "Señor Cara de Papa": 13, "Pac-Man": 13, "Cañón láser": 13, "Las piezas": 13, "La casa": 13, "La niña de papel": 13,
   // Conceptos encarnados
@@ -28,25 +28,42 @@ const ESPNOM = {
   // Animales que hablan
   "el lobo": 2, "la tortuga": 2, "la liebre": 2, "la zorra": 2, "el cuervo": 2, "El cuervo": 2, "la cigarra": 2, "la hormiga": 2, "el tigre": 2, "el Gato": 2, "el Zorro": 2, "el Grillo Parlante": 2, "el rey de los ratones": 2, "Rey Ratón": 2, "el patito": 2, "la madre pata": 2, "los cisnes": 2, "la golondrina": 2, Topo: 2, Rata: 2, "el señor Sapo": 2, Tejón: 2, Bambi: 2, Falina: 2, "el gran príncipe del bosque": 2, Baloo: 2, Bagheera: 2, "Shere Khan": 2, Kaa: 2, Akela: 2, "el Conejo Blanco": 2, "El conejo blanco": 2, "el gato de Cheshire": 2, "el León Cobarde": 2, "León cobarde": 2, Mickey: 2, Minnie: 2, "Capitán Pete": 2,
   // Animales
-  "Moby Dick": 1, Rocinante: 1, Platero: 1, Buck: 1, Spitz: 1, "Colmillo Blanco": 1, Kala: 1, "El pterodáctilo": 1, Yzur: 1, "Gregorio Samsa": 1, "Donkey Kong": 1, Milú: 1, "El gato Mochi": 1, "El toro": 1, "El caballo": 1,
+  "Moby Dick": 1, Rocinante: 1, Platero: 1, Buck: 1, Spitz: 1, "Colmillo Blanco": 1, Kala: 2, "El pterodáctilo": 33, Yzur: 2, "Gregorio Samsa": 7, "Donkey Kong": 1, Milú: 1, "El gato Mochi": 1, "El toro": 1, "El caballo": 1,
   // Humanos que el nombre podría confundir
   "Zorro de Jade": 0, "Ojo de Halcón": 0, Vampira: 0,
 };
 // Mismo nombre, distinta obra
-const ESPOBRA = { "Twin Peaks|Bob": 10, "Alien, el octavo pasajero|Ash": 4, "Réquiem para una voz sintética|La voz": 4, "Mujer Maravilla|Hipólita": 8 };
+const ESPOBRA = { "Twin Peaks|Bob": 11, "Alien, el octavo pasajero|Ash": 20, "Réquiem para una voz sintética|La voz": 22, "Mujer Maravilla|Hipólita": 8 };
 function espDe(n, t) {
   const k = String(n || "").trim();
   if (t && ESPOBRA[t + "|" + k] != null) return ESPOBRA[t + "|" + k];
   if (ESPNOM[k] != null) return ESPNOM[k];
   const s = k.toLowerCase();
-  if (/fantasma|espíritu|ánima|aparición/.test(s)) return 10;
+  if (/fantasma|ánima|aparición/.test(s)) return 10;
+  if (/espíritu|\bgenio\b|djinn/.test(s)) return 18;
   if (/vampir|zombi|momia|no muert/.test(s)) return 6;
   if (/hombre lobo|licántrop/.test(s)) return 7;
-  if (/\brobot|androide|droide|autómata|cíborg|\bia\b/.test(s)) return 4;
+  if (/androide|replicante/.test(s)) return 20;
+  if (/cíborg/.test(s)) return 21;
+  if (/\bia\b|computadora/.test(s)) return 22;
+  if (/\brobot|droide|autómata/.test(s)) return 4;
+  if (/\bclon/.test(s)) return 23;
   if (/alien|extraterrest|marcian|selenita/.test(s)) return 3;
-  if (/demonio|diablo|arcángel|\bángel/.test(s)) return 11;
+  if (/arcángel|\bángel/.test(s)) return 17;
+  if (/demonio|diablo/.test(s)) return 11;
+  if (/semidiós/.test(s)) return 30;
   if (/\bdios\b|\bdiosa\b/.test(s)) return 8;
-  if (/dragón|\bhada|\belfo|\benan[oa]|duende|gigante|\btrol|sirena|unicornio/.test(s)) return 9;
+  if (/titán|ninfa|cíclope|\bfuria|\bmusa\b|esfinge/.test(s)) return 16;
+  if (/\bhada/.test(s)) return 24;
+  if (/\belf[oa]s?\b/.test(s)) return 25;
+  if (/\benan[oa]/.test(s)) return 26;
+  if (/gigante/.test(s)) return 27;
+  if (/sirena|tritón/.test(s)) return 28;
+  if (/dragón/.test(s)) return 29;
+  if (/centauro|fauno|minotauro|arpía/.test(s)) return 35;
+  if (/brujo|bruja|hechicer|\bmag[oa]\b|chamán/.test(s)) return 31;
+  if (/dinosaurio|tiranosaurio/.test(s)) return 33;
+  if (/duende|\btrol|unicornio|grifo|fénix/.test(s)) return 9;
   if (/monstruo|bestia|criatura|\bogro/.test(s)) return 5;
   return 0;
 }

@@ -187,8 +187,9 @@ V37.mods.push((P, add) => {
 });
 // Videojuegos: el compositor también forma parte del equipo; el intérprete (las voces) es opcional
 if (!MD[2][1].includes(5)) MD[2][1].splice(MD[2][1].indexOf(7) >= 0 ? MD[2][1].indexOf(7) : MD[2][1].length, 0, 5);
+// En música, con un artista firmado el intérprete del Equipo queda opcional (para los videos)
 function rolOpc(m, r) {
-  return m == 2 && r == 7;
+  return (m == 2 && r == 7) || (m == 4 && r == 7 && !!W && W.bnd41 != null);
 }
 V37.mods.push((P, add) => {
   if (P.m == 2 && (P.y || yr()) >= 1995 && !(P.crew && S.tl[P.crew[7]])) add(0, -1, L37("personajes sin voz", "voiceless characters"));

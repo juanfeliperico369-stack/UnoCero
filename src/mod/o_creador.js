@@ -38,13 +38,13 @@ castH = function () {
   const L = W.cast,
     cnt = IMP.map((_, i) => L.filter((c) => c.i == i).length),
     ad = adulto(Object.assign({}, W, { gn: wGn() }));
-  return `<div class="m">${T40("Opcional: los personajes que viven en tus canciones o en el videoclip. En un álbum conceptual le dan hilo a la historia; en un disco normal, color a las letras.", "Optional: the characters who live in your songs or music video. In a concept album they hold the story together; in a regular record they color the lyrics.")}</div>${pjBts(cnt, [0, 1, 3, 4])}${L.map((c, k) => pjCard(c, k, ad)).join("") || `<div class="m">${T40("Sin personajes todavía.", "No characters yet.")}</div>`}${
+  return `<div class="m">${T40("Opcional: los personajes que viven en tus canciones o en el videoclip. En un álbum conceptual le dan hilo a la historia; en un disco normal, color a las letras.", "Optional: the characters who live in your songs or music video. In a concept album they hold the story together; in a regular record they color the lyrics.")}</div>${pjBts(cnt, [0, 1, 5, 3, 4])}${L.map((c, k) => pjCard(c, k, ad)).join("") || `<div class="m">${T40("Sin personajes todavía.", "No characters yet.")}</div>`}${
     L.length
       ? `<div class="m" translate="no">${tx4(
-          "El papel dice qué hace cada uno en las letras. En un álbum conceptual, si hay una voz o un héroe, alguien a quien se le canta o un amor perdido, y un rival o un recuerdo, la historia queda completa: +1 de crítica. En un disco normal, las canciones dedicadas a alguien suman público.",
-          "The role says what each one does in the lyrics. In a concept album, with a voice or a hero, someone being sung to or a lost love, and a rival or a memory, the story is complete: +1 critics. On a regular record, songs dedicated to someone add audience.",
-          "Le rôle dit ce que fait chacun dans les paroles. Dans un album concept, avec une voix ou un héros, quelqu'un à qui l'on chante ou un amour perdu, et un rival ou un souvenir, l'histoire est complète : +1 de critique. Sur un disque normal, les chansons dédiées à quelqu'un ajoutent du public.",
-          "O papel diz o que cada um faz nas letras. Num álbum conceitual, com uma voz ou um herói, alguém a quem se canta ou um amor perdido, e um rival ou uma lembrança, a história fica completa: +1 de crítica. Num disco normal, as canções dedicadas a alguém somam público.",
+          "Quién es en la canción dice qué hace cada personaje en la letra: quien la canta, a quien se le canta, el rival… En un álbum conceptual, si hay una voz o un héroe, alguien a quien se le canta o un amor perdido, y un rival o un recuerdo, la historia queda completa: +1 de crítica. En un disco normal, las canciones dedicadas a alguien suman público.",
+          "Who they are in the song says what each character does in the lyrics: who sings it, who it is sung to, the rival… In a concept album, with a voice or a hero, someone being sung to or a lost love, and a rival or a memory, the story is complete: +1 critics. On a regular record, songs dedicated to someone add audience.",
+          "Qui c'est dans la chanson dit ce que fait chaque personnage dans les paroles : qui la chante, à qui on la chante, le rival… Dans un album concept, avec une voix ou un héros, quelqu'un à qui l'on chante ou un amour perdu, et un rival ou un souvenir, l'histoire est complète : +1 de critique. Sur un disque normal, les chansons dédiées à quelqu'un ajoutent du public.",
+          "Quem é na canção diz o que cada personagem faz na letra: quem a canta, a quem se canta, o rival… Num álbum conceitual, com uma voz ou um herói, alguém a quem se canta ou um amor perdido, e um rival ou uma lembrança, a história fica completa: +1 de crítica. Num disco normal, as canções dedicadas a alguém somam público.",
         )}${pm4Hist(L) ? " ✓" : ""}</div>`
       : ""
   }`;
@@ -105,7 +105,7 @@ V37.mods.push((P, add) => {
 V37.ficha.push((P) =>
   P.m == 4 && P.pm4 && P.pm4.length
     ? (P.cast || []).length
-      ? `<div class="c sub"><b>${T40("Papel en las letras", "Role in the lyrics")}</b>${P.pm4.map((c) => `<div class="fila"><span translate="no">${esc(c.n)}<span class="m"> · ${esc(pm4Rol(c.r))}</span></span></div>`).join("")}</div>`
+      ? `<div class="c sub"><b>${T40("Quién es en la canción", "Who they are in the song")}</b>${P.pm4.map((c) => `<div class="fila"><span translate="no">${esc(c.n)}<span class="m"> · ${esc(pm4Rol(c.r))}</span></span></div>`).join("")}</div>`
       : `<div class="c sub"><b>${T40("Personajes de las canciones", "Characters in the songs")}</b>${P.pm4.map((c) => `<div class="fila"><span translate="no">${esc(c.n)}<span class="m"> · ${esc(bibTr(ARQ[c.a] || ""))}${c.r ? " · " + esc(pm4Rol(c.r)) : c.d ? " · " + esc(c.d) : ""}${c.pr ? " · " + esc(presTxt(c.pr)) : ""}</span></span></div>`).join("")}</div>`
     : "",
 );

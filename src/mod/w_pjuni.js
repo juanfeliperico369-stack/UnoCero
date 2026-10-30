@@ -56,7 +56,7 @@ pjCard = function (c, k, ad) {
   if (W.m == 4)
     h = h.replace(
       /<\/div>$/,
-      `<select onchange="act('wcr4','${k}|'+this.value)" translate="no" aria-label="${esc(pm4Rol(0))}">${PM4R.map((_, r) => `<option value="${r}"${(c.r | 0) == r ? " selected" : ""}>${esc(tx4("Papel en las letras: ", "Role in the lyrics: ", "Rôle dans les paroles : ", "Papel nas letras: ") + pm4Rol(r))}</option>`).join("")}</select></div>`,
+      `<label class="m" translate="no">${tx4("Quién es en la canción", "Who they are in the song", "Qui c'est dans la chanson", "Quem é na canção")}</label><select onchange="act('wcr4','${k}|'+this.value)" translate="no" aria-label="${esc(tx4("Quién es en la canción", "Who they are in the song", "Qui c'est dans la chanson", "Quem é na canção"))}">${PM4R.map((_, r) => `<option value="${r}"${(c.r | 0) == r ? " selected" : ""}>${esc(pm4Rol(r))}</option>`).join("")}</select></div>`,
     );
   return h;
 };
@@ -97,3 +97,8 @@ const castHUni = castH;
 castH = function () {
   return `<div class="m" translate="no">${pjUniTx()}</div>` + castHUni.apply(this, arguments);
 };
+(() => {
+  if (typeof DIC_FR == "undefined") return;
+  DIC_FR["Quién es en la canción"] = "Qui c'est dans la chanson";
+  DIC_PT["Quién es en la canción"] = "Quem é na canção";
+})();

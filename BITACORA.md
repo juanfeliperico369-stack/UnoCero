@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 11 (se instala encima de la entrega anterior, que era la 10). Cada actualización debe subir el versionCode (`VC=12 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 12 (se instala encima de la entrega anterior, que era la 11). Cada actualización debe subir el versionCode (`VC=13 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -349,6 +349,52 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - Adaptar «Drácula» trae a sus 16 personajes con su especie.
   - Las 987 traducciones nuevas del catálogo no cambian si se traducen otra vez.
   - Prueba de estrés en español (3.464 pulsaciones), francés (3.434), portugués (3.472) e inglés (3.103): sin errores ni textos rotos.
+  - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
+- **Especies separadas y más especies (36):** las que iban juntas ahora son especies distintas: «Dios» y «Ser mitológico», «Ángel» y «Demonio», «Espíritu» y «Fantasma», «Robot» y «Androide», «Superhumano» y «Mutante», «Planta» y «Ser de la naturaleza».
+  - **Nuevas:** cíborg, inteligencia artificial, clon, hada, elfo, enano, gigante, sirena, dragón, semidiós, hechicero, dinosaurio, bestia gigante e híbrido (centauro, fauno, minotauro).
+  - Cada una tiene su costo en imagen real, los géneros con los que encaja y su ejemplo en los cuatro idiomas. La lista sale con «Humano» primero y el resto en orden alfabético.
+  - **Personajes nuevos:** nacen con especies que le sientan a la obra. La mitología trae dioses, semidioses y seres mitológicos; la fantasía, elfos, enanos, hadas y hechiceros; la ciencia ficción, androides, cíborgs, clones e inteligencias artificiales.
+  - **Catálogo reclasificado:** se revisaron los 984 personajes no humanos o mágicos del catálogo, 226 cambiaron. Por ejemplo, Polifemo, Calipso y Escila son seres mitológicos; Atenea y Zeus, dioses; Hércules y Gilgamesh, semidioses; Campanita y el Hada Azul, hadas; Gandalf y las brujas de Macbeth, hechiceros; Smaug, dragón; HAL 9000, inteligencia artificial.
+  - También se revisaron los 333 personajes de las obras famosas (106 cambios) y el reconocimiento por nombre al traer un personaje.
+  - En una obra de realidad, una inteligencia artificial ya no se cuenta como «ser imposible».
+- **«Quién es en la canción»:** la lista de los personajes de un disco ahora lleva el título «Quién es en la canción» y opciones claras (quien canta, a quien se le canta, el amor perdido, el rival…), en vez de repetir «Papel en las letras:» en cada opción. Tiene su ayuda «i» con lo que hace y un dato curioso.
+- **Público objetivo y audiencia focal, según el documento:** se pueden elegir **hasta 5 en conjunto**, en una sola lista con buscador.
+  - **Grupos:** edades (niños, adolescentes, jóvenes, adultos, maduros, mayores y familiar), aficionados (cinéfilos, seriéfilos, gamers, teatrófilos, melómanos y bibliófilos), las 16 culturas, sexo e identidad (masculino, femenino, LGBTQ+) y alcance (global y general).
+  - Antes había una sola edad, un sexo, una afición y una cultura por separado, y la audiencia focal estaba escondida en las opciones del medio. Ahora está en la primera pestaña, junto al resto de la idea.
+  - **Efectos:**
+    - Cada edad elegida afina el marketing; «Familiar» suma a niños, adultos y maduros.
+    - Los aficionados del mismo medio compran más.
+    - Cada cultura que encaja con los géneros suma crítica y público.
+    - LGBTQ+ suma representación desde 1990.
+    - El sexo elegido suma si va con los géneros.
+    - Global vende más desde 1990.
+  - Las partidas guardadas conservan lo que tenían elegido.
+- **Música:**
+  - **La edición sale del tipo de obra:** si el tipo es un álbum, solo se elige entre álbum de estudio, álbum doble o solo digital; un sencillo, un EP, un mixtape, un álbum en vivo o un jingle ya no muestran la opción, porque se eligió al principio. En el modo rápido pasa lo mismo.
+  - **Portada:** se quitaron las opciones «Foto del artista», «Ilustración», «Solo letras», «Arte abstracto» y «Paisaje», porque la portada se diseña en su propio editor. Su efecto ahora sale de ese diseño: sin diseño cuenta como foto del artista, sin imagen como solo letras, con una ciudad o un castillo como paisaje y con un objeto como ilustración.
+  - **Intérprete:**
+    - Al elegir el tipo de intérprete aparece la lista de todos tus artistas firmados, agrupados por solistas, bandas, dúos, grupos vocales, orquestas y DJs. Antes solo salían los del tipo elegido y por eso la lista no aparecía. Elegir uno fija el tipo solo.
+    - Nuevo tipo «Solista intérprete»: lo canta el intérprete que contratas en Equipo, distinto de los solistas firmados.
+    - Con un artista firmado, el intérprete del Equipo pasa a ser opcional.
+  - **DJs:** se suman como tipo de intérprete y se pueden firmar en Obras → Música (uno o dos).
+  - «Músicos y equipo de apoyo» pasó a llamarse «Músicos de apoyo» y llega hasta 50.
+- **Personajes:**
+  - **Nuevo papel «Tercero»,** para personajes con nombre de poca presencia, con su botón para agregarlo. Cuesta menos que un secundario.
+  - **Elenco de apoyo:** «Terceros y elenco de apoyo» llega hasta 50 (antes 30).
+- **Equipo de apoyo de producción y de posproducción,** hasta 200 cada uno, en todos los medios. Son personas que se suman al equipo base: asistentes, técnicos y auxiliares.
+  - En producción, cada 60 personas acortan una semana el rodaje o la grabación (hasta 3 semanas) y suman orden al rodaje.
+  - En posproducción, cada 60 personas acortan una semana el montaje (hasta 3 semanas) y pulen el resultado (hasta +1,5 de crítica).
+  - Cada persona cuesta un 0,05 % del presupuesto en producción y un 0,04 % en posproducción.
+- **El embudo, revisado en todos los medios:** se probaron 625 combinaciones de medio, tipo de obra y ficción o realidad en 1750, 1900, 1985 y 2030. Ninguna se quedó sin géneros, subgéneros, temas, tramas o arcos, y no hubo errores.
+- **Traducciones que se repetían sin fin:**
+  - En francés y portugués, la descripción de una opción que empezaba con «:» sumaba un espacio cada vez que se traducía.
+  - «−4 sem» sumaba un punto cada vez («sem.», «sem..», «sem…»). Con la pantalla abierta, el texto crecía hasta trabar el juego, y en el teléfono podía cerrar la app.
+  - Se revisaron las 12.600 traducciones al francés, las 12.600 al portugués y las 27.000 al inglés: ahora ninguna cambia si se traduce otra vez.
+  - De paso se corrigieron «Vida» (que en francés terminaba como «Ven»), «Ancha», «novela corta», «compra a la cadena» en portugués, «Fuenteovejuna lo hizo» y, en inglés, «Reality», «Normal», «La Llorona» y «Moral».
+- **Pruebas de esta ronda:**
+  - En los cuatro idiomas: firmar un solista y una banda y verlos en la lista de un disco, elegir 5 públicos, los equipos de apoyo, el papel «Tercero» y las 36 especies.
+  - La edición según el tipo: álbum, EP, sencillo, partitura y modo rápido.
+  - Prueba de estrés en español (3.466 pulsaciones), francés (3.443), portugués (3.472) e inglés (3.095): sin errores ni textos rotos.
   - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
