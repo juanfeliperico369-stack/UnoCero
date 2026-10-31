@@ -21,6 +21,12 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Temas especiales**: Espacial, Navidad, Halloween, Hollywood clásico, Bollywood, Anime, Cómic, Píxel, Plano 2D, Noir y Synthwave. Cambian los colores y decoran las ilustraciones; Píxel dibuja las ilustraciones en píxeles y Hollywood clásico y Noir las pasan a blanco y negro.
 - **Decoración de temporada**: en cualquier tema, el edificio celebra Halloween, Navidad y Año Nuevo según el calendario del juego.
 
+### Capturas
+
+![Antes y ahora](industry-art/capturas/antes-despues.png)
+
+![Temas especiales](industry-art/capturas/temas-especiales.png)
+
 ### Créditos
 
 Creado por OneZero.
