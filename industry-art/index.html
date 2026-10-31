@@ -694,7 +694,7 @@ html.t-era-futuro .c{background:linear-gradient(var(--p),var(--p)) padding-box}
 .zine .inicio .hero h1{grid-area:t;z-index:1;align-self:end;margin:0;padding:14px 12px 0;font-family:var(--fd);font-size:clamp(3.3rem,21vw,8.6rem);line-height:.84;letter-spacing:-.005em;text-transform:uppercase;color:var(--a);background:none;-webkit-text-fill-color:currentColor;text-shadow:3px 3px 0 var(--bg),-3px 3px 0 var(--bg),3px -3px 0 var(--bg),-3px -3px 0 var(--bg),0 4px 0 var(--bg),4px 0 0 var(--bg),-4px 0 0 var(--bg),0 -4px 0 var(--bg);pointer-events:none}
 .zine .inicio .hero canvas#hc{grid-area:c;height:280px;margin:-0.3em 12px 0;font-size:clamp(3.3rem,21vw,8.6rem);width:calc(100% - 24px);border:var(--bw) solid var(--ink);box-shadow:var(--off) var(--off) 0 var(--shd);border-radius:0}
 .zine .inicio .hero p{grid-area:p;margin:14px 12px 0;color:var(--a);font:700 clamp(1.3rem,5.4vw,2.1rem)/1 var(--fd);text-transform:uppercase;letter-spacing:.01em;max-width:none;text-shadow:none}
-.zine .inicio .hero canvas.ini-logo{grid-area:c;justify-self:end;align-self:start;z-index:2;margin:12px 24px 0 0;width:56px!important;height:56px!important;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.zine .inicio .hero canvas.ini-logo{grid-area:c;justify-self:start;align-self:end;z-index:2;margin:0 0 12px 24px;width:56px!important;height:56px!important;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
 .zine .hero-idi{grid-area:c;position:relative;inset:auto;justify-self:end;align-self:end;margin:0 22px 10px 0;z-index:2}
 .zine .hero-idi .ch{background:var(--lab);color:var(--labt);border-color:var(--ink)}
 .zine .hero-idi .ch.on{background:var(--ink);color:var(--lab)}
@@ -723,6 +723,52 @@ html.t-era-futuro .c{background:linear-gradient(var(--p),var(--p)) padding-box}
 .ini-rapida small{display:block;font-weight:400;opacity:.85;font-size:.82rem}
 .zine .ini-rapida{border-radius:var(--rad);background:var(--lab);color:var(--labt);box-shadow:var(--off) var(--off) 0 var(--shd);margin-top:12px}
 .zine .ini-rapida b{font-family:var(--fd);text-transform:uppercase;font-size:1.25rem;letter-spacing:.02em;line-height:1}
+html.t-espacio{--bg:#070818;--p:#10122b;--p2:#171a3a;--t:#e8ecff;--m:#a5acd6;--a:#5ad1ff;--a2:#070818;--r:#ff5c8a;--g:#ffd166;--l:#272b5a;--sh:0 8px 30px rgba(0,0,0,.6);--ink:#5ad1ff;--shd:rgba(90,209,255,.28);--mast:#0b0d24;--mastt:#e8ecff;--lab:#171a3a;--labt:#e8ecff;--navbg:#05060f;--navt:#a5acd6;--hoja:#0b0d24;--fdls:.08em;--rad:14px;--bw:1.5px;--off:0px;--s0:#5ad1ff;--s1:#b388ff;--s2:#ff7ad9;--s3:#7cffc4;--s4:#ffd166;--s5:#ff9f6b;--sect:#070818;--tex:radial-gradient(circle at 20px 30px,rgba(255,255,255,.75) 0 1px,transparent 1.5px) 0 0/170px 170px,radial-gradient(circle at 110px 80px,rgba(255,255,255,.5) 0 1px,transparent 1.5px) 0 0/170px 170px,radial-gradient(circle at 60px 140px,rgba(173,216,255,.6) 0 1.2px,transparent 1.7px) 0 0/170px 170px,radial-gradient(900px 500px at 85% -10%,rgba(123,92,255,.22),transparent 60%)}
+html.t-espacio .c{box-shadow:0 0 0 1px rgba(90,209,255,.12),0 0 22px rgba(90,209,255,.18)}
+html.t-espacio .b,html.t-espacio .ch{box-shadow:0 0 12px rgba(90,209,255,.18)}
+html.t-espacio h2,html.t-espacio h3{text-shadow:0 0 14px rgba(90,209,255,.45)}
+html.t-navidad{--bg:#0f3d2e;--p:#fff8ec;--p2:#f6ead2;--t:#1d1a16;--m:#5d5547;--a:#c8102e;--a2:#fff8ec;--r:#c8102e;--g:#8f6a00;--l:#e6d5b2;--sh:0 8px 24px rgba(0,0,0,.3);--ink:#1d1a16;--shd:#c8102e;--bgt:#fff8ec;--mast:#c8102e;--mastt:#fff8ec;--lab:#fff8ec;--labt:#1d1a16;--navbg:#0a2a1f;--navt:#f6ead2;--hoja:#0f3d2e;--rad:10px;--off:4px;--s0:#c8102e;--s1:#1f7a4d;--s2:#d4a017;--s3:#2a6fb0;--s4:#c8102e;--s5:#d4a017;--sect:#fff8ec;--tex:radial-gradient(circle at 15px 20px,rgba(255,255,255,.55) 0 2px,transparent 2.5px) 0 0/120px 120px,radial-gradient(circle at 75px 70px,rgba(255,255,255,.4) 0 1.5px,transparent 2px) 0 0/120px 120px,radial-gradient(circle at 100px 15px,rgba(255,255,255,.35) 0 1px,transparent 1.5px) 0 0/120px 120px}
+html.t-navidad .c:not(.sub):not(.edificio){outline:2px dashed #d4a017;outline-offset:-7px}
+html.t-navidad #top{box-shadow:0 3px 0 #1f7a4d,0 6px 0 #d4a017}
+html.t-halloween{--bg:#140a1f;--p:#1f1230;--p2:#2a1a40;--t:#f6e9ff;--m:#c9b3e0;--a:#ff7a1a;--a2:#140a1f;--r:#ff3b3b;--g:#ffb347;--l:#3c2757;--sh:0 8px 30px rgba(0,0,0,.6);--ink:#ff7a1a;--shd:#000000;--mast:#ff7a1a;--mastt:#140a1f;--lab:#2a1a40;--labt:#f6e9ff;--navbg:#0b0612;--navt:#c9b3e0;--hoja:#140a1f;--rad:6px;--off:4px;--fdls:.04em;--s0:#ff7a1a;--s1:#b388ff;--s2:#7bd389;--s3:#ffb347;--s4:#ff5c5c;--s5:#ff7a1a;--sect:#140a1f;--tex:radial-gradient(700px 360px at 50% -6%,rgba(255,122,26,.18),transparent 65%),radial-gradient(circle at 30px 40px,rgba(255,179,71,.35) 0 1.2px,transparent 1.7px) 0 0/140px 140px}
+html.t-halloween h2,html.t-halloween h3{text-shadow:0 0 12px rgba(255,122,26,.45)}
+html.t-hollywood{--bg:#121212;--p:#f2efe8;--p2:#e4e0d6;--t:#111111;--m:#4a4740;--a:#8f6a00;--a2:#ffffff;--r:#a4161a;--g:#7a5c00;--l:#cfc9bb;--sh:0 8px 30px rgba(0,0,0,.6);--ink:#111111;--shd:#000000;--bgt:#f2efe8;--mast:#a4161a;--mastt:#f6e7b0;--lab:#111111;--labt:#f6e7b0;--navbg:#000000;--navt:#d8d2c4;--hoja:#121212;--fdls:.14em;--rad:2px;--off:4px;--s0:#a4161a;--s1:#c9a227;--s2:#f2efe8;--s3:#8a8a8a;--s4:#a4161a;--s5:#c9a227;--sect:#111111;--tex:var(--grano),radial-gradient(1200px 700px at 50% 20%,transparent 55%,rgba(0,0,0,.55))}
+html.t-hollywood #top{background:radial-gradient(circle,#ffe9a0 0 2.6px,transparent 3.2px) 0 calc(100% - 3px)/16px 9px repeat-x,var(--mast)}
+html.t-hollywood body{--navon:#a4161a;--navont:#f6e7b0}
+html.t-hollywood body[data-sec]{--sect:#111111}
+html.t-hollywood body[data-sec="0"],html.t-hollywood body[data-sec="4"]{--sect:#f6e7b0}
+html.t-bollywood{--bg:#5b0f45;--p:#fff6e5;--p2:#ffe9c7;--t:#2b0f22;--m:#6b4a5c;--a:#c4006b;--a2:#fff6e5;--r:#d7263d;--g:#9a6600;--l:#f0d3a8;--sh:0 8px 24px rgba(0,0,0,.3);--ink:#2b0f22;--shd:#ffb300;--bgt:#ffe9c7;--mast:#ff9933;--mastt:#2b0f22;--lab:#fff6e5;--labt:#2b0f22;--navbg:#3a0a2c;--navt:#ffe9c7;--hoja:#5b0f45;--rad:16px;--off:4px;--s0:#ff9933;--s1:#ff4fa3;--s2:#00b3b3;--s3:#c77dff;--s4:#ffb300;--s5:#ff6b6b;--sect:#2b0f22;--tex:radial-gradient(circle at 30px 30px,transparent 7px,rgba(255,179,0,.28) 7.5px 8.5px,transparent 9px) 0 0/60px 60px,radial-gradient(circle at 30px 30px,rgba(255,153,51,.45) 0 2px,transparent 2.5px) 0 0/60px 60px}
+html.t-bollywood .c:not(.sub):not(.edificio){outline:2px solid #ffb300;outline-offset:-6px}
+html.t-anime{--bg:#fde8f0;--p:#ffffff;--p2:#fff3f8;--t:#2a2340;--m:#6d6485;--a:#e2408a;--a2:#ffffff;--r:#e8335e;--g:#9a6a00;--l:#f3d3e2;--sh:0 8px 24px rgba(120,60,100,.18);--ink:#2a2340;--shd:#7ec8ff;--mast:#7ec8ff;--mastt:#1d1730;--lab:#ffffff;--labt:#2a2340;--navbg:#2a2340;--navt:#fde8f0;--hoja:#fde8f0;--rad:18px;--off:4px;--s0:#ff5fa2;--s1:#7ec8ff;--s2:#ffd166;--s3:#9b8cff;--s4:#5fd3a4;--s5:#ff8f5f;--sect:#1d1730;--tex:radial-gradient(ellipse 5px 3px at 20px 30px,rgba(255,143,184,.55) 98%,transparent) 0 0/130px 130px,radial-gradient(ellipse 4px 2.5px at 90px 95px,rgba(255,170,200,.5) 98%,transparent) 0 0/130px 130px,repeating-linear-gradient(115deg,transparent 0 60px,rgba(126,200,255,.07) 60px 62px)}
+html.t-anime h2{font-style:italic}
+html.t-comic{--bg:#ffe14d;--p:#ffffff;--p2:#fff7d6;--t:#111111;--m:#444444;--a:#e3242b;--a2:#ffffff;--r:#e3242b;--g:#8a6a00;--l:#dddddd;--sh:0 8px 24px rgba(0,0,0,.25);--ink:#111111;--shd:#111111;--bw:3px;--off:6px;--mast:#1f6fd1;--mastt:#ffffff;--lab:#ffffff;--labt:#111111;--navbg:#111111;--navt:#ffe14d;--hoja:#fff7d6;--rad:4px;--s0:#e3242b;--s1:#1f6fd1;--s2:#111111;--s3:#22a447;--s4:#ff7a00;--s5:#8e44ad;--sect:#ffffff;--tex:radial-gradient(rgba(0,0,0,.16) 1.3px,transparent 1.8px) 0 0/9px 9px}
+html.t-comic h2,html.t-comic .pd-t{text-shadow:3px 3px 0 var(--sec);font-style:italic}
+html.t-comic #ts{border-radius:20px}
+html.t-comic #ts::after{content:"";position:absolute;left:26px;bottom:-14px;border:8px solid transparent;border-top:8px solid #151515;border-left:8px solid #151515}
+html.t-pixel{--bg:#202040;--p:#2c2c5a;--p2:#383870;--t:#f8f8f8;--m:#c0c0e0;--a:#f8b800;--a2:#202040;--r:#e83030;--g:#f8b800;--l:#505090;--sh:none;--ink:#f8f8f8;--shd:#000000;--bw:0px;--off:0px;--rad:0px;--mast:#e83030;--mastt:#f8f8f8;--lab:#000000;--labt:#f8f8f8;--navbg:#000000;--navt:#c0c0e0;--hoja:#202040;--fd:"Courier New",ui-monospace,Menlo,monospace;--fk:"Courier New",ui-monospace,Menlo,monospace;--fdls:.04em;--s0:#f8b800;--s1:#58d854;--s2:#3cbcfc;--s3:#f878f8;--s4:#f83800;--s5:#f8b800;--sect:#000000;--tex:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 2px,transparent 2px 4px),conic-gradient(rgba(255,255,255,.025) 25%,transparent 0 50%,rgba(255,255,255,.025) 0 75%,transparent 0) 0 0/16px 16px}
+html.t-pixel .c,html.t-pixel .b,html.t-pixel .ch,html.t-pixel #top .caja,html.t-pixel #top .fans,html.t-pixel #top .b.p:not(.q){border:0;box-shadow:0 -4px 0 0 var(--ink),0 4px 0 0 var(--ink),-4px 0 0 0 var(--ink),4px 0 0 0 var(--ink),8px 8px 0 0 #000}
+html.t-pixel .b,html.t-pixel .ch{box-shadow:0 -3px 0 0 var(--ink),0 3px 0 0 var(--ink),-3px 0 0 0 var(--ink),3px 0 0 0 var(--ink),5px 5px 0 0 #000}
+html.t-pixel .c.sub,html.t-pixel .sub{box-shadow:none;border:2px dashed rgba(248,248,248,.25)}
+html.t-pixel .c{margin:14px}
+html.t-pixel h2,html.t-pixel h3,html.t-pixel .titulo{font-weight:900;letter-spacing:0}
+html.t-pixel .b:active,html.t-pixel .ch:active{transform:translate(3px,3px)}
+html.t-plano{--bg:#fff4dc;--p:#ffffff;--p2:#fdf0d5;--t:#22223b;--m:#5c5c7a;--a:#e07a3f;--a2:#ffffff;--r:#bc4b51;--g:#8f6a00;--l:#f1e3c6;--sh:0 10px 30px rgba(34,34,59,.12);--ink:#22223b;--shd:transparent;--bw:0px;--off:0px;--rad:22px;--mast:#3d5a80;--mastt:#ffffff;--lab:#ffffff;--labt:#22223b;--navbg:#22223b;--navt:#fff4dc;--hoja:#fff4dc;--s0:#f4a259;--s1:#5b8e7d;--s2:#bc4b51;--s3:#8cb369;--s4:#3d5a80;--s5:#f4e285;--sect:#22223b}
+html.t-plano .c{box-shadow:0 10px 26px -18px rgba(34,34,59,.45)}
+html.t-plano .b,html.t-plano .ch{border:0;box-shadow:none;background:var(--p2);border-radius:999px}
+html.t-plano .b.a{background:var(--a)}html.t-plano .ch.on{background:var(--t);color:#fff}
+html.t-plano .c>.k:first-child:has(>h2,>h3),html.t-plano .c>h3:first-child{border-bottom-width:0}
+html.t-plano select,html.t-plano input[type=text],html.t-plano input[type=number],html.t-plano input[type=search]{border:2px solid var(--l)}
+html.t-plano #top,html.t-plano #nav{border:0}
+html.t-noir{--bg:#0d0d0d;--p:#161616;--p2:#202020;--t:#ececec;--m:#a0a0a0;--a:#ff4d5e;--a2:#0d0d0d;--r:#ff4d5e;--g:#e0c060;--l:#333333;--sh:0 8px 30px rgba(0,0,0,.7);--ink:#ececec;--shd:#000000;--mast:#000000;--mastt:#ececec;--lab:#161616;--labt:#ececec;--navbg:#000000;--navt:#a0a0a0;--hoja:#0d0d0d;--rad:0px;--off:4px;--fdls:.1em;--s0:#ff4d5e;--s1:#ececec;--s2:#bdbdbd;--s3:#ff4d5e;--s4:#ececec;--s5:#e0c060;--sect:#000000;--tex:repeating-linear-gradient(-28deg,rgba(255,255,255,.035) 0 14px,transparent 14px 34px),var(--grano)}
+html.t-synthwave{--bg:#1a0b2e;--p:#251040;--p2:#2f1654;--t:#fdf0ff;--m:#c7a8e8;--a:#ff3ea5;--a2:#1a0b2e;--r:#ff3e6c;--g:#ffd23f;--l:#4a2577;--sh:0 8px 30px rgba(0,0,0,.6);--ink:#ff3ea5;--shd:#2de2e6;--mast:linear-gradient(90deg,#ff3ea5,#7b2ff7);--mastt:#ffffff;--lab:#1a0b2e;--labt:#fdf0ff;--navbg:#0f0620;--navt:#c7a8e8;--hoja:#1a0b2e;--rad:6px;--off:4px;--fdls:.06em;--s0:#ff3ea5;--s1:#2de2e6;--s2:#ffd23f;--s3:#b26bff;--s4:#ff8a3d;--s5:#2de2e6;--sect:#1a0b2e;--tex:linear-gradient(transparent 95%,rgba(255,62,165,.16) 95%) 0 0/100% 44px,linear-gradient(90deg,transparent 95%,rgba(45,226,230,.12) 95%) 0 0/44px 100%,radial-gradient(900px 420px at 50% 112%,rgba(255,62,165,.28),transparent 70%)}
+html.t-synthwave h2,html.t-synthwave h3{text-shadow:0 0 10px rgba(255,62,165,.6)}
+.tema-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:6px 0}
+.tema-g .ch{justify-content:flex-start;min-height:48px}
+.tema-g .ch i{width:18px;height:18px;border-radius:4px;flex:none;border:1.5px solid rgba(0,0,0,.35);background:var(--mu)}
+html.t-pixel canvas.pt,html.t-pixel canvas.tf,html.t-pixel canvas.rl,html.t-pixel canvas.ini-lg,html.t-pixel canvas.lgv,html.t-pixel canvas.lgv-canal,html.t-pixel canvas.ini-logo,html.t-pixel canvas#ed,html.t-pixel canvas#hc,html.t-pixel canvas#avp{image-rendering:pixelated;image-rendering:crisp-edges}
+html.t-hollywood canvas.pt,html.t-hollywood canvas.tf,html.t-hollywood canvas.rl,html.t-hollywood canvas#ed,html.t-hollywood canvas#hc,html.t-hollywood canvas#avp{filter:grayscale(1) contrast(1.15) sepia(.12)}
+html.t-noir canvas.pt,html.t-noir canvas.tf,html.t-noir canvas.rl,html.t-noir canvas#ed,html.t-noir canvas#hc,html.t-noir canvas#avp{filter:grayscale(1) contrast(1.3)}
+html.t-plano canvas#ed,html.t-plano canvas#hc{filter:saturate(1.15)}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
 const VERN = "1.0";
@@ -852,7 +898,7 @@ const nf = (n) =>
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 const nfc = (n) => (n >= 1000000 ? nf(n / 1000000) + " M" : n >= 10000 ? nf(n / 1000) + " mil" : nf(n));
 const CFG = Object.assign(
-  { tema: "revista", txt: 1, snd: 1, anim: 1, dalt: 0, auto: "mes", real: 0, vel: 650 },
+  { tema: "revista", temp: 1, txt: 1, snd: 1, anim: 1, dalt: 0, auto: "mes", real: 0, vel: 650 },
   (() => {
     try {
       return JSON.parse(LS.g("ia16.cfg") || "{}") || {};
@@ -37074,7 +37120,8 @@ function tc() {
 }
 function prep(cv) {
   if (!cv) return null;
-  const d = window.devicePixelRatio || 1,
+  const px = pixelEsc(cv),
+    d = px || window.devicePixelRatio || 1,
     w = cv.clientWidth,
     h = cv.clientHeight;
   if (!w || !h) return null;
@@ -37084,6 +37131,7 @@ function prep(cv) {
   }
   const c = cv.getContext("2d");
   c.setTransform(d, 0, 0, d, 0, 0);
+  c.imageSmoothingEnabled = !px;
   return { c, w, h };
 }
 const Cp = (x, y, r) => `M${x - r} ${y}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`;
@@ -37609,6 +37657,374 @@ function edif(c, w, h, t, o) {
     c.arc(x + 1, h - 52, 10, 0, 7);
     c.fill();
   }
+  escenaTema(c, w, h, T, o);
+}
+const TEMAS_ESP = [
+  ["espacio", "Espacial", "#5ad1ff"],
+  ["navidad", "Navidad", "#c8102e"],
+  ["halloween", "Halloween", "#ff7a1a"],
+  ["hollywood", "Hollywood clásico", "#c9a227"],
+  ["bollywood", "Bollywood", "#ff9933"],
+  ["anime", "Anime", "#ff5fa2"],
+  ["comic", "Cómic", "#ffe14d"],
+  ["pixel", "Píxel", "#58d854"],
+  ["plano", "Plano 2D", "#f4a259"],
+  ["noir", "Noir", "#3a3a3a"],
+  ["synthwave", "Synthwave", "#ff3ea5"],
+];
+const ILUS_CLASES = ["pt", "tf", "rl", "ini-lg", "lgv", "lgv-canal", "lgp"];
+const pixelEsc = (cv) =>
+  document.documentElement.classList.contains("t-pixel") && (cv.id == "ed" || cv.id == "hc" || cv.id == "avp" || ILUS_CLASES.some((k) => cv.classList.contains(k)))
+    ? cv.clientWidth > 220
+      ? 1 / 3
+      : 0.5
+    : 0;
+function decoActual() {
+  if (TEMAS_ESP.some((x) => x[0] == CFG.tema)) return CFG.tema;
+  if (!CFG.temp) return "";
+  if (!S) {
+    const d = new Date(),
+      m = d.getMonth(),
+      n = d.getDate();
+    return (m == 9 && n >= 24) || (m == 10 && n <= 1) ? "halloween" : m == 11 && n >= 15 ? "navidad" : m == 0 && n <= 3 ? "anio" : "";
+  }
+  const w = wk();
+  return w >= 43 && w <= 44 ? "halloween" : w >= 50 ? "navidad" : w == 1 ? "anio" : "";
+}
+function escenaTema(c, w, h, T, o) {
+  const k = decoActual();
+  if (!k) return;
+  const r = (i, s) => {
+      const x = Math.sin(i * 127.1 + s * 311.7) * 43758.5453;
+      return x - Math.floor(x);
+    },
+    suelo = h - 24,
+    circ = (x, y, rr) => {
+      c.beginPath();
+      c.arc(x, y, rr, 0, 7);
+      c.fill();
+    },
+    caer = (n, vel, deriva, dib) => {
+      for (let i = 0; i < n; i++) {
+        const v = vel * (0.6 + r(i, 1) * 0.8),
+          y = ((r(i, 2) * (h + 30) + T * v) % (h + 30)) - 15,
+          x = (((r(i, 3) * w + Math.sin(T / 1400 + i) * 14 + T * deriva * v) % w) + w) % w;
+        dib(x, y, i);
+      }
+    },
+    guirnalda = (y0, comba, cols, rr, paso) => {
+      c.strokeStyle = "rgba(25,20,15,.75)";
+      c.lineWidth = 1.2;
+      c.beginPath();
+      for (let x = 0; x <= w; x += 6) {
+        const y = y0 + Math.sin((x / w) * Math.PI) * comba;
+        if (x) c.lineTo(x, y);
+        else c.moveTo(x, y);
+      }
+      c.stroke();
+      for (let x = paso / 2, i = 0; x < w; x += paso, i++) {
+        const y = y0 + Math.sin((x / w) * Math.PI) * comba + rr,
+          on = Math.sin(T / 420 + i * 1.7) > -0.35;
+        c.fillStyle = cols[i % cols.length];
+        c.globalAlpha = on ? 1 : 0.35;
+        circ(x, y, rr);
+        if (on) {
+          c.globalAlpha = 0.22;
+          circ(x, y, rr * 2.6);
+        }
+      }
+      c.globalAlpha = 1;
+    },
+    haz = (bx, ang, a) => {
+      const tx = bx + Math.tan(ang) * suelo,
+        g = c.createLinearGradient(bx, suelo, tx, 0);
+      g.addColorStop(0, "rgba(255,250,225," + a + ")");
+      g.addColorStop(1, "rgba(255,250,225,0)");
+      c.fillStyle = g;
+      c.beginPath();
+      c.moveTo(bx - 5, suelo);
+      c.lineTo(bx + 5, suelo);
+      c.lineTo(tx + 55, 0);
+      c.lineTo(tx - 55, 0);
+      c.closePath();
+      c.fill();
+    },
+    nube = (x, y, s, col) => {
+      c.fillStyle = col;
+      circ(x, y, s);
+      circ(x + s * 0.9, y + s * 0.2, s * 0.8);
+      circ(x - s * 0.9, y + s * 0.25, s * 0.7);
+      c.fillRect(x - s * 1.5, y + s * 0.25, s * 3.1, s * 0.75);
+    };
+  c.save();
+  if (k == "navidad") {
+    c.fillStyle = "rgba(255,255,255,.92)";
+    c.fillRect(0, suelo - 3, w, 5);
+    c.fillStyle = "#fff";
+    caer(70, 0.018, 0.1, (x, y, i) => {
+      c.globalAlpha = 0.55 + r(i, 4) * 0.45;
+      circ(x, y, 0.8 + r(i, 5) * 1.9);
+    });
+    c.globalAlpha = 1;
+    guirnalda(h * 0.04, h * 0.07, ["#ff3b3b", "#ffd23f", "#3ddc84", "#4da3ff"], 2.6, 20);
+  } else if (k == "halloween") {
+    c.fillStyle = "rgba(70,10,90,.24)";
+    c.fillRect(0, 0, w, h);
+    const mx = w * 0.82,
+      my = h * 0.2,
+      mr = Math.min(32, h * 0.12),
+      g = c.createRadialGradient(mx, my, mr * 0.3, mx, my, mr * 2.6);
+    g.addColorStop(0, "rgba(255,170,60,.55)");
+    g.addColorStop(1, "rgba(255,120,30,0)");
+    c.fillStyle = g;
+    circ(mx, my, mr * 2.6);
+    c.fillStyle = "#ffb347";
+    circ(mx, my, mr);
+    c.fillStyle = "rgba(200,110,30,.35)";
+    circ(mx - mr * 0.3, my - mr * 0.2, mr * 0.22);
+    circ(mx + mr * 0.25, my + mr * 0.3, mr * 0.16);
+    c.fillStyle = "#120818";
+    for (let i = 0; i < 7; i++) {
+      const x = ((r(i, 1) * w + T * (0.02 + r(i, 2) * 0.03)) % (w + 40)) - 20,
+        y = h * (0.1 + r(i, 3) * 0.35) + Math.sin(T / 300 + i) * 6,
+        s = 5 + r(i, 4) * 6,
+        f = Math.sin(T / 90 + i * 2) * 0.5 + 0.5,
+        wy = y - s * (0.2 + f * 0.6);
+      c.beginPath();
+      c.moveTo(x, y);
+      c.quadraticCurveTo(x - s, wy - s * 0.3, x - s * 2, wy);
+      c.quadraticCurveTo(x - s * 1.3, y, x - s * 0.9, y + s * 0.15);
+      c.quadraticCurveTo(x - s * 0.5, y - s * 0.1, x, y + s * 0.35);
+      c.quadraticCurveTo(x + s * 0.5, y - s * 0.1, x + s * 0.9, y + s * 0.15);
+      c.quadraticCurveTo(x + s * 1.3, y, x + s * 2, wy);
+      c.quadraticCurveTo(x + s, wy - s * 0.3, x, y);
+      c.fill();
+    }
+    for (let i = 0; i < 3; i++) {
+      const x = w * (0.12 + i * 0.36),
+        s = 9 + (i % 2) * 3,
+        y = suelo + 2,
+        tri = (tx, ty, ts) => {
+          c.beginPath();
+          c.moveTo(tx - ts, ty + ts * 0.6);
+          c.lineTo(tx + ts, ty + ts * 0.6);
+          c.lineTo(tx, ty - ts * 0.6);
+          c.closePath();
+          c.fill();
+        };
+      c.fillStyle = "#ff7a1a";
+      c.beginPath();
+      c.ellipse(x, y - s * 0.8, s * 1.25, s, 0, 0, 7);
+      c.fill();
+      c.strokeStyle = "rgba(120,40,0,.6)";
+      c.lineWidth = 1;
+      c.beginPath();
+      c.ellipse(x, y - s * 0.8, s * 0.45, s, 0, 0, 7);
+      c.stroke();
+      c.fillStyle = "#3a7d2c";
+      c.fillRect(x - 1.5, y - s * 1.95, 3, s * 0.45);
+      c.fillStyle = "rgba(255,230,120," + (0.75 + 0.25 * Math.sin(T / 120 + i * 3)) + ")";
+      tri(x - s * 0.5, y - s * 1.05, s * 0.3);
+      tri(x + s * 0.5, y - s * 1.05, s * 0.3);
+      c.beginPath();
+      c.moveTo(x - s * 0.6, y - s * 0.55);
+      c.lineTo(x + s * 0.6, y - s * 0.55);
+      c.lineTo(x, y - s * 0.22);
+      c.closePath();
+      c.fill();
+    }
+  } else if (k == "espacio") {
+    const px = w * 0.16,
+      py = h * 0.22,
+      pr = Math.min(22, h * 0.08),
+      g = c.createLinearGradient(px - pr, py - pr, px + pr, py + pr);
+    c.strokeStyle = "rgba(255,214,150,.75)";
+    c.lineWidth = 2;
+    c.beginPath();
+    c.ellipse(px, py, pr * 2, pr * 0.55, -0.35, Math.PI, 2 * Math.PI);
+    c.stroke();
+    g.addColorStop(0, "#c4a8ff");
+    g.addColorStop(1, "#4b33b8");
+    c.fillStyle = g;
+    circ(px, py, pr);
+    c.beginPath();
+    c.ellipse(px, py, pr * 2, pr * 0.55, -0.35, 0, Math.PI);
+    c.stroke();
+    for (let i = 0; i < 46; i++) {
+      c.fillStyle = "rgba(200,230,255," + (0.3 + 0.6 * Math.abs(Math.sin(T / 700 + i * 1.3))) + ")";
+      circ(r(i, 1) * w, r(i, 2) * h * 0.6, 0.6 + r(i, 3) * 1.2);
+    }
+    const ph = (T % 6500) / 6500;
+    if (ph < 0.16) {
+      const q = ph / 0.16,
+        sx = w * (0.92 - q * 0.55),
+        sy = h * (0.04 + q * 0.22),
+        g2 = c.createLinearGradient(sx, sy, sx + 70, sy - 26);
+      g2.addColorStop(0, "rgba(255,255,255,.95)");
+      g2.addColorStop(1, "rgba(255,255,255,0)");
+      c.strokeStyle = g2;
+      c.lineWidth = 2;
+      c.beginPath();
+      c.moveTo(sx, sy);
+      c.lineTo(sx + 70, sy - 26);
+      c.stroke();
+    }
+  } else if (k == "hollywood") {
+    for (let i = 0; i < 3; i++) haz(w * (0.15 + i * 0.35), Math.sin(T / 1600 + i * 2.1) * 0.55, 0.2);
+    c.fillStyle = "rgba(0,0,0," + (0.04 + 0.04 * Math.abs(Math.sin(T / 70))) + ")";
+    c.fillRect(0, 0, w, h);
+  } else if (k == "bollywood") {
+    guirnalda(h * 0.03, h * 0.06, ["#ff9933", "#ffcc00", "#ff7a00"], 3.4, 9);
+    guirnalda(h * 0.1, h * 0.05, ["#ff4fa3", "#ff9933", "#ffcc00"], 3, 10);
+    caer(26, 0.02, 0.2, (x, y, i) => {
+      c.fillStyle = ["#ff4fa3", "#ff9933", "#ffcc00"][i % 3];
+      c.globalAlpha = 0.85;
+      c.beginPath();
+      c.ellipse(x, y, 3.4, 2, T / 500 + i, 0, 7);
+      c.fill();
+    });
+    c.globalAlpha = 1;
+    for (let i = 0; i < 6; i++) {
+      const x = w * (0.08 + i * 0.17),
+        fl = 1 + 0.25 * Math.sin(T / 110 + i * 2);
+      c.fillStyle = "#b5541b";
+      c.beginPath();
+      c.ellipse(x, suelo + 1, 6, 3, 0, 0, Math.PI);
+      c.fill();
+      c.fillStyle = "rgba(255,200,80,.3)";
+      circ(x, suelo - 5, 9 * fl);
+      c.fillStyle = "#ffd23f";
+      c.beginPath();
+      c.ellipse(x, suelo - 4, 2.2, 4.5 * fl, 0, 0, 7);
+      c.fill();
+    }
+  } else if (k == "anime") {
+    const g = c.createLinearGradient(0, 0, 0, h * 0.6);
+    g.addColorStop(0, "rgba(255,150,200,.22)");
+    g.addColorStop(1, "rgba(255,150,200,0)");
+    c.fillStyle = g;
+    c.fillRect(0, 0, w, h * 0.6);
+    caer(34, 0.02, 0.45, (x, y, i) => {
+      c.fillStyle = i % 4 ? "rgba(255,183,213,.92)" : "rgba(255,226,236,.95)";
+      c.beginPath();
+      c.ellipse(x, y, 4, 2.4, T / 400 + i, 0, 7);
+      c.fill();
+    });
+  } else if (k == "comic") {
+    if (!escenaTema.trama) {
+      const t = document.createElement("canvas");
+      t.width = t.height = 8;
+      const x = t.getContext("2d");
+      x.fillStyle = "rgba(0,0,0,.22)";
+      x.beginPath();
+      x.arc(4, 4, 1.6, 0, 7);
+      x.fill();
+      escenaTema.trama = t;
+    }
+    c.fillStyle = c.createPattern(escenaTema.trama, "repeat");
+    c.fillRect(0, 0, w, h * 0.55);
+    const bx = w * 0.13,
+      by = h * 0.2,
+      n = 12,
+      s = 1 + 0.06 * Math.sin(T / 160);
+    c.fillStyle = "#ffe14d";
+    c.strokeStyle = "#111";
+    c.lineWidth = 2.5;
+    c.beginPath();
+    for (let i = 0; i <= n * 2; i++) {
+      const a = (i / (n * 2)) * Math.PI * 2,
+        rr = (i % 2 ? 14 : 30) * s;
+      c.lineTo(bx + Math.cos(a) * rr, by + Math.sin(a) * rr * 0.8);
+    }
+    c.closePath();
+    c.fill();
+    c.stroke();
+    c.fillStyle = "#e3242b";
+    c.font = "700 20px " + TIT;
+    c.textAlign = "center";
+    c.textBaseline = "middle";
+    c.fillText("★", bx, by + 1);
+    c.strokeStyle = "#111";
+    c.lineWidth = 4;
+    c.strokeRect(2, 2, w - 4, h - 4);
+  } else if (k == "pixel") {
+    for (let i = 0; i < 4; i++) {
+      const x = ((r(i, 1) * w + T * 0.01 * (1 + i * 0.3)) % (w + 80)) - 40,
+        y = h * (0.08 + i * 0.09),
+        u = 6;
+      c.fillStyle = "rgba(255,255,255,.9)";
+      c.fillRect(x, y, u * 6, u);
+      c.fillRect(x + u, y - u, u * 3, u);
+      c.fillRect(x - u, y + u, u * 8, u);
+    }
+  } else if (k == "plano") {
+    c.fillStyle = "#f4a259";
+    circ(w * 0.14, h * 0.2, Math.min(26, h * 0.1));
+    for (let i = 0; i < 3; i++) nube(((r(i, 1) * w + T * 0.006 * (1 + i * 0.4)) % (w + 100)) - 50, h * (0.12 + i * 0.1), 10 + i * 3, "rgba(255,255,255,.92)");
+  } else if (k == "noir") {
+    c.fillStyle = "rgba(0,0,0,.25)";
+    c.fillRect(0, 0, w, h);
+    c.fillStyle = "rgba(0,0,0,.14)";
+    for (let i = -h; i < w; i += 46) {
+      c.beginPath();
+      c.moveTo(i, 0);
+      c.lineTo(i + 22, 0);
+      c.lineTo(i + 22 + h * 0.5, h);
+      c.lineTo(i + h * 0.5, h);
+      c.closePath();
+      c.fill();
+    }
+    c.strokeStyle = "rgba(220,225,235,.38)";
+    c.lineWidth = 1;
+    c.beginPath();
+    caer(90, 0.32, 0.12, (x, y) => {
+      c.moveTo(x, y);
+      c.lineTo(x - 3, y + 11);
+    });
+    c.stroke();
+  } else if (k == "synthwave") {
+    const sx = w * 0.18,
+      sy = h * 0.3,
+      sr = Math.min(34, h * 0.13),
+      g = c.createLinearGradient(0, sy - sr, 0, sy + sr);
+    g.addColorStop(0, "#ffd23f");
+    g.addColorStop(1, "#ff3ea5");
+    c.fillStyle = g;
+    circ(sx, sy, sr);
+    c.fillStyle = "rgba(26,11,46,.95)";
+    for (let i = 0; i < 5; i++) c.fillRect(sx - sr, sy + i * (sr / 5) + 1, sr * 2, 1.5 + i * 0.9);
+    c.strokeStyle = "rgba(255,62,165,.7)";
+    c.lineWidth = 1;
+    c.beginPath();
+    for (let i = 0; i <= 12; i++) {
+      c.moveTo(w / 2, suelo);
+      c.lineTo((w * i) / 12 + (w * i) / 12 - w / 2, h);
+    }
+    const off = (T / 40) % 6;
+    for (let y = suelo + off; y < h; y += 6) {
+      c.moveTo(0, y);
+      c.lineTo(w, y);
+    }
+    c.stroke();
+  } else if (k == "anio") {
+    for (let b = 0; b < 3; b++) {
+      const per = 2600,
+        ph = ((T + b * 870) % per) / per;
+      if (ph > 0.55) continue;
+      const q = ph / 0.55,
+        cx = w * (0.22 + b * 0.28),
+        cy = h * (0.16 + (b % 2) * 0.1),
+        col = ["#ffd23f", "#ff4fa3", "#5ad1ff"][b];
+      c.fillStyle = col;
+      c.globalAlpha = 1 - q;
+      for (let i = 0; i < 18; i++) {
+        const a = (i / 18) * Math.PI * 2;
+        circ(cx + Math.cos(a) * q * 34, cy + Math.sin(a) * q * 34 + q * q * 10, 1.8);
+      }
+    }
+    c.globalAlpha = 1;
+  }
+  c.restore();
 }
 function cerca(c, x, w, h) {
   c.strokeStyle = "rgba(255,255,255,.25)";
@@ -40246,6 +40662,7 @@ function ajM() {
   ]
     .map((x) => ch("cfgt", x[0], x[1], CFG.tema == x[0]))
     .join("")}</div><div class="m">Revista: cada sección del juego tiene su propio color de papel.<br>Época: el diseño cambia con los años, igual que tu edificio.</div>
+<label class="m">Temas especiales</label><div class="tema-g">${TEMAS_ESP.map(([k, n, c]) => `<button class="ch${CFG.tema == k ? " on" : ""}" data-a="cfgt" data-v="${k}"><i style="--mu:${c}"></i>${n}</button>`).join("")}</div><div class="chips">${ch("cfgb", "temp", "Decoración de temporada", CFG.temp)}</div><div class="m">Los temas especiales cambian los colores y decoran tus ilustraciones.<br>Con la decoración de temporada, tu edificio celebra Halloween, Navidad y Año Nuevo en cualquier tema.</div>
 <label class="m">Color de acento</label><div class="chips">${ACCN.map((x, i) => `<button class="ch${(CFG.acc | 0) == i ? " on" : ""}" data-a="cfgac" data-v="${i}">${i ? `<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${x[1]}"></span>` : ""}${x[0]}</button>`).join("")}</div>
 <label class="m">Densidad</label><div class="chips">${ch("cfgde", "n", "C\u00F3moda", CFG.den != "c")}${ch("cfgde", "c", "Compacta", CFG.den == "c")}</div>
 <label class="m">Tamaño del texto</label><div class="chips">${[
@@ -40314,7 +40731,7 @@ ACT["cfgde"] = (v) => {
   ajM();
   if (S) pg();
 };
-const TEMAS_CLAROS = ["claro", "papel", "revista", "minimal", "era-gas", "era-neon", "era-pomo", "era-vidrio"];
+const TEMAS_CLAROS = ["claro", "papel", "revista", "minimal", "era-gas", "era-neon", "era-pomo", "era-vidrio", "navidad", "hollywood", "bollywood", "anime", "comic", "plano"];
 const temaActual = (y) => (CFG.tema == "epoca" ? "era-" + eraEst(y).k : CFG.tema);
 function aplicarCfg() {
   const r = document.documentElement,
@@ -60296,6 +60713,16 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Mejor actor de reparto", "Best supporting actor", "Meilleur second rôle masculin", "Melhor ator coadjuvante"],
   ["Mejor actriz de reparto", "Best supporting actress", "Meilleur second rôle féminin", "Melhor atriz coadjuvante"],
   ["Por etapa", "By stage", "Par étape", "Por etapa"],
+  ["Temas especiales", "Special themes", "Thèmes spéciaux", "Temas especiais"],
+  ["Espacial", "Space", "Spatial", "Espacial"],
+  ["Navidad", "Christmas", "Noël", "Natal"],
+  ["Hollywood clásico", "Classic Hollywood", "Hollywood classique", "Hollywood clássica"],
+  ["Cómic", "Comic", "BD", "Quadrinhos"],
+  ["Píxel", "Pixel", "Pixel", "Pixel"],
+  ["Plano 2D", "Flat 2D", "2D plat", "2D plano"],
+  ["Decoración de temporada", "Seasonal decorations", "Décorations de saison", "Decoração sazonal"],
+  ["Los temas especiales cambian los colores y decoran tus ilustraciones.", "Special themes change the colours and decorate your illustrations.", "Les thèmes spéciaux changent les couleurs et décorent tes illustrations.", "Os temas especiais mudam as cores e decoram suas ilustrações."],
+  ["Con la decoración de temporada, tu edificio celebra Halloween, Navidad y Año Nuevo en cualquier tema.", "With seasonal decorations, your building celebrates Halloween, Christmas and New Year in any theme.", "Avec les décorations de saison, ton bâtiment fête Halloween, Noël et le Nouvel An dans n'importe quel thème.", "Com a decoração sazonal, seu prédio comemora o Halloween, o Natal e o Ano-Novo em qualquer tema."],
   ["Avanza una semana", "Advance one week", "Avance d'une semaine", "Avança uma semana"],
   ["Avanza un mes", "Advance one month", "Avance d'un mois", "Avança um mês"],
   ["Avanza hasta el próximo evento", "Advance to the next event", "Avance jusqu'au prochain événement", "Avança até o próximo evento"],
