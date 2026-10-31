@@ -18023,7 +18023,7 @@ function wRap() {
     st = (n, t, h) => `<div class="c"><h3 style="margin:0 0 4px">${n} · ${t}</h3>${h}</div>`,
     br = BRk(W.bv),
     bm = BMOD[bmDe(br)];
-  return [
+  const A = [
     st(
       1,
       "Tipo de obra",
@@ -18060,7 +18060,8 @@ function wRap() {
     ),
     conRodaje(W.m) ? `<div class="c"><h3 style="margin:0 0 4px">${L37("Rodaje", "Shooting")}</h3>${rodH(1)}</div>` : "",
     `<div class="c"><h3 style="margin:0 0 4px">Antes de producir · equipo y música</h3><details class="nota"><summary aria-label="Más información"></summary><div class="m">Ya vienen recomendados para tu presupuesto; cámbialos si quieres.</div></details>${bt("eqr", "", ic("talento") + " Equipo recomendado")}${m[1].map(crewSel).join("")}${muH(1)}</div>`,
-  ].join("");
+  ];
+  return (typeof wRapEt == "function" ? wRapEt(A) : A).join("");
 }
 function rapFr() {
   if (W.ct && W.src != null && pj(W.src))

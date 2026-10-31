@@ -3,8 +3,15 @@
 // (música), se vende con crédito o se archiva como material. Las ideas vendidas quedan en el archivo con su resultado.
 const WT1 = [0, 1, 2, 3, 6],
   WT2 = [3, 4, 5];
-const wEt = () => (W && W.md == "d" ? (W.etapa == 2 ? 2 : 1) : 0);
-const wTabs = () => (wEt() == 1 ? WT1 : wEt() == 2 ? WT2 : WORD);
+const wEt = () => (W && !S.taller ? (W.etapa == 2 ? 2 : 1) : 0);
+// Modo rápido: los pasos 1 a 12 son la idea; el presupuesto, el rodaje y el equipo, la contratación (los personajes están en las dos)
+function wRapEt(A) {
+  const e = wEt();
+  return !e ? A : [wEtapaH()].concat(e == 1 ? A.slice(0, 12) : [A[10]].concat(A.slice(12)));
+}
+const wTabs = () => (W && W.md != "d" ? WORD : wEt() == 1 ? WT1 : wEt() == 2 ? WT2 : WORD);
+// La idea ya tiene guion: lo escribió alguien por encargo o es un guion comprado
+const wEsc = () => W && (W.gsc != null || !!W.gs);
 const idT = (e, n, f, p) => `<span translate="no">${esc(tx4(e, n, f, p))}</span>`;
 function wEtapaH() {
   const e = wEt();
@@ -12,12 +19,14 @@ function wEtapaH() {
   const N = [tx4("Idea", "Idea", "Idée", "Ideia"), tx4("Contratación y producción", "Hiring and production", "Embauche et production", "Contratação e produção"), "Marketing", tx4("Lanzamiento", "Launch", "Lancement", "Lançamento")];
   return `<div class="c" translate="no"><div class="chips" style="margin:0">${N.map((n, i) => `<span class="ch${i + 1 == e ? " on" : ""}" style="cursor:default${i + 1 < e ? ";opacity:.7" : ""}">${i + 1} · ${esc(n)}</span>`).join("")}</div><div class="m">${esc(
     e == 1
-      ? tx4(
-          "Primero la idea: la historia, cómo se cuenta, sus estilos y sus personajes. Guárdala en Proyectos o sigue a la contratación.",
-          "First the idea: the story, how it's told, its styles and its characters. Save it in Projects or move on to hiring.",
-          "D'abord l'idée : l'histoire, sa façon d'être racontée, ses styles et ses personnages. Garde-la dans Projets ou passe à l'embauche.",
-          "Primeiro a ideia: a história, como é contada, seus estilos e seus personagens. Guarde-a em Projetos ou siga para a contratação.",
-        )
+      ? wEsc()
+        ? tx4(`El guion ya está escrito (${W.gsc != null ? W.gsc : "—"}/100). Puedes seguir a la contratación.`, `The script is written (${W.gsc != null ? W.gsc : "—"}/100). You can move on to hiring.`, `Le scénario est écrit (${W.gsc != null ? W.gsc : "—"}/100). Tu peux passer à l'embauche.`, `O roteiro já está escrito (${W.gsc != null ? W.gsc : "—"}/100). Você pode seguir para a contratação.`)
+        : tx4(
+            "Primero la idea: la historia, cómo se cuenta, sus estilos y sus personajes. Guárdala en Proyectos o encarga que un escritor la escriba: con el guion listo se pasa a la contratación.",
+            "First the idea: the story, how it's told, its styles and its characters. Save it in Projects or have a writer write it: once the script is ready you move on to hiring.",
+            "D'abord l'idée : l'histoire, sa façon d'être racontée, ses styles et ses personnages. Garde-la dans Projets ou fais-la écrire par un scénariste : avec le scénario prêt, on passe à l'embauche.",
+            "Primeiro a ideia: a história, como é contada, seus estilos e seus personagens. Guarde-a em Projetos ou peça a um escritor que a escreva: com o roteiro pronto, segue-se para a contratação.",
+          )
       : tx4(
           "Ahora se contrata: intérpretes, equipo y producción. El marketing y el lanzamiento vienen cuando la obra esté terminada.",
           "Now you hire: performers, crew and production. Marketing and launch come once the work is finished.",
@@ -54,16 +63,24 @@ wzBotones = function (er) {
     doc = bt("wdoc", "", ic("libro") + " Documento de la historia"),
     sv = (a) => bt("idsv", "", ic("idea") + " " + tx4("Guardar idea en Proyectos", "Save idea to Projects", "Garder l'idée dans Projets", "Guardar ideia em Projetos"), a);
   if (S.taller) return wzBotEt.apply(this, arguments);
-  if (!e) return wzBotEt.apply(this, arguments).replace(/(<div class="bts" style="margin-top:6px">)/, "$1" + sv(""));
+  if (!e) return wzBotEt.apply(this, arguments);
   if (e == 1) {
-    const er1 = er.filter((x) => !/^Falta (?!el t)|^Faltan |sede|huelga|energ|ocupad|estudiando|contrato|Fondos/i.test(x));
-    return `${er1.length ? `<p class="m" style="color:var(--r)">${er1.map(esc).join(" · ")}</p>` : ""}<button class="b a" data-a="ide2" ${er1.length ? "disabled" : ""} style="width:100%;margin-top:6px" translate="no">${esc(tx4("Seguir: contratación y producción", "Next: hiring and production", "Suite : embauche et production", "Seguir: contratação e produção"))} →</button><div class="bts" style="margin-top:6px" translate="no">${sv("")}${doc}</div>`;
+    const er1 = er.filter((x) => !/^Falta (?!el t)|^Faltan |sede|huelga|energ|ocupad|estudiando|contrato|Fondos/i.test(x)),
+      sig =
+        wEsc()
+          ? `<button class="b a" data-a="ide2" ${er1.length ? "disabled" : ""} style="width:100%;margin-top:6px" translate="no">${esc(tx4("Seguir: contratación y producción", "Next: hiring and production", "Suite : embauche et production", "Seguir: contratação e produção"))} →</button>`
+          : `<button class="b a" data-a="idesc" ${er1.length ? "disabled" : ""} style="width:100%;margin-top:6px" translate="no">${ic("libro")} ${esc(tx4("Guardar y encargar el guion", "Save and commission the script", "Garder et commander le scénario", "Guardar e encomendar o roteiro"))}</button>`;
+    return `${er1.length ? `<p class="m" style="color:var(--r)">${er1.map(esc).join(" · ")}</p>` : ""}${sig}<div class="bts" style="margin-top:6px" translate="no">${sv("")}${doc}</div>`;
   }
   return wzBotEt.apply(this, arguments).replace(/(<div class="bts" style="margin-top:6px">)/, "$1" + bt("ide1", "", ic("atras") + " " + tx4("Volver a la idea", "Back to the idea", "Revenir à l'idée", "Voltar à ideia")) + sv(""));
 };
 ACT["ide2"] = () => {
+  if (!wEsc()) return toast(tx4("Primero un escritor tiene que escribir la idea", "First a writer has to write the idea", "D'abord un scénariste doit écrire l'idée", "Primeiro um escritor tem que escrever a ideia"));
   W.etapa = 2;
   if (!Object.keys(W.crew || {}).length) W.crew = eqRec(W.m, BD());
+  // El escritor del guion sigue en el equipo si está libre
+  const tw = S.tl[W.escT];
+  if (tw && !tw.ret && !tw.dead && !ocupado(tw) && MD[W.m][1].includes(0)) W.crew[0] = tw.id;
   repartoRec(W);
   W.tab = 3;
   return wz();
@@ -78,21 +95,81 @@ const ideas = () => (S.ideas = S.ideas || []);
 function idPack() {
   return Object.assign(ideaPack(), { fid: W.fid, src: W.src, ct: W.ct, mt: W.mt, enc: null, cop: null, etapa: 1 });
 }
+// Guarda la idea (con su guion, si ya lo tiene) y devuelve el registro
+function idGuarda() {
+  const id = W.idI || "d" + (S.idN = (S.idN | 0) + 1),
+    v = ideas().find((x) => x.id == id),
+    it = Object.assign(v || {}, { id, n: String(W.nm).trim().slice(0, 80), m: W.m, y: yr(), w: idPack() });
+  if (!v) ideas().unshift(it);
+  W.idI = id;
+  return it;
+}
 ACT["idsv"] = () => {
   if (!String(W.nm || "").trim()) return toast(tx4("Ponle un título", "Give it a title", "Donne-lui un titre", "Dê um título"));
-  const id = W.idI || "d" + (S.idN = (S.idN | 0) + 1),
-    it = { id, n: String(W.nm).trim().slice(0, 80), m: W.m, y: yr(), w: idPack() },
-    k = ideas().findIndex((x) => x.id == id);
-  if (k >= 0) ideas()[k] = it;
-  else ideas().unshift(it);
-  W.idI = id;
+  idGuarda();
   cx();
   toast(tx4("Idea guardada en Proyectos", "Idea saved to Projects", "Idée gardée dans Projets", "Ideia guardada em Projetos"));
   return pg();
 };
+// ---------- El guion: un escritor convierte la idea en letras; tarda, cobra y le pone nota ----------
+const escFee = (t, m) => (t.you ? 0 : Math.round(fee(t, 0, m) * 0.35));
+const escSem = (t, w) => cl(Math.round(3 + (w.cx | 0) * 1.5 + (w.cast || []).length / 4 + (100 - (t.s[0] | 0)) / 25), 3, 16);
+function idEscPick(it) {
+  const L = S.tl
+    .filter((t) => !t.ret && !t.dead && !t.es && (t.r == 0 || t.you) && (t.e >= 10 || t.you) && !ocupado(t))
+    .sort((a, b) => (b.you ? 1 : 0) - (a.you ? 1 : 0) || b.s[0] - a.s[0])
+    .slice(0, 40);
+  if (!L.length) return toast(tx4("No hay escritores libres", "No writers available", "Aucun scénariste libre", "Não há escritores livres"));
+  return fxPick({
+    t: tx4("¿Quién escribe «" + it.n + "»?", "Who writes \"" + it.n + "\"?", "Qui écrit « " + it.n + " » ?", "Quem escreve «" + it.n + "»?"),
+    d: tx4("El escritor convierte la idea en guion. Tarda unas semanas y su habilidad decide la nota del guion: con esa nota se produce mejor y la idea vale más si la vendes.", "The writer turns the idea into a script. It takes some weeks and their skill sets the script's score: a better score makes a better production and a pricier sale.", "Le scénariste transforme l'idée en scénario. Cela prend quelques semaines et son talent fixe la note : une meilleure note donne une meilleure production et une vente plus chère.", "O escritor transforma a ideia em roteiro. Leva algumas semanas e sua habilidade define a nota: com ela a produção sai melhor e a ideia vale mais se você a vender."),
+    items: L.map((t) => ({ v: t.id, l: t.n, nt: 1, ns: 1, s: tx4("escritura", "writing", "écriture", "escrita") + " " + t.s[0] + " · " + escSem(t, it.w) + " " + tx4("sem", "wks", "sem", "sem") + " · " + (t.you ? tx4("eres tú", "it's you", "c'est toi", "é você") : fm(escFee(t, it.m))) })),
+    orden: false,
+    ok: (s) => {
+      const t = S.tl[+s[0]];
+      if (!t) return;
+      const c = escFee(t, it.m);
+      if (S.cash < c) return toast("Fondos insuficientes");
+      gasta("talento", c);
+      if (!t.you) t.e = Math.max(0, t.e - 10);
+      Object.assign(it, { esc: t.id, ef: S.t + escSem(t, it.w), gs: null });
+      it.w.gsc = null;
+      nws(tx4(`${t.n} empieza a escribir «${it.n}».`, `${t.n} starts writing "${it.n}".`, `${t.n} commence à écrire « ${it.n} ».`, `${t.n} começa a escrever «${it.n}».`));
+      return pg();
+    },
+  });
+}
+ACT["idesc"] = () => {
+  if (!String(W.nm || "").trim()) return toast(tx4("Ponle un título", "Give it a title", "Donne-lui un titre", "Dê um título"));
+  const it = idGuarda();
+  cx();
+  return idEscPick(it);
+};
+on("semana", () => {
+  if (!S || !S.ideas) return;
+  S.ideas.forEach((it) => {
+    if (it.esc == null || it.gs != null || S.t < it.ef) return;
+    const t = S.tl[it.esc],
+      w = it.w || {},
+      rico = Math.min(10, (w.tm || []).length + (w.pa || []).length + (w.ar || []).length + (w.cast || []).length / 2);
+    it.gs = cl(Math.round((t ? t.s[0] : 50) * 0.7 + rico * 2 + 8 + gauss() * 6), 10, 99);
+    w.gsc = it.gs;
+    w.escT = it.esc;
+    nws(tx4(`«${it.n}» ya está escrita: el guion de ${t ? t.n : ""} saca ${it.gs}/100.`, `"${it.n}" is written: ${t ? t.n : ""}'s script scores ${it.gs}/100.`, `« ${it.n} » est écrite : le scénario de ${t ? t.n : ""} obtient ${it.gs}/100.`, `«${it.n}» está escrita: o roteiro de ${t ? t.n : ""} tira ${it.gs}/100.`));
+  });
+});
+// La nota del guion pesa en la obra
+V37.prod.push((P, W2) => {
+  if (W2.gsc != null) P.gsc = W2.gsc;
+});
+V37.mods.push((P, add) => {
+  if (P.gsc != null) add(Math.round(((P.gsc - 60) / 10) * 10) / 10, Math.round(((P.gsc - 60) / 20) * 10) / 10, tx4("el guion", "the script", "le scénario", "o roteiro"));
+});
 function idAbre(it, etapa) {
   ideaUnpack(it.w);
   ["fid", "src", "ct", "mt"].forEach((k) => it.w[k] != null && (W[k] = it.w[k]));
+  W.gsc = it.gs != null ? it.gs : null;
+  W.escT = it.esc;
   W.idI = it.id;
   W.md = "d";
   W.etapa = etapa;
@@ -106,24 +183,34 @@ V37.prod.push((P, W2) => {
 const rivN = (r) => (S.rv[r] ? S.rv[r].n : "");
 const rivL = (m) => rvVivos().filter((i) => !S.rv[i].own && !S.rv[i].ind && (m == null || (S.rv[i].sp[m] | 0) >= 1));
 function idPrecio(it, r) {
-  const w = it.w || {},
-    o = S.rv[r] || { sz: 1 },
-    k = 1 + 0.05 * Math.min(8, (w.tm || []).length) + 0.03 * Math.min(12, (w.cast || []).length) + 0.05 * Math.min(3, (w.pa || []).length);
-  return Math.round(TB(it.m) * 0.04 * k * (0.6 + 0.4 * o.sz) * (1 + (S.pop || 0) / 200));
+  const o = S.rv[r] || { sz: 1 },
+    t = S.tl[it.esc],
+    // Si la escribiste tú, vale según tu habilidad de escritura
+    base = t && !t.you ? escFee(t, it.m) : TB(it.m) * 0.003 * ((t ? t.s[0] : 50) / 50);
+  // Un guion flojo apenas recupera lo que costó escribirlo; uno muy bueno se vende por varias veces su costo
+  return Math.round(base * (0.5 + Math.pow((it.gs || 0) / 50, 2)) * (0.7 + 0.3 * o.sz));
 }
 const artL = () => (typeof bnd41 == "function" ? bnd41().filter((b) => !b.sep && b.h > S.t) : []);
 function idRow(it) {
   const o = [
     ["e", tx4("Editar la idea", "Edit the idea", "Modifier l'idée", "Editar a ideia")],
     ["r", tx4("Encomendar a un rival", "Commission a rival", "Confier à un rival", "Encomendar a um rival")],
-    ["c", tx4("Coproducir con un rival", "Co-produce with a rival", "Coproduire avec un rival", "Coproduzir com um rival")],
+    it.gs != null ? ["c", tx4("Coproducir con un rival", "Co-produce with a rival", "Coproduire avec un rival", "Coproduzir com um rival")] : null,
     it.m == 4 && artL().length ? ["a", tx4("Encomendar a tus artistas firmados", "Commission your signed artists", "Confier à tes artistes sous contrat", "Encomendar aos seus artistas contratados")] : null,
-    ["v", tx4("Vender a un rival", "Sell to a rival", "Vendre à un rival", "Vender a um rival")],
+    it.gs != null ? ["v", tx4("Vender a un rival", "Sell to a rival", "Vendre à un rival", "Vender a um rival")] : null,
     ["m", tx4("Archivar como material", "File as material", "Archiver comme matériel", "Arquivar como material")],
     ["d", tx4("Documento de la idea", "Idea document", "Document de l'idée", "Documento da ideia")],
     ["x", tx4("Borrar", "Delete", "Supprimer", "Apagar")],
   ].filter(Boolean);
-  return `<div class="c sub" translate="no"><div class="k"><b>${ic("idea")} ${esc(it.n)}</b><span class="m">${esc(MD[it.m][0])} · ${it.y}</span></div><div class="m">${esc([(it.w.g || []).join(", "), (it.w.cast || []).length ? (it.w.cast || []).length + " " + tx4("personajes", "characters", "personnages", "personagens") : ""].filter(Boolean).join(" · "))}</div><div class="k" style="gap:6px;flex-wrap:nowrap">${bt("idx", it.id + "|p", ic("adelante") + " " + tx4("Contratar y producir", "Hire and produce", "Embaucher et produire", "Contratar e produzir"), "a")}<select onchange="if(this.value)act('idx','${it.id}|'+this.value)" style="flex:1"><option value="">${esc(tx4("Más opciones…", "More options…", "Plus d'options…", "Mais opções…"))}</option>${o.map(([k, n]) => `<option value="${k}">${esc(n)}</option>`).join("")}</select></div></div>`;
+  const tw = S.tl[it.esc],
+    est =
+      it.gs != null
+        ? tx4(`Guion ${it.gs}/100 · ${tw ? tw.n : ""}`, `Script ${it.gs}/100 · ${tw ? tw.n : ""}`, `Scénario ${it.gs}/100 · ${tw ? tw.n : ""}`, `Roteiro ${it.gs}/100 · ${tw ? tw.n : ""}`)
+        : it.esc != null
+          ? tx4(`Escribiéndose · ${tw ? tw.n : ""} · ${Math.max(0, it.ef - S.t)} sem`, `Being written · ${tw ? tw.n : ""} · ${Math.max(0, it.ef - S.t)} wks`, `En écriture · ${tw ? tw.n : ""} · ${Math.max(0, it.ef - S.t)} sem`, `Sendo escrita · ${tw ? tw.n : ""} · ${Math.max(0, it.ef - S.t)} sem`)
+          : tx4("Sin guion todavía", "No script yet", "Pas encore de scénario", "Ainda sem roteiro"),
+    pri = it.gs != null ? bt("idx", it.id + "|p", ic("adelante") + " " + tx4("Contratar y producir", "Hire and produce", "Embaucher et produire", "Contratar e produzir"), "a") : it.esc != null ? "" : bt("idx", it.id + "|w", ic("libro") + " " + tx4("Encargar el guion", "Commission the script", "Commander le scénario", "Encomendar o roteiro"), "a");
+  return `<div class="c sub" translate="no"><div class="k"><b>${ic("idea")} ${esc(it.n)}</b><span class="m">${esc(MD[it.m][0])} · ${it.y}</span></div><div class="m">${esc([(it.w.g || []).join(", "), (it.w.cast || []).length ? (it.w.cast || []).length + " " + tx4("personajes", "characters", "personnages", "personagens") : ""].filter(Boolean).join(" · "))}</div><div class="m" style="color:${it.gs != null ? "var(--a)" : "var(--t)"}">${esc(est)}</div><div class="k" style="gap:6px;flex-wrap:nowrap">${pri}<select onchange="if(this.value)act('idx','${it.id}|'+this.value)" style="flex:1"><option value="">${esc(tx4("Más opciones…", "More options…", "Plus d'options…", "Mais opções…"))}</option>${o.map(([k, n]) => `<option value="${k}">${esc(n)}</option>`).join("")}</select></div></div>`;
 }
 function idListaH() {
   const L = ideas();
@@ -149,6 +236,8 @@ function idHaz(it, r) {
     return wz();
   }
   if (a == "v") {
+    if (S.rv[r].idc > S.t) return toast(tx4("Ese rival ya compró una idea hace poco", "That rival bought an idea recently", "Ce rival a acheté une idée récemment", "Esse rival comprou uma ideia há pouco"));
+    S.rv[r].idc = S.t + 26;
     const p = idPrecio(it, r);
     S.idv = (S.idv || []).concat([{ id: it.id, n: it.n, m: it.m, r, y: yr(), p, w: it.w, gp: 0, cob: 0 }]);
     S.ideas = ideas().filter((x) => x.id != it.id);
@@ -167,6 +256,8 @@ ACT["idx"] = (v) => {
     it = ideas().find((x) => x.id == id);
   if (!it) return;
   IDK2 = a;
+  if (a == "w") return idEscPick(it);
+  if ((a == "p" || a == "c" || a == "v") && it.gs == null) return toast(tx4("Primero un escritor tiene que escribir la idea", "First a writer has to write the idea", "D'abord un scénariste doit écrire l'idée", "Primeiro um escritor tem que escrever a ideia"));
   if (a == "e" || a == "p") {
     idAbre(it, a == "e" ? 1 : 2);
     if (a == "p") {
@@ -177,7 +268,10 @@ ACT["idx"] = (v) => {
   }
   if (a == "r") return idRival(it, tx4("Encomendar a un rival", "Commission a rival", "Confier à un rival", "Encomendar a um rival"), () => tx4("Produce con su equipo y cobra un 15 %", "Produces with its crew and charges 15%", "Produit avec son équipe et prend 15 %", "Produz com sua equipe e cobra 15 %"));
   if (a == "c") return idRival(it, tx4("Coproducir con un rival", "Co-produce with a rival", "Coproduire avec un rival", "Coproduzir com um rival"), () => tx4("Pone el 40 % del costo y se queda con el 40 % de las ventas", "Covers 40% of the cost and keeps 40% of sales", "Paie 40 % du coût et garde 40 % des ventes", "Paga 40 % do custo e fica com 40 % das vendas"));
-  if (a == "v") return idRival(it, tx4("Vender la idea", "Sell the idea", "Vendre l'idée", "Vender a ideia"), (r) => tx4("Paga ", "Pays ", "Paie ", "Paga ") + fm(idPrecio(it, r)));
+  if (a == "v") {
+    if (!rivL(it.m).some((r) => !(S.rv[r].idc > S.t))) return toast(tx4("Ningún rival quiere comprar ideas ahora", "No rival wants to buy ideas right now", "Aucun rival ne veut acheter d'idées maintenant", "Nenhum rival quer comprar ideias agora"));
+    return idRival(it, tx4("Vender la idea", "Sell the idea", "Vendre l'idée", "Vender a ideia"), (r) => (S.rv[r].idc > S.t ? tx4("ya compró una idea hace poco", "bought an idea recently", "a acheté une idée récemment", "comprou uma ideia há pouco") : tx4("Paga ", "Pays ", "Paie ", "Paga ") + fm(idPrecio(it, r))));
+  }
   if (a == "a") {
     const B = artL();
     return fxPick({
@@ -304,7 +398,7 @@ function frImporta(e) {
   let fid = null,
     n = 0;
   L.forEach((w) => {
-    if (S.pj.some((p) => p.adq && p.adq.rw == w.id)) return;
+    if (S.pj.some((p) => p.adq && (p.adq.rw == w.id || p.adq.rw == rwKey(w)))) return;
     const T = S.pj.find((p) => p.st == 4 && p.m == w.m && !p.adq);
     if (!T) return;
     const P = JSON.parse(JSON.stringify(T)),
@@ -315,7 +409,7 @@ function frImporta(e) {
       id,
       n: w.n,
       m: w.m,
-      gn: w.g0 ? [w.g0] : (P.gn || []).slice(0, 1),
+      gn: w.g0 || w.g ? [w.g0 || w.g] : (P.gn || []).slice(0, 1),
       y,
       rt: S.t - (yr() - y) * 52,
       st: 4,
@@ -323,7 +417,7 @@ function frImporta(e) {
       cast: [],
       aw: [],
       earn: 0,
-      gross: Math.round((w.gR || 0) / hoyF(yr())),
+      gross: w.gN != null ? w.gN : Math.round((w.gR || 0) / hoyF(yr())),
       gR: w.gR || 0,
       c: w.C || 50,
       a: w.A || 50,
@@ -339,7 +433,7 @@ function frImporta(e) {
       bnd41: null,
       cop: null,
       colab: null,
-      adq: { r: rivN(w.o), y: yr(), rw: w.id },
+      adq: { r: rivN(w.o), y: yr(), rw: w.id != null ? w.id : rwKey(w) },
     });
     P.r0 = P.rt;
     if (fid == null) fid = id;

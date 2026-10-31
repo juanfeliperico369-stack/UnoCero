@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 14 (se instala encima de la entrega anterior, que era la 13). Cada actualización debe subir el versionCode (`VC=15 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 15 (se instala encima de la entrega anterior, que era la 14). Cada actualización debe subir el versionCode (`VC=16 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -432,11 +432,30 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
     - Las opciones de teatro con deslizadores.
   - Prueba de estrés en español (3.444 pulsaciones), francés (3.484), portugués (3.492) e inglés (3.132): sin errores ni textos rotos.
   - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
-- **Filmografía completa de cada talento:** la ficha del talento muestra, además de «Obras contigo», toda su filmografía.
+- **Historial de proyectos de cada talento** (antes «Filmografía completa»): la ficha del talento muestra, además de «Obras contigo», toda su filmografía.
   - Incluye las obras que hizo con los estudios rivales, estrenadas o en producción, con año, medio, estudio, cargo, crítica, público y recaudación.
   - También incluye el resto de su carrera previa: se arma una sola vez, queda guardada y siempre sale igual.
   - Las tuyas se pueden tocar para abrir su ficha.
   - Probado: un compositor con 33 obras muestra las 33. Pruebas de estrés en español (3.507 pulsaciones) y francés (3.476) sin errores.
+- **El guion antes de producir:** el flujo queda así: idea → guion → contratación y producción → marketing → lanzamiento.
+  - **La idea** se puede dejar en Proyectos o archivar como material tal cual, sin escribir.
+  - **Para producirla,** un escritor tiene que escribirla. «Guardar y encargar el guion» (o «Encargar el guion» en la lista de ideas) deja elegir al escritor; puedes ser tú. La lista muestra su habilidad, las semanas que tarda y lo que cobra.
+    - Tarda de 3 a 16 semanas, según la complejidad, los personajes y la habilidad del escritor.
+    - Al terminar, el guion saca una nota de 10 a 100 y sale en las noticias.
+    - El escritor sigue en el equipo si está libre, y la nota del guion pesa en la crítica y el público de la obra.
+  - **Vender una idea exige el guion escrito.** El precio sale de lo que costó escribirla y de su nota: un guion flojo apenas recupera el costo y uno muy bueno se vende por varias veces lo que costó. Cada rival compra como mucho una idea cada medio año. Así se acaba el dinero infinito de vender ideas sin escribir.
+  - Coproducir también exige el guion. Encomendar a un rival o a tus artistas no lo exige, porque ellos se encargan.
+  - **El modo rápido sigue el mismo flujo:** los pasos de la idea primero, con «Guardar idea en Proyectos» y «Guardar y encargar el guion». Con el guion listo se pasa al presupuesto, el rodaje, el equipo y el reparto.
+- **Ficha de una obra rival:**
+  - Ahora trae más datos (expectativa, clasificación y presupuesto, cuando se conocen) y un botón a su franquicia.
+  - Tiene **«Comprar la obra y su franquicia»:** la obra y las demás de su franquicia pasan a tus Franquicias con su ficha y quedan en Material. Después, el botón lleva a tu franquicia.
+- **Historial de proyectos:** cada obra del historial de un talento se puede tocar. Las tuyas abren su ficha; las de los rivales y las de su carrera anterior abren la ficha de obra rival, también con la opción de comprarla.
+- **Pruebas de esta ronda:**
+  - En modo rápido: encargar el guion, esperar la nota, venderla (el rival no vuelve a comprar hasta medio año después), y producir otra idea escrita con su presupuesto y su equipo.
+  - Comprar una obra rival desde su ficha; abrir obras desde el historial de un talento.
+  - La prueba de estrés encontró que la nota del guion chocaba con el «guion comprado» del juego y mostraba «NaN» y «[object Object]». Se corrigió: un guion comprado cuenta como escrito.
+  - Prueba de estrés en español (3.486 pulsaciones), francés (3.543), portugués (3.540) e inglés (3.160): sin errores ni textos rotos.
+  - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).
