@@ -53439,15 +53439,15 @@ function vRank40() {
     const mOk = (m) => RK40.m < 0 || m == RK40.m;
     if (RK40.p == 0) {
       const y0 = yr();
-      (S.rw40 || []).forEach((x) => x.y == y0 && mOk(x.m) && L.push({ n: "«" + x.n + "»", sub: rvNom(x.o), g: x.gR }));
-      S.rw.forEach((x) => x.y == y0 && mOk(x.m) && !L.some((z) => z.n == "«" + x.n + "»") && L.push({ n: "«" + x.n + "»", sub: rvNom(x.o), g: x.gR || 0 }));
-      S.pj.forEach((p) => p.st >= 3 && p.y == y0 && mOk(p.m) && L.push({ n: "«" + p.n + "»", sub: S.sn, g: p.gR || 0, yo: 1 }));
+      (S.rw40 || []).forEach((x) => x.y == y0 && mOk(x.m) && L.push({ n: "«" + x.n + "»", sub: rvNom(x.o), g: x.gR, k: x.o + "|" + x.y + "|" + encodeURIComponent(x.n) }));
+      S.rw.forEach((x) => x.y == y0 && mOk(x.m) && !L.some((z) => z.n == "«" + x.n + "»") && L.push({ n: "«" + x.n + "»", sub: rvNom(x.o), g: x.gR || 0, k: x.o + "|" + x.y + "|" + encodeURIComponent(x.n) }));
+      S.pj.forEach((p) => p.st >= 3 && p.y == y0 && mOk(p.m) && L.push({ n: "«" + p.n + "»", sub: S.sn, g: p.gR || 0, yo: 1, id: p.id }));
     } else {
-      MD.forEach((_, m) => mOk(m) && (S.top[m] || []).forEach((x) => L.push({ n: "«" + x.n + "»", sub: (x.o < 0 ? S.sn : rvNom(x.o)) + " · " + x.y, g: x.gR, yo: x.o < 0 })));
+      MD.forEach((_, m) => mOk(m) && (S.top[m] || []).forEach((x) => L.push({ n: "«" + x.n + "»", sub: (x.o < 0 ? S.sn : rvNom(x.o)) + " · " + x.y, g: x.gR, yo: x.o < 0, k: x.o + "|" + x.y + "|" + encodeURIComponent(x.n) })));
     }
     L.sort((a, b) => b.g - a.g);
     L = L.slice(0, 25);
-    h += `<div class="c"><div class="chips">${ms.map(([i, n]) => rkCh("rk4", "m|" + i, esc(n), RK40.m == i)).join("")}</div><div class="chips">${rkCh("rk4", "p|0", E40("Este año", "This year"), RK40.p == 0)}${rkCh("rk4", "p|1", E40("De la historia", "All time"), RK40.p == 1)}</div>${L.length ? rkPodio(L, (x) => fm0(x.g)) + rkFilas(L, (x) => fm0(x.g)) : `<div class="m">${L37("Todavía no hay estrenos para este ranking.", "No releases for this ranking yet.")}</div>`}<div class="m">${L37("En dólares de hoy.", "In today's dollars.")}</div></div>`;
+    h += `<div class="c"><div class="chips">${ms.map(([i, n]) => rkCh("rk4", "m|" + i, esc(n), RK40.m == i)).join("")}</div><div class="chips">${rkCh("rk4", "p|0", E40("Este año", "This year"), RK40.p == 0)}${rkCh("rk4", "p|1", E40("De la historia", "All time"), RK40.p == 1)}</div>${L.length ? rkPodio(L, (x) => fm0(x.g)) + rkFilas(L, (x) => fm0(x.g), (x) => (x.id != null ? ` data-a="det" data-v="${x.id}"` : x.k ? ` data-a="rkob" data-v="${x.k}"` : "")) : `<div class="m">${L37("Todavía no hay estrenos para este ranking.", "No releases for this ranking yet.")}</div>`}<div class="m">${L37("En dólares de hoy.", "In today's dollars.")}</div></div>`;
   } else if (v == "tal") {
     const r = RK40.r | 0,
       L = S.tl

@@ -466,6 +466,24 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
     - Partida sin obras propias. Se compraron dos franquicias, una con el arreglo y otra como en una partida vieja: las dos aparecen, cada obra abre su ficha sin errores y la partida sigue 30 semanas sin fallos.
     - Compra directa de una obra cerrada con secuelas activas: llegan la original y sus 5 secuelas de cine en una sola franquicia, sin las obras homónimas de serie y música.
     - Compras viejas desde la ficha y desde la carrera anterior de un talento: se recuperan una sola vez, sin duplicados.
+- **Fichas completas para las obras de los rivales:** al tocar una obra del archivo de rivales, del historial de un talento, de los rankings, del Salón o de la franquicia de un rival, se abre la misma ficha que tienen tus obras:
+  - Sinopsis, crítica, géneros, clasificación, tono, época, departamentos y personajes con sus actores.
+  - Equipo completo, costos (producción, talentos, marketing, sobrecosto), recaudación, primera semana, público, semanas en cartelera con su gráfica, parte del estudio y ganancia.
+  - Encima de la ficha está lo propio de una obra ajena: el estudio, su franquicia con el canon y la cronología interna (cada obra se puede tocar), el botón a la franquicia y la compra.
+  - **Información real y estable:** cada obra se arma siempre igual a partir de su propia semilla, sin tocar el azar de la partida. Lo que se sabe (dirección, protagonista, el talento de su historial, presupuesto, crítica, público y recaudación) se respeta. El resto del equipo y del reparto sale de gente de esa época y queda guardado.
+  - **Las secuelas conservan el mundo y los personajes principales de la original,** con sus mismos actores y la edad que corresponde.
+  - El talento que queda en el equipo de una obra rival la ve en su historial de proyectos. El historial ahora también incluye las obras archivadas de los rivales, no solo las que están en cartelera.
+  - Al comprar una obra rival, llega a tus franquicias con esa misma ficha: personajes, equipo y cifras.
+  - Sin los botones de gestión de tus obras (continuar, licenciar, bóveda…), que no corresponden a una obra ajena.
+  - La franquicia de un rival se ve por medio, cada una con su canon en orden de estreno; los títulos repetidos sin número son obras distintas.
+- **Tus obras** muestran en su ficha su lugar en el canon y en la cronología interna de la franquicia, con las obras vecinas.
+- **Rankings de obras:** cada fila abre la ficha, tuya o del rival.
+- **El documento cambia con la etapa:**
+  - **Idea:** solo la historia.
+  - **Guion escrito:** además, la sección «El guion» con quién lo escribió y su nota (o «Guion comprado» y su autor). Sin dinero.
+  - **En producción:** el documento completo trae etapa, presupuesto, equipo y reparto.
+  - **Estrenada:** además, el estudio, la franquicia y su lugar en el canon, la recaudación, la primera semana, las semanas, el público total, tu parte y la ganancia, la crítica y los premios.
+  - **Obras de rivales:** el mismo documento, con el estudio y la parte del estudio.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).

@@ -10,9 +10,20 @@ function tFilmo(t, ps) {
       .concat((p.cast || []).filter((c) => c.t == t.id).map((c) => bibTr(IMP[c.i] ? IMP[c.i][0] : "") + ": " + c.n));
     L.push({ y: p.y || yr(), n: p.n, m: p.m, s: S.sn, r: uniq(R0).join(", "), d: p.st >= 3 ? [Math.round(p.c || 0), Math.round(p.a || 0), p.gross || 0] : null, id: p.id });
   });
-  (S.rw || []).forEach((e) => {
-    const R0 = [e.d == t.id ? rol(ri0(e.m)) : "", e.a == t.id ? rol(7) : ""].filter(Boolean);
-    if (R0.length) L.push({ y: e.y, n: e.n, m: e.m, s: S.rv[e.o] ? S.rv[e.o].n : "", r: R0.join(", "), d: [e.C | 0, e.A | 0, Math.round((e.gR || 0) / hoyF(yr()))], a: "rwo", v: e.o + "|" + e.y + "|" + encodeURIComponent(e.n) });
+  // Obras de los rivales (en cartelera y archivadas): dirección, protagonista y el resto del equipo o reparto que figura en su ficha
+  const vis = {},
+    rwc = S.rwc || {};
+  (S.rw || []).concat(S.rw40 || []).forEach((e) => {
+    const k = rwKey(e);
+    if (vis[k]) return;
+    const sv = rwc[k],
+      R0 = [e.d == t.id ? rol(ri0(e.m)) : "", e.a == t.id ? rol(7) : ""]
+        .concat(sv && sv.c ? Object.keys(sv.c).filter((r) => sv.c[r] == t.id).map((r) => rol(+r)) : [])
+        .concat(sv && sv.a && sv.a.includes(t.id) ? [rol(7)] : [])
+        .filter(Boolean);
+    if (!R0.length) return;
+    vis[k] = 1;
+    L.push({ y: e.y, n: e.n, m: e.m, s: S.rv[e.o] ? S.rv[e.o].n : "", r: uniq(R0).join(", "), d: [e.C | 0, e.A | 0, Math.round((e.gR || 0) / hoyF(e.y))], a: "rwo", v: e.o + "|" + e.y + "|" + encodeURIComponent(e.n) });
   });
   (S.mq || []).forEach((q) => {
     const R0 = [q.d == t.id ? rol(ri0(q.m)) : "", q.a == t.id ? rol(7) : ""].filter(Boolean);

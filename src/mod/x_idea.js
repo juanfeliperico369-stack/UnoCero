@@ -390,11 +390,13 @@ ACT["idfb"] = (v) => {
 };
 // ---------- Franquicia comprada a un rival: sus obras pasan a tus franquicias, cada una con su ficha ----------
 // Ficha base de un medio cuando todavía no tienes una obra terminada de ese medio
-function frPlantilla(m) {
+function frPlantilla(m, o) {
   if (m == null || !MD[m]) return null;
   const W0 = W;
+  o = o || {};
   try {
-    W = wDef({ m, g: [0], tone: 4, pr: 4, age: 2, cx: 2, fx: 0, ai: 0, ln: 50, cs: 3, mc: -1, ty: [0], sb: [], tm: [0], pa: [0], ar: [0], cr: [], rl: 1, ep: 9, cy: -1, fk: 0, crew: {}, cast: [], nm: "", md: "r", pm: [], gq: 0 });
+    W = wDef(Object.assign({ m, g: [0], tone: 4, pr: 4, age: 2, cx: 2, fx: 0, ai: 0, ln: 50, cs: 3, mc: -1, ty: [0], sb: [], tm: [0], pa: [0], ar: [0], cr: [], rl: 1, ep: 9, cy: -1, fk: 0, crew: {}, cast: [], nm: "", md: "r", pm: [], gq: 0 }, o.w || {}));
+    if (o.pjs) W.cast = o.pjs(W) || [];
     const Pn = wP(),
       P = {
         m,
@@ -456,6 +458,7 @@ function frPlantilla(m) {
         pct: 0,
         lin: [],
         mf: W.mf ? JSON.parse(JSON.stringify(W.mf)) : void 0,
+        cast: o.pjs ? Pn.cast || [] : void 0,
       };
     P.fo = fOver(P);
     return P;
@@ -487,32 +490,39 @@ function frImporta(e) {
     n = 0;
   L.forEach((w) => {
     if (S.pj.some((p) => p.adq && (p.adq.rw == w.id || p.adq.rw == rwKey(w) || (p.n == w.n && p.y == w.y)))) return;
-    const T = S.pj.find((p) => p.st == 4 && p.m == w.m && !p.adq) || frPlantilla(w.m);
+    // La obra llega con la misma ficha que tenía en el rival: equipo, personajes y cifras
+    const Rv = typeof rwPj == "function" ? rwPj(w) : null,
+      T = Rv || S.pj.find((p) => p.st == 4 && p.m == w.m && !p.adq) || frPlantilla(w.m);
     if (!T) return;
     const P = JSON.parse(JSON.stringify(T)),
       id = S.ids++,
       y = w.y || yr(),
       b = w.b || P.bud || 0;
+    delete P.rvo;
+    delete P.rwk;
+    if (!Rv)
+      Object.assign(P, {
+        gn: w.g0 || w.g ? [w.g0 || w.g] : (P.gn || []).slice(0, 1),
+        y,
+        rt: S.t - (yr() - y) * 52,
+        crew: w.d != null ? { [w.m == 4 ? 5 : 1]: w.d } : {},
+        cast: [],
+        aw: [],
+        gross: w.gN != null ? w.gN : Math.round((w.gR || 0) / hoyF(y)),
+        gR: w.gR || 0,
+        c: w.C || 50,
+        a: w.A || 50,
+        h: Math.round(((w.A || 50) + (w.C || 50)) / 2),
+        bud: b,
+        cost: b,
+        paid: b,
+      });
     Object.assign(P, {
       id,
       n: w.n,
       m: w.m,
-      gn: w.g0 || w.g ? [w.g0 || w.g] : (P.gn || []).slice(0, 1),
-      y,
-      rt: S.t - (yr() - y) * 52,
       st: 4,
-      crew: w.d != null ? { [w.m == 4 ? 5 : 1]: w.d } : {},
-      cast: [],
-      aw: [],
       earn: 0,
-      gross: w.gN != null ? w.gN : Math.round((w.gR || 0) / hoyF(yr())),
-      gR: w.gR || 0,
-      c: w.C || 50,
-      a: w.A || 50,
-      h: Math.round(((w.A || 50) + (w.C || 50)) / 2),
-      bud: b,
-      cost: b,
-      paid: b,
       fid: fid == null ? id : fid,
       src: null,
       ct: 0,
