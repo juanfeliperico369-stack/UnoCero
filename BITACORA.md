@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 15 (se instala encima de la entrega anterior, que era la 14). Cada actualización debe subir el versionCode (`VC=16 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 16 (se instala encima de la entrega anterior, que era la 15). Cada actualización debe subir el versionCode (`VC=17 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -456,6 +456,11 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - La prueba de estrés encontró que la nota del guion chocaba con el «guion comprado» del juego y mostraba «NaN» y «[object Object]». Se corrigió: un guion comprado cuenta como escrito.
   - Prueba de estrés en español (3.486 pulsaciones), francés (3.543), portugués (3.540) e inglés (3.160): sin errores ni textos rotos.
   - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
+- **Franquicias compradas sin obras propias (versionCode 16):**
+  - Al comprar una franquicia de un rival, sus obras no aparecían si aún no tenías una obra tuya terminada del mismo medio: el juego copiaba esa ficha como base. Ahora arma la ficha base por su cuenta, en los seis medios.
+  - En las partidas guardadas, las franquicias compradas antes del arreglo aparecen solas al abrir Franquicias (o al pasar la semana), con todas sus obras y fichas.
+  - La tarjeta de la franquicia dice a quién y en qué año se compró, en lugar de «Original».
+  - **Pruebas:** partida sin obras propias. Se compraron dos franquicias, una con el arreglo y otra como en una partida vieja; las dos aparecen, cada obra abre su ficha sin errores y la partida sigue 30 semanas sin fallos.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).

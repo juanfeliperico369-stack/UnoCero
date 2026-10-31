@@ -389,6 +389,82 @@ ACT["idfb"] = (v) => {
   return pg();
 };
 // ---------- Franquicia comprada a un rival: sus obras pasan a tus franquicias, cada una con su ficha ----------
+// Ficha base de un medio cuando todavía no tienes una obra terminada de ese medio
+function frPlantilla(m) {
+  if (m == null || !MD[m]) return null;
+  const W0 = W;
+  try {
+    W = wDef({ m, g: [0], tone: 4, pr: 4, age: 2, cx: 2, fx: 0, ai: 0, ln: 50, cs: 3, mc: -1, ty: [0], sb: [], tm: [0], pa: [0], ar: [0], cr: [], rl: 1, ep: 9, cy: -1, fk: 0, crew: {}, cast: [], nm: "", md: "r", pm: [], gq: 0 });
+    const Pn = wP(),
+      P = {
+        m,
+        gn: Pn.gn,
+        tone: W.tone,
+        pr: W.pr,
+        age: Pn.age,
+        cx: W.cx,
+        fx: 0,
+        ai: 0,
+        cs: W.cs,
+        mc: W.mc,
+        ty: Pn.ty,
+        sb: Pn.sb,
+        tm: Pn.tm,
+        pa: Pn.pa,
+        ar: Pn.ar,
+        cr: Pn.cr,
+        pm: Pn.pm,
+        rl: W.rl,
+        fk: DX.fx[0],
+        ep: W.ep,
+        ea: [EP[W.ep]],
+        cy: W.cy,
+        br: 1,
+        ln: W.ln,
+        sl: [],
+        mkc: 0,
+        adm: 0,
+        over: 1,
+        cont: Pn.cont,
+        cen: Pn.cen,
+        dep: (Pn.dep || []).map(Math.round),
+        sty: W.sty | 0,
+        fmt: W.fmt,
+        ani: 0,
+        loc: 0,
+        ter: 0,
+        ext: 0,
+        pol: W.pol,
+        rit: W.rit,
+        lug: W.lug,
+        idi: W.idi,
+        du: W.du == null ? void 0 : W.du,
+        pob: W.pob,
+        gq: 0,
+        md: "r",
+        nx: W.nx | 0,
+        tvF: m == 1 ? W.tvF : void 0,
+        eps: m == 1 ? W.eps : void 0,
+        emin: m == 1 ? W.emin : void 0,
+        tvS: W.tvS,
+        tvT: W.tvT,
+        sala: 0,
+        dur: durH(m, W.ln, W),
+        fee: 0,
+        pw: 1,
+        pl: 1,
+        pct: 0,
+        lin: [],
+        mf: W.mf ? JSON.parse(JSON.stringify(W.mf)) : void 0,
+      };
+    P.fo = fOver(P);
+    return P;
+  } catch (er) {
+    return null;
+  } finally {
+    W = W0;
+  }
+}
 function frImporta(e) {
   const raiz = String(e.n)
       .replace(/ (II|III|IV)$|\s?: el regreso$|\s?: la saga continúa$/, "")
@@ -399,7 +475,7 @@ function frImporta(e) {
     n = 0;
   L.forEach((w) => {
     if (S.pj.some((p) => p.adq && (p.adq.rw == w.id || p.adq.rw == rwKey(w)))) return;
-    const T = S.pj.find((p) => p.st == 4 && p.m == w.m && !p.adq);
+    const T = S.pj.find((p) => p.st == 4 && p.m == w.m && !p.adq) || frPlantilla(w.m);
     if (!T) return;
     const P = JSON.parse(JSON.stringify(T)),
       id = S.ids++,
@@ -441,7 +517,9 @@ function frImporta(e) {
     n++;
   });
   if (n) {
-    frG(fid).n = raiz;
+    const F = frG(fid);
+    F.n = raiz;
+    F.cmp = F.cmp || { r: rivN(e.o), y: yr() };
     nws(tx4(`«${raiz}»: ${n} ${n == 1 ? "obra pasa" : "obras pasan"} a tus franquicias, con su ficha.`, `"${raiz}": ${n} ${n == 1 ? "work joins" : "works join"} your franchises, each with its sheet.`, `« ${raiz} » : ${n} ${n == 1 ? "œuvre rejoint" : "œuvres rejoignent"} tes franchises, avec leur fiche.`, `«${raiz}»: ${n} ${n == 1 ? "obra entra" : "obras entram"} nas suas franquias, com sua ficha.`));
   }
   return n;
@@ -467,6 +545,32 @@ ACT["remc"] = (v) => {
     pg();
   }
   return r;
+};
+// Partidas guardadas: franquicias compradas que no llegaron a tus franquicias
+function frRepara() {
+  if (!S || !S.mt || !S.pj || !S.rv) return;
+  S.mt.forEach((x) => {
+    if (!x || x.imp41 || !/^[fq]/.test(String(x.i || "")) || !/^Franquicia de /.test(x.k || "")) return;
+    x.imp41 = 1;
+    if (S.pj.some((p) => p.adq && p.n == x.n)) return;
+    const e = String(x.i)[0] == "f" && (S.rw || []).find((z) => String(z.id) == String(x.i).slice(1)),
+      m = MD.findIndex((d) => x.k == "Franquicia de " + d[0].toLowerCase()),
+      o = S.rv.findIndex((r) => r && r.n == x.a);
+    if (e) frImporta(e);
+    else if (m >= 0 && o >= 0) frImporta({ n: x.n, o, m, y: x.y, g0: (x.g || [])[0] });
+  });
+}
+on("semana", frRepara);
+const vFrId = vFr;
+vFr = function () {
+  frRepara();
+  return vFrId.apply(this, arguments);
+};
+const frCardId = frCard;
+frCard = function (f) {
+  const h = frCardId.apply(this, arguments),
+    F = frG(f);
+  return F.cmp ? h.replace(ic("idea") + " Original", `<span translate="no">${ic("dinero")} ${esc(tx4(`Comprada a ${F.cmp.r} en ${F.cmp.y}`, `Bought from ${F.cmp.r} in ${F.cmp.y}`, `Achetée à ${F.cmp.r} en ${F.cmp.y}`, `Comprada de ${F.cmp.r} em ${F.cmp.y}`))}</span>`) : h;
 };
 // ---------- Material: encomendarlo a un rival, coproducirlo o, si es música, encargarlo a tus artistas ----------
 const mtRowId = mtRow;
