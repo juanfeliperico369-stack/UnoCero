@@ -460,7 +460,12 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - Al comprar una franquicia de un rival, sus obras no aparecían si aún no tenías una obra tuya terminada del mismo medio: el juego copiaba esa ficha como base. Ahora arma la ficha base por su cuenta, en los seis medios.
   - En las partidas guardadas, las franquicias compradas antes del arreglo aparecen solas al abrir Franquicias (o al pasar la semana), con todas sus obras y fichas.
   - La tarjeta de la franquicia dice a quién y en qué año se compró, en lugar de «Original».
-  - **Pruebas:** partida sin obras propias. Se compraron dos franquicias, una con el arreglo y otra como en una partida vieja; las dos aparecen, cada obra abre su ficha sin errores y la partida sigue 30 semanas sin fallos.
+  - **Comprar una obra desde su ficha** tenía el mismo fallo: se pagaba y la obra no quedaba. Ahora la obra queda en tus Franquicias con su ficha, y la ficha rival muestra «Ya es tuya: ver tu franquicia». Las compras hechas antes del arreglo también se recuperan, incluidas las de la carrera anterior de un talento.
+  - **Qué trae una compra:** la obra comprada, su original y sus secuelas del mismo estudio y medio («II», «III», «IV», «V», «el regreso», «la saga continúa»), todas en una sola franquicia. Los rivales a veces repiten un título para obras sin relación; esas ya no se cuelan. Antes, al comprar una obra cerrada cuya franquicia seguía activa, llegaba la otra obra y no la comprada.
+  - **Pruebas:**
+    - Partida sin obras propias. Se compraron dos franquicias, una con el arreglo y otra como en una partida vieja: las dos aparecen, cada obra abre su ficha sin errores y la partida sigue 30 semanas sin fallos.
+    - Compra directa de una obra cerrada con secuelas activas: llegan la original y sus 5 secuelas de cine en una sola franquicia, sin las obras homónimas de serie y música.
+    - Compras viejas desde la ficha y desde la carrera anterior de un talento: se recuperan una sola vez, sin duplicados.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).

@@ -65526,15 +65526,26 @@ function frPlantilla(m) {
   }
 }
 function frImporta(e) {
-  const raiz = String(e.n)
-      .replace(/ (II|III|IV)$|\s?: el regreso$|\s?: la saga continúa$/, "")
-      .trim(),
-    L = (S.rw || []).filter((w) => w.o == e.o && (w.n == e.n || w.n.indexOf(raiz) == 0)).sort((a, b) => a.y - b.y);
-  if (!L.length && e.m != null) L.push(e);
-  let fid = null,
+  const raiz = rwRaiz(e.n),
+    suf = (w) => w.n != rwRaiz(w.n),
+    C = (S.rw || []).concat(S.rw40 || []).filter((w) => w && w.o == e.o && w.m == e.m && rwRaiz(w.n) == raiz),
+    orig = suf(e) ? C.filter((w) => !suf(w) && w.y <= e.y).sort((a, b) => b.y - a.y)[0] : null,
+    por = {},
+    add = (w) => {
+      const p = por[w.n];
+      if (!p || (p != e && Math.abs(w.y - e.y) < Math.abs(p.y - e.y))) por[w.n] = w;
+    };
+  if (e.m != null) {
+    por[e.n] = (S.rw || []).find((w) => w.o == e.o && w.n == e.n && w.y == e.y && w.m == e.m) || e;
+    if (orig) add(orig);
+    C.filter(suf).forEach(add);
+  }
+  const L = Object.values(por).sort((a, b) => a.y - b.y),
+    ya = S.pj.find((p) => p.adq && p.m == e.m && p.adq.r == rivN(e.o) && rwRaiz(p.n) == raiz);
+  let fid = ya ? ya.fid : null,
     n = 0;
   L.forEach((w) => {
-    if (S.pj.some((p) => p.adq && (p.adq.rw == w.id || p.adq.rw == rwKey(w)))) return;
+    if (S.pj.some((p) => p.adq && (p.adq.rw == w.id || p.adq.rw == rwKey(w) || (p.n == w.n && p.y == w.y)))) return;
     const T = S.pj.find((p) => p.st == 4 && p.m == w.m && !p.adq) || frPlantilla(w.m);
     if (!T) return;
     const P = JSON.parse(JSON.stringify(T)),
@@ -65608,13 +65619,19 @@ ACT["remc"] = (v) => {
 };
 function frRepara() {
   if (!S || !S.mt || !S.pj || !S.rv) return;
+  (S.rwb40 || []).forEach((k) => {
+    const x = (S.rw40 || []).find((z) => rwKey(z) == k);
+    if (!x || !S.rv[x.o] || S.pj.some((p) => p.adq && (p.adq.rw == k || (p.n == x.n && p.y == x.y)))) return;
+    const e = (S.rw || []).find((z) => z.o == x.o && z.n == x.n && z.y == x.y);
+    frImporta(Object.assign({ g0: x.g, id: e ? e.id : k }, x));
+  });
   S.mt.forEach((x) => {
-    if (!x || x.imp41 || !/^[fq]/.test(String(x.i || "")) || !/^Franquicia de /.test(x.k || "")) return;
+    if (!x || x.imp41 || !/^[fqw]/.test(String(x.i || "")) || !/^Franquicia de /.test(x.k || "")) return;
     x.imp41 = 1;
-    if (S.pj.some((p) => p.adq && p.n == x.n)) return;
+    if (S.pj.some((p) => p.adq && (p.n == x.n || rwRaiz(p.n) == x.n))) return;
     const e = String(x.i)[0] == "f" && (S.rw || []).find((z) => String(z.id) == String(x.i).slice(1)),
       m = MD.findIndex((d) => x.k == "Franquicia de " + d[0].toLowerCase()),
-      o = S.rv.findIndex((r) => r && r.n == x.a);
+      o = S.rv.findIndex((r, i) => r && (r.n == x.a || rvNom(i) == x.a));
     if (e) frImporta(e);
     else if (m >= 0 && o >= 0) frImporta({ n: x.n, o, m, y: x.y, g0: (x.g || [])[0] });
   });
