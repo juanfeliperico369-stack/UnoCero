@@ -545,6 +545,50 @@ details.nota.inf-oc{display:none}
 .cif-bv .cif-u{opacity:.7}
 .cif-bv input{flex:1;min-width:0;max-width:220px;padding:6px 8px;font-variant-numeric:tabular-nums;text-align:right}
 input.cif-n{width:68px;min-height:0;padding:2px 6px;margin-left:8px;font-size:13px;font-variant-numeric:tabular-nums;text-align:right;vertical-align:middle;display:inline-block}
+/* Enlaces dentro del texto: del alto de la línea, sin empujar ni pisar las líneas vecinas */
+.lnk{display:inline;min-height:0;padding:2px 1px;line-height:inherit;vertical-align:baseline;border-radius:4px}
+.lnk:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+/* Filas con título y botones: si no caben, los botones bajan a su propia línea y el título nunca se aplasta */
+.fila{flex-wrap:wrap;row-gap:6px}
+.fila>span:first-child{flex:1 1 170px}
+.fila>.bts{margin-left:auto;justify-content:flex-end}
+.fila>b:last-child,.fila>span:last-child:not(:first-child){margin-left:auto;text-align:right}
+/* Listas de obras: se leen enteras, sin una caja con desplazamiento propio dentro de otra */
+.uni-l{max-height:none;overflow:visible}
+.uni-r{line-height:1.45;padding:8px 12px}
+.uni-r b{margin-right:4px}
+details.mas{margin-top:2px}
+details.mas>summary{cursor:pointer;list-style:none;padding:10px 12px;border-radius:8px;color:var(--a);font-weight:600;background:var(--c2,rgba(255,255,255,.04))}
+details.mas>summary::-webkit-details-marker{display:none}
+details.mas>summary::after{content:" ▾"}
+details.mas[open]>summary::after{content:" ▴"}
+details.mas>.uni-l{margin-top:4px}
+/* Fases del festival: cuatro columnas que caben en cualquier teléfono */
+.fes-fases{grid-template-columns:repeat(4,minmax(0,1fr))}
+.fes-fases b{font-size:.86em;overflow-wrap:anywhere;hyphens:auto}
+.fes-fases .m{font-size:.8em}
+/* Tarjeta del documento en la ficha */
+.c.doc-c{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.c.doc-c>div{flex:1 1 200px;min-width:0}
+.c.doc-c h3{margin:0 0 2px}
+/* Cabecera de la ficha de una obra rival */
+.c.rw-c .rw-est{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.c.rw-c .rw-tag{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--c2,rgba(255,255,255,.06));font-size:.85em}
+.c.rw-c h3{margin:12px 0 4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.c.rw-c .bts{margin-top:10px}
+/* Etapas del flujo de una obra: una línea de progreso */
+.etapas{list-style:none;margin:0 0 10px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;counter-reset:none}
+.etapas li{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:.8em;line-height:1.25;color:var(--m);position:relative}
+.etapas li::before{content:"";position:absolute;top:14px;left:-50%;right:50%;height:2px;background:var(--l);z-index:0}
+.etapas li:first-child::before{display:none}
+.etapas li b{position:relative;z-index:1;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--p2,rgba(255,255,255,.06));border:1px solid var(--l);font-size:.95em}
+.etapas li.on{color:var(--t)}
+.etapas li.on b{background:var(--a);border-color:var(--a);color:#0b1020}
+.etapas li.ok b{border-color:var(--a);color:var(--a)}
+.etapas li.ok::before,.etapas li.on::before{background:var(--a)}
+.etapas li span{overflow-wrap:anywhere}
+/* Botones de una tarjeta en teléfono: se reparten el ancho en bloques parejos */
+@media (max-width:560px){.c .bts>.b{flex:1 1 auto}.k .bts>.b,.k>.bts>.b,.bts>.b.x,.bts>.b.inf{flex:none}}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
 const VERN = "1.0";
@@ -55140,12 +55184,11 @@ const uniY = (P) => (P.epY != null ? P.epY : P.ep == null || P.ep == 9 ? P.y || 
 function cronoH(fs, col) {
   const L = uniObras(fs).sort((a, b) => uniY(a) - uniY(b) || (a.rt || 0) - (b.rt || 0));
   if (!L.length) return "";
-  return `<div class="uni-l">${L.slice(0, 80)
-    .map((P) => {
+  const fila = (P) => {
       const k = Math.max(0, fs.indexOf(P.fid));
       return `<button class="uni-r" data-a="det" data-v="${P.id}" style="border-left-color:${col ? UNIC[k] : "var(--a)"}"><b>${anoTxt(uniY(P))}</b> «${esc(P.n)}»<span class="m"> · ${MD[P.m][0]}${(P.xf || []).length ? " · " + P.xf.map((g) => esc(frG(g).n)).join(", ") : ""}${P.st >= 3 ? "" : " · " + T40("en desarrollo", "in development")}</span></button>`;
-    })
-    .join("")}</div>`;
+  };
+  return `<div class="uni-l">${L.slice(0, 10).map(fila).join("")}</div>${L.length > 10 ? `<details class="mas"><summary>${T40("Ver " + (L.length - 10) + " más", "See " + (L.length - 10) + " more")}</summary><div class="uni-l">${L.slice(10, 120).map(fila).join("")}</div></details>` : ""}`;
 }
 function uniH(f) {
   f = +f;
@@ -62403,10 +62446,18 @@ ACT["pdoc"] = (v) => {
   const d = DOCX,
     fmt = (k) => `<div class="bts">${bt("wdocb", k + "|html", ic("exportar") + " " + T40("Página o PDF (.html)", "Page or PDF (.html)"), k == "h" ? "a" : "")}${bt("wdocb", k + "|doc", ic("exportar") + " Word (.doc)")}${bt("wdocb", k + "|md", ic("exportar") + " Markdown (.md)")}${bt("wdocb", k + "|pdf", ic("libro") + " " + T40("Imprimir", "Print"))}</div>`;
   op(
-    `<div class="c"><div class="k"><h2 style="margin:0">${ic("libro")} ${T40("Documento de la idea", "Idea document")}</h2>${btx()}</div><div class="c sub"><b>${docEsc(d.t)}</b><div class="m">${docEsc(d.md)} · ${docEsc(d.fr)}</div>${d.log ? `<p class="m" style="font-style:italic">${docEsc(d.log)}</p>` : ""}</div><div class="c sub"><b>${T40("Solo la historia", "Story only")}</b><div class="m">${T40("La idea y la trama: de qué trata, cómo avanza, personajes y mundo. Sin dinero ni nombres del equipo.", "The idea and plot: what it's about, how it unfolds, characters and world. No money or crew names.")}</div>${fmt("h")}</div><div class="c sub"><b>${T40("Completo", "Complete")}</b><div class="m">${T40("Además de la historia: ficha técnica, contenido, producción, costos, reparto, equipo y predicción.", "Besides the story: technical sheet, content, production, costs, cast, crew and forecast.")}</div>${fmt("c")}</div>${P.wd ? "" : `<div class="m">${T40("Obra anterior a esta versión: el documento se rearma con los datos que guardó la obra.", "Work from before this version: the document is rebuilt from the data the work kept.")}</div>`}</div>`,
+    `<div class="c"><div class="k"><h2 style="margin:0">${ic("libro")} ${tx4("Documento de la obra", "Work document", "Document de l'œuvre", "Documento da obra")}</h2>${btx()}</div><div class="c sub"><b>${docEsc(d.t)}</b><div class="m">${docEsc(d.md)} · ${docEsc(d.fr)}</div>${d.log ? `<p class="m" style="font-style:italic">${docEsc(d.log)}</p>` : ""}</div><div class="c sub"><b>${T40("Solo la historia", "Story only")}</b><div class="m">${T40("La idea y la trama: de qué trata, cómo avanza, personajes y mundo. Sin dinero ni nombres del equipo.", "The idea and plot: what it's about, how it unfolds, characters and world. No money or crew names.")}</div>${fmt("h")}</div><div class="c sub"><b>${T40("Completo", "Complete")}</b><div class="m">${T40("Además de la historia: ficha técnica, contenido, producción, costos, reparto, equipo y predicción.", "Besides the story: technical sheet, content, production, costs, cast, crew and forecast.")}</div>${fmt("c")}</div>${P.wd || P.rvo != null ? "" : `<div class="m">${T40("Obra anterior a esta versión: el documento se rearma con los datos que guardó la obra.", "Work from before this version: the document is rebuilt from the data the work kept.")}</div>`}</div>`,
   );
 };
-V37.ficha.push((P) => (P && P.id != null && P.n ? `<div class="bts" style="margin-top:8px">${bt("pdoc", P.id, ic("libro") + " " + T40("Documento de la idea", "Idea document"))}</div>` : ""));
+V37.ficha.push((P) =>
+  P && P.id != null && P.n
+    ? `<div class="c doc-c" translate="no"><div><h3>${ic("libro")} ${esc(tx4("Documento de la obra", "Work document", "Document de l'œuvre", "Documento da obra"))}</h3><div class="m">${esc(
+        P.st >= 3
+          ? tx4("Trae todo: la historia, los personajes, el equipo, el presupuesto, los resultados y su lugar en la franquicia.", "It has everything: story, characters, crew, budget, results and its place in the franchise.", "Il contient tout : l'histoire, les personnages, l'équipe, le budget, les résultats et sa place dans la franchise.", "Traz tudo: a história, os personagens, a equipe, o orçamento, os resultados e seu lugar na franquia.")
+          : tx4("Trae lo que hay hasta ahora: la historia, el guion, el equipo y el presupuesto. Al estrenarse suma los resultados.", "It has what exists so far: story, script, crew and budget. After release it adds the results.", "Il contient ce qui existe : l'histoire, le scénario, l'équipe et le budget. À la sortie, il ajoute les résultats.", "Traz o que há até agora: a história, o roteiro, a equipe e o orçamento. Após a estreia, soma os resultados."),
+      )}</div></div>${bt("pdoc", P.id, ic("exportar") + " " + esc(tx4("Descargar", "Download", "Télécharger", "Baixar")), "a")}</div>`
+    : "",
+);
 
 const evRel = () => S.pj.filter((p) => p.st >= 3 && !p.rr).length;
 const evAnios = () => yr() - (S.y0 || yr());
@@ -65023,7 +65074,7 @@ function tFilmo(t, ps) {
     }</span></${x.id != null || x.a ? "button" : "div"}>`;
   return `<h3 translate="no">${esc(tx4("Historial de proyectos", "Project history", "Historique des projets", "Histórico de projetos"))} (${L.length})</h3><div class="m" translate="no">${esc(
     tx4("Todo lo que hizo: contigo y con los demás estudios.", "Everything they've done: with you and with other studios.", "Tout ce qu'il a fait : avec toi et avec les autres studios.", "Tudo o que fez: com você e com os outros estúdios."),
-  )}</div><div class="uni-l" translate="no">${L.slice(0, 40).map(fila).join("") || `<div class="m">${esc(tx4("Todavía no tiene obras.", "No works yet.", "Pas encore d'œuvres.", "Ainda sem obras."))}</div>`}</div>${L.length > 40 ? `<div class="m" translate="no">${esc(tx4(`Y ${L.length - 40} más.`, `And ${L.length - 40} more.`, `Et ${L.length - 40} de plus.`, `E mais ${L.length - 40}.`))}</div>` : ""}`;
+  )}</div><div class="uni-l" translate="no">${L.slice(0, 8).map(fila).join("") || `<div class="m">${esc(tx4("Todavía no tiene obras.", "No works yet.", "Pas encore d'œuvres.", "Ainda sem obras."))}</div>`}</div>${L.length > 8 ? `<details class="mas" translate="no"><summary>${esc(tx4(`Ver ${L.length - 8} más`, `See ${L.length - 8} more`, `Voir ${L.length - 8} de plus`, `Ver mais ${L.length - 8}`))}</summary><div class="uni-l">${L.slice(8, 120).map(fila).join("")}</div></details>` : ""}`;
 }
 const rwRaiz = (n) =>
   String(n)
@@ -65101,7 +65152,7 @@ function wEtapaH() {
   const e = wEt();
   if (!e) return "";
   const N = [tx4("Idea", "Idea", "Idée", "Ideia"), tx4("Contratación y producción", "Hiring and production", "Embauche et production", "Contratação e produção"), "Marketing", tx4("Lanzamiento", "Launch", "Lancement", "Lançamento")];
-  return `<div class="c" translate="no"><div class="chips" style="margin:0">${N.map((n, i) => `<span class="ch${i + 1 == e ? " on" : ""}" style="cursor:default${i + 1 < e ? ";opacity:.7" : ""}">${i + 1} · ${esc(n)}</span>`).join("")}</div><div class="m">${esc(
+  return `<div class="c" translate="no"><ol class="etapas">${N.map((n, i) => `<li class="${i + 1 == e ? "on" : i + 1 < e ? "ok" : ""}"><b>${i + 1 < e ? "✓" : i + 1}</b><span>${esc(n)}</span></li>`).join("")}</ol><div class="m">${esc(
     e == 1
       ? wEsc()
         ? tx4(`El guion ya está escrito (${W.gsc != null ? W.gsc : "—"}/100). Puedes seguir a la contratación.`, `The script is written (${W.gsc != null ? W.gsc : "—"}/100). You can move on to hiring.`, `Le scénario est écrit (${W.gsc != null ? W.gsc : "—"}/100). Tu peux passer à l'embauche.`, `O roteiro já está escrito (${W.gsc != null ? W.gsc : "—"}/100). Você pode seguir para a contratação.`)
@@ -65906,6 +65957,8 @@ const rwHash = (k) => {
   return Math.abs(h);
 };
 const rwAct = (x) => (S.rw || []).find((z) => z.o == x.o && z.n == x.n && z.y == x.y) || null;
+const RWSUF = [/ II$/, / III$/, / IV$/, / V$/, /: el regreso$/, /: la saga continúa$/];
+const rwOrd = (w) => w.y * 10 + (w.n == rwRaiz(w.n) ? 0 : 1 + Math.max(0, RWSUF.findIndex((r) => r.test(w.n))));
 const rwFrL = (x) => {
   const raiz = rwRaiz(x.n),
     v = {};
@@ -65913,7 +65966,7 @@ const rwFrL = (x) => {
     .concat(S.rw40 || [])
     .filter((w) => w && w.o == x.o && w.m == x.m && rwRaiz(w.n) == raiz)
     .filter((w) => (v[w.n + "|" + w.y] ? 0 : (v[w.n + "|" + w.y] = 1)))
-    .sort((a, b) => a.y - b.y);
+    .sort((a, b) => rwOrd(a) - rwOrd(b));
 };
 const rwOrig = (x) => {
   const raiz = rwRaiz(x.n);
@@ -66100,9 +66153,9 @@ function rwCard(x, P) {
     ya = mia || (S.rwb40 || []).includes(rwKey(x)),
     pr = rwPrecio(x),
     raiz = rwRaiz(x.n);
-  return `<div class="c" translate="no"><div class="m">${tx("Ficha de la obra rival", "Rival work sheet", "Fiche de l'œuvre rivale", "Ficha da obra rival")} · ${S.rv[x.o] ? `<button class="lnk" data-a="rvp" data-v="${x.o}">${esc(rvNom(x.o))}</button>` : esc(x.s || rvNom(x.o))}</div>${
+  return `<div class="c rw-c" translate="no"><div class="rw-est"><span class="rw-tag">${tx("Obra rival", "Rival work", "Œuvre rivale", "Obra rival")}</span><span class="m">${tx("Estudio", "Studio", "Studio", "Estúdio")}:</span>${S.rv[x.o] ? `<button class="lnk" data-a="rvp" data-v="${x.o}">${esc(rvNom(x.o))}</button>` : `<b>${esc(x.s || rvNom(x.o))}</b>`}</div>${
     L.length > 1
-      ? `<h3 style="margin:8px 0 4px">${ic("franquicia")} ${tx("Franquicia", "Franchise", "Franchise", "Franquia")} «${esc(raiz)}» · ${tx(`${i + 1} de ${L.length} en el canon`, `${i + 1} of ${L.length} in the canon`, `${i + 1} sur ${L.length} dans le canon`, `${i + 1} de ${L.length} no cânone`)}</h3><div class="m">${mismo ? tx("Canon y cronología interna: el orden de estreno es el mismo que el de la historia.", "Canon and in-story chronology: release order matches story order.", "Canon et chronologie interne : l'ordre de sortie suit celui de l'histoire.", "Cânone e cronologia interna: a ordem de lançamento segue a da história.") : tx("Canon, por orden de estreno:", "Canon, by release order:", "Canon, par ordre de sortie :", "Cânone, por ordem de lançamento:")}</div><div class="uni-l">${Ps.map(fila).join("")}</div>${mismo ? "" : `<div class="m" style="margin-top:6px">${tx("Cronología interna, por el año en que ocurre cada historia:", "In-story chronology, by the year each story takes place:", "Chronologie interne, selon l'année où se passe chaque histoire :", "Cronologia interna, pelo ano em que cada história acontece:")}</div><div class="uni-l">${cr.map(fila).join("")}</div>`}`
+      ? `<h3>${ic("franquicia")} ${tx("Franquicia", "Franchise", "Franchise", "Franquia")} «${esc(raiz)}» · ${tx(`${i + 1} de ${L.length} en el canon`, `${i + 1} of ${L.length} in the canon`, `${i + 1} sur ${L.length} dans le canon`, `${i + 1} de ${L.length} no cânone`)}</h3><div class="m">${mismo ? tx("Canon y cronología interna: el orden de estreno es el mismo que el de la historia.", "Canon and in-story chronology: release order matches story order.", "Canon et chronologie interne : l'ordre de sortie suit celui de l'histoire.", "Cânone e cronologia interna: a ordem de lançamento segue a da história.") : tx("Canon, por orden de estreno:", "Canon, by release order:", "Canon, par ordre de sortie :", "Cânone, por ordem de lançamento:")}</div><div class="uni-l">${Ps.map(fila).join("")}</div>${mismo ? "" : `<div class="m" style="margin-top:6px">${tx("Cronología interna, por el año en que ocurre cada historia:", "In-story chronology, by the year each story takes place:", "Chronologie interne, selon l'année où se passe chaque histoire :", "Cronologia interna, pelo ano em que cada história acontece:")}</div><div class="uni-l">${cr.map(fila).join("")}</div>`}`
       : ""
   }<div class="bts" style="margin-top:8px">${S.rv[x.o] ? bt("rwfr", x.o + "|" + encodeURIComponent(raiz), ic("franquicia") + " " + tx("Franquicia «", 'Franchise "', "Franchise « ", "Franquia «") + esc(raiz) + (IDI == "en" ? '"' : "»")) : ""}${
     mia ? bt("fro", mia.fid, ic("franquicia") + " " + tx("Ya es tuya: ver tu franquicia", "It's yours: see your franchise", "Elle est à toi : voir ta franchise", "Já é sua: ver sua franquia")) : ya ? "" : S.rv[x.o] ? bt("rwbuy", "", ic("dinero") + " " + tx("Comprar la obra y su franquicia", "Buy the work and its franchise", "Acheter l'œuvre et sa franchise", "Comprar a obra e sua franquia") + " · " + fm(pr), S.cash >= pr ? "a" : "off") : ""
@@ -66139,7 +66192,16 @@ const rwConP = (P, f) => {
   } finally {
     const i = S.pj.indexOf(P);
     if (i >= 0) S.pj.splice(i, 1);
+    if (S.fr && S.fr[P.fid]) delete S.fr[P.fid];
   }
+};
+const porgRw = porg;
+porg = function (P) {
+  if (!P || P.rvo == null) return porgRw.apply(this, arguments);
+  const x = { n: P.n, o: P.rvo, m: P.m, y: P.y },
+    o = rwOrig(x),
+    L = rwCanon(x);
+  return (o ? "Secuela de «" + esc(o.n) + "» (" + o.y + ")" : "Obra original") + (L.length > 1 ? " · franquicia «" + esc(rwRaiz(P.n)) + "»" : "");
 };
 function rwDet(x) {
   const P = rwPj(x);
@@ -66969,6 +67031,47 @@ document.addEventListener("visibilitychange", () => {
   else if (CFG.mus) MUX.ctx.resume().catch(() => {});
 });
 E40L(MUXP.map((x) => [x.n, x.en]).concat(MUXP.map((x) => x.d)));
+
+let ORD0 = { t: null, n: null, ro: null };
+function ordAjusta() {
+  const t = document.getElementById("top"),
+    n = document.getElementById("nav"),
+    m = document.getElementById("main");
+  if (!t || !m) return;
+  const rt = t.getBoundingClientRect(),
+    arriba = getComputedStyle(t).position == "fixed" && rt.top <= 1 && rt.height > 0;
+  const pt = arriba ? Math.ceil(rt.height + 10) + "px" : "";
+  if (m.style.paddingTop != pt) m.style.paddingTop = pt;
+  if (n) {
+    const rn = n.getBoundingClientRect(),
+      ab = getComputedStyle(n).position == "fixed" && rn.bottom >= innerHeight - 1 && rn.width > innerWidth * 0.6 && rn.height > 0,
+      pb = ab ? Math.ceil(rn.height + 14) + "px" : "";
+    if (m.style.paddingBottom != pb) m.style.paddingBottom = pb;
+  }
+  if (typeof ResizeObserver != "undefined" && (ORD0.t !== t || ORD0.n !== n)) {
+    if (ORD0.ro) ORD0.ro.disconnect();
+    ORD0 = { t, n, ro: new ResizeObserver(() => ordAjusta()) };
+    ORD0.ro.observe(t, { box: "border-box" });
+    if (n) ORD0.ro.observe(n, { box: "border-box" });
+  }
+}
+addEventListener("resize", ordAjusta);
+const pgOrd = pg;
+pg = function () {
+  const r = pgOrd.apply(this, arguments);
+  try {
+    ordAjusta();
+  } catch (er) {}
+  return r;
+};
+const platHOr = platH;
+platH = function (P) {
+  return P && P.rvo != null ? "" : platHOr.apply(this, arguments);
+};
+const despuesHOr = despuesH;
+despuesH = function (P) {
+  return P && P.rvo != null ? "" : despuesHOr.apply(this, arguments);
+};
 
 (() => {
   const G = [

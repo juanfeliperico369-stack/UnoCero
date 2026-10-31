@@ -1,0 +1,45 @@
+/* ===== Orden visual: nada encimado, filas que respiran y listas sin cortes ===== */
+/* Enlaces dentro del texto: del alto de la línea, sin empujar ni pisar las líneas vecinas */
+.lnk{display:inline;min-height:0;padding:2px 1px;line-height:inherit;vertical-align:baseline;border-radius:4px}
+.lnk:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+/* Filas con título y botones: si no caben, los botones bajan a su propia línea y el título nunca se aplasta */
+.fila{flex-wrap:wrap;row-gap:6px}
+.fila>span:first-child{flex:1 1 170px}
+.fila>.bts{margin-left:auto;justify-content:flex-end}
+.fila>b:last-child,.fila>span:last-child:not(:first-child){margin-left:auto;text-align:right}
+/* Listas de obras: se leen enteras, sin una caja con desplazamiento propio dentro de otra */
+.uni-l{max-height:none;overflow:visible}
+.uni-r{line-height:1.45;padding:8px 12px}
+.uni-r b{margin-right:4px}
+details.mas{margin-top:2px}
+details.mas>summary{cursor:pointer;list-style:none;padding:10px 12px;border-radius:8px;color:var(--a);font-weight:600;background:var(--c2,rgba(255,255,255,.04))}
+details.mas>summary::-webkit-details-marker{display:none}
+details.mas>summary::after{content:" ▾"}
+details.mas[open]>summary::after{content:" ▴"}
+details.mas>.uni-l{margin-top:4px}
+/* Fases del festival: cuatro columnas que caben en cualquier teléfono */
+.fes-fases{grid-template-columns:repeat(4,minmax(0,1fr))}
+.fes-fases b{font-size:.86em;overflow-wrap:anywhere;hyphens:auto}
+.fes-fases .m{font-size:.8em}
+/* Tarjeta del documento en la ficha */
+.c.doc-c{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.c.doc-c>div{flex:1 1 200px;min-width:0}
+.c.doc-c h3{margin:0 0 2px}
+/* Cabecera de la ficha de una obra rival */
+.c.rw-c .rw-est{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.c.rw-c .rw-tag{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--c2,rgba(255,255,255,.06));font-size:.85em}
+.c.rw-c h3{margin:12px 0 4px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.c.rw-c .bts{margin-top:10px}
+/* Etapas del flujo de una obra: una línea de progreso */
+.etapas{list-style:none;margin:0 0 10px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;counter-reset:none}
+.etapas li{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:.8em;line-height:1.25;color:var(--m);position:relative}
+.etapas li::before{content:"";position:absolute;top:14px;left:-50%;right:50%;height:2px;background:var(--l);z-index:0}
+.etapas li:first-child::before{display:none}
+.etapas li b{position:relative;z-index:1;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--p2,rgba(255,255,255,.06));border:1px solid var(--l);font-size:.95em}
+.etapas li.on{color:var(--t)}
+.etapas li.on b{background:var(--a);border-color:var(--a);color:#0b1020}
+.etapas li.ok b{border-color:var(--a);color:var(--a)}
+.etapas li.ok::before,.etapas li.on::before{background:var(--a)}
+.etapas li span{overflow-wrap:anywhere}
+/* Botones de una tarjeta en teléfono: se reparten el ancho en bloques parejos */
+@media (max-width:560px){.c .bts>.b{flex:1 1 auto}.k .bts>.b,.k>.bts>.b,.bts>.b.x,.bts>.b.inf{flex:none}}

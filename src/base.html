@@ -55656,12 +55656,11 @@ const uniY = (P) => (P.epY != null ? P.epY : P.ep == null || P.ep == 9 ? P.y || 
 function cronoH(fs, col) {
   const L = uniObras(fs).sort((a, b) => uniY(a) - uniY(b) || (a.rt || 0) - (b.rt || 0));
   if (!L.length) return "";
-  return `<div class="uni-l">${L.slice(0, 80)
-    .map((P) => {
+  const fila = (P) => {
       const k = Math.max(0, fs.indexOf(P.fid));
       return `<button class="uni-r" data-a="det" data-v="${P.id}" style="border-left-color:${col ? UNIC[k] : "var(--a)"}"><b>${anoTxt(uniY(P))}</b> «${esc(P.n)}»<span class="m"> · ${MD[P.m][0]}${(P.xf || []).length ? " · " + P.xf.map((g) => esc(frG(g).n)).join(", ") : ""}${P.st >= 3 ? "" : " · " + T40("en desarrollo", "in development")}</span></button>`;
-    })
-    .join("")}</div>`;
+  };
+  return `<div class="uni-l">${L.slice(0, 10).map(fila).join("")}</div>${L.length > 10 ? `<details class="mas"><summary>${T40("Ver " + (L.length - 10) + " más", "See " + (L.length - 10) + " more")}</summary><div class="uni-l">${L.slice(10, 120).map(fila).join("")}</div></details>` : ""}`;
 }
 function uniH(f) {
   f = +f;

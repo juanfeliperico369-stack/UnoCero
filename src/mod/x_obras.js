@@ -8,6 +8,8 @@ const rwHash = (k) => {
   return Math.abs(h);
 };
 const rwAct = (x) => (S.rw || []).find((z) => z.o == x.o && z.n == x.n && z.y == x.y) || null;
+const RWSUF = [/ II$/, / III$/, / IV$/, / V$/, /: el regreso$/, /: la saga continúa$/];
+const rwOrd = (w) => w.y * 10 + (w.n == rwRaiz(w.n) ? 0 : 1 + Math.max(0, RWSUF.findIndex((r) => r.test(w.n))));
 const rwFrL = (x) => {
   const raiz = rwRaiz(x.n),
     v = {};
@@ -15,7 +17,7 @@ const rwFrL = (x) => {
     .concat(S.rw40 || [])
     .filter((w) => w && w.o == x.o && w.m == x.m && rwRaiz(w.n) == raiz)
     .filter((w) => (v[w.n + "|" + w.y] ? 0 : (v[w.n + "|" + w.y] = 1)))
-    .sort((a, b) => a.y - b.y);
+    .sort((a, b) => rwOrd(a) - rwOrd(b));
 };
 // La original de una secuela: la del mismo título base, estudio y medio, la más reciente antes de ella
 const rwOrig = (x) => {
@@ -207,9 +209,9 @@ function rwCard(x, P) {
     ya = mia || (S.rwb40 || []).includes(rwKey(x)),
     pr = rwPrecio(x),
     raiz = rwRaiz(x.n);
-  return `<div class="c" translate="no"><div class="m">${tx("Ficha de la obra rival", "Rival work sheet", "Fiche de l'œuvre rivale", "Ficha da obra rival")} · ${S.rv[x.o] ? `<button class="lnk" data-a="rvp" data-v="${x.o}">${esc(rvNom(x.o))}</button>` : esc(x.s || rvNom(x.o))}</div>${
+  return `<div class="c rw-c" translate="no"><div class="rw-est"><span class="rw-tag">${tx("Obra rival", "Rival work", "Œuvre rivale", "Obra rival")}</span><span class="m">${tx("Estudio", "Studio", "Studio", "Estúdio")}:</span>${S.rv[x.o] ? `<button class="lnk" data-a="rvp" data-v="${x.o}">${esc(rvNom(x.o))}</button>` : `<b>${esc(x.s || rvNom(x.o))}</b>`}</div>${
     L.length > 1
-      ? `<h3 style="margin:8px 0 4px">${ic("franquicia")} ${tx("Franquicia", "Franchise", "Franchise", "Franquia")} «${esc(raiz)}» · ${tx(`${i + 1} de ${L.length} en el canon`, `${i + 1} of ${L.length} in the canon`, `${i + 1} sur ${L.length} dans le canon`, `${i + 1} de ${L.length} no cânone`)}</h3><div class="m">${mismo ? tx("Canon y cronología interna: el orden de estreno es el mismo que el de la historia.", "Canon and in-story chronology: release order matches story order.", "Canon et chronologie interne : l'ordre de sortie suit celui de l'histoire.", "Cânone e cronologia interna: a ordem de lançamento segue a da história.") : tx("Canon, por orden de estreno:", "Canon, by release order:", "Canon, par ordre de sortie :", "Cânone, por ordem de lançamento:")}</div><div class="uni-l">${Ps.map(fila).join("")}</div>${mismo ? "" : `<div class="m" style="margin-top:6px">${tx("Cronología interna, por el año en que ocurre cada historia:", "In-story chronology, by the year each story takes place:", "Chronologie interne, selon l'année où se passe chaque histoire :", "Cronologia interna, pelo ano em que cada história acontece:")}</div><div class="uni-l">${cr.map(fila).join("")}</div>`}`
+      ? `<h3>${ic("franquicia")} ${tx("Franquicia", "Franchise", "Franchise", "Franquia")} «${esc(raiz)}» · ${tx(`${i + 1} de ${L.length} en el canon`, `${i + 1} of ${L.length} in the canon`, `${i + 1} sur ${L.length} dans le canon`, `${i + 1} de ${L.length} no cânone`)}</h3><div class="m">${mismo ? tx("Canon y cronología interna: el orden de estreno es el mismo que el de la historia.", "Canon and in-story chronology: release order matches story order.", "Canon et chronologie interne : l'ordre de sortie suit celui de l'histoire.", "Cânone e cronologia interna: a ordem de lançamento segue a da história.") : tx("Canon, por orden de estreno:", "Canon, by release order:", "Canon, par ordre de sortie :", "Cânone, por ordem de lançamento:")}</div><div class="uni-l">${Ps.map(fila).join("")}</div>${mismo ? "" : `<div class="m" style="margin-top:6px">${tx("Cronología interna, por el año en que ocurre cada historia:", "In-story chronology, by the year each story takes place:", "Chronologie interne, selon l'année où se passe chaque histoire :", "Cronologia interna, pelo ano em que cada história acontece:")}</div><div class="uni-l">${cr.map(fila).join("")}</div>`}`
       : ""
   }<div class="bts" style="margin-top:8px">${S.rv[x.o] ? bt("rwfr", x.o + "|" + encodeURIComponent(raiz), ic("franquicia") + " " + tx("Franquicia «", 'Franchise "', "Franchise « ", "Franquia «") + esc(raiz) + (IDI == "en" ? '"' : "»")) : ""}${
     mia ? bt("fro", mia.fid, ic("franquicia") + " " + tx("Ya es tuya: ver tu franquicia", "It's yours: see your franchise", "Elle est à toi : voir ta franchise", "Já é sua: ver sua franquia")) : ya ? "" : S.rv[x.o] ? bt("rwbuy", "", ic("dinero") + " " + tx("Comprar la obra y su franquicia", "Buy the work and its franchise", "Acheter l'œuvre et sa franchise", "Comprar a obra e sua franquia") + " · " + fm(pr), S.cash >= pr ? "a" : "off") : ""
@@ -246,7 +248,16 @@ const rwConP = (P, f) => {
   } finally {
     const i = S.pj.indexOf(P);
     if (i >= 0) S.pj.splice(i, 1);
+    if (S.fr && S.fr[P.fid]) delete S.fr[P.fid];
   }
+};
+const porgRw = porg;
+porg = function (P) {
+  if (!P || P.rvo == null) return porgRw.apply(this, arguments);
+  const x = { n: P.n, o: P.rvo, m: P.m, y: P.y },
+    o = rwOrig(x),
+    L = rwCanon(x);
+  return (o ? "Secuela de «" + esc(o.n) + "» (" + o.y + ")" : "Obra original") + (L.length > 1 ? " · franquicia «" + esc(rwRaiz(P.n)) + "»" : "");
 };
 function rwDet(x) {
   const P = rwPj(x);

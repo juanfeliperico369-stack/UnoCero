@@ -17,7 +17,7 @@ function wEtapaH() {
   const e = wEt();
   if (!e) return "";
   const N = [tx4("Idea", "Idea", "Idée", "Ideia"), tx4("Contratación y producción", "Hiring and production", "Embauche et production", "Contratação e produção"), "Marketing", tx4("Lanzamiento", "Launch", "Lancement", "Lançamento")];
-  return `<div class="c" translate="no"><div class="chips" style="margin:0">${N.map((n, i) => `<span class="ch${i + 1 == e ? " on" : ""}" style="cursor:default${i + 1 < e ? ";opacity:.7" : ""}">${i + 1} · ${esc(n)}</span>`).join("")}</div><div class="m">${esc(
+  return `<div class="c" translate="no"><ol class="etapas">${N.map((n, i) => `<li class="${i + 1 == e ? "on" : i + 1 < e ? "ok" : ""}"><b>${i + 1 < e ? "✓" : i + 1}</b><span>${esc(n)}</span></li>`).join("")}</ol><div class="m">${esc(
     e == 1
       ? wEsc()
         ? tx4(`El guion ya está escrito (${W.gsc != null ? W.gsc : "—"}/100). Puedes seguir a la contratación.`, `The script is written (${W.gsc != null ? W.gsc : "—"}/100). You can move on to hiring.`, `Le scénario est écrit (${W.gsc != null ? W.gsc : "—"}/100). Tu peux passer à l'embauche.`, `O roteiro já está escrito (${W.gsc != null ? W.gsc : "—"}/100). Você pode seguir para a contratação.`)

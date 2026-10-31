@@ -484,6 +484,16 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - **En producción:** el documento completo trae etapa, presupuesto, equipo y reparto.
   - **Estrenada:** además, el estudio, la franquicia y su lugar en el canon, la recaudación, la primera semana, las semanas, el público total, tu parte y la ganancia, la crítica y los premios.
   - **Obras de rivales:** el mismo documento, con el estudio y la parte del estudio.
+- **Orden visual (todo lo nuevo, revisado pantalla por pantalla a ancho de teléfono):**
+  - **La barra superior ya no tapa las sub-pestañas.** Si la letra del teléfono es grande y la barra crece, el contenido baja con ella; lo mismo con la barra de abajo.
+  - **Filas con título y botones** (giras, propuestas, ofertas): si no caben, los botones bajan a su propia línea y el título nunca se aplasta. En teléfono, los botones de una tarjeta se reparten el ancho en bloques parejos.
+  - **Enlaces dentro del texto** (nombres de talentos): del alto de la línea, sin pisar las líneas vecinas.
+  - **Listas de obras** (historial de proyectos, cronología de franquicias): sin cajas con desplazamiento propio que parecían cortadas. Se ven las primeras y el resto aparece con «Ver N más».
+  - **Etapas de la obra** (Idea → Contratación y producción → Marketing → Lanzamiento): una línea de progreso con pasos numerados y marcados, en lugar de burbujas sueltas.
+  - **El documento de la obra** tiene su propia tarjeta en la ficha, con lo que trae según la etapa y el botón «Descargar». Antes era un botón suelto fuera de las tarjetas.
+  - **Ficha de una obra rival:** una cabecera ordenada (etiqueta «Obra rival», estudio, franquicia con su canon y acciones). Dice bien si es secuela («Secuela de «X» (año)»). La original va antes que sus secuelas aunque salgan el mismo año. No muestra bloques que solo aplican a tus obras (tu catálogo, tus plataformas).
+  - **Festival Mundial del Arte:** las cuatro fases caben en cualquier teléfono; antes «Subastas» se salía de la pantalla.
+  - **Revisión automática de diseño:** recorre todas las pestañas y las ventanas nuevas, y detecta elementos encimados, desbordados o recortados. Ahora queda en cero, salvo un falso aviso: un texto partido en dos líneas junto a un enlace.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).

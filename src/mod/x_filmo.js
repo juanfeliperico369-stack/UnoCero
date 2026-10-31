@@ -59,7 +59,7 @@ function tFilmo(t, ps) {
     }</span></${x.id != null || x.a ? "button" : "div"}>`;
   return `<h3 translate="no">${esc(tx4("Historial de proyectos", "Project history", "Historique des projets", "Histórico de projetos"))} (${L.length})</h3><div class="m" translate="no">${esc(
     tx4("Todo lo que hizo: contigo y con los demás estudios.", "Everything they've done: with you and with other studios.", "Tout ce qu'il a fait : avec toi et avec les autres studios.", "Tudo o que fez: com você e com os outros estúdios."),
-  )}</div><div class="uni-l" translate="no">${L.slice(0, 40).map(fila).join("") || `<div class="m">${esc(tx4("Todavía no tiene obras.", "No works yet.", "Pas encore d'œuvres.", "Ainda sem obras."))}</div>`}</div>${L.length > 40 ? `<div class="m" translate="no">${esc(tx4(`Y ${L.length - 40} más.`, `And ${L.length - 40} more.`, `Et ${L.length - 40} de plus.`, `E mais ${L.length - 40}.`))}</div>` : ""}`;
+  )}</div><div class="uni-l" translate="no">${L.slice(0, 8).map(fila).join("") || `<div class="m">${esc(tx4("Todavía no tiene obras.", "No works yet.", "Pas encore d'œuvres.", "Ainda sem obras."))}</div>`}</div>${L.length > 8 ? `<details class="mas" translate="no"><summary>${esc(tx4(`Ver ${L.length - 8} más`, `See ${L.length - 8} more`, `Voir ${L.length - 8} de plus`, `Ver mais ${L.length - 8}`))}</summary><div class="uni-l">${L.slice(8, 120).map(fila).join("")}</div></details>` : ""}`;
 }
 // ---------- Ficha de una obra rival: más datos, su franquicia y la opción de comprarla ----------
 const rwRaiz = (n) =>
