@@ -11,7 +11,7 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
 
 ## Antes de publicar en Google Play (lista de lanzamiento)
 1. **Llave de subida:** el .aab y el .apk están firmados con la llave `industryart` (CN=OneZero, O=Infinite Tree). El archivo de la llave se entrega aparte y **no está en el repositorio**. Guárdalo en un lugar seguro con su contraseña: sin él no se pueden publicar actualizaciones. Al crear la app en Play Console, activa «Firma de apps de Google Play» y sube el .aab; Google guarda la llave final y esta queda como llave de subida.
-2. **Versión:** versionName 1.0, versionCode 12 (se instala encima de la entrega anterior, que era la 11). Cada actualización debe subir el versionCode (`VC=13 tools/android.sh …`).
+2. **Versión:** versionName 1.0, versionCode 13 (se instala encima de la entrega anterior, que era la 12). Cada actualización debe subir el versionCode (`VC=14 tools/android.sh …`).
 3. **Paquete:** `com.industryart.juego`, el mismo de la app 1.0. Si en el teléfono está instalada la 1.0 (firmada con otra llave), hay que desinstalarla antes de instalar el .apk.
 4. **Seguridad de los datos (ficha de Play):** el juego no recoge ni comparte datos, no tiene anuncios ni compras, y guarda las partidas solo en el teléfono. Se puede declarar «No se recogen datos».
 5. **Clasificación de contenido:** el contenido adulto existe, pero siempre sugerido. En el cuestionario conviene declarar violencia, lenguaje y temas adultos opcionales.
@@ -395,6 +395,42 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - En los cuatro idiomas: firmar un solista y una banda y verlos en la lista de un disco, elegir 5 públicos, los equipos de apoyo, el papel «Tercero» y las 36 especies.
   - La edición según el tipo: álbum, EP, sencillo, partitura y modo rápido.
   - Prueba de estrés en español (3.466 pulsaciones), francés (3.443), portugués (3.472) e inglés (3.095): sin errores ni textos rotos.
+  - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
+- **La idea primero, como en el documento:** el creador detallado va por etapas, a la vista arriba: **1 · Idea → 2 · Contratación y producción → 3 · Marketing → 4 · Lanzamiento**.
+  - **1 · Idea:** concepto, historia, clasificación, personajes (sin intérpretes todavía) y lo propio del medio. Se puede guardar en Proyectos o seguir a la contratación. Los errores de equipo o de dinero no aparecen en esta etapa.
+  - **2 · Contratación y producción:** reparto (los intérpretes), producción y equipo, con «Iniciar producción» y «Volver a la idea». El marketing y el lanzamiento siguen después, con la obra terminada.
+  - **Ideas en proceso** (en Proyectos), cada una con «Contratar y producir» y un menú «Más opciones…»:
+    - Editar la idea.
+    - **Encomendar a un rival:** produce con su equipo y cobra un 15 %.
+    - **Coproducir con un rival:** pone el 40 % del costo y se queda con el 40 % de las ventas.
+    - **Encomendar a tus artistas firmados** (música): la graban sin pasar por el creador y cuenta como colaboración.
+    - **Vender a un rival,** con tu crédito.
+    - **Archivar como material.**
+    - Descargar el documento de la idea, o borrarla.
+  - **El documento de la idea ya no cruza dinero ni contratación** (presupuesto, proyecciones, equipo, intérpretes). La ficha de una obra estrenada sí trae sus datos.
+- **Ideas vendidas:** en Material, sección «Ideas vendidas».
+  - Muestra a quién se vendió, por cuánto y las regalías cobradas.
+  - Cuando el rival la estrena, la venta cobra un 3 % de lo que recaude, y la sección muestra cómo le fue: recaudación, crítica, público, quién la dirigió y quién la protagonizó.
+  - Tiene el botón para recomprar la franquicia.
+- **Encomendar material:** cada material propio o de dominio público tiene «Encomendar»: a un rival o, para música, a tus artistas firmados.
+- **Franquicias compradas a rivales, de verdad tuyas:** al comprarla (a la venta, en remate o recomprando una idea vendida), sus obras pasan a Franquicias. Cada una tiene su ficha, con crítica, público, recaudación y la nota «Comprada a … en …». Se pueden continuar, licenciar y usar en parques. El material también queda en Material, como antes.
+- **Parque temático de una obra o franquicia tuya:** volvió. En Parques temáticos, «Parque de una de tus obras o franquicias» abre un parque dedicado a ella. Atrae más gente cuanto más popular es la franquicia y la mantiene viva entre estrenos.
+- **Sello musical:**
+  - **Los artistas llegan solos:** solistas, bandas, dúos, grupos vocales, orquestas y DJs piden firmar con tu sello. Aparecen en Obras → Música, en «Quieren firmar contigo», con sus integrantes y su habilidad musical, para firmar o rechazar.
+  - **Publican su propia música:** el sello pone la infraestructura y se queda con la mitad. Cada lanzamiento sale en las noticias y en «Lo que publicaron tus artistas».
+  - Armar grupos a mano sigue igual.
+  - Sus integrantes siguen siendo talentos de todo el ecosistema: se pueden usar en películas, series, teatro, juegos y libros.
+- **El intérprete de un disco:** al buscar talentos para «Intérprete» en música aparecen los intérpretes y también compositores, productores o actores con mucha habilidad musical (62 o más). Así se nota quién, además de su oficio, puede ser solista.
+- **Autores de la casa sin tope:** antes eran 5.
+- **Opciones más claras:** en las opciones de cada medio, lo que va de menos a más (sala, funciones, temporada, gira, edición) es un deslizador con el valor a la vista. Las listas largas son un desplegable y las cortas siguen como botones.
+- **Pruebas de esta ronda:**
+  - Probé el flujo completo:
+    - Guardar una idea, verla en Proyectos, contratarla y producirla.
+    - Vender una idea: el rival la estrena y cobras regalías. Después recompras su franquicia, que aparece en Franquicias con su ficha.
+    - Abrir el parque de una franquicia.
+    - Recibir y firmar a un artista que pidió entrar al sello.
+    - Las opciones de teatro con deslizadores.
+  - Prueba de estrés en español (3.444 pulsaciones), francés (3.484), portugués (3.492) e inglés (3.132): sin errores ni textos rotos.
   - Traducción estable en francés, portugués e inglés. Partidas 1700–2120 sin errores ni quiebra.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**

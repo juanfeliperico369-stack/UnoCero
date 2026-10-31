@@ -18176,7 +18176,7 @@ function wDet() {
   const y = yr(),
     lk = (i) => y < MD[i][2],
     tab = W.tab | 0;
-  let h = `<div class="c"><div class="subt" role="tablist">${WORD.map((i) => wCh("wtab", i, i == 6 ? MXTAB[W.m] : i == 3 && !conPers(W.m) ? WTAB[3] + " (opcional)" : WTAB[i], tab == i)).join("")}</div></div><div class="c">`;
+  let h = `${wEtapaH()}<div class="c"><div class="subt" role="tablist">${wTabs().map((i) => wCh("wtab", i, i == 6 ? MXTAB[W.m] : i == 3 && !conPers(W.m) ? WTAB[3] + " (opcional)" : WTAB[i], tab == i)).join("")}</div></div><div class="c">`;
   if (tab == 0)
     h += `<label class="m">Medio</label>${wSel(
       "m",
@@ -24502,6 +24502,8 @@ function mfAnual() {
 on("semana", mfSem);
 on("mes", mfMes);
 on("anual", mfAnual);
+// Opciones del medio que van de menos a más: se eligen con un deslizador
+const MFORD = ["sal", "fun", "tem", "gir", "edi", "lux"];
 function mfH() {
   const G = MFG[W.m];
   if (!G || !W.mf) return "";
@@ -24515,8 +24517,16 @@ function mfH() {
       h += `<label class="m">${n}</label><div class="chips">${PLT.map((p, i) => (sh[i] > 0 ? wCh("wmf", "pl|" + i, p[0] + " \u00B7 " + Math.round(sh[i] * 100) + " %", L.includes(i)) : "")).join("")}</div><div class="m">${L37(`Llegas al ${Math.round(sum(L, (i) => sh[i]) * 100)} % de quienes juegan. Cada plataforma de más cuesta 8 %; desde la quinta, 12 %.`, `You reach ${Math.round(sum(L, (i) => sh[i]) * 100)}% of players. Each extra platform costs 8%; from the fifth on, 12%.`)}</div>`;
       return;
     }
-    const sel = W.mf[k] | 0;
-    h += `<label class="m">${n}</label><div class="chips">${O.map((o, i) => ((y < o[1] || (o[2] && y >= o[2])) && !(k == "mot" && i == 2) && !(k == "imp" && i == 1) && !(k == "art" && i == 1) || (k == "edm" && W.m == 4 && !edmTipo(W).includes(i)) ? "" : wCh("wmf", k + "|" + i, o[0], sel == i, !mfOk(W.m, k, i, y)))).join("")}</div>${O[sel] && O[sel][7] ? `<div class="m">${esc(O[sel][7])}</div>` : ""}`;
+    const sel = W.mf[k] | 0,
+      V = O.map((o, i) => i).filter((i) => !(((y < O[i][1] || (O[i][2] && y >= O[i][2])) && !(k == "mot" && i == 2) && !(k == "imp" && i == 1) && !(k == "art" && i == 1)) || (k == "edm" && W.m == 4 && !edmTipo(W).includes(i))));
+    // Lo que va de menos a más (sala, funciones, temporada) es un deslizador; las listas largas, un desplegable; las cortas, botones
+    if (MFORD.includes(k) && V.length > 2) {
+      const p = Math.max(0, V.indexOf(sel));
+      h += `<label class="m">${n}: <b>${esc(O[V[p]][0])}</b></label><input type="range" min="0" max="${V.length - 1}" step="1" value="${p}" onchange="act('wmf','${k}|'+[${V.join(",")}][this.value])">`;
+    } else if (V.length >= 5)
+      h += `<label class="m">${n}</label><select onchange="act('wmf','${k}|'+this.value)">${V.map((i) => `<option value="${i}"${sel == i ? " selected" : ""}${mfOk(W.m, k, i, y) ? "" : " disabled"}>${esc(O[i][0])}</option>`).join("")}</select>`;
+    else h += `<label class="m">${n}</label><div class="chips">${V.map((i) => wCh("wmf", k + "|" + i, O[i][0], sel == i, !mfOk(W.m, k, i, y))).join("")}</div>`;
+    h += O[sel] && O[sel][7] ? `<div class="m">${esc(O[sel][7])}</div>` : "";
     if (k == "mot" && y >= 1985)
       h += `<div class="k"><span class="m">${S.mot ? "Tu motor: " + motN() + " \u2605" + (motN() < S.mot.n ? " (envejece: mej\u00F3ralo)" : "") : "A\u00FAn no tienes motor propio"}</span>${motN() < 5 ? bt("mot", "", (S.mot ? "Mejorar" : "Crear") + " \u00B7 " + fm(motCosto())) : ""}</div>`;
     if (k == "art" && S.band)
@@ -52559,14 +52569,14 @@ function edit41H() {
     lI = iI >= 0 ? cnv(iI) : 0;
   return (
     lista41H(5, T40("Los más vendidos de la semana", "This week's bestsellers")) +
-    `<div class="c"><h3 style="margin:0 0 6px">${T40("Autores de la casa", "In-house authors")} (${L.length}/5)</h3><div class="m">${L37("Escritores con contrato: cada tanto te entregan un manuscrito sin costo (llega a Propuestas) y sus libros contigo ganan +1 de crítica. Cobran un adelanto al año.", "Contracted writers: every so often they deliver a manuscript for free (it arrives in Proposals) and their books with you gain +1 critics. They get a yearly advance.")}</div>${L.map((x) => `<div class="fila"><span>${lnk41(S.tl[x.t])}<span class="m"> · ${S.tl[x.t].s[0]} · ${T40("hasta", "until")} ${S.y0 + Math.floor(x.h / 52)}</span></span>${bt("esc4x", x.t, ic("cerrar"))}</div>`).join("")}${L.length < 5 ? C.map((t) => `<div class="fila"><span>${lnk41(t)}<span class="m"> · ${t.s[0]} · ${t.age} ${T40("años", "yrs")}</span></span>${bt("esc4", t.id, T40("Firmar", "Sign") + " · " + fm(escC41(t)) + "/" + T40("año", "yr"), S.cash >= escC41(t) ? "a" : "off")}</div>`).join("") : ""}</div>` +
+    `<div class="c"><h3 style="margin:0 0 6px">${T40("Autores de la casa", "In-house authors")} (${L.length})</h3><div class="m">${L37("Escritores con contrato: cada tanto te entregan un manuscrito sin costo (llega a Propuestas) y sus libros contigo ganan +1 de crítica. Cobran un adelanto al año.", "Contracted writers: every so often they deliver a manuscript for free (it arrives in Proposals) and their books with you gain +1 critics. They get a yearly advance.")}</div>${L.map((x) => `<div class="fila"><span>${lnk41(S.tl[x.t])}<span class="m"> · ${S.tl[x.t].s[0]} · ${T40("hasta", "until")} ${S.y0 + Math.floor(x.h / 52)}</span></span>${bt("esc4x", x.t, ic("cerrar"))}</div>`).join("")}${L.length < 5 ? C.map((t) => `<div class="fila"><span>${lnk41(t)}<span class="m"> · ${t.s[0]} · ${t.age} ${T40("años", "yrs")}</span></span>${bt("esc4", t.id, T40("Firmar", "Sign") + " · " + fm(escC41(t)) + "/" + T40("año", "yr"), S.cash >= escC41(t) ? "a" : "off")}</div>`).join("") : ""}</div>` +
     `<div class="c"><h3 style="margin:0 0 6px">${T40("Universos editoriales", "Publishing universes")}</h3><div class="m">${L37("Al estilo de los grandes universos de superhéroes: une hasta 8 franquicias editoriales en un mismo canon, organiza un gran evento de crossover al año (sube el interés de todas) o reinicia el universo para refrescarlo.", "In the style of the big superhero universes: join up to 8 publishing franchises in one canon, run a big crossover event each year (boosts interest in all of them) or reboot the universe to refresh it.")}</div>${U.map((u) => `<div class="c sub"><div class="k"><b>${esc(u.n)}</b><span class="m">${u.f.length} ${T40("franquicias", "franchises")}</span></div><div class="m">${u.f.map((f) => esc(frG(f).n) + (frPjs(f)[0] ? " (" + esc(frPjs(f)[0].n) + ")" : "")).join(" · ")}</div><div class="bts">${bt("fro", u.f[0], T40("Abrir", "Open"))}${u.ev == yr() ? "" : bt("ued4", u.f[0], T40("Gran evento", "Big event") + " · " + fm(Math.round(TB(5) * 0.6)), "a")}${bt("ure4", u.f[0], T40("Reiniciar", "Reboot") + " · " + fm(Math.round(TB(5) * 0.3)))}</div></div>`).join("")}${F.length >= 2 ? `<select onchange="if(this.value!=='')act('ued4n',this.value)"><option value="">+ ${T40("Crear universo con tus franquicias editoriales", "Create a universe with your publishing franchises")}</option>${F.slice(0, 30).map((f) => `<option value="${f}">${esc(frG(f).n)}</option>`).join("")}</select>` : `<div class="m">${T40("Necesitas dos franquicias editoriales con libros publicados.", "You need two publishing franchises with published books.")}</div>`}</div>` +
     `<div class="c"><h3 style="margin:0 0 6px">${T40("Imprenta", "Printing press")}</h3>${filaV(T40("Imprenta propia", "Own printing press"), lI ? T40("nivel", "level") + " " + lI + "/3" : "—")}${iI >= 0 && lI < 3 && !ixPista(iI) ? `<div class="bts">${bt("ib", iI, (lI ? T40("Mejorar", "Upgrade") : T40("Construir", "Build")) + " · " + fm(px(iI, lI)), S.cash >= px(iI, lI) ? "" : "off")}</div>` : ""}</div>`
   );
 }
 ACT["esc4"] = (v) => {
   const t = tl41(+v);
-  if (!t || esc41().length >= 5) return;
+  if (!t) return;
   const c = escC41(t);
   if (S.cash < c) return toast("Fondos insuficientes");
   gasta("talento", c);
@@ -53233,7 +53243,7 @@ const wzN41b = wz;
 wz = function () {
   const r = wzN41b.apply(this, arguments),
     h = document.querySelector("#md .hoja");
-  const nx = W && W.tab != null ? WORD[WORD.indexOf(W.tab | 0) + 1] : null;
+  const nx = W && W.tab != null ? wTabs()[wTabs().indexOf(W.tab | 0) + 1] : null;
   if (h && W && W.tab != null && W.md != "r" && nx != null && !h.querySelector(".av41"))
     h.insertAdjacentHTML("beforeend", `<div class="bts av41" style="margin:10px">${bt("wtab", nx, T40("Avanzar", "Next") + ": " + tr40(nx == 6 ? MXTAB[W.m] : nx == 3 && !conPers(W.m) ? WTAB[3] + " (opcional)" : WTAB[nx]) + " " + ic("adelante"), "a")}</div>`);
   return r;
