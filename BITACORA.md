@@ -494,6 +494,11 @@ La app Android es propia (carpeta `android/`): una pantalla con el juego, sin an
   - **Ficha de una obra rival:** una cabecera ordenada (etiqueta «Obra rival», estudio, franquicia con su canon y acciones). Dice bien si es secuela («Secuela de «X» (año)»). La original va antes que sus secuelas aunque salgan el mismo año. No muestra bloques que solo aplican a tus obras (tu catálogo, tus plataformas).
   - **Festival Mundial del Arte:** las cuatro fases caben en cualquier teléfono; antes «Subastas» se salía de la pantalla.
   - **Revisión automática de diseño:** recorre todas las pestañas y las ventanas nuevas, y detecta elementos encimados, desbordados o recortados. Ahora queda en cero, salvo un falso aviso: un texto partido en dos líneas junto a un enlace.
+  - En francés, el botón «Y aller» del calendario se salía de la pantalla y una etiqueta del mapa de piratería quedaba cortada. Ahora el botón baja a otra línea y las palabras largas se parten.
+- **Pruebas de esta ronda:**
+  - Fichas de obras rivales: 60 obras abiertas sin errores ni datos rotos. La misma ficha al reabrirla y el azar de la partida intacto. Las secuelas comparten personajes con su original. Documentos de obra rival, obra propia e idea escrita. Rankings, Salón, historial de talentos, franquicia rival y compra con la misma ficha.
+  - Prueba de estrés en español (3.553 pulsaciones), francés en pantalla ancha (3.562) e inglés (3.544): sin errores ni textos rotos.
+  - Traducción al portugués estable (33.000 textos, sin ciclos). Partidas 1700–2120 sin errores ni quiebra.
 - **Lo que estaba pendiente, resuelto:**
   - **Francés y portugués completos en los textos largos:**
     - El catálogo de obras clásicas (dominio público y derechos) estaba casi todo en español: 285 de sus 333 sinopsis. Ahora están las 333, con los personajes de cada obra («le narrateur», «as três bruxas»…).

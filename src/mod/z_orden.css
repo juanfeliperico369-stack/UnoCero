@@ -43,3 +43,8 @@ details.mas>.uni-l{margin-top:4px}
 .etapas li span{overflow-wrap:anywhere}
 /* Botones de una tarjeta en teléfono: se reparten el ancho en bloques parejos */
 @media (max-width:560px){.c .bts>.b{flex:1 1 auto}.k .bts>.b,.k>.bts>.b,.bts>.b.x,.bts>.b.inf{flex:none}}
+/* Navegación del calendario: siempre cabe, aunque el idioma alargue los botones */
+.calnav{flex-wrap:wrap;row-gap:6px}
+.calnav select,.calnav input{min-width:0}
+/* Celdas del mapa de piratería: las palabras largas se parten en lugar de cortarse */
+.pir-c span{overflow-wrap:anywhere;hyphens:auto}
