@@ -20003,7 +20003,7 @@ ${rel.length ? `<div class="m">Relaciones: ${rel.join(" \u00B7 ")}</div>` : ""}
           `<canvas class="pt" data-id="${p.id}" data-a="det" data-v="${p.id}" style="width:40px;height:60px;border-radius:5px"></canvas>`,
       )
       .join("") || '<span class="m">A\u00FAn no trabaja contigo.</span>'
-  }</div>
+  }</div>${typeof tFilmo == "function" ? tFilmo(t, ps) : ""}
 <div class="bts" style="margin-top:10px">${bt("lc", t.id, (sl ? "\u2605 Quitar de" : "\u2606 Agregar a") + " la lista corta")}${t.ret ? "" : bt("stu", t.id, ic("academia") + (t.es ? " Curso" : t.you ? " Estudiar" : " Becar"))}${t.you || t.ret ? "" : bt("ct", t.id, t.ex ? "Rescindir contrato" : "Contrato exclusivo")}</div>
 ${
   !t.ret && !t.es && !ocupado(t) && enProd2.length
