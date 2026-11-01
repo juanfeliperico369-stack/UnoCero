@@ -19,7 +19,24 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Época**: el diseño cambia con los años, igual que tu edificio: gaceta, art déco, pop, Memphis, digital y ciencia ficción.
 - También: Minimalista, Oscuro, Claro, Alto contraste, Medianoche, Cine clásico, Bosque y Papel.
 - **Temas especiales**: Espacial, Navidad, Halloween, Hollywood clásico, Bollywood, Anime, Cómic, Píxel, Plano 2D, Noir y Synthwave. Cambian los colores y decoran las ilustraciones; Píxel dibuja las ilustraciones en píxeles y Hollywood clásico y Noir las pasan a blanco y negro.
+- **Corrientes estéticas**: Art Nouveau, Bauhaus, Constructivismo, Pop Art, Brutalismo, Vaporwave, Cyberpunk, Steampunk, Y2K, Solarpunk, Barroco y Suizo.
+- **Historia**: las estéticas se alternan solas según el año, las fiestas del calendario y la época en que cada estilo estuvo de moda (o volvió a estarlo).
 - **Decoración de temporada**: en cualquier tema, el edificio celebra Halloween, Navidad y Año Nuevo según el calendario del juego.
+- **Símbolos**: cada estética tiene su ornamento (✦ ❦ ⚜ ☾ ❄ ⚙ ☀ …) en las portadillas y en los selectores, y el creador de logos suma 12 formas nuevas: corazón, flor de lis, flor, luna, sol, copo de nieve, destello, engranaje, átomo, calavera, trébol y llama.
+- **Modo claro y oscuro** en todos los temas, y estilo de ilustración 2D o píxel.
+
+### Música
+
+- **Según la época**: suena la música de moda en el año de tu partida, la de las fiestas (villancicos en diciembre, órgano y pizzicato en Halloween) y, con un tema especial, su banda sonora (chiptune con Píxel, synthwave con Synthwave, el Danubio azul con Espacial…). Cada pieza cambia sola cada minuto o dos, y el botón Siguiente salta a otra.
+- **Clásicos de dominio público**, con arreglos propios: Greensleeves, Pachelbel, la Tocata en re menor, el Minueto en Sol, Mozart, Beethoven, Noche de paz, Jingle Bells, Strauss, Brahms, Grieg, Chopin, Satie, Joplin y When the Saints. Solo suenan desde el año en que se publicaron.
+- **Electrónica original**: chiptune, synthwave, rock and roll, house, apertura de anime, lo-fi, darksynth, raga digital y ambiente espacial.
+- Cada pieza trae un dato curioso en Ajustes.
+
+### Negocio, construcciones y tecnología
+
+- **Obras**: cada construcción levanta una obra con grúa y andamios en tu edificio. Puede retrasarse por lluvia o huelga, encarecerse o adelantarse; al terminar la inauguras y ganas prensa y fans.
+- **Patentes**: si investigas un invento antes de su fecha real, lo patentas. Los rivales te pagan licencia cuando llega para todos y regalías cada año hasta que la patente vence a los 20 años. Puedes venderla.
+- **Valor de la compañía**: cuánto pagaría un comprador por tu estudio, con su historial y tu puesto frente a los rivales.
 
 ### Android
 
@@ -37,7 +54,10 @@ Los paquetes de la versión 1.0 están en `entregables/`. Las sugerencias para e
 
 ![Temas especiales](industry-art/capturas/temas-especiales.png)
 
+![Obras, logos con símbolos, música y patentes](industry-art/capturas/novedades.png)
+
 ### Créditos
 
 Creado por OneZero.
 Tipografías: TeX Gyre Heros Condensed (GUST e-foundry, GUST Font License) e Inter (The Inter Project Authors, SIL Open Font License 1.1).
+Música: obras clásicas y tradicionales de dominio público, arregladas y sintetizadas dentro del juego; las piezas electrónicas son originales de OneZero. El juego no incluye grabaciones de terceros.

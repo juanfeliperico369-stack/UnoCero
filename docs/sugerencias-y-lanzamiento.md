@@ -33,6 +33,13 @@
     - Años de inicio de cuatro fiestas: España 1918, Japón 1873, Tailandia 1960, Australia 1935.
     - El color de tres tiras se desbloquea en 1935 (*Becky Sharp*), no en 1939.
     - Mozart pasa a figurar como austriaco y Ang Lee como taiwanés.
+- **Música:** cada clásico solo suena desde su año de publicación. Por ejemplo, *Para Elisa* se compuso hacia 1810 pero se publicó en 1867, y en el juego aparece en 1867. Los datos curiosos de cada pieza se revisaron:
+  - Jingle Bells, primera canción tocada desde el espacio (Gemini 6, 1965).
+  - Noche de paz, estrenada con guitarra en Oberndorf (1818).
+  - El Minueto en Sol, que es de Petzold y no de Bach.
+  - La marcha de Chopin, que sonó en su propio funeral (1849).
+  - Las piezas electrónicas son originales, así que no hay derechos de terceros.
+- **Rendimiento:** una semana de juego se calcula en unos 4 ms y una pantalla se dibuja en unos 6 ms en un computador de escritorio; en un teléfono de gama media conviene contar con 4 a 6 veces más. La animación del edificio se detiene cuando no está en pantalla y baja de 30 a un mínimo de 10 cuadros por segundo si el teléfono va lento.
 
 ## 3. Ideas geniales para una última estocada
 
@@ -56,14 +63,19 @@
 
 ### Presentación y comunidad
 7. **Tarjeta de estreno para compartir.** Una imagen vertical (formato historia de redes) con el póster, la crítica y la taquilla de tu obra, con la estética del tema elegido.
-8. **Banda sonora por estética.** El motor de música ya genera piezas por época. Agregar variaciones para los temas especiales (por ejemplo, synthwave para Synthwave, campanas para Navidad) cuesta poco y luce mucho.
+8. **Radio del estudio.** La música ya cambia con la época, el calendario y el tema. El siguiente paso sería que tus propias bandas y solistas del sello tengan un tema propio que suene en la radio del juego cuando llegan al número 1.
 9. **Logros de Google Play Games.** El juego ya tiene 113 logros: conectarlos a Play Games da visibilidad gratis en la tienda.
 10. **Guardado en la nube opcional** (Google Drive), para no perder partidas al cambiar de teléfono.
 11. **Galería de la comunidad.** Los paquetes `.iapack` del Editor permiten compartir franquicias y talentos. Una página sencilla en GitHub Pages con los mejores paquetes puede crear comunidad desde el día uno.
 
+### Negocio y construcción (siguientes pasos)
+12. **Ofertas de compra.** Con el valor de la compañía ya calculado, un conglomerado podría ofrecer comprar tu estudio. Aceptar cerraría la partida con un final propio y un puntaje; rechazar subiría la moral del equipo.
+13. **Salida a bolsa.** Vender una parte del estudio para conseguir capital, con una junta que exija dividendos. Encaja con la junta y el socio que el juego ya tiene.
+14. **Mantenimiento por época.** Las construcciones viejas podrían pedir una remodelación cada 30 o 40 años, por ejemplo de nitrato a digital, con una obra propia y una inauguración.
+
 ### Técnica (para después del 1.0)
-12. **Reestructurar el código por módulos.** El código funciona, pero está construido como capas de funciones que envuelven a otras. Separarlo en módulos facilitaría mantener la versión 2.
-13. **Reducir el tamaño del HTML** (5,8 MB). La mayor parte son diccionarios de traducción y fuentes; se pueden cargar por idioma. Es una mejora de rendimiento, no un problema.
-14. **Accesibilidad.**
+15. **Reestructurar el código por módulos.** El código funciona, pero está construido como capas de funciones que envuelven a otras. Separarlo en módulos facilitaría mantener la versión 2.
+16. **Reducir el tamaño del HTML** (5,9 MB). La mayor parte son diccionarios de traducción y fuentes; se pueden cargar por idioma. Es una mejora de rendimiento, no un problema.
+17. **Accesibilidad.**
     - Probar con TalkBack.
     - Añadir un modo de "una mano" que baje los controles de tiempo junto a la barra de navegación inferior.

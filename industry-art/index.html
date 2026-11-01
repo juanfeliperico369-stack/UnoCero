@@ -764,7 +764,7 @@ html.t-synthwave{--bg:#1a0b2e;--p:#251040;--p2:#2f1654;--t:#fdf0ff;--m:#c7a8e8;-
 html.t-synthwave h2,html.t-synthwave h3{text-shadow:0 0 10px rgba(255,62,165,.6)}
 .tema-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:6px 0}
 .tema-g .ch{justify-content:flex-start;min-height:48px}
-.tema-g .ch i{width:18px;height:18px;border-radius:4px;flex:none;border:1.5px solid rgba(0,0,0,.35);background:var(--mu)}
+.tema-g .ch i{width:22px;height:22px;border-radius:4px;flex:none;border:1.5px solid rgba(0,0,0,.35);background:var(--mu);display:grid;place-items:center;font:normal 13px/1 "Segoe UI Symbol","Noto Sans Symbols 2","Noto Sans Symbols","Apple Symbols","DejaVu Sans",sans-serif;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.55);letter-spacing:-1px;overflow:hidden}
 html.t-pixel canvas.pt,html.t-pixel canvas.tf,html.t-pixel canvas.rl,html.t-pixel canvas.ini-lg,html.t-pixel canvas.lgv,html.t-pixel canvas.lgv-canal,html.t-pixel canvas.ini-logo,html.t-pixel canvas#ed,html.t-pixel canvas#hc,html.t-pixel canvas#avp{image-rendering:pixelated;image-rendering:crisp-edges}
 html.t-hollywood canvas.pt,html.t-hollywood canvas.tf,html.t-hollywood canvas.rl,html.t-hollywood canvas#ed,html.t-hollywood canvas#hc,html.t-hollywood canvas#avp{filter:grayscale(1) contrast(1.15) sepia(.12)}
 html.t-noir canvas.pt,html.t-noir canvas.tf,html.t-noir canvas.rl,html.t-noir canvas#ed,html.t-noir canvas#hc,html.t-noir canvas#avp{filter:grayscale(1) contrast(1.3)}
@@ -830,6 +830,8 @@ html.t-suizo{--bg:#ffffff;--p:#ffffff;--p2:#f4f4f4;--t:#111111;--m:#555555;--a:#
 html.t-suizo h2,html.t-suizo h3,html.t-suizo .pd-t{text-transform:none;font-weight:800;letter-spacing:-.02em}
 html.graf-pixel canvas.pt,html.graf-pixel canvas.tf,html.graf-pixel canvas.rl,html.graf-pixel canvas.ini-lg,html.graf-pixel canvas.lgv,html.graf-pixel canvas.lgv-canal,html.graf-pixel canvas#ed,html.graf-pixel canvas#hc,html.graf-pixel canvas#avp{image-rendering:pixelated;image-rendering:crisp-edges}
 .zine canvas.tf{border-radius:50%;box-shadow:0 0 0 2px var(--ink)}
+
+.zine .pd-d::before{content:var(--orn,"\2726") "\00a0";color:var(--sec);font-family:"Segoe UI Symbol","Noto Sans Symbols 2","Noto Sans Symbols","Apple Symbols","DejaVu Sans",sans-serif;font-weight:400;font-style:normal}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
 const VERN = "1.0";
@@ -29161,7 +29163,7 @@ on("semana", () => {
     if (d < d0 || d > d1) return;
     if (!S.pre) nws("Llega para todos: " + e[1] + ". " + e[6] + ".");
     const o = S.tech[i];
-    if (typeof o == "number" && o <= e[0]) {
+    if (typeof o == "number" && o <= e[0] && !(S.patV && S.patV[i])) {
       const n = rvVivos().filter((r) => e[2].some((m) => S.rv[r].sp[m] > 0)).length,
         g = Math.round(tcx(i) * 0.12 * n);
       if (g > 0) {
@@ -37421,6 +37423,7 @@ function edifDatos() {
     lote: cnv(11),
     parque: (S.pq || []).length,
     cine: S.pj.some((p) => p.st == 3),
+    obra: (S.obras || []).length,
   };
 }
 let EDH = [];
@@ -37541,7 +37544,7 @@ function edif(c, w, h, t, o) {
     c.stroke();
     c.globalAlpha = 1;
   }
-  edifExtras(c, bx, bw, top, T, o, E);
+  edifExtras(c, bx, bw, top, T, o, E, h);
   let yb = h - 24;
   for (let i = 0; i < n; i++) {
     const f = o.fl[i],
@@ -37779,7 +37782,8 @@ const pixelEsc = (cv) =>
       : 0.5
     : 0;
 function decoActual() {
-  if (TEMAS_ESP.some((x) => x[0] == CFG.tema) || ESTETICAS.some((x) => x[0] == CFG.tema)) return CFG.tema;
+  const tm = document.documentElement.dataset.tm || CFG.tema;
+  if (TEMAS_ESP.some((x) => x[0] == tm) || ESTETICAS.some((x) => x[0] == tm)) return tm;
   if (!CFG.temp) return "";
   if (!S) {
     const d = new Date(),
@@ -38401,7 +38405,7 @@ function fondoRetrato(c, X, Y, U, t) {
     c.fillRect(X - U, Y - U, U * 2, U * 2);
   }
 }
-function edifExtras(c, bx, bw, top, T, o, E) {
+function edifExtras(c, bx, bw, top, T, o, E, h) {
   const L = o.L,
     col = L ? fc(L.c | 0) : E.trim,
     col2 = L ? bgc(L.b | 0) : E.wall,
@@ -38439,6 +38443,7 @@ function edifExtras(c, bx, bw, top, T, o, E) {
     c.fillStyle = col2;
     c.fillRect(px + 1, top - 29 + ond * 0.5, 7, 2.5);
   }
+  if (o.obra && h) obraDibujo(c, bx, bw, top, T, h - 24);
   if (E.k == "gas") {
     const cx = bx + bw - 24;
     c.fillStyle = E.wall;
@@ -38453,6 +38458,79 @@ function edifExtras(c, bx, bw, top, T, o, E) {
       c.fill();
     }
   }
+}
+function obraDibujo(c, bx, bw, top, T, suelo) {
+  const am = "#f2b51d",
+    os = "#8a6400",
+    mx = bx + bw + 16,
+    cima = top - 40,
+    jx0 = mx - bw * 0.62,
+    jx1 = mx + 22;
+  c.save();
+  c.strokeStyle = "rgba(120,86,40,.95)";
+  c.lineWidth = 1.2;
+  const sx0 = bx - 9,
+    sx1 = bx + 3,
+    sy = top + (suelo - top) * 0.38;
+  c.beginPath();
+  c.moveTo(sx0, suelo);
+  c.lineTo(sx0, sy);
+  c.moveTo(sx1, suelo);
+  c.lineTo(sx1, sy);
+  for (let y = suelo; y > sy; y -= 13) {
+    c.moveTo(sx0, y);
+    c.lineTo(sx1, y - 13);
+  }
+  c.stroke();
+  c.fillStyle = "#c98d3b";
+  for (let y = suelo - 13; y >= sy; y -= 13) c.fillRect(sx0 - 2, y - 1.5, sx1 - sx0 + 4, 3);
+  c.fillStyle = "rgba(40,160,90,.28)";
+  c.fillRect(sx0 - 1, sy, sx1 - sx0 + 2, suelo - sy);
+  c.strokeStyle = am;
+  c.lineWidth = 1.4;
+  c.beginPath();
+  c.moveTo(mx - 3, suelo);
+  c.lineTo(mx - 3, cima);
+  c.moveTo(mx + 3, suelo);
+  c.lineTo(mx + 3, cima);
+  for (let y = suelo; y > cima + 6; y -= 8) {
+    c.moveTo(mx - 3, y);
+    c.lineTo(mx + 3, y - 8);
+  }
+  c.moveTo(jx0, cima);
+  c.lineTo(jx1, cima);
+  c.moveTo(jx0, cima + 5);
+  c.lineTo(jx1, cima + 5);
+  for (let x = jx0; x < jx1 - 6; x += 7) {
+    c.moveTo(x, cima + 5);
+    c.lineTo(x + 7, cima);
+  }
+  c.moveTo(mx, cima - 12);
+  c.lineTo(jx0 + 4, cima);
+  c.moveTo(mx, cima - 12);
+  c.lineTo(jx1 - 2, cima);
+  c.stroke();
+  c.fillStyle = os;
+  c.fillRect(mx - 5, cima - 2, 10, 9);
+  c.fillRect(jx1 - 9, cima + 5, 9, 7);
+  const k = 0.5 + 0.5 * Math.sin(T / 2400),
+    hx = jx0 + 10 + (mx - jx0 - 26) * k,
+    hy = cima + 14 + (top - cima - 4) * (0.5 + 0.5 * Math.sin(T / 1700));
+  c.strokeStyle = "rgba(40,40,40,.85)";
+  c.lineWidth = 0.8;
+  c.beginPath();
+  c.moveTo(hx, cima + 5);
+  c.lineTo(hx, hy);
+  c.stroke();
+  c.fillStyle = os;
+  c.fillRect(hx - 2, cima + 3, 4, 3);
+  c.fillStyle = "#b24a2b";
+  c.fillRect(hx - 9, hy, 18, 3.5);
+  c.fillStyle = Math.sin(T / 300) > 0 ? "#ff4b3a" : "rgba(255,75,58,.25)";
+  c.beginPath();
+  c.arc(mx, cima - 13, 1.8, 0, 7);
+  c.fill();
+  c.restore();
 }
 function fondoEstetico(c, X, Y, U, f, t) {
   const plano = (a, b) => {
@@ -38619,6 +38697,57 @@ function marcoEstetico(c, X, Y, U, k) {
     }
   }
   c.restore();
+}
+
+const HIST_ESTILOS = [
+  ["barroco", [[1700, 1750]]],
+  ["papel", [[1751, 1841]]],
+  ["sepia", [[1839, 1899]]],
+  ["revista", [[1842, 1889], [1936, 1972]]],
+  ["cine", [[1895, 1929]]],
+  ["art-nouveau", [[1890, 1914], [1966, 1972]]],
+  ["constructivismo", [[1917, 1932]]],
+  ["bauhaus", [[1919, 1933]]],
+  ["hollywood", [[1927, 1960]]],
+  ["comic", [[1938, 1956], [1961, 1970], [2008, 2019]]],
+  ["noir", [[1941, 1958], [1973, 1976], [2005, 2006]]],
+  ["bollywood", [[1950, 1965], [1995, 2010]]],
+  ["suizo", [[1950, 1970]]],
+  ["brutalismo", [[1951, 1975], [2014, 2019]]],
+  ["pop-art", [[1956, 1970]]],
+  ["espacio", [[1957, 1972], [1977, 1983], [2100, 2199]]],
+  ["pixel", [[1978, 1994], [2008, 2016]]],
+  ["synthwave", [[1980, 1989], [2011, 2019]]],
+  ["cyberpunk", [[1982, 1995], [2017, 2021], [2040, 2060]]],
+  ["anime", [[1983, 1999], [2001, 2003], [2016, 2023]]],
+  ["steampunk", [[1987, 1995], [2006, 2012]]],
+  ["y2k", [[1997, 2004], [2020, 2024]]],
+  ["solarpunk", [[2008, 2030], [2050, 2099]]],
+  ["vaporwave", [[2010, 2016]]],
+  ["plano", [[2013, 2020]]],
+];
+const ERA_NOM = { gas: "Gaceta", deco: "Art déco", neon: "Pop psicodélico", pomo: "Memphis", vidrio: "Digital", futuro: "Ciencia ficción" };
+function temaHistoria(y, w) {
+  if (w >= 50 && y >= 1843) return "navidad";
+  if (w >= 43 && w <= 45 && y >= 1920) return S && S.sede == 20 ? "bollywood" : "halloween";
+  const L = HIST_ESTILOS.filter(([, R]) => R.some(([a, b]) => y >= a && y <= b)).map((x) => x[0]);
+  L.push("era-" + eraEst(y).k);
+  const sem = S && S.sd ? hs(String(S.sd)) : 0;
+  return L[(y * 31 + sem) % L.length];
+}
+const ORN = {
+  revista: "\u2726", papel: "\u2766", sepia: "\u2767", cine: "\u272A", claro: "\u25CF", oscuro: "\u2727", neon: "\u2727", contraste: "\u25A0", medianoche: "\u263E", bosque: "\u2618\uFE0E", minimal: "\u25CB",
+  "era-gas": "\u2766", "era-deco": "\u25C8", "era-neon": "\u273F", "era-pomo": "\u25ED", "era-vidrio": "\u25C9", "era-futuro": "\u2727",
+  espacio: "\u2604\uFE0E", navidad: "\u2744\uFE0E", halloween: "\u263E", hollywood: "\u272A", bollywood: "\u2741", anime: "\u273F", comic: "\u2739", pixel: "\u25A6", plano: "\u25CF", noir: "\u2602\uFE0E", synthwave: "\u25E2\u25E3",
+  "art-nouveau": "\u2767", bauhaus: "\u25CF\u25A0\u25B2", constructivismo: "\u25E3", "pop-art": "\u273A", brutalismo: "\u25A0", vaporwave: "\u25CA", cyberpunk: "\u03DF", steampunk: "\u2699\uFE0E", y2k: "\u2727", solarpunk: "\u2600\uFE0E", barroco: "\u269C\uFE0E", suizo: "\u271A",
+};
+const ornTema = (t) => ORN[t] || "\u2726";
+const BASE_NOM = { revista: "Revista", papel: "Papel", sepia: "Sepia", cine: "Cine clásico" };
+function nombreTema(t) {
+  if (t.indexOf("era-") == 0) return ERA_NOM[t.slice(4)] || t;
+  if (BASE_NOM[t]) return BASE_NOM[t];
+  const x = TEMAS_ESP.concat(ESTETICAS).find((z) => z[0] == t);
+  return x ? x[1] : t;
 }
 const BANDERAS = [
   "h:#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234;k:#3C3B6E,.4,.54",
@@ -39392,11 +39521,29 @@ function sonar(k) {
   else if (k == "error") bp(170, 0.18, "sawtooth", 0.03);
   else bp(620, 0.04);
 }
+const LPVIS = {};
+let LPIO = null,
+  LPC = 1;
+function lpVisible(id) {
+  const cv = $("#" + id);
+  if (!cv) return false;
+  if (typeof IntersectionObserver == "undefined") return true;
+  if (!LPIO) LPIO = new IntersectionObserver((L) => L.forEach((e) => (e.target.vis = e.isIntersecting)), { rootMargin: "60px" });
+  if (LPVIS[id] !== cv) {
+    if (LPVIS[id]) LPIO.unobserve(LPVIS[id]);
+    LPVIS[id] = cv;
+    cv.vis = true;
+    LPIO.observe(cv);
+  }
+  return cv.vis !== false;
+}
 function lp(t) {
-  if (CFG.anim && !document.hidden && t - lastT > 33 && !hojaAbierta()) {
+  if (CFG.anim && !document.hidden && t - lastT > Math.min(100, Math.max(33, LPC * 6)) && !hojaAbierta()) {
     lastT = t;
-    hero(t);
-    edC(t);
+    const t0 = performance.now();
+    if (lpVisible("hc")) hero(t);
+    if (lpVisible("ed")) edC(t);
+    LPC = LPC * 0.9 + (performance.now() - t0) * 0.1;
   }
   requestAnimationFrame(lp);
 }
@@ -41513,6 +41660,7 @@ function ajM() {
     ["oscuro", "Oscuro"],
     ["claro", "Claro"],
     ["epoca", "\u00C9poca"],
+    ["historia", "Historia"],
     ["contraste", "Alto contraste"],
     ["medianoche", "Medianoche"],
     ["cine", "Cine clásico"],
@@ -41520,9 +41668,9 @@ function ajM() {
     ["papel", "Papel"],
   ]
     .map((x) => ch("cfgt", x[0], x[1], CFG.tema == x[0]))
-    .join("")}</div><div class="m">Revista: cada sección del juego tiene su propio color de papel.<br>Época: el diseño cambia con los años, igual que tu edificio.</div>
-<label class="m">Temas especiales</label><div class="tema-g">${TEMAS_ESP.map(([k, n, c]) => `<button class="ch${CFG.tema == k ? " on" : ""}" data-a="cfgt" data-v="${k}"><i style="--mu:${c}"></i>${n}</button>`).join("")}</div><div class="chips">${ch("cfgb", "temp", "Decoración de temporada", CFG.temp)}</div><div class="m">Los temas especiales cambian los colores y decoran tus ilustraciones.<br>Con la decoración de temporada, tu edificio celebra Halloween, Navidad y Año Nuevo en cualquier tema.</div>
-<label class="m">Corrientes estéticas</label><div class="tema-g">${ESTETICAS.map(([k, n, c]) => `<button class="ch${CFG.tema == k ? " on" : ""}" data-a="cfgt" data-v="${k}"><i style="--mu:${c}"></i>${n}</button>`).join("")}</div>
+    .join("")}</div><div class="m">Revista: cada sección del juego tiene su propio color de papel.<br>Época: el diseño cambia con los años, igual que tu edificio.<br>Historia: las estéticas se alternan solas según el año, las fiestas del calendario y la época en que cada estilo estuvo de moda.</div>
+<label class="m">Temas especiales</label><div class="tema-g">${TEMAS_ESP.map(([k, n, c]) => `<button class="ch${CFG.tema == k ? " on" : ""}" data-a="cfgt" data-v="${k}"><i style="--mu:${c}">${ornTema(k)}</i>${n}</button>`).join("")}</div><div class="chips">${ch("cfgb", "temp", "Decoración de temporada", CFG.temp)}</div><div class="m">Los temas especiales cambian los colores y decoran tus ilustraciones.<br>Con la decoración de temporada, tu edificio celebra Halloween, Navidad y Año Nuevo en cualquier tema.</div>
+<label class="m">Corrientes estéticas</label><div class="tema-g">${ESTETICAS.map(([k, n, c]) => `<button class="ch${CFG.tema == k ? " on" : ""}" data-a="cfgt" data-v="${k}"><i style="--mu:${c}">${ornTema(k)}</i>${n}</button>`).join("")}</div>
 <label class="m">Modo</label><div class="chips">${ch("cfgmo", "auto", "Automático", (CFG.modo || "auto") == "auto")}${ch("cfgmo", "claro", "Claro", CFG.modo == "claro")}${ch("cfgmo", "oscuro", "Oscuro", CFG.modo == "oscuro")}</div><div class="m">El modo da versión clara u oscura a Revista, Época y los temas especiales. Automático sigue a tu dispositivo.</div>
 <label class="m">Ilustraciones</label><div class="chips">${ch("cfggr", "2d", "Vectoriales", (CFG.graf || "2d") != "pixel")}${ch("cfggr", "pixel", "En píxeles", CFG.graf == "pixel")}</div><div class="m">En píxeles dibuja el edificio, los retratos, los pósteres y los logos como un videojuego retro, en cualquier tema.</div>
 <label class="m">Color de acento</label><div class="chips">${ACCN.map((x, i) => `<button class="ch${(CFG.acc | 0) == i ? " on" : ""}" data-a="cfgac" data-v="${i}">${i ? `<span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${x[1]}"></span>` : ""}${x[0]}</button>`).join("")}</div>
@@ -41609,7 +41757,7 @@ const modoAct = () => {
     return "claro";
   }
 };
-const temaActual = (y) => (CFG.tema == "epoca" ? "era-" + eraEst(y).k : CFG.tema);
+const temaActual = (y) => (CFG.tema == "epoca" ? "era-" + eraEst(y).k : CFG.tema == "historia" ? temaHistoria(y, S ? wk() : 1) : CFG.tema);
 function aplicarCfg() {
   const r = document.documentElement,
     y = S ? yr() : 1950,
@@ -41625,6 +41773,8 @@ function aplicarCfg() {
     (CFG.anim ? "" : " quieto") +
     (CFG.den == "c" ? " compacto" : "");
   r.dataset.era = eraEst(y).k;
+  r.dataset.tm = tm;
+  r.style.setProperty("--orn", JSON.stringify(ornTema(tm)));
   const ac = ACCN[CFG.acc | 0],
     cl2 = lumHex(getComputedStyle(r).getPropertyValue("--p")) > 0.4;
   if (ac && CFG.acc && CFG.tema != "contraste" && !CFG.dalt) {
@@ -46451,13 +46601,17 @@ function evElegir(L) {
 }
 let EVB = { t: -1, n: -1, P: null };
 function evCtx(ctx, meds, id) {
-  if (EVB.t != S.t || EVB.n != S.pj.length) EVB = { t: S.t, n: S.pj.length, P: S.pj.filter((p) => p.st != 4 || ((p.a || 0) >= 55 && !p.rr)) };
+  if (EVB.t != S.t || EVB.n != S.pj.length) EVB = { t: S.t, n: S.pj.length, C: {}, P: S.pj.filter((p) => p.st != 4 || ((p.a || 0) >= 55 && !p.rr)) };
   const P = EVB.P,
-    med = (p, def) => (meds || def || [0, 1, 2, 3, 4, 5]).includes(p.m);
+    med = (p, def) => (meds || def || [0, 1, 2, 3, 4, 5]).includes(p.m),
+    EVF = (k, f) => {
+      const q = k + "|" + (meds || "");
+      return EVB.C[q] || (EVB.C[q] = P.filter(f));
+    };
   if (ctx == "") return true;
   if (ctx == "estrella") {
     const L = [];
-    P.filter((p) => p.st == 0 && med(p, [0, 1])).forEach((p) => {
+    EVF("f1", (p) => p.st == 0 && med(p, [0, 1])).forEach((p) => {
       (p.cast || []).forEach((c) => c.t != null && c.i <= 1 && S.tl[c.t] && !S.tl[c.t].you && L.push({ t: c.t, o: p.id }));
       const ti = (p.crew || {})[7];
       if (ti != null && S.tl[ti] && !S.tl[ti].you) L.push({ t: ti, o: p.id });
@@ -46465,35 +46619,36 @@ function evCtx(ctx, meds, id) {
     return evElegir(L);
   }
   if (ctx == "obra") {
-    const p = evElegir(P.filter((p) => p.st == 0 && med(p, [0, 1])));
+    const p = evElegir(EVF("f2", (p) => p.st == 0 && med(p, [0, 1])));
     return p ? { o: p.id } : null;
   }
   if (ctx == "proyecto") {
-    const p = evElegir(P.filter((p) => p.st == 0 && med(p, [2, 3, 4, 5])));
+    const p = evElegir(EVF("f3", (p) => p.st == 0 && med(p, [2, 3, 4, 5])));
     return p ? { p: p.id } : null;
   }
   if (ctx == "temporada") {
-    const p = evElegir(P.filter((p) => p.st == 3 && p.m == 3));
+    const p = evElegir(EVF("f4", (p) => p.st == 3 && p.m == 3));
     return p ? { p: p.id } : null;
   }
   if (ctx == "lanzado") {
-    const p = evElegir(P.filter((p) => p.st == 3 && med(p, [2, 4, 5])));
+    const p = evElegir(EVF("f5", (p) => p.st == 3 && med(p, [2, 4, 5])));
     return p ? { p: p.id } : null;
   }
   if (ctx == "cartelera") {
-    const p = evElegir(P.filter((p) => p.st == 3 && med(p)));
+    const p = evElegir(EVF("f6", (p) => p.st == 3 && med(p)));
     return p ? { o: p.id } : null;
   }
   if (ctx == "catalogo") {
-    const p = evElegir(P.filter((p) => p.st == 4 && med(p) && evAniosExt(p) > 3 && (p.a || 0) >= 55));
+    const p = evElegir(EVF("f7", (p) => p.st == 4 && med(p) && evAniosExt(p) > 3 && (p.a || 0) >= 55));
     return p ? { o: p.id } : null;
   }
   if (ctx == "exito") {
-    const p = evElegir(P.filter((p) => p.st >= 3 && med(p) && (p.a || 0) >= 62 && evAniosExt(p) < 4));
+    const p = evElegir(EVF("f8", (p) => p.st >= 3 && med(p) && (p.a || 0) >= 62 && evAniosExt(p) < 4));
     return p ? { o: p.id } : null;
   }
   if (ctx == "franq") {
-    const F = Object.keys(S.fr || {}).filter((k) => S.fr[k] && S.fr[k].n && P.some((p) => p.fid == k && p.st >= 3));
+    const conObra = EVB.fq || (EVB.fq = new Set(P.filter((p) => p.st >= 3 && p.fid != null).map((p) => String(p.fid)))),
+      F = Object.keys(S.fr || {}).filter((k) => S.fr[k] && S.fr[k].n && conObra.has(String(k)));
     const k = evElegir(F);
     return k != null ? { f: k } : null;
   }
@@ -46504,7 +46659,7 @@ function evCtx(ctx, meds, id) {
       const r = evElegir(L);
       return r != null ? { r } : null;
     }
-    const p = evElegir(P.filter((p) => p.st == 0)),
+    const p = evElegir(EVF("f9", (p) => p.st == 0)),
       r = evElegir(vivos);
     return p && r != null ? { o: p.id, r } : null;
   }
@@ -46512,19 +46667,19 @@ function evCtx(ctx, meds, id) {
   if (ctx == "canal") return S.cb && S.cb.on ? true : null;
   if (ctx == "trayectoria") return yr() - S.y0 >= 15 && S.pop >= 40 ? true : null;
   if (ctx == "fuerte") {
-    const p = evElegir(P.filter((p) => p.st == 3 && [2, 4, 5].includes(p.m) && evCont(p) >= 5));
+    const p = evElegir(EVF("f10", (p) => p.st == 3 && [2, 4, 5].includes(p.m) && evCont(p) >= 5));
     return p ? { p: p.id } : null;
   }
   if (ctx == "explicito") {
-    const p = evElegir(P.filter((p) => p.st == 3 && p.m == 4 && p.cont && ((p.cont.l | 0) >= 2 || (p.cont.s | 0) >= 2)));
+    const p = evElegir(EVF("f11", (p) => p.st == 3 && p.m == 4 && p.cont && ((p.cont.l | 0) >= 2 || (p.cont.s | 0) >= 2)));
     return p ? { p: p.id } : null;
   }
   if (ctx == "voces") {
-    const p = evElegir(P.filter((p) => p.st == 3 && p.m == 2 && p.cast && p.cast[0] && p.cast[0].x == "F" && p.cast[0].t != null));
+    const p = evElegir(EVF("f12", (p) => p.st == 3 && p.m == 2 && p.cast && p.cast[0] && p.cast[0].x == "F" && p.cast[0].t != null));
     return p ? { p: p.id } : null;
   }
   if (ctx == "teatro_fuerte") {
-    const p = evElegir(P.filter((p) => p.st == 0 && p.m == 3 && evCont(p) >= 3));
+    const p = evElegir(EVF("f13", (p) => p.st == 0 && p.m == 3 && evCont(p) >= 3));
     return p ? { p: p.id } : null;
   }
   return null;
@@ -48267,7 +48422,14 @@ guide = function () {
 };
 const pgExt = pg;
 pg = function () {
-  if (S && CFG.tema == "epoca" && document.documentElement.dataset.era != eraEst(yr()).k) aplicarCfg();
+  if (S && (CFG.tema == "epoca" || CFG.tema == "historia")) {
+    const tn = temaActual(yr()),
+      ta = document.documentElement.dataset.tm;
+    if (ta != tn) {
+      aplicarCfg();
+      if (CFG.tema == "historia" && ta) setTimeout(() => toast(ornTema(tn) + " " + trX(dual("Nueva edición: ", "New edition: ") + nombreTema(tn))), 60);
+    }
+  }
   const r = pgExt.apply(this, arguments);
   if (S) document.body.dataset.sec = tab;
   else document.body.removeAttribute("data-sec");
@@ -48318,8 +48480,8 @@ function hoyH() {
 
 
 const LGFN = ["Círculo", "Rombo", "Triángulo", "Hexágono", "Estrella", "Rollo de película", "Claqueta", "Corona", "Rayo", "Escudo", "Máscara de teatro", "Nota musical", "Libro abierto", "Planeta", "Ojo"];
-const lgK = (s) => ((s = s | 0) < 20 ? s % 5 : s < 40 ? 5 + ((s - 20) % 5) : 10 + ((s - 40) % 5));
-const lgV = (s) => ((s = s | 0) < 20 ? (s / 5) | 0 : s < 40 ? ((s - 20) / 5) | 0 : (((s - 40) / 5) | 0) % 4);
+const lgK = (s) => ((s = s | 0) < 20 ? s % 5 : s < 40 ? 5 + ((s - 20) % 5) : s < 60 ? 10 + ((s - 40) % 5) : 15 + ((s - 60) % 12));
+const lgV = (s) => ((s = s | 0) < 20 ? (s / 5) | 0 : s < 40 ? ((s - 20) / 5) | 0 : s < 60 ? (((s - 40) / 5) | 0) % 4 : (((s - 60) / 12) | 0) % 4);
 const shExt = sh;
 sh = function (c, k, r) {
   if (k < 5) return shExt(c, k, r);
@@ -48441,6 +48603,214 @@ sh = function (c, k, r) {
   c.quadraticCurveTo(r * 0.92, r * 0.25, 0, r);
   c.quadraticCurveTo(-r * 0.92, r * 0.25, -r * 0.88, -r * 0.78);
   c.quadraticCurveTo(-r * 0.5, -r * 0.72, 0, -r);
+  c.closePath();
+};
+LGFN.push("Corazón", "Flor de lis", "Flor", "Luna creciente", "Sol", "Copo de nieve", "Destello", "Engranaje", "Átomo", "Calavera", "Trébol", "Llama");
+const shSimbolo = sh;
+sh = function (c, k, r) {
+  if (k < 15) return shSimbolo(c, k, r);
+  c.beginPath();
+  const T = Math.PI * 2,
+    M = (x, y) => c.moveTo(x * r, y * r),
+    L = (x, y) => c.lineTo(x * r, y * r),
+    Q = (a, b, x, y) => c.quadraticCurveTo(a * r, b * r, x * r, y * r),
+    B = (a, b, d, e, x, y) => c.bezierCurveTo(a * r, b * r, d * r, e * r, x * r, y * r),
+    O = (x, y, q, ccw) => {
+      c.moveTo((x + q) * r, y * r);
+      c.arc(x * r, y * r, q * r, 0, T, !!ccw);
+    },
+    barra = (a, d0, d1, g) => {
+      const ca = Math.cos(a),
+        sa = Math.sin(a),
+        px = -sa * g,
+        py = ca * g;
+      M(ca * d0 + px, sa * d0 + py);
+      L(ca * d1 + px, sa * d1 + py);
+      L(ca * d1 - px, sa * d1 - py);
+      L(ca * d0 - px, sa * d0 - py);
+      c.closePath();
+    };
+  if (k == 15) {
+    M(0, 0.92);
+    B(-1.3, 0.05, -0.78, -1.08, 0, -0.42);
+    B(0.78, -1.08, 1.3, 0.05, 0, 0.92);
+    c.closePath();
+    return;
+  }
+  if (k == 16) {
+    M(0, -1);
+    Q(-0.44, -0.46, -0.14, 0.1);
+    L(0.14, 0.1);
+    Q(0.44, -0.46, 0, -1);
+    c.closePath();
+    M(-0.1, 0.12);
+    B(-0.3, -0.58, -1.02, -0.62, -0.93, -0.06);
+    Q(-0.9, 0.14, -0.7, 0.2);
+    B(-0.86, -0.24, -0.46, -0.32, -0.3, 0.12);
+    c.closePath();
+    M(0.3, 0.12);
+    B(0.46, -0.32, 0.86, -0.24, 0.7, 0.2);
+    Q(0.9, 0.14, 0.93, -0.06);
+    B(1.02, -0.62, 0.3, -0.58, 0.1, 0.12);
+    c.closePath();
+    M(0.44, 0.08);
+    L(-0.44, 0.08);
+    L(-0.44, 0.3);
+    L(0.44, 0.3);
+    c.closePath();
+    M(0.13, 0.3);
+    L(-0.13, 0.3);
+    Q(-0.12, 0.62, 0, 0.94);
+    Q(0.12, 0.62, 0.13, 0.3);
+    c.closePath();
+    M(-0.15, 0.3);
+    Q(-0.5, 0.32, -0.6, 0.66);
+    Q(-0.3, 0.52, -0.08, 0.44);
+    c.closePath();
+    M(0.08, 0.44);
+    Q(0.3, 0.52, 0.6, 0.66);
+    Q(0.5, 0.32, 0.15, 0.3);
+    c.closePath();
+    return;
+  }
+  if (k == 17) {
+    for (let i = 0; i < 5; i++) {
+      const a = -Math.PI / 2 + (i * T) / 5;
+      c.moveTo(Math.cos(a) * 0.98 * r, Math.sin(a) * 0.98 * r);
+      c.ellipse(Math.cos(a) * 0.54 * r, Math.sin(a) * 0.54 * r, 0.44 * r, 0.3 * r, a, 0, T);
+    }
+    O(0, 0, 0.26);
+    return;
+  }
+  if (k == 18) {
+    const R = 0.95,
+      cx = 0.42,
+      R2 = 0.78,
+      x = (R * R - R2 * R2 + cx * cx) / (2 * cx),
+      y = Math.sqrt(R * R - x * x),
+      a = Math.atan2(y, x),
+      b = Math.atan2(y, x - cx);
+    c.save();
+    c.rotate(-0.38);
+    c.translate(r * 0.14, 0);
+    c.arc(0, 0, R * r, -a, a, true);
+    c.arc(cx * r, 0, R2 * r, b, -b, false);
+    c.closePath();
+    c.restore();
+    return;
+  }
+  if (k == 19) {
+    O(0, 0, 0.5);
+    for (let i = 0; i < 12; i++) {
+      const a = (i * T) / 12,
+        d = i % 2 ? 0.86 : 1;
+      M(Math.cos(a - 0.12) * 0.62, Math.sin(a - 0.12) * 0.62);
+      L(Math.cos(a) * d, Math.sin(a) * d);
+      L(Math.cos(a + 0.12) * 0.62, Math.sin(a + 0.12) * 0.62);
+      c.closePath();
+    }
+    return;
+  }
+  if (k == 20) {
+    for (let i = 0; i < 6; i++) {
+      const a = -Math.PI / 2 + (i * T) / 6;
+      barra(a, 0, 0.96, 0.075);
+      const bx = Math.cos(a) * 0.56,
+        by = Math.sin(a) * 0.56;
+      for (const s of [-1, 1]) {
+        const b = a + s * 0.8,
+          cb = Math.cos(b),
+          sb = Math.sin(b),
+          px = -sb * 0.06,
+          py = cb * 0.06;
+        M(bx + px, by + py);
+        L(bx + cb * 0.32 + px, by + sb * 0.32 + py);
+        L(bx + cb * 0.32 - px, by + sb * 0.32 - py);
+        L(bx - px, by - py);
+        c.closePath();
+      }
+    }
+    M(0.22, 0);
+    for (let i = 1; i <= 6; i++) L(Math.cos((-i * T) / 6) * 0.22, Math.sin((-i * T) / 6) * 0.22);
+    c.closePath();
+    return;
+  }
+  if (k == 21) {
+    const st = (x, y, q, h) => {
+      M(x, y - q);
+      Q(x + h * q, y - h * q, x + q, y);
+      Q(x + h * q, y + h * q, x, y + q);
+      Q(x - h * q, y + h * q, x - q, y);
+      Q(x - h * q, y - h * q, x, y - q);
+      c.closePath();
+    };
+    st(-0.1, 0.1, 0.88, 0.12);
+    st(0.62, -0.62, 0.3, 0.14);
+    return;
+  }
+  if (k == 22) {
+    const N = 10,
+      p = T / N;
+    for (let i = 0; i < N; i++) {
+      const a = i * p;
+      L(Math.cos(a - p * 0.3) * 0.76, Math.sin(a - p * 0.3) * 0.76);
+      L(Math.cos(a - p * 0.17) * 1, Math.sin(a - p * 0.17) * 1);
+      L(Math.cos(a + p * 0.17) * 1, Math.sin(a + p * 0.17) * 1);
+      L(Math.cos(a + p * 0.3) * 0.76, Math.sin(a + p * 0.3) * 0.76);
+    }
+    c.closePath();
+    O(0, 0, 0.32, true);
+    return;
+  }
+  if (k == 23) {
+    for (let i = 0; i < 3; i++) {
+      const a = (i * T) / 6;
+      c.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+      c.ellipse(0, 0, r, 0.36 * r, a, 0, T);
+      c.moveTo(Math.cos(a) * 0.84 * r, Math.sin(a) * 0.84 * r);
+      c.ellipse(0, 0, 0.84 * r, 0.22 * r, a, 0, T, true);
+    }
+    O(0, 0, 0.18);
+    return;
+  }
+  if (k == 24) {
+    O(0, -0.16, 0.76);
+    c.rect(-0.38 * r, 0.3 * r, 0.76 * r, 0.6 * r);
+    c.moveTo(0.5 * r, -0.12 * r);
+    c.ellipse(0.29 * r, -0.12 * r, 0.21 * r, 0.24 * r, 0, 0, T, true);
+    c.moveTo(-0.08 * r, -0.12 * r);
+    c.ellipse(-0.29 * r, -0.12 * r, 0.21 * r, 0.24 * r, 0, 0, T, true);
+    M(0, 0.1);
+    L(-0.11, 0.3);
+    L(0.11, 0.3);
+    c.closePath();
+    for (const x of [-0.2, 0, 0.2]) {
+      M(x - 0.035, 0.64);
+      L(x - 0.035, 0.9);
+      L(x + 0.035, 0.9);
+      L(x + 0.035, 0.64);
+      c.closePath();
+    }
+    return;
+  }
+  if (k == 25) {
+    O(0, -0.48, 0.38);
+    O(-0.47, 0.04, 0.38);
+    O(0.47, 0.04, 0.38);
+    O(0, -0.08, 0.24);
+    M(0, 0.02);
+    L(0.17, 0.96);
+    L(-0.17, 0.96);
+    c.closePath();
+    return;
+  }
+  M(0, 0.96);
+  B(-0.62, 0.96, -0.86, 0.36, -0.56, -0.12);
+  Q(-0.44, 0.12, -0.26, 0.16);
+  B(-0.42, -0.36, -0.1, -0.7, 0.06, -1);
+  B(0.18, -0.6, 0.56, -0.42, 0.5, -0.02);
+  Q(0.62, -0.14, 0.66, -0.36);
+  B(0.96, 0.08, 0.78, 0.96, 0, 0.96);
   c.closePath();
 };
 const LGPRE = [
@@ -50324,7 +50694,7 @@ function lgColX(k, i) {
   return c ? c[2 + k] : ["hsl(0,78%,60%)", "hsl(0,40%,12%)", "hsl(0,60%,82%)"][k];
 }
 function lgMax(k) {
-  return k == "s" ? 59 : k == "f" ? LGF.length - 1 : k == "x" ? LSUF.length - 1 : k == "tx" ? LTX.length - 1 : k == "p" ? LPO.length - 1 : 19 + LGCX.length;
+  return k == "s" ? 107 : k == "f" ? LGF.length - 1 : k == "x" ? LSUF.length - 1 : k == "tx" ? LTX.length - 1 : k == "p" ? LPO.length - 1 : 19 + LGCX.length;
 }
 const lgColN = (i) => {
   const c = (i | 0) < 20 ? LGCN[i | 0] : LGCX[(i | 0) - 20];
@@ -61733,6 +62103,116 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Mejor ensayo", "Best essay", "Meilleur essai", "Melhor ensaio"],
   ["clase", "class", "classe", "classe"],
   ["Fiesta nacional de", "National day of", "Fête nationale de", "Festa nacional de"],
+  ["Historia", "History", "Histoire", "História"],
+  ["Historia: las estéticas se alternan solas según el año, las fiestas del calendario y la época en que cada estilo estuvo de moda.", "History: the aesthetics change on their own with the year, the calendar holidays and the time when each style was in vogue.", "Histoire : les esthétiques alternent toutes seules selon l'année, les fêtes du calendrier et l'époque où chaque style était à la mode.", "História: as estéticas se alternam sozinhas conforme o ano, as festas do calendário e a época em que cada estilo esteve na moda."],
+  ["Nueva edición", "New edition", "Nouvelle édition", "Nova edição"],
+  ["Pop psicodélico", "Psychedelic pop", "Pop psychédélique", "Pop psicodélico"],
+  ["Memphis", "Memphis", "Memphis", "Memphis"],
+  ["Corazón", "Heart", "Cœur", "Coração"],
+  ["Flor de lis", "Fleur-de-lis", "Fleur de lys", "Flor-de-lis"],
+  ["Flor", "Flower", "Fleur", "Flor"],
+  ["Luna creciente", "Crescent moon", "Croissant de lune", "Lua crescente"],
+  ["Sol", "Sun", "Soleil", "Sol"],
+  ["Copo de nieve", "Snowflake", "Flocon de neige", "Floco de neve"],
+  ["Destello", "Sparkle", "Étincelle", "Brilho"],
+  ["Engranaje", "Gear", "Engrenage", "Engrenagem"],
+  ["Átomo", "Atom", "Atome", "Átomo"],
+  ["Calavera", "Skull", "Crâne", "Caveira"],
+  ["Trébol", "Clover", "Trèfle", "Trevo"],
+  ["Llama", "Flame", "Flamme", "Chama"],
+  ["Ahora suena", "Now playing", "En cours de lecture", "Tocando agora"],
+  ["Elegida", "Selected", "Sélectionnée", "Selecionada"],
+  ["Música ambiente", "Ambient music", "Musique d'ambiance", "Música ambiente"],
+  ["Música electrónica", "Electronic music", "Musique électronique", "Música eletrônica"],
+  ["Clásicos de dominio público", "Public-domain classics", "Classiques du domaine public", "Clássicos de domínio público"],
+  ["Según la época: suena la música de moda en tu año y la de las fiestas del calendario; con un tema especial, su banda sonora.", "By era: you hear the music in vogue in your year and the calendar holidays; with a special theme, its soundtrack.", "Selon l'époque : on entend la musique à la mode de ton année et celle des fêtes du calendrier ; avec un thème spécial, sa bande originale.", "Conforme a época: toca a música da moda no seu ano e a das festas do calendário; com um tema especial, a sua trilha sonora."],
+  ["Tradicional inglesa", "English traditional", "Traditionnel anglais", "Tradicional inglesa"],
+  ["Tradicional", "Traditional", "Traditionnel", "Tradicional"],
+  ["Atribuida a J. S. Bach", "Attributed to J. S. Bach", "Attribuée à J. S. Bach", "Atribuída a J. S. Bach"],
+  ["Canon en Re", "Canon in D", "Canon en ré", "Cânone em Ré"],
+  ["Tocata en re menor", "Toccata in D minor", "Toccata en ré mineur", "Tocata em ré menor"],
+  ["Minueto en Sol", "Minuet in G", "Menuet en sol", "Minueto em Sol"],
+  ["Pequeña serenata nocturna", "Eine kleine Nachtmusik", "Une petite musique de nuit", "Pequena serenata noturna"],
+  ["Para Elisa", "Für Elise", "Lettre à Élise", "Para Elisa"],
+  ["Himno a la alegría", "Ode to Joy", "Hymne à la joie", "Hino à alegria"],
+  ["Noche de paz", "Silent Night", "Douce nuit", "Noite feliz"],
+  ["Danubio azul", "The Blue Danube", "Le Beau Danube bleu", "Danúbio azul"],
+  ["Canción de cuna", "Brahms' Lullaby", "Berceuse de Brahms", "Canção de ninar de Brahms"],
+  ["En la gruta del rey de la montaña", "In the Hall of the Mountain King", "Dans l'antre du roi de la montagne", "Na gruta do rei da montanha"],
+  ["Marcha fúnebre", "Funeral March", "Marche funèbre", "Marcha fúnebre"],
+  ["Gimnopedia n.º 1", "Gymnopédie No. 1", "Gymnopédie n° 1", "Gymnopédie n.º 1"],
+  ["Los santos", "When the Saints", "When the Saints", "When the Saints"],
+  ["Rocola", "Jukebox", "Juke-box", "Jukebox"],
+  ["Neón de medianoche", "Midnight neon", "Néon de minuit", "Neon da meia-noite"],
+  ["Pista de baile", "Dance floor", "Piste de danse", "Pista de dança"],
+  ["Ruta real", "Royal road", "Route royale", "Rota real"],
+  ["Lo-fi del estudio", "Studio lo-fi", "Lo-fi du studio", "Lo-fi do estúdio"],
+  ["Lluvia de neón", "Neon rain", "Pluie de néon", "Chuva de neon"],
+  ["Raga digital", "Digital raga", "Raga numérique", "Raga digital"],
+  ["Órbita", "Orbit", "Orbite", "Órbita"],
+  ["Balada inglesa del siglo XVI, en flauta y laúd.", "Sixteenth-century English ballad, on flute and lute.", "Ballade anglaise du XVIe siècle, à la flûte et au luth.", "Balada inglesa do século XVI, em flauta e alaúde."],
+  ["La leyenda dice que la escribió Enrique VIII, pero su estilo llegó de Italia después de su muerte. En 1865 su melodía pasó a ser el villancico «What Child Is This?».", "Legend says Henry VIII wrote it, but its style came from Italy after his death. In 1865 its tune became the carol «What Child Is This?».", "La légende dit qu'Henri VIII l'a écrite, mais son style est venu d'Italie après sa mort. En 1865, sa mélodie est devenue le chant de Noël «What Child Is This?».", "A lenda diz que Henrique VIII a escreveu, mas seu estilo chegou da Itália depois da morte dele. Em 1865 sua melodia virou a canção de Natal «What Child Is This?»."],
+  ["El bajo repite ocho notas y las cuerdas lo adornan cada vez más.", "The bass repeats eight notes while the strings decorate it more and more.", "La basse répète huit notes et les cordes l'ornent de plus en plus.", "O baixo repete oito notas e as cordas o enfeitam cada vez mais."],
+  ["Estuvo casi olvidado más de dos siglos; una grabación de 1968 lo volvió famoso y hoy suena en miles de bodas.", "It was almost forgotten for two centuries; a 1968 recording made it famous and today it plays at thousands of weddings.", "Il est resté presque oublié pendant plus de deux siècles ; un enregistrement de 1968 l'a rendu célèbre et il résonne aujourd'hui dans des milliers de mariages.", "Ficou quase esquecido por mais de dois séculos; uma gravação de 1968 o tornou famoso e hoje toca em milhares de casamentos."],
+  ["Órgano solemne, el clásico de las películas de terror.", "Solemn organ, the horror-film classic.", "Orgue solennel, le classique des films d'horreur.", "Órgão solene, o clássico dos filmes de terror."],
+  ["Algunos musicólogos dudan de que la haya escrito Bach. Disney la usó para abrir «Fantasía» en 1940.", "Some musicologists doubt Bach wrote it. Disney used it to open «Fantasia» in 1940.", "Certains musicologues doutent que Bach l'ait écrite. Disney l'a utilisée pour ouvrir «Fantasia» en 1940.", "Alguns musicólogos duvidam que Bach a tenha escrito. A Disney a usou para abrir «Fantasia» em 1940."],
+  ["Minueto para clave, de los salones del siglo XVIII.", "Harpsichord minuet from the eighteenth-century salons.", "Menuet pour clavecin, des salons du XVIIIe siècle.", "Minueto para cravo, dos salões do século XVIII."],
+  ["Durante más de dos siglos se creyó que era de Bach porque estaba en el cuaderno de su esposa, Anna Magdalena. En los años setenta se descubrió que era de Petzold.", "For more than two centuries it was thought to be by Bach because it was in his wife Anna Magdalena's notebook. In the 1970s it turned out to be by Petzold.", "Pendant plus de deux siècles, on l'a cru de Bach parce qu'il figurait dans le cahier de sa femme, Anna Magdalena. Dans les années 1970, on a découvert qu'il était de Petzold.", "Por mais de dois séculos pensou-se que era de Bach porque estava no caderno de sua esposa, Anna Magdalena. Nos anos 1970 descobriu-se que era de Petzold."],
+  ["Serenata alegre para cuerdas, con bajo de Alberti.", "Cheerful string serenade over an Alberti bass.", "Sérénade joyeuse pour cordes, sur une basse d'Alberti.", "Serenata alegre para cordas, com baixo de Alberti."],
+  ["Mozart la terminó en 1787, pero se publicó en 1827, años después de su muerte. La película «Amadeus» (1984) la volvió a poner de moda.", "Mozart finished it in 1787, but it was published in 1827, years after his death. The film «Amadeus» (1984) made it fashionable again.", "Mozart l'a terminée en 1787, mais elle n'a été publiée qu'en 1827, des années après sa mort. Le film «Amadeus» (1984) l'a remise à la mode.", "Mozart a terminou em 1787, mas ela só foi publicada em 1827, anos depois de sua morte. O filme «Amadeus» (1984) a colocou de novo na moda."],
+  ["La pieza de piano más famosa del mundo.", "The most famous piano piece in the world.", "Le morceau de piano le plus célèbre du monde.", "A peça de piano mais famosa do mundo."],
+  ["Beethoven la escribió hacia 1810, pero se publicó en 1867, cuarenta años después de su muerte. Nadie sabe con certeza quién era Elisa.", "Beethoven wrote it around 1810, but it was published in 1867, forty years after his death. Nobody knows for sure who Elise was.", "Beethoven l'a écrite vers 1810, mais elle n'a été publiée qu'en 1867, quarante ans après sa mort. Personne ne sait avec certitude qui était Élise.", "Beethoven a escreveu por volta de 1810, mas ela só foi publicada em 1867, quarenta anos depois de sua morte. Ninguém sabe ao certo quem era Elisa."],
+  ["El final de la Novena sinfonía, en coro de cuerdas.", "The finale of the Ninth Symphony, as a string chorale.", "Le final de la Neuvième symphonie, en choral de cordes.", "O final da Nona Sinfonia, em coral de cordas."],
+  ["Beethoven estaba casi sordo en el estreno de 1824: tuvieron que girarlo para que viera los aplausos. Hoy es el himno de la Unión Europea.", "Beethoven was almost deaf at the 1824 premiere: he had to be turned around to see the applause. Today it is the anthem of the European Union.", "Beethoven était presque sourd lors de la création en 1824 : il a fallu le retourner pour qu'il voie les applaudissements. C'est aujourd'hui l'hymne de l'Union européenne.", "Beethoven estava quase surdo na estreia de 1824: tiveram de virá-lo para que visse os aplausos. Hoje é o hino da União Europeia."],
+  ["Villancico en caja de música.", "Christmas carol on a music box.", "Chant de Noël en boîte à musique.", "Canção de Natal em caixinha de música."],
+  ["Se estrenó en 1818 en Oberndorf, Austria, con guitarra: según la tradición, el órgano de la iglesia estaba averiado.", "It premiered in 1818 in Oberndorf, Austria, with a guitar: according to tradition, the church organ was broken.", "Il a été créé en 1818 à Oberndorf, en Autriche, à la guitare : selon la tradition, l'orgue de l'église était en panne.", "Estreou em 1818 em Oberndorf, na Áustria, com violão: segundo a tradição, o órgão da igreja estava quebrado."],
+  ["Cascabeles y trineo para diciembre.", "Sleigh bells for December.", "Grelots et traîneau pour décembre.", "Guizos e trenó para dezembro."],
+  ["Fue la primera canción que sonó desde el espacio: en 1965 los astronautas del Gemini 6 la tocaron con una armónica y unos cascabeles.", "It was the first song played from space: in 1965 the Gemini 6 astronauts played it on a harmonica and bells.", "Ce fut la première chanson jouée depuis l'espace : en 1965, les astronautes de Gemini 6 l'ont jouée avec un harmonica et des grelots.", "Foi a primeira canção tocada no espaço: em 1965 os astronautas da Gemini 6 a tocaram com uma gaita e uns guizos."],
+  ["El vals de los grandes bailes de Viena.", "The waltz of the great Viennese balls.", "La valse des grands bals de Vienne.", "A valsa dos grandes bailes de Viena."],
+  ["Su estreno de 1867, con coro, fue tibio. En 1968 Kubrick lo puso a flotar con las naves de «2001: Una odisea del espacio».", "Its 1867 premiere, with a choir, was lukewarm. In 1968 Kubrick set it floating with the spaceships of «2001: A Space Odyssey».", "Sa création en 1867, avec chœur, fut tiède. En 1968, Kubrick l'a fait flotter avec les vaisseaux de «2001 : l'Odyssée de l'espace».", "Sua estreia em 1867, com coro, foi morna. Em 1968 Kubrick a fez flutuar com as naves de «2001: Uma odisseia no espaço»."],
+  ["Nana en caja de música, para las noches tranquilas.", "Music-box lullaby for quiet nights.", "Berceuse en boîte à musique, pour les nuits tranquilles.", "Canção de ninar em caixinha de música, para noites tranquilas."],
+  ["Brahms se la regaló en 1868 a su amiga Bertha Faber por el nacimiento de su segundo hijo.", "Brahms gave it in 1868 to his friend Bertha Faber for the birth of her second son.", "Brahms l'a offerte en 1868 à son amie Bertha Faber pour la naissance de son deuxième fils.", "Brahms a deu de presente em 1868 à sua amiga Bertha Faber pelo nascimento do segundo filho dela."],
+  ["Pizzicato sigiloso que acelera en cada vuelta.", "Sneaky pizzicato that speeds up on every lap.", "Pizzicato furtif qui accélère à chaque tour.", "Pizzicato sorrateiro que acelera a cada volta."],
+  ["Grieg escribió que no soportaba escucharla porque «apesta a boñiga de vaca, a nacionalismo exagerado y a trols satisfechos de sí mismos».", "Grieg wrote that he couldn't stand listening to it because it «reeks of cow-pies, exaggerated nationalism and trollish self-satisfaction».", "Grieg a écrit qu'il ne supportait pas de l'écouter parce qu'elle «pue la bouse de vache, le nationalisme exagéré et la suffisance des trolls».", "Grieg escreveu que não suportava ouvi-la porque ela «fede a esterco de vaca, a nacionalismo exagerado e a trolls satisfeitos consigo mesmos»."],
+  ["Marcha lenta en órgano para las noches de Halloween.", "Slow organ march for Halloween nights.", "Marche lente à l'orgue pour les nuits d'Halloween.", "Marcha lenta no órgão para as noites de Halloween."],
+  ["Una versión para orquesta de esta marcha sonó en el propio funeral de Chopin, en París, en 1849.", "An orchestral version of this march was played at Chopin's own funeral in Paris in 1849.", "Une version pour orchestre de cette marche a été jouée aux propres funérailles de Chopin, à Paris, en 1849.", "Uma versão para orquestra desta marcha tocou no próprio funeral de Chopin, em Paris, em 1849."],
+  ["Piano lento y flotante, para pensar.", "Slow floating piano, for thinking.", "Piano lent et flottant, pour réfléchir.", "Piano lento e flutuante, para pensar."],
+  ["Satie tenía poco más de veinte años. El nombre viene de una danza de la antigua Esparta, la «gimnopedia».", "Satie was barely over twenty. The name comes from a dance of ancient Sparta, the «gymnopaedia».", "Satie avait à peine plus de vingt ans. Le nom vient d'une danse de l'ancienne Sparte, la «gymnopédie».", "Satie tinha pouco mais de vinte anos. O nome vem de uma dança da antiga Esparta, a «gimnopédia»."],
+  ["Ragtime de piano, como en el cine mudo.", "Ragtime piano, like in the silent movies.", "Ragtime au piano, comme au cinéma muet.", "Ragtime de piano, como no cinema mudo."],
+  ["Volvió a ser un éxito 71 años después, en 1973, gracias a la película «El golpe».", "It became a hit again 71 years later, in 1973, thanks to the film «The Sting».", "Il est redevenu un succès 71 ans plus tard, en 1973, grâce au film «L'Arnaque».", "Voltou a ser um sucesso 71 anos depois, em 1973, graças ao filme «Golpe de mestre»."],
+  ["Jazz de Nueva Orleans, con bajo que camina.", "New Orleans jazz with a walking bass.", "Jazz de La Nouvelle-Orléans, avec une basse qui marche.", "Jazz de Nova Orleans, com baixo caminhante."],
+  ["Era un himno religioso; Louis Armstrong lo convirtió en 1938 en un clásico del jazz.", "It was a church hymn; Louis Armstrong turned it into a jazz classic in 1938.", "C'était un cantique religieux ; Louis Armstrong en a fait un classique du jazz en 1938.", "Era um hino religioso; Louis Armstrong o transformou em 1938 num clássico do jazz."],
+  ["Chiptune de consola: onda cuadrada y ruido blanco.", "Console chiptune: square wave and white noise.", "Chiptune de console : onde carrée et bruit blanc.", "Chiptune de console: onda quadrada e ruído branco."],
+  ["Las consolas de los ochenta solo podían tocar tres o cuatro notas a la vez, por eso los arpegios rápidos imitan acordes completos.", "Eighties consoles could only play three or four notes at once, which is why fast arpeggios imitate full chords.", "Les consoles des années 1980 ne pouvaient jouer que trois ou quatre notes à la fois : les arpèges rapides imitent donc des accords complets.", "Os consoles dos anos 1980 só podiam tocar três ou quatro notas ao mesmo tempo; por isso os arpejos rápidos imitam acordes completos."],
+  ["Synthwave con caja de los ochenta y bajo pulsante.", "Synthwave with an eighties snare and a pulsing bass.", "Synthwave avec caisse claire des années 1980 et basse pulsée.", "Synthwave com caixa dos anos 1980 e baixo pulsante."],
+  ["El synthwave nació en internet a mediados de los 2000 como nostalgia de los ochenta; la película «Drive» (2011) lo llevó al gran público.", "Synthwave was born online in the mid-2000s as eighties nostalgia; the film «Drive» (2011) took it to the mainstream.", "La synthwave est née sur internet au milieu des années 2000, par nostalgie des années 1980 ; le film «Drive» (2011) l'a fait connaître du grand public.", "O synthwave nasceu na internet em meados dos anos 2000 como nostalgia dos anos 1980; o filme «Drive» (2011) o levou ao grande público."],
+  ["Rock and roll de doce compases, con saxofón y bajo boogie.", "Twelve-bar rock and roll with saxophone and boogie bass.", "Rock and roll de douze mesures, avec saxophone et basse boogie.", "Rock and roll de doze compassos, com saxofone e baixo boogie."],
+  ["En América Latina a la máquina de discos se le dice «rocola» por la marca estadounidense Rock-Ola, que las fabricaba.", "In Latin America a jukebox is called a «rocola», after the American brand Rock-Ola that made them.", "En Amérique latine, on appelle le juke-box «rocola», d'après la marque américaine Rock-Ola qui les fabriquait.", "Na América Latina a jukebox é chamada de «rocola», por causa da marca americana Rock-Ola, que as fabricava."],
+  ["Disco y house: bombo en cada tiempo y piano en contratiempo.", "Disco and house: a kick on every beat and offbeat piano.", "Disco et house : grosse caisse sur chaque temps et piano à contretemps.", "Disco e house: bumbo em cada tempo e piano no contratempo."],
+  ["El house nació en los clubes de Chicago a principios de los ochenta, con cajas de ritmos como la Roland TR-808 y la TR-909.", "House was born in Chicago clubs in the early eighties, with drum machines like the Roland TR-808 and TR-909.", "La house est née dans les clubs de Chicago au début des années 1980, avec des boîtes à rythmes comme la Roland TR-808 et la TR-909.", "O house nasceu nos clubes de Chicago no começo dos anos 1980, com baterias eletrônicas como a Roland TR-808 e a TR-909."],
+  ["Canción de apertura de anime: rápida, luminosa y con batería.", "Anime opening song: fast, bright and with drums.", "Générique d'anime : rapide, lumineux et avec batterie.", "Abertura de anime: rápida, luminosa e com bateria."],
+  ["Usa la «progresión de la ruta real» (IV-V-iii-vi), una de las secuencias de acordes más usadas en el pop japonés.", "It uses the «royal road progression» (IV-V-iii-vi), one of the most used chord sequences in Japanese pop.", "Elle utilise la «progression de la route royale» (IV-V-iii-vi), l'une des suites d'accords les plus utilisées de la pop japonaise.", "Usa a «progressão da rota real» (IV-V-iii-vi), uma das sequências de acordes mais usadas no pop japonês."],
+  ["Piano eléctrico, batería perezosa y crujido de vinilo.", "Electric piano, lazy drums and vinyl crackle.", "Piano électrique, batterie paresseuse et craquements de vinyle.", "Piano elétrico, bateria preguiçosa e chiado de vinil."],
+  ["Las transmisiones de «lo-fi para estudiar» se hicieron populares hacia 2017 y algunas llevan años sin apagarse.", "«Lo-fi to study to» streams became popular around 2017 and some have been running for years.", "Les directs de «lo-fi pour étudier» sont devenus populaires vers 2017 et certains tournent depuis des années.", "As transmissões de «lo-fi para estudar» ficaram populares por volta de 2017 e algumas estão no ar há anos."],
+  ["Darksynth: bajo grueso, arpegios rápidos y lluvia de ciudad.", "Darksynth: heavy bass, fast arpeggios and city rain.", "Darksynth : basse lourde, arpèges rapides et pluie urbaine.", "Darksynth: baixo pesado, arpejos rápidos e chuva de cidade."],
+  ["El cyberpunk nació en la literatura de los ochenta: la palabra viene de un cuento de Bruce Bethke de 1983.", "Cyberpunk was born in eighties literature: the word comes from a 1983 short story by Bruce Bethke.", "Le cyberpunk est né dans la littérature des années 1980 : le mot vient d'une nouvelle de Bruce Bethke de 1983.", "O cyberpunk nasceu na literatura dos anos 1980: a palavra vem de um conto de Bruce Bethke de 1983."],
+  ["Sitar, tanpura y tabla sobre un pulso electrónico.", "Sitar, tanpura and tabla over an electronic pulse.", "Sitar, tanpura et tabla sur une pulsation électronique.", "Cítara, tanpura e tabla sobre um pulso eletrônico."],
+  ["El tanpura no toca melodía: repite un bordón continuo para que el sitar tenga siempre una nota de referencia.", "The tanpura plays no melody: it repeats a continuous drone so the sitar always has a reference note.", "Le tanpura ne joue pas de mélodie : il répète un bourdon continu pour que le sitar ait toujours une note de référence.", "A tanpura não toca melodia: repete um bordão contínuo para que a cítara tenha sempre uma nota de referência."],
+  ["Ambiente espacial: campanas, colchones y estrellas.", "Space ambience: bells, pads and stars.", "Ambiance spatiale : cloches, nappes et étoiles.", "Ambiente espacial: sinos, camadas e estrelas."],
+  ["En el espacio no hay sonido porque no hay aire que lo transmita; la música espacial del cine es pura imaginación.", "There is no sound in space because there is no air to carry it; movie space music is pure imagination.", "Il n'y a pas de son dans l'espace car il n'y a pas d'air pour le transmettre ; la musique spatiale du cinéma est pure imagination.", "Não há som no espaço porque não há ar para transmiti-lo; a música espacial do cinema é pura imaginação."],
+  ["Obras en curso", "Construction in progress", "Chantiers en cours", "Obras em andamento"],
+  ["Cada construcción nueva levanta una obra en tu edificio. Funciona desde ya; al terminar la obra la inauguras y ganas prensa y fans.", "Each new building project opens a construction site at your studio. It works right away; when the works finish you open it and win press and fans.", "Chaque nouvelle construction ouvre un chantier dans ton bâtiment. Elle fonctionne tout de suite ; à la fin du chantier, tu l'inaugures et gagnes presse et fans.", "Cada construção nova abre uma obra no seu prédio. Ela funciona desde já; ao terminar a obra você a inaugura e ganha imprensa e fãs."],
+  ["Tus patentes", "Your patents", "Tes brevets", "Suas patentes"],
+  ["Investiga un invento antes de su fecha real y lo patentas: cuando llegue para todos, los rivales te pagan una licencia y después regalías cada año, hasta que la patente vence a los 20 años.", "Research an invention before its real date and you patent it: when it reaches everyone, rivals pay you a licence and then royalties every year, until the patent expires after 20 years.", "Recherche une invention avant sa date réelle et tu la brevètes : quand elle arrive pour tous, les rivaux te paient une licence puis des redevances chaque année, jusqu'à l'expiration du brevet au bout de 20 ans.", "Pesquise uma invenção antes da data real e você a patenteia: quando ela chegar para todos, os rivais pagam uma licença e depois royalties todo ano, até a patente vencer aos 20 anos."],
+  ["vence en", "expires in", "expire en", "vence em"],
+  ["regalías desde", "royalties from", "redevances dès", "royalties a partir de"],
+  ["al año", "a year", "par an", "por ano"],
+  ["Vender", "Sell", "Vendre", "Vender"],
+  ["Nadie quiere comprar esa patente", "Nobody wants to buy that patent", "Personne ne veut acheter ce brevet", "Ninguém quer comprar essa patente"],
+  ["Valor de la compañía", "Company value", "Valeur de l'entreprise", "Valor da empresa"],
+  ["Lo que pagaría un comprador por tu estudio: seis veces la utilidad del último año, la caja sin deudas, la mitad de los ingresos, la mitad de lo invertido en construcciones y tus filiales. Los rivales se valoran igual.", "What a buyer would pay for your studio: six times last year's profit, cash minus debt, half of revenue, half of what you invested in buildings and your subsidiaries. Rivals are valued the same way.", "Ce qu'un acheteur paierait pour ton studio : six fois le bénéfice de l'an dernier, la trésorerie sans les dettes, la moitié du chiffre d'affaires, la moitié de ce que tu as investi en constructions et tes filiales. Les rivaux sont évalués de la même façon.", "O que um comprador pagaria pelo seu estúdio: seis vezes o lucro do último ano, o caixa sem dívidas, metade da receita, metade do investido em construções e suas filiais. Os rivais são avaliados do mesmo jeito."],
+  ["puesto", "rank", "rang", "posição"],
+  ["Puesto", "Rank", "Rang", "Posição"],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -67712,7 +68192,7 @@ const MUXP = [
   { n: "Horizonte", en: "Horizon", d: ["Ambiente sereno de campanas y cuerdas.", "Serene ambience of bells and strings."], bpm: 56, compas: 4, prog: [[0, 7, 11, 14], [5, 9, 12, 16], [9, 12, 16, 19], [7, 11, 14, 19]], raiz: 52, piano: 0, pad: 1, bell: 1 },
 ];
 const MUX = { on: 0, ctx: null, out: null, h: null, t: 0, i: 0, p: -1, cambio: 0, sd: 7 };
-const muxPiezaEra = () => {
+let muxPiezaEra = () => {
   const y = S ? yr() : 1950;
   return y < 1880 ? 0 : y < 1950 ? 1 : y < 2000 ? 2 : 3;
 };
@@ -67755,6 +68235,7 @@ function muxArma() {
   MUX.ctx = c;
   MUX.out = bus;
   MUX.master = master;
+  MUX.seco = seco;
 }
 const muxF = (m) => 440 * Math.pow(2, (m - 69) / 12);
 function muxPiano(m, t, dur, v) {
@@ -67947,8 +68428,791 @@ document.addEventListener("visibilitychange", () => {
   if (document.hidden) MUX.ctx.suspend().catch(() => {});
   else if (CFG.mus) MUX.ctx.resume().catch(() => {});
 });
+MUXP.forEach((p, i) => Object.assign(p, { tipo: "amb", y: 1700, v: [[[1700, 1880], [1880, 1950], [1950, 2000], [2000, 2300]][i]] }));
+MUXP.push(
+  {
+    n: "Greensleeves", en: "Greensleeves", comp: "Tradicional inglesa", ano: "1580", y: 1700, v: [[1700, 1790], [1865, 1905]], tg: ["navidad", "barroco"], tipo: "clasico",
+    d: ["Balada inglesa del siglo XVI, en flauta y laúd.", "Sixteenth-century English ballad, on flute and lute."],
+    dato: ["La leyenda dice que la escribió Enrique VIII, pero su estilo llegó de Italia después de su muerte. En 1865 su melodía pasó a ser el villancico «What Child Is This?».", "Legend says Henry VIII wrote it, but its style came from Italy after his death. In 1865 its tune became the carol «What Child Is This?»."],
+    bpm: 100, compas: 3, sub: 2, voz: "flauta", est: "vals", acv: "laud",
+    mel: "C5-4 D5-2 E5-3 F5-1 E5-2 D5-4 B4-2 G4-3 A4-1 B4-2 C5-4 A4-2 A4-3 G#4-1 A4-2 B4-4 G#4-2 E4-4 A4-2 C5-4 D5-2 E5-3 F5-1 E5-2 D5-4 B4-2 G4-3 A4-1 B4-2 C5-3 B4-1 A4-2 G#4-3 F#4-1 G#4-2 A4-4 A4-2",
+    ac: "Am C G Em Am Am E E Am C G Em Am E Am",
+  },
+  {
+    n: "Canon en Re", en: "Canon in D", comp: "Johann Pachelbel", ano: "1680–1706", y: 1700, v: [[1700, 1760], [1968, 1995], [2200, 2300]], tg: ["barroco"], tipo: "clasico",
+    d: ["El bajo repite ocho notas y las cuerdas lo adornan cada vez más.", "The bass repeats eight notes while the strings decorate it more and more."],
+    dato: ["Estuvo casi olvidado más de dos siglos; una grabación de 1968 lo volvió famoso y hoy suena en miles de bodas.", "It was almost forgotten for two centuries; a 1968 recording made it famous and today it plays at thousands of weddings."],
+    bpm: 62, compas: 4, sub: 2, voz: "cuerdas", est: "canon",
+    mel: "F#5-2 E5-2 D5-2 C#5-2 B4-2 A4-2 B4-2 C#5-2 D5-2 C#5-2 B4-2 A4-2 G4-2 F#4-2 G4-2 E4-2 D4-1 F#4-1 A4-1 G4-1 F#4-1 D4-1 F#4-1 E4-1 D4-1 B3-1 D4-1 A4-1 G4-1 B4-1 A4-1 G4-1 D5-1 F#5-1 A5-1 G5-1 F#5-1 D5-1 F#5-1 E5-1 D5-1 B4-1 D5-1 A5-1 G5-1 B5-1 A5-1 G5-1",
+    ac: "D,A,Bm,F#m G,D,G,A",
+  },
+  {
+    n: "Tocata en re menor", en: "Toccata in D minor", comp: "Atribuida a J. S. Bach", ano: "c. 1704", y: 1704, v: [[1704, 1750], [1938, 1945]], tg: ["miedo", "barroco", "noir"], tipo: "clasico",
+    d: ["Órgano solemne, el clásico de las películas de terror.", "Solemn organ, the horror-film classic."],
+    dato: ["Algunos musicólogos dudan de que la haya escrito Bach. Disney la usó para abrir «Fantasía» en 1940.", "Some musicologists doubt Bach wrote it. Disney used it to open «Fantasia» in 1940."],
+    bpm: 60, compas: 4, sub: 4, voz: "organo", est: "organo", vol: 0.8,
+    mel: "A5-1 G5-1 A5-10 R-4 G5-1 F5-1 E5-1 D5-1 C#5-4 D5-8 A4-1 G4-1 A4-10 R-4 E4-4 F4-4 C#4-4 D4-4 R-16",
+    ac: "Dm A7,Dm Dm C#dim,Dm -",
+  },
+  {
+    n: "Minueto en Sol", en: "Minuet in G", comp: "Christian Petzold", y: 1725, v: [[1725, 1800]], tg: ["barroco"], tipo: "clasico",
+    d: ["Minueto para clave, de los salones del siglo XVIII.", "Harpsichord minuet from the eighteenth-century salons."],
+    dato: ["Durante más de dos siglos se creyó que era de Bach porque estaba en el cuaderno de su esposa, Anna Magdalena. En los años setenta se descubrió que era de Petzold.", "For more than two centuries it was thought to be by Bach because it was in his wife Anna Magdalena's notebook. In the 1970s it turned out to be by Petzold."],
+    bpm: 112, compas: 3, sub: 2, voz: "clave", est: "vals", acv: "clave",
+    mel: "D5-2 G4-1 A4-1 B4-1 C5-1 D5-2 G4-2 G4-2 E5-2 C5-1 D5-1 E5-1 F#5-1 G5-2 G4-2 G4-2 C5-2 D5-1 C5-1 B4-1 A4-1 B4-2 C5-1 B4-1 A4-1 G4-1 F#4-2 G4-1 A4-1 B4-1 G4-1 A4-6 D5-2 G4-1 A4-1 B4-1 C5-1 D5-2 G4-2 G4-2 E5-2 C5-1 D5-1 E5-1 F#5-1 G5-2 G4-2 G4-2 C5-2 D5-1 C5-1 B4-1 A4-1 B4-2 C5-1 B4-1 A4-1 G4-1 A4-2 B4-1 A4-1 G4-1 F#4-1 G4-6",
+    ac: "G G C G C G D D G G C G C G D7 G",
+  },
+  {
+    n: "Pequeña serenata nocturna", en: "Eine kleine Nachtmusik", comp: "Wolfgang Amadeus Mozart", y: 1787, v: [[1787, 1860], [1984, 1992]], tg: [], tipo: "clasico",
+    d: ["Serenata alegre para cuerdas, con bajo de Alberti.", "Cheerful string serenade over an Alberti bass."],
+    dato: ["Mozart la terminó en 1787, pero se publicó en 1827, años después de su muerte. La película «Amadeus» (1984) la volvió a poner de moda.", "Mozart finished it in 1787, but it was published in 1827, years after his death. The film «Amadeus» (1984) made it fashionable again."],
+    bpm: 132, compas: 4, sub: 2, voz: "cuerdas", est: "alberti",
+    mel: "G4-2 R-1 D4-1 G4-2 R-1 D4-1 G4-1 D4-1 G4-1 B4-1 D5-4 C5-2 R-1 A4-1 C5-2 R-1 A4-1 C5-1 A4-1 F#4-1 A4-1 D4-4 G5-2 R-1 D5-1 G5-2 R-1 D5-1 G5-1 D5-1 G5-1 B5-1 D6-4 C6-2 R-1 A5-1 C6-2 R-1 A5-1 C6-1 A5-1 F#5-1 A5-1 D5-4",
+    ac: "G G D7 D7 G G D7 D7",
+  },
+  {
+    n: "Para Elisa", en: "Für Elise", comp: "Ludwig van Beethoven", ano: "1810", y: 1867, v: [[1867, 1930]], tg: [], tipo: "clasico",
+    d: ["La pieza de piano más famosa del mundo.", "The most famous piano piece in the world."],
+    dato: ["Beethoven la escribió hacia 1810, pero se publicó en 1867, cuarenta años después de su muerte. Nadie sabe con certeza quién era Elisa.", "Beethoven wrote it around 1810, but it was published in 1867, forty years after his death. Nobody knows for sure who Elise was."],
+    bpm: 150, compas: 3, sub: 2, voz: "piano", est: "elisa",
+    mel: "E5-1 D#5-1 E5-1 B4-1 D5-1 C5-1 A4-2 R-1 C4-1 E4-1 A4-1 B4-2 R-1 E4-1 G#4-1 B4-1 C5-2 R-1 E4-1 E5-1 D#5-1 E5-1 D#5-1 E5-1 B4-1 D5-1 C5-1 A4-2 R-1 C4-1 E4-1 A4-1 B4-2 R-1 E4-1 C5-1 B4-1 A4-2 R-2 E5-1 D#5-1",
+    ac: "- Am E Am - Am E Am",
+  },
+  {
+    n: "Himno a la alegría", en: "Ode to Joy", comp: "Ludwig van Beethoven", y: 1824, v: [[1824, 1900], [1972, 2010]], tg: [], tipo: "clasico",
+    d: ["El final de la Novena sinfonía, en coro de cuerdas.", "The finale of the Ninth Symphony, as a string chorale."],
+    dato: ["Beethoven estaba casi sordo en el estreno de 1824: tuvieron que girarlo para que viera los aplausos. Hoy es el himno de la Unión Europea.", "Beethoven was almost deaf at the 1824 premiere: he had to be turned around to see the applause. Today it is the anthem of the European Union."],
+    bpm: 112, compas: 4, sub: 2, voz: "cuerdas", est: "coral",
+    mel: "F#4-2 F#4-2 G4-2 A4-2 A4-2 G4-2 F#4-2 E4-2 D4-2 D4-2 E4-2 F#4-2 F#4-3 E4-1 E4-4 F#4-2 F#4-2 G4-2 A4-2 A4-2 G4-2 F#4-2 E4-2 D4-2 D4-2 E4-2 F#4-2 E4-3 D4-1 D4-4 E4-2 E4-2 F#4-2 D4-2 E4-2 F#4-1 G4-1 F#4-2 D4-2 E4-2 F#4-1 G4-1 F#4-2 E4-2 D4-2 E4-2 A3-4 F#4-2 F#4-2 G4-2 A4-2 A4-2 G4-2 F#4-2 E4-2 D4-2 D4-2 E4-2 F#4-2 E4-3 D4-1 D4-4",
+    ac: "D A D A D A D A,D A A,D A,D D,A D A D A,D",
+  },
+  {
+    n: "Noche de paz", en: "Silent Night", comp: "Franz Xaver Gruber", y: 1818, v: [], tg: ["navidad"], tipo: "clasico",
+    d: ["Villancico en caja de música.", "Christmas carol on a music box."],
+    dato: ["Se estrenó en 1818 en Oberndorf, Austria, con guitarra: según la tradición, el órgano de la iglesia estaba averiado.", "It premiered in 1818 in Oberndorf, Austria, with a guitar: according to tradition, the church organ was broken."],
+    bpm: 150, compas: 6, sub: 2, voz: "cajita", est: "coral",
+    mel: "G4-3 A4-1 G4-2 E4-6 G4-3 A4-1 G4-2 E4-6 D5-4 D5-2 B4-6 C5-4 C5-2 G4-6 A4-4 A4-2 C5-3 B4-1 A4-2 G4-3 A4-1 G4-2 E4-6 A4-4 A4-2 C5-3 B4-1 A4-2 G4-3 A4-1 G4-2 E4-6 D5-4 D5-2 F5-3 D5-1 B4-2 C5-6 E5-6 C5-3 G4-1 E4-2 G4-3 F4-1 D4-2 C4-12",
+    ac: "C C G7 C F C F C G7 C C,G7 C",
+  },
+  {
+    n: "Jingle Bells", en: "Jingle Bells", comp: "James Lord Pierpont", y: 1857, v: [], tg: ["navidad"], tipo: "clasico",
+    d: ["Cascabeles y trineo para diciembre.", "Sleigh bells for December."],
+    dato: ["Fue la primera canción que sonó desde el espacio: en 1965 los astronautas del Gemini 6 la tocaron con una armónica y unos cascabeles.", "It was the first song played from space: in 1965 the Gemini 6 astronauts played it on a harmonica and bells."],
+    bpm: 132, compas: 4, sub: 2, voz: "cajita", est: "marcha", cascabel: 1,
+    mel: "E5-2 E5-2 E5-4 E5-2 E5-2 E5-4 E5-2 G5-2 C5-3 D5-1 E5-8 F5-2 F5-2 F5-3 F5-1 F5-2 E5-2 E5-2 E5-1 E5-1 E5-2 D5-2 D5-2 E5-2 D5-4 G5-4 E5-2 E5-2 E5-4 E5-2 E5-2 E5-4 E5-2 G5-2 C5-3 D5-1 E5-8 F5-2 F5-2 F5-2 F5-2 F5-2 E5-2 E5-2 E5-1 E5-1 G5-2 G5-2 F5-2 D5-2 C5-8",
+    ac: "C C C C F C D7 G7 C C C C F C G7 C",
+  },
+  {
+    n: "Danubio azul", en: "The Blue Danube", comp: "Johann Strauss II", y: 1867, v: [[1867, 1920], [1968, 1975], [2150, 2300]], tg: ["espacio"], tipo: "clasico",
+    d: ["El vals de los grandes bailes de Viena.", "The waltz of the great Viennese balls."],
+    dato: ["Su estreno de 1867, con coro, fue tibio. En 1968 Kubrick lo puso a flotar con las naves de «2001: Una odisea del espacio».", "Its 1867 premiere, with a choir, was lukewarm. In 1968 Kubrick set it floating with the spaceships of «2001: A Space Odyssey»."],
+    bpm: 168, compas: 3, sub: 1, voz: "cuerdas", est: "vals",
+    mel: "D4-3 D4-1 F#4-1 A4-1 A4-3 R-1 A5-1 A5-1 R-1 F#5-1 F#5-1 D4-3 D4-1 F#4-1 A4-1 A4-3 R-1 A5-1 A5-1 R-1 G5-1 G5-1 C#4-3 C#4-1 E4-1 B4-1 B4-3 R-1 B5-1 B5-1 R-1 G5-1 G5-1 C#4-3 C#4-1 E4-1 B4-1 B4-3 R-1 B5-1 B5-1 R-1 F#5-1 F#5-1 D4-3 D4-1 F#4-1 A4-1 D5-3 R-1 D6-1 D6-1 R-1 A5-1 A5-1 D4-3 D4-1 F#4-1 A4-1 D5-3 R-1 D6-1 D6-1 R-1 B5-1 B5-1 E5-1 G5-1 B5-1 A5-2 C#5-1 D5-3",
+    ac: "D D D D D D D D D A7 A7 A7 A7 A7 A7 A7 A7 A7 A7 D D D D D D D D D D G Em A7 D",
+  },
+  {
+    n: "Canción de cuna", en: "Brahms' Lullaby", comp: "Johannes Brahms", y: 1868, v: [[1868, 1950]], tg: [], tipo: "clasico",
+    d: ["Nana en caja de música, para las noches tranquilas.", "Music-box lullaby for quiet nights."],
+    dato: ["Brahms se la regaló en 1868 a su amiga Bertha Faber por el nacimiento de su segundo hijo.", "Brahms gave it in 1868 to his friend Bertha Faber for the birth of her second son."],
+    bpm: 96, compas: 3, sub: 2, voz: "cajita", est: "vals", acv: "piano",
+    mel: "G4-4 E4-1 E4-1 G4-4 E4-1 G4-1 C5-2 B4-3 A4-1 A4-2 G4-2 D4-1 E4-1 F4-4 D4-1 E4-1 F4-4 D4-1 F4-1 B4-1 A4-1 G4-2 B4-2 C5-4 C4-1 C4-1 C5-4 A4-1 F4-1 G4-4 E4-1 C4-1 F4-2 G4-2 A4-2 G4-4 C4-1 C4-1 C5-4 A4-1 F4-1 G4-4 E4-1 C4-1 F4-2 E4-2 D4-2 C4-4 E4-1 E4-1",
+    ac: "C C G7 G7 G7 G7 G7 C F C F,G7 C F C G7 C",
+  },
+  {
+    n: "En la gruta del rey de la montaña", en: "In the Hall of the Mountain King", comp: "Edvard Grieg", ano: "1875", y: 1876, v: [[1876, 1930]], tg: ["miedo"], tipo: "clasico", acel: 1,
+    d: ["Pizzicato sigiloso que acelera en cada vuelta.", "Sneaky pizzicato that speeds up on every lap."],
+    dato: ["Grieg escribió que no soportaba escucharla porque «apesta a boñiga de vaca, a nacionalismo exagerado y a trols satisfechos de sí mismos».", "Grieg wrote that he couldn't stand listening to it because it «reeks of cow-pies, exaggerated nationalism and trollish self-satisfaction»."],
+    bpm: 112, compas: 4, sub: 2, voz: "pulso", est: "pizz", vol: 1.35,
+    mel: "B3-1 C#4-1 D4-1 E4-1 F#4-1 D4-1 F#4-2 F4-1 C#4-1 F4-2 E4-1 C4-1 E4-2 B3-1 C#4-1 D4-1 E4-1 F#4-1 D4-1 F#4-1 B4-1 A4-1 F#4-1 D4-1 F#4-1 A4-4 B4-1 C#5-1 D5-1 E5-1 F#5-1 D5-1 F#5-2 F5-1 C#5-1 F5-2 E5-1 C5-1 E5-2 B4-1 C#5-1 D5-1 E5-1 F#5-1 D5-1 F#5-1 B5-1 A5-1 F#5-1 D5-1 F#5-1 A5-4",
+    ac: "Bm F# Bm D Bm F# Bm D",
+  },
+  {
+    n: "Marcha fúnebre", en: "Funeral March", comp: "Frédéric Chopin", ano: "1837", y: 1840, v: [[1840, 1900]], tg: ["miedo", "noir"], tipo: "clasico",
+    d: ["Marcha lenta en órgano para las noches de Halloween.", "Slow organ march for Halloween nights."],
+    dato: ["Una versión para orquesta de esta marcha sonó en el propio funeral de Chopin, en París, en 1849.", "An orchestral version of this march was played at Chopin's own funeral in Paris in 1849."],
+    bpm: 54, compas: 4, sub: 4, voz: "organo", est: "organo", vol: 0.8,
+    mel: "Bb3-4 Bb3-3 Bb3-1 Bb3-8 Db4-3 C4-1 C4-3 Bb3-1 Bb3-3 A3-1 Bb3-4 Bb3-4 Bb3-3 Bb3-1 Bb3-8 Db4-3 C4-1 C4-3 Bb3-1 Bb3-3 A3-1 Bb3-4",
+    ac: "Bbm Bbm,F Bbm Bbm,F",
+  },
+  {
+    n: "Gimnopedia n.º 1", en: "Gymnopédie No. 1", comp: "Erik Satie", y: 1888, v: [[1888, 1925], [1968, 1980], [2150, 2300]], tg: ["cine", "noir"], tipo: "clasico",
+    d: ["Piano lento y flotante, para pensar.", "Slow floating piano, for thinking."],
+    dato: ["Satie tenía poco más de veinte años. El nombre viene de una danza de la antigua Esparta, la «gimnopedia».", "Satie was barely over twenty. The name comes from a dance of ancient Sparta, the «gymnopaedia»."],
+    bpm: 72, compas: 3, sub: 2, voz: "piano", est: "gimno", vol: 0.9,
+    mel: "R-24 R-2 F#5-2 A5-2 G5-2 F#5-2 C#5-2 B4-2 C#5-2 D5-2 A4-6 F#4-18 R-2 F#5-2 A5-2 G5-2 F#5-2 C#5-2 B4-2 C#5-2 D5-2 A4-2 C#5-2 F#5-2 E5-18",
+    ac: "Gmaj7 Dmaj7",
+  },
+  {
+    n: "The Entertainer", en: "The Entertainer", comp: "Scott Joplin", y: 1902, v: [[1902, 1925], [1973, 1980]], tg: ["cine"], tipo: "clasico",
+    d: ["Ragtime de piano, como en el cine mudo.", "Ragtime piano, like in the silent movies."],
+    dato: ["Volvió a ser un éxito 71 años después, en 1973, gracias a la película «El golpe».", "It became a hit again 71 years later, in 1973, thanks to the film «The Sting»."],
+    bpm: 80, compas: 2, sub: 4, voz: "piano", est: "rag",
+    mel: "R-6 D5-1 D#5-1 E5-1 C6-2 E5-1 C6-2 E5-1 C6-5 C6-1 D6-1 D#6-1 E6-1 C6-1 D6-1 E6-2 B5-1 D6-2 C6-5 R-2 D5-1 D#5-1 E5-1 C6-2 E5-1 C6-2 E5-1 C6-5 A5-1 G5-1 F#5-1 A5-1 C6-1 E6-2 D6-1 C6-1 A5-1 D6-6 R-2 D5-1 D#5-1 E5-1 C6-2 E5-1 C6-2 E5-1 C6-5 C6-1 D6-1 D#6-1 E6-1 C6-1 D6-1 E6-2 B5-1 D6-2 C6-8",
+    ac: "- C C G7 C C C,D7 D7 G7 C C G7 C",
+  },
+  {
+    n: "Los santos", en: "When the Saints", comp: "Tradicional", ano: "", y: 1920, v: [[1920, 1955]], tg: [], tipo: "clasico",
+    d: ["Jazz de Nueva Orleans, con bajo que camina.", "New Orleans jazz with a walking bass."],
+    dato: ["Era un himno religioso; Louis Armstrong lo convirtió en 1938 en un clásico del jazz.", "It was a church hymn; Louis Armstrong turned it into a jazz classic in 1938."],
+    bpm: 132, compas: 4, sub: 2, voz: "metal", est: "swing",
+    mel: "R-2 C4-2 E4-2 F4-2 G4-8 R-2 C4-2 E4-2 F4-2 G4-8 R-2 C4-2 E4-2 F4-2 G4-4 E4-4 C4-4 E4-4 D4-8 R-2 E4-2 E4-2 D4-2 C4-6 C4-2 E4-4 G4-4 G4-2 F4-6 R-2 E4-2 F4-2 G4-2 E4-4 C4-4 D4-8 C4-8",
+    ac: "C C C C C C C G7 C C7 F F C C G7 C",
+  },
+  {
+    n: "8 bits", en: "8 bits", comp: "OneZero", y: 1978, v: [[1978, 1995], [2008, 2020]], tg: ["chip"], tipo: "electro",
+    d: ["Chiptune de consola: onda cuadrada y ruido blanco.", "Console chiptune: square wave and white noise."],
+    dato: ["Las consolas de los ochenta solo podían tocar tres o cuatro notas a la vez, por eso los arpegios rápidos imitan acordes completos.", "Eighties consoles could only play three or four notes at once, which is why fast arpeggios imitate full chords."],
+    bpm: 150, compas: 4, sub: 4, voz: "cuadrada", est: "chip",
+    mel: "C5-2 E5-2 G5-2 C6-2 B5-2 G5-2 E5-2 G5-2 A5-4 E5-4 C5-4 E5-4 F5-2 A5-2 C6-2 A5-2 F5-2 A5-2 C6-4 B5-4 A5-2 G5-2 D5-8 C5-2 E5-2 G5-2 C6-2 B5-2 G5-2 E5-2 G5-2 A5-2 C6-2 E6-4 D6-2 C6-2 A5-4 F5-2 G5-2 A5-2 C6-2 D6-4 C6-4 B5-2 C6-2 D6-4 G5-8",
+    ac: "C Am F G C Am F G",
+  },
+  {
+    n: "Neón de medianoche", en: "Midnight neon", comp: "OneZero", y: 1982, v: [[1982, 1990], [2011, 2020]], tg: ["synth"], tipo: "electro",
+    d: ["Synthwave con caja de los ochenta y bajo pulsante.", "Synthwave with an eighties snare and a pulsing bass."],
+    dato: ["El synthwave nació en internet a mediados de los 2000 como nostalgia de los ochenta; la película «Drive» (2011) lo llevó al gran público.", "Synthwave was born online in the mid-2000s as eighties nostalgia; the film «Drive» (2011) took it to the mainstream."],
+    bpm: 100, compas: 4, sub: 4, voz: "sierra", est: "synth",
+    mel: "E5-6 D5-2 C5-4 B4-4 C5-6 A4-2 A4-8 G4-4 C5-4 E5-4 G5-4 F5-6 E5-2 D5-8 E5-6 D5-2 C5-4 E5-4 A5-8 G5-4 F5-4 E5-4 D5-4 C5-4 E5-4 D5-12 B4-4",
+    ac: "Am F C G Am F C G",
+  },
+  {
+    n: "Rocola", en: "Jukebox", comp: "OneZero", y: 1954, v: [[1954, 1966]], tg: [], tipo: "electro",
+    d: ["Rock and roll de doce compases, con saxofón y bajo boogie.", "Twelve-bar rock and roll with saxophone and boogie bass."],
+    dato: ["En América Latina a la máquina de discos se le dice «rocola» por la marca estadounidense Rock-Ola, que las fabricaba.", "In Latin America a jukebox is called a «rocola», after the American brand Rock-Ola that made them."],
+    bpm: 160, compas: 4, sub: 2, voz: "metal", est: "boogie",
+    mel: "E4-2 G4-2 A4-2 G4-2 Bb4-3 A4-1 G4-4 E4-2 G4-2 A4-2 G4-2 C5-8 A4-2 C5-2 D5-2 C5-2 Eb5-3 D5-1 C5-4 E4-2 G4-2 A4-2 G4-2 C5-4 G4-4 D5-2 B4-2 G4-4 C5-2 A4-2 F4-4 E4-2 G4-2 C5-4 D5-4 B4-4",
+    ac: "C C7 C C F F C C G F C G",
+  },
+  {
+    n: "Pista de baile", en: "Dance floor", comp: "OneZero", y: 1975, v: [[1975, 1999]], tg: ["baile"], tipo: "electro",
+    d: ["Disco y house: bombo en cada tiempo y piano en contratiempo.", "Disco and house: a kick on every beat and offbeat piano."],
+    dato: ["El house nació en los clubes de Chicago a principios de los ochenta, con cajas de ritmos como la Roland TR-808 y la TR-909.", "House was born in Chicago clubs in the early eighties, with drum machines like the Roland TR-808 and TR-909."],
+    bpm: 122, compas: 4, sub: 4, voz: "sierra", est: "house", vol: 0.8,
+    mel: "C5-6 Ab4-2 C5-4 Eb5-4 F5-6 Eb5-2 Db5-8 C5-6 Bb4-2 Ab4-4 C5-4 Bb4-8 G4-8 C5-6 Ab4-2 C5-4 Eb5-4 F5-4 Ab5-4 G5-4 F5-4 Eb5-6 C5-2 Ab4-4 C5-4 Bb4-16",
+    ac: "Fm Db Ab Eb Fm Db Ab Eb",
+  },
+  {
+    n: "Ruta real", en: "Royal road", comp: "OneZero", y: 1978, v: [[1978, 2040]], tg: ["anime"], tipo: "electro",
+    d: ["Canción de apertura de anime: rápida, luminosa y con batería.", "Anime opening song: fast, bright and with drums."],
+    dato: ["Usa la «progresión de la ruta real» (IV-V-iii-vi), una de las secuencias de acordes más usadas en el pop japonés.", "It uses the «royal road progression» (IV-V-iii-vi), one of the most used chord sequences in Japanese pop."],
+    bpm: 160, compas: 4, sub: 4, voz: "sierra", est: "rock",
+    mel: "A4-2 C5-2 F5-4 E5-2 D5-2 C5-4 B4-2 D5-2 G5-4 F5-2 E5-2 D5-4 E5-2 G5-2 B5-4 A5-2 G5-2 E5-4 A5-6 G5-2 E5-4 C5-4 A4-2 C5-2 F5-4 G5-2 A5-2 C6-4 B5-2 A5-2 G5-4 F5-2 E5-2 D5-4 E5-2 G5-2 B5-4 C6-2 B5-2 G5-4 A5-16",
+    ac: "F G Em Am F G Em Am",
+  },
+  {
+    n: "Lo-fi del estudio", en: "Studio lo-fi", comp: "OneZero", y: 2013, v: [[2013, 2045]], tg: ["lofi"], tipo: "electro",
+    d: ["Piano eléctrico, batería perezosa y crujido de vinilo.", "Electric piano, lazy drums and vinyl crackle."],
+    dato: ["Las transmisiones de «lo-fi para estudiar» se hicieron populares hacia 2017 y algunas llevan años sin apagarse.", "«Lo-fi to study to» streams became popular around 2017 and some have been running for years."],
+    bpm: 78, compas: 4, sub: 4, voz: "rhodes", est: "lofi",
+    mel: "A4-6 G4-2 E4-8 G4-6 E4-2 D4-8 F4-4 E4-4 D4-4 C4-4 E4-16 A4-4 C5-4 B4-4 A4-4 G4-6 E4-2 D4-8 F4-4 A4-4 G4-4 E4-4 D4-16",
+    ac: "Fmaj7 Em7 Dm7 Cmaj7 Fmaj7 Em7 Dm7 Cmaj7",
+  },
+  {
+    n: "Lluvia de neón", en: "Neon rain", comp: "OneZero", y: 2020, v: [[2020, 2120]], tg: ["ciber"], tipo: "electro",
+    d: ["Darksynth: bajo grueso, arpegios rápidos y lluvia de ciudad.", "Darksynth: heavy bass, fast arpeggios and city rain."],
+    dato: ["El cyberpunk nació en la literatura de los ochenta: la palabra viene de un cuento de Bruce Bethke de 1983.", "Cyberpunk was born in eighties literature: the word comes from a 1983 short story by Bruce Bethke."],
+    bpm: 108, compas: 4, sub: 4, voz: "sierra", est: "synth", oscuro: 1,
+    mel: "D5-4 F5-4 A5-6 G5-2 F5-4 D5-4 Bb4-8 G4-4 Bb4-4 D5-4 F5-4 E5-8 C#5-8 D5-4 F5-4 A5-6 Bb5-2 A5-4 F5-4 D5-8 Bb4-4 D5-4 G5-4 F5-4 E5-12 R-4",
+    ac: "Dm Bb Gm A Dm Bb Gm A",
+  },
+  {
+    n: "Raga digital", en: "Digital raga", comp: "OneZero", y: 1990, v: [[1990, 2100]], tg: ["raga"], tipo: "electro",
+    d: ["Sitar, tanpura y tabla sobre un pulso electrónico.", "Sitar, tanpura and tabla over an electronic pulse."],
+    dato: ["El tanpura no toca melodía: repite un bordón continuo para que el sitar tenga siempre una nota de referencia.", "The tanpura plays no melody: it repeats a continuous drone so the sitar always has a reference note."],
+    bpm: 96, compas: 4, sub: 4, voz: "sitar", est: "drone",
+    mel: "G4-2 Ab4-2 B4-4 C5-4 Db5-2 C5-2 B4-2 Ab4-2 G4-4 F4-4 E4-4 E4-2 F4-2 G4-2 Ab4-2 G4-4 F4-2 E4-2 Db4-4 E4-4 C4-8 G4-2 Ab4-2 B4-2 C5-2 Db5-4 E5-4 F5-2 E5-2 Db5-2 C5-2 B4-4 Ab4-4 G4-2 Ab4-2 G4-2 F4-2 E4-4 Db4-4 C4-16",
+    ac: "C",
+  },
+  {
+    n: "Órbita", en: "Orbit", comp: "OneZero", y: 2060, v: [[2060, 2300]], tg: ["espacio"], tipo: "electro",
+    d: ["Ambiente espacial: campanas, colchones y estrellas.", "Space ambience: bells, pads and stars."],
+    dato: ["En el espacio no hay sonido porque no hay aire que lo transmita; la música espacial del cine es pura imaginación.", "There is no sound in space because there is no air to carry it; movie space music is pure imagination."],
+    bpm: 70, compas: 4, sub: 2, voz: "campana", est: "ambient",
+    mel: "G5-2 E5-2 B5-4 C6-2 A5-2 E5-4 A5-2 B5-2 C6-4 B5-2 D6-2 G5-4 G5-2 E5-2 B5-4 C6-2 E6-2 D6-4 C6-2 B5-2 A5-4 B5-8",
+    ac: "Cmaj7 Am7 Fmaj7 G6 Cmaj7 Am7 Fmaj7 G6",
+  },
+);
+const MUX_TEMA = { navidad: "navidad", halloween: "miedo", synthwave: "synth", vaporwave: "synth", pixel: "chip", cyberpunk: "ciber", espacio: "espacio", "era-futuro": "espacio", anime: "anime", bollywood: "raga", hollywood: "cine", cine: "cine", noir: "noir", barroco: "barroco", y2k: "baile", "pop-art": "baile", plano: "lofi", solarpunk: "lofi" };
+const MUX_NOTA = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+const MUX_CAL = { "": [0, 4, 7], m: [0, 3, 7], 7: [0, 4, 7, 10], m7: [0, 3, 7, 10], maj7: [0, 4, 7, 11], dim: [0, 3, 6], 6: [0, 4, 7, 9] };
+const muxAlt = (s) => (s == "#" ? 1 : s == "b" ? -1 : 0);
+function muxMidi(n) {
+  const m = /^([A-G])([#b]?)(\d)$/.exec(n);
+  return m ? 12 * (+m[3] + 1) + MUX_NOTA[m[1]] + muxAlt(m[2]) : null;
+}
+function muxAcorde(s) {
+  const m = /^([A-G])([#b]?)(.*)$/.exec(s);
+  if (!m) return null;
+  return { r: 48 + ((MUX_NOTA[m[1]] + muxAlt(m[2]) + 12) % 12), i: MUX_CAL[m[3]] || MUX_CAL[""] };
+}
+function muxCompila(P) {
+  if (P._c) return P._c;
+  const ini = {};
+  let t = 0;
+  P.mel
+    .trim()
+    .split(/\s+/)
+    .forEach((tk) => {
+      const [n, d] = tk.split("-"),
+        k = +d || 1;
+      if (n != "R") (ini[t] = ini[t] || []).push([muxMidi(n), k]);
+      t += k;
+    });
+  const barra = P.compas * P.sub;
+  return (P._c = {
+    ini,
+    barra,
+    len: Math.ceil(t / barra) * barra,
+    ac: P.ac
+      .trim()
+      .split(/\s+/)
+      .map((b) => b.split(",").map((x) => (x == "-" ? null : muxAcorde(x)))),
+  });
+}
+const muxDurP = (P) => (P.mel ? 60 / (P.bpm * (P.acel ? MUX.acel || 1 : 1)) / P.sub : 60 / P.bpm / 2);
+const muxLargo = (P) => (P.mel ? muxCompila(P).len : P.compas * 2 * P.prog.length);
+const MUX_VOZ = {
+  clave: { o: [["sawtooth", 1, 1.05], ["square", 2, 0.28]], at: 0.003, dec: 1.3, lp: 3600 },
+  laud: { o: [["triangle", 1, 1], ["sawtooth", 2, 0.12]], at: 0.004, dec: 1.1, lp: 2400 },
+  cajita: { o: [["sine", 1, 1], ["sine", 4, 0.22], ["sine", 6.3, 0.06]], at: 0.002, dec: 1.6 },
+  cuadrada: { o: [["square", 1, 0.5]], at: 0.004, lp: 5200, seco: 1 },
+  sierra: { o: [["sawtooth", 1, 0.55, -8], ["sawtooth", 1, 0.55, 8]], at: 0.012, lp: 2600, vib: 4 },
+  organo: { o: [["sine", 1, 0.7], ["sine", 2, 0.4], ["sine", 3, 0.22], ["sine", 4, 0.16], ["sine", 0.5, 0.3]], at: 0.03 },
+  cuerdas: { o: [["sawtooth", 1, 0.55, -7], ["sawtooth", 1, 0.55, 7]], at: 0.08, lp: 1900, vib: 5 },
+  flauta: { o: [["triangle", 1, 0.9], ["sine", 2, 0.12]], at: 0.05, lp: 3200, vib: 5 },
+  metal: { o: [["sawtooth", 1, 0.6], ["square", 1, 0.15]], at: 0.03, lp: 1700, vib: 5 },
+  rhodes: { o: [["sine", 1, 0.9], ["sine", 2, 0.18], ["sine", 7, 0.03]], at: 0.004, dec: 2.2 },
+  pulso: { o: [["triangle", 1, 1], ["sine", 2, 0.25]], at: 0.003, dec: 0.32, lp: 1600 },
+  sitar: { o: [["sawtooth", 1, 1.5], ["sawtooth", 2.01, 0.4]], at: 0.004, dec: 1.4, bp: 1500, curva: 40 },
+  bajo: { o: [["triangle", 1, 1], ["sine", 2, 0.2]], at: 0.006, dec: 0.7, lp: 900 },
+  bajoS: { o: [["sawtooth", 1, 0.7], ["square", 0.5, 0.25]], at: 0.005, lp: 520, seco: 1 },
+  bajoC: { o: [["triangle", 1, 1]], at: 0.002, seco: 1 },
+};
+function muxVoz(k, m, t, d, v) {
+  if (m == null) return;
+  if (!k || k == "piano") return muxPiano(m, t, Math.max(0.3, d * 1.5), v);
+  if (k == "campana") return muxBell(m, t, v * 0.55);
+  const V = MUX_VOZ[k] || MUX_VOZ.flauta,
+    c = MUX.ctx,
+    e = c.createGain(),
+    f = c.createBiquadFilter(),
+    fin = V.dec ? t + Math.max(V.dec, d * 1.2) : t + d + 0.14;
+  f.type = V.bp ? "bandpass" : "lowpass";
+  f.frequency.value = V.bp || V.lp || 8000;
+  if (V.bp) f.Q.value = 1.4;
+  e.gain.setValueAtTime(0.0001, t);
+  e.gain.exponentialRampToValueAtTime(v, t + V.at);
+  if (V.dec) e.gain.exponentialRampToValueAtTime(0.0001, fin);
+  else {
+    e.gain.setValueAtTime(v, t + Math.max(V.at, d * 0.9));
+    e.gain.exponentialRampToValueAtTime(0.0001, fin);
+  }
+  e.connect(f);
+  f.connect(V.seco && MUX.seco ? MUX.seco : MUX.out);
+  let lfo = null;
+  if (V.vib && d > 0.3) {
+    lfo = c.createOscillator();
+    const lg = c.createGain();
+    lfo.frequency.value = V.vib;
+    lg.gain.value = 9;
+    lfo.connect(lg);
+    lfo.start(t + 0.12);
+    lfo.stop(fin + 0.05);
+    lfo.lg = lg;
+  }
+  V.o.forEach(([ty, mul, g, dt]) => {
+    const o = c.createOscillator(),
+      og = c.createGain();
+    o.type = ty;
+    o.frequency.value = muxF(m) * mul;
+    if (dt) o.detune.value = dt;
+    if (V.curva) {
+      o.detune.setValueAtTime((dt || 0) + V.curva, t);
+      o.detune.linearRampToValueAtTime(dt || 0, t + 0.09);
+    }
+    if (lfo) lfo.lg.connect(o.detune);
+    og.gain.value = g;
+    o.connect(og);
+    og.connect(e);
+    o.start(t);
+    o.stop(fin + 0.05);
+  });
+}
+function muxRuido() {
+  if (!MUX.nz || MUX.nz.sampleRate != MUX.ctx.sampleRate) {
+    const c = MUX.ctx,
+      n = c.sampleRate,
+      b = c.createBuffer(1, n, n),
+      d = b.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    MUX.nz = b;
+  }
+  return MUX.nz;
+}
+function muxGolpe(k, t, v) {
+  const c = MUX.ctx,
+    dest = MUX.seco || MUX.out;
+  if (k == "bombo" || k == "tablaG" || k == "tabla" || k == "timbal") {
+    const o = c.createOscillator(),
+      e = c.createGain(),
+      [f0, f1, L] = k == "bombo" ? [150, 44, 0.32] : k == "tablaG" ? [190, 80, 0.45] : k == "timbal" ? [110, 70, 0.9] : [620, 560, 0.28];
+    o.type = k == "tabla" ? "triangle" : "sine";
+    o.frequency.setValueAtTime(f0, t);
+    o.frequency.exponentialRampToValueAtTime(f1, t + (k == "tablaG" ? 0.25 : 0.1));
+    e.gain.setValueAtTime(v, t);
+    e.gain.exponentialRampToValueAtTime(0.0001, t + L);
+    o.connect(e);
+    e.connect(k == "timbal" ? MUX.out : dest);
+    o.start(t);
+    o.stop(t + L + 0.02);
+    if (k != "tabla") return;
+  }
+  const s = c.createBufferSource(),
+    f = c.createBiquadFilter(),
+    e = c.createGain(),
+    L = { caja: 0.2, palmas: 0.18, plato: 1.2, abierto: 0.24, cascabel: 0.16, vinilo: 0.012, tabla: 0.05 }[k] || 0.045,
+    hz = { caja: 1900, palmas: 1150, plato: 5200, cascabel: 6500, vinilo: 3000, tabla: 2500 }[k] || 7600;
+  s.buffer = muxRuido();
+  f.type = k == "caja" || k == "palmas" || k == "tabla" ? "bandpass" : "highpass";
+  f.frequency.value = hz;
+  e.gain.setValueAtTime(v, t);
+  e.gain.exponentialRampToValueAtTime(0.0001, t + L);
+  s.connect(f);
+  f.connect(e);
+  e.connect(k == "caja" || k == "palmas" ? MUX.out : dest);
+  s.start(t, Math.max(0, Math.random() * (0.94 - L)), L + 0.05);
+  if (k == "caja") {
+    const o = c.createOscillator(),
+      g = c.createGain();
+    o.frequency.value = 185;
+    g.gain.setValueAtTime(v * 0.6, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    o.connect(g);
+    g.connect(dest);
+    o.start(t);
+    o.stop(t + 0.12);
+  }
+}
+function muxAcomp(P, ch, t, b, bs, seg, st, j) {
+  const E = P.est,
+    sub = P.sub,
+    q = sub,
+    R = ch ? ch.r : null,
+    I = ch ? ch.i : [],
+    av = P.acv || "piano",
+    tono = (o) => I.map((x) => R + x + o);
+  if (E == "elisa") {
+    if (ch && bs < 3) muxPiano(R - 12 + [0, 7, 12][bs], t, st * 4, 0.06);
+    return;
+  }
+  if (E == "alberti") {
+    if (ch && b % 1 == 0) muxVoz("piano", R + I[[0, 2, 1, 2][b % 4]], t, st * 1.2, 0.04);
+    if (ch && b == 0) muxVoz("piano", R - 12, t, st * P.compas * sub, 0.06);
+    return;
+  }
+  if (E == "vals") {
+    if (!ch) return;
+    if (b == 0) muxVoz(av, R - 12, t, st * q * 1.8, 0.075);
+    else if (b == q || b == 2 * q) tono(0).slice(1).forEach((m) => muxVoz(av, m, t, st * q * 0.8, 0.032));
+    return;
+  }
+  if (E == "rag") {
+    if (!ch) return;
+    const e = sub / 2;
+    if (b % sub == 0) muxPiano(R - 12 - ((b / sub) % 2 ? 5 : 0), t, st * e * 1.5, 0.08);
+    else if (b % e == 0) tono(0).forEach((m) => muxPiano(m, t, st * e, 0.035));
+    return;
+  }
+  if (E == "canon") {
+    if (!ch || bs) return;
+    muxVoz("bajo", R - 12, t, st * seg, 0.12);
+    muxPad(tono(0), t, st * seg, 0.03);
+    return;
+  }
+  if (E == "gimno") {
+    if (!ch) return;
+    if (b == 0) muxPiano(R - 12, t, st * q * 2.5, 0.06);
+    if (b == q) tono(0).slice(1).forEach((m) => muxPiano(m, t, st * q * 2.2, 0.03));
+    return;
+  }
+  if (E == "coral") {
+    if (!ch || bs) return;
+    muxPad(tono(0), t, st * seg, 0.032);
+    muxVoz("bajo", R - 12, t, st * seg, 0.09);
+    return;
+  }
+  if (E == "marcha") {
+    if (!ch) return;
+    if (b % (2 * q) == 0) muxVoz("bajo", R - 12 + (b ? 7 : 0), t, st * q, 0.11);
+    else if (b % q == 0) tono(0).forEach((m) => muxPiano(m, t, st * q * 0.7, 0.03));
+    if (P.cascabel) muxGolpe("cascabel", t, b % q ? 0.025 : 0.045);
+    return;
+  }
+  if (E == "swing") {
+    if (!ch) return;
+    if (b % q == 0) {
+      muxVoz("bajo", R - 12 + [0, 4, 7, 9][(b / q) % 4], t, st * q, 0.12);
+      if ((b / q) % 2) {
+        tono(0).forEach((m) => muxPiano(m, t, st * q * 0.5, 0.025));
+        muxGolpe("caja", t, 0.025);
+      }
+    }
+    muxGolpe("hihat", t + (b % 2 ? st * 0.33 : 0), b % 2 ? 0.02 : 0.03);
+    return;
+  }
+  if (E == "pizz") {
+    if (!ch) return;
+    if (b % q == 0) muxVoz("pulso", R - 12 + ((b / q) % 2 ? 7 : 0), t, st, 0.1);
+    if (b == 0) muxGolpe("timbal", t, 0.08 * Math.min(1.6, MUX.acel || 1));
+    return;
+  }
+  if (E == "organo") {
+    if (!ch || bs) return;
+    tono(0).forEach((m) => muxVoz("organo", m, t, st * seg, 0.022));
+    muxVoz("organo", R - 12, t, st * seg, 0.03);
+    return;
+  }
+  if (E == "boogie") {
+    if (!ch) return;
+    muxVoz("bajo", R - 12 + [0, 4, 7, 9, 10, 9, 7, 4][b % 8], t, st * 0.9, 0.11);
+    if (b % q == 0 && (b / q) % 2) {
+      muxGolpe("caja", t, 0.07);
+      tono(12).forEach((m) => muxPiano(m, t, st * 0.8, 0.025));
+    }
+    if (b % (2 * q) == 0) muxGolpe("bombo", t, 0.16);
+    muxGolpe("hihat", t, 0.025);
+    return;
+  }
+  if (E == "ambient") {
+    if (ch && !bs) muxPad(tono(12), t, st * seg, 0.03);
+    if (ch && b % 2 == 1 && muxRnd() < 0.35) muxBell(R + 24 + I[Math.floor(muxRnd() * I.length)], t, 0.025);
+    return;
+  }
+  const corch = b % (sub / 2) == 0,
+    golpe = (k, v) => muxGolpe(k, t, v);
+  if (E == "chip") {
+    if (ch && corch) muxVoz("bajoC", R - 12 + ((b / (sub / 2)) % 2 ? 12 : 0), t, st * (sub / 2) * 0.9, 0.11);
+    if (ch) muxVoz("cuadrada", R + 12 + I[j % I.length], t, st * 0.9, 0.022);
+    if (b % (2 * q) == 0) golpe("bombo", 0.2);
+    if (b % (2 * q) == q) golpe("caja", 0.07);
+    if (corch) golpe("hihat", 0.035);
+    return;
+  }
+  if (E == "synth") {
+    if (ch && corch) muxVoz("bajoS", R - 12, t, st * (sub / 2) * 0.85, 0.12);
+    if (ch && !bs) muxPad(tono(12), t, st * seg, P.oscuro ? 0.02 : 0.03);
+    if (ch && P.oscuro) muxVoz("cuadrada", R + 12 + I[j % I.length] + (j % 8 > 3 ? 12 : 0), t, st * 0.8, 0.014);
+    else if (ch && b % 2 == 0) muxVoz("cuadrada", R + 12 + I[(j >> 1) % I.length], t, st * 1.6, 0.012);
+    if (b % (2 * q) == 0) golpe("bombo", 0.22);
+    if (b % (2 * q) == q) golpe("caja", 0.1);
+    if (corch) golpe("hihat", 0.03);
+    if (P.oscuro && b == 3 * q + q / 2) golpe("bombo", 0.15);
+    return;
+  }
+  if (E == "house") {
+    if (b % q == 0) golpe("bombo", 0.24);
+    if (b % q == q / 2) {
+      golpe("abierto", 0.04);
+      if (ch) muxVoz("bajoS", R - 12 + (b % (2 * q) == q / 2 ? 0 : 12), t, st * (q / 2) * 0.9, 0.11);
+    }
+    if (b % (2 * q) == q) golpe("palmas", 0.08);
+    if (ch && (b == q + q / 2 || b == 3 * q + q / 2)) tono(12).forEach((m) => muxPiano(m, t, st * 2, 0.035));
+    if (ch && !bs) muxPad(tono(0), t, st * seg, 0.018);
+    return;
+  }
+  if (E == "lofi") {
+    const sw = b % 2 ? st * 0.34 : 0;
+    if (ch && !bs) tono(0).forEach((m) => muxVoz("rhodes", m, t, st * seg * 0.9, 0.035));
+    if (ch && !bs) muxVoz("bajo", R - 12, t, st * seg * 0.6, 0.1);
+    if (b == 0 || b == 2 * q + q / 2) golpe("bombo", 0.15);
+    if (b % (2 * q) == q) golpe("caja", 0.05);
+    if (corch) muxGolpe("hihat", t + sw, 0.018);
+    if (b % 3 == 0) muxGolpe("vinilo", t + muxRnd() * st, 0.012 + muxRnd() * 0.02);
+    return;
+  }
+  if (E == "rock") {
+    if (ch && corch) muxVoz("bajoS", R - 12, t, st * (sub / 2) * 0.85, 0.11);
+    if (ch && !bs) muxPad([R, R + 7, R + 12], t, st * seg, 0.03);
+    if (b == 0 || b == 2 * q || b == 2 * q + q / 2) golpe("bombo", 0.22);
+    if (b % (2 * q) == q) golpe("caja", 0.11);
+    if (corch) golpe("hihat", 0.03);
+    if (b == 0 && Math.floor(j / P.compas / sub) % 4 == 0) golpe("plato", 0.06);
+    return;
+  }
+  if (E == "drone") {
+    if (b % q == 0 && R != null) muxVoz("laud", R - 12 + [7, 12, 12, 0][(b / q) % 4], t, st * q * 2, 0.06);
+    const T = ["tablaG", "tabla", "tabla", "tablaG", "tablaG", "tabla", "tabla", "tablaG"],
+      p = b / (sub / 2);
+    if (corch) golpe(T[p % 8], T[p % 8] == "tablaG" ? 0.12 : 0.06);
+    if (b % q == 0) golpe("bombo", b == 0 ? 0.14 : 0.06);
+    return;
+  }
+}
+function muxPasoM(P, t, i) {
+  const C = muxCompila(P),
+    j = i % C.len,
+    b = j % C.barra,
+    A = C.ac[Math.floor(j / C.barra) % C.ac.length],
+    seg = C.barra / A.length,
+    k = Math.min(A.length - 1, Math.floor(b / seg)),
+    st = muxDurP(P);
+  (C.ini[j] || []).forEach(([m, d]) => muxVoz(P.voz, m, t, d * st, 0.105 * (P.vol || 1)));
+  muxAcomp(P, A[k], t, b, b - k * seg, seg, st, j);
+}
+const muxVigente = (P, y) => y >= (P.y || 0) && (P.v || []).some(([a, b]) => y >= a && y <= b);
+function muxEtiqueta(y, w) {
+  if (S && CFG.temp && w >= 50 && y >= 1843) return "navidad";
+  if (S && CFG.temp && w >= 43 && w <= 44 && y >= 1876) return "miedo";
+  return MUX_TEMA[document.documentElement.dataset.tm || CFG.tema] || null;
+}
+function muxElige() {
+  if (CFG.musp != null && CFG.musp >= 0 && MUXP[CFG.musp | 0]) return CFG.musp | 0;
+  const y = S ? yr() : 1950,
+    w = S ? wk() : 20,
+    tag = muxEtiqueta(y, w),
+    idx = MUXP.map((p, i) => i);
+  let L = tag ? idx.filter((i) => (MUXP[i].tg || []).includes(tag) && y >= (MUXP[i].y || 0)) : [];
+  if (!L.length) L = idx.filter((i) => muxVigente(MUXP[i], y));
+  if (!L.length) L = [y < 1880 ? 0 : y < 1950 ? 1 : y < 2000 ? 2 : 3];
+  const clave = L.join(",");
+  if (MUX.lista != clave) {
+    MUX.lista = clave;
+    MUX.k = (y + (S && S.sd ? hs(String(S.sd)) : 0)) % L.length;
+    MUX.sig = 0;
+  }
+  if (MUX.sig) {
+    MUX.sig = 0;
+    MUX.k++;
+  }
+  return L[MUX.k % L.length];
+}
+muxPiezaEra = muxElige;
+muxProg = function () {
+  if (!MUX.on || !MUX.ctx) return;
+  const c = MUX.ctx;
+  if (c.state == "suspended") c.resume().catch(() => {});
+  const pi = muxElige();
+  if (pi != MUX.p) {
+    const prev = MUX.p;
+    MUX.p = pi;
+    MUX.i = 0;
+    MUX.acel = 1;
+    MUX.t0 = c.currentTime;
+    if (prev >= 0 && (CFG.musp == null || CFG.musp < 0) && S && !S.bot) {
+      const P = MUXP[pi];
+      setTimeout(() => toast("♫ " + trX(LL([P.n, P.en]) + (P.comp ? " · " + P.comp : ""))), 30);
+    }
+  }
+  const P = MUXP[pi] || MUXP[0],
+    L = muxLargo(P);
+  if (MUX.t < c.currentTime) MUX.t = c.currentTime + 0.1;
+  while (MUX.t < c.currentTime + 0.6) {
+    try {
+      (P.mel ? muxPasoM : muxPaso)(P, MUX.t, MUX.i);
+    } catch (e) {}
+    MUX.t += muxDurP(P);
+    MUX.i++;
+    if (MUX.i % L == 0) {
+      if (P.acel) MUX.acel = (MUX.acel || 1) >= 1.45 ? 1 : (MUX.acel || 1) * 1.09;
+      if ((CFG.musp == null || CFG.musp < 0) && c.currentTime - (MUX.t0 || 0) > (P.mel ? 70 : 110)) {
+        MUX.sig = 1;
+        break;
+      }
+    }
+  }
+};
+ACT["musn"] = () => {
+  if (CFG.musp != null && CFG.musp >= 0) {
+    const L = MUXP.length;
+    CFG.musp = ((CFG.musp | 0) + 1) % L;
+    cfgSv();
+  } else MUX.sig = 1;
+  if (CFG.mus && !MUX.on) muxStart();
+  muxProg();
+  if (typeof ajM == "function") ajM();
+};
+const muxAno = (P) => (P.tipo != "clasico" ? "" : P.ano != null ? P.ano : String(P.y));
+const MUX_GRUPOS = [
+  ["Música ambiente", "Ambient music", "amb"],
+  ["Clásicos de dominio público", "Public-domain classics", "clasico"],
+  ["Música electrónica", "Electronic music", "electro"],
+];
+muxAjH = function () {
+  const p = CFG.musp == null ? -1 : CFG.musp,
+    act = p >= 0 ? p : MUX.p >= 0 ? MUX.p : muxElige(),
+    P = MUXP[act] || MUXP[0],
+    v = Math.round(muxVol() * 100);
+  return `<label class="m">${dualReg("Música", "Music")}: <b>${v} %</b></label><input type="range" min="0" max="100" step="5" value="${v}" oninput="muxVolSet(this.value);this.previousElementSibling.querySelector('b').textContent=this.value+' %'" aria-label="${dualReg("Volumen de la música", "Music volume")}"><div class="chips">${chx("musp", -1, '<span aria-hidden="true">♫</span> ' + dualReg("Según la época", "By era"), p < 0)}${chx("musn", "", '<span aria-hidden="true">⏭\uFE0E</span> ' + dualReg("Siguiente", "Next"))}</div><div class="m">${dualReg("Según la época: suena la música de moda en tu año y la de las fiestas del calendario; con un tema especial, su banda sonora.", "By era: you hear the music in vogue in your year and the calendar holidays; with a special theme, its soundtrack.")}</div>${MUX_GRUPOS.map(
+    ([es, en, k]) =>
+      `<label class="m">${dualReg(es, en)}</label><div class="chips">${MUXP.map((x, i) => [x, i])
+        .filter(([x]) => (x.tipo || "amb") == k)
+        .map(([x, i]) => chx("musp", i, LL([x.n, x.en]), p == i, 0, x.comp ? x.comp + (muxAno(x) ? " · " + muxAno(x) : "") : ""))
+        .join("")}</div>`,
+  ).join("")}<div class="c mus-ahora"><div class="m">${MUX.on ? '<span aria-hidden="true">♫</span> ' + dualReg("Ahora suena", "Now playing") : dualReg("Elegida", "Selected")}</div><b>${esc(LL([P.n, P.en]))}</b>${P.comp ? `<span class="m"> · ${esc(P.comp)}${muxAno(P) ? " · " + muxAno(P) : ""}</span>` : ""}<div class="m">${esc(LL(P.d))}</div>${P.dato ? `<div class="m"><b>${dualReg("Dato curioso", "Fun fact")}:</b> ${esc(LL(P.dato))}</div>` : ""}</div>`;
+};
 regENL(MUXP.map((x) => [x.n, x.en]).concat(MUXP.map((x) => x.d)));
 
+const L4 = (es, en, fr, pt) => (CFG.idi == "en" ? en : CFG.idi == "fr" ? fr : CFG.idi == "pt" ? pt : es);
+const ixNom = (i) => trX(trTxt(IX[i] ? IX[i][0] : ""));
+const teNom = (i) => trX(trTxt(TE[i] ? TE[i][1] : ""));
+const PAT_ANOS = 20;
+function obraNueva(i, l) {
+  const t = 6 + 4 * l + (IX[i][4] >= 1.5 ? 4 : 0);
+  S.obras = (S.obras || []).filter((o) => o.i != i);
+  S.obras.push({ i, l, w: t, t, c: px(i, l - 1), ev: 0 });
+}
+const OBRA_EV = [
+  [0, (o) => ((o.w += 2), 0), "Las lluvias retrasan la obra de «#»: dos semanas más.", "Rain delays the construction of «#»: two more weeks.", "La pluie retarde le chantier de «#» : deux semaines de plus.", "As chuvas atrasam a obra de «#»: mais duas semanas."],
+  [0, (o) => gasta("infra", Math.round(o.c * 0.06)), "Sobrecosto en la obra de «#»: los materiales suben y pagas $.", "Cost overrun on «#»: materials go up and you pay $.", "Surcoût sur le chantier de «#» : les matériaux augmentent et tu paies $.", "Custo extra na obra de «#»: os materiais sobem e você paga $."],
+  [0, (o) => ((o.w = Math.max(1, o.w - 2)), 0), "La obra de «#» va adelantada: dos semanas menos.", "The construction of «#» is ahead of schedule: two weeks less.", "Le chantier de «#» a de l'avance : deux semaines de moins.", "A obra de «#» está adiantada: duas semanas a menos."],
+  [1870, (o) => ((o.w += 3), 0), "Huelga de obreros en la obra de «#»: tres semanas más.", "Builders strike at «#»: three more weeks.", "Grève des ouvriers sur le chantier de «#» : trois semaines de plus.", "Greve de operários na obra de «#»: mais três semanas."],
+  [1850, (o) => ((o.w += 4), (S.fans = Math.round((S.fans || 0) + 400)), 0), "Hallazgo arqueológico bajo la obra de «#»: cuatro semanas de pausa y la prensa habla de tu estudio.", "Archaeological find under «#»: a four-week pause and the press talks about your studio.", "Découverte archéologique sous le chantier de «#» : quatre semaines de pause et la presse parle de ton studio.", "Achado arqueológico sob a obra de «#»: quatro semanas de pausa e a imprensa fala do seu estúdio."],
+];
+on("semana", () => {
+  if (!S.obras || !S.obras.length) return;
+  const y = yr();
+  S.obras = S.obras.filter((o) => {
+    if (!IX[o.i]) return false;
+    if (!o.ev && o.w > 2 && R() < 0.045) {
+      const L = OBRA_EV.filter((e) => y >= e[0]),
+        e = L[Math.floor(R() * L.length)];
+      o.ev = 1;
+      const g = e[1](o);
+      nws(L4(e[2], e[3], e[4], e[5]).replace("#", ixNom(o.i)).replace("$", fm(g || 0)));
+    }
+    if (--o.w > 0) return true;
+    S.fans = Math.round((S.fans || 0) * 1.004 + 150 * o.l);
+    S.pop = Math.min(100, (S.pop || 0) + 0.3 * o.l);
+    const t = L4("Inauguras «#» (nivel %): corte de cinta, prensa y nuevos fans.", "You open «#» (level %): ribbon cutting, press and new fans.", "Tu inaugures «#» (niveau %) : ruban coupé, presse et nouveaux fans.", "Você inaugura «#» (nível %): corte de fita, imprensa e novos fãs.")
+      .replace("#", ixNom(o.i))
+      .replace("%", o.l);
+    nws(t);
+    bit(t);
+    if (!S.bot) tst("✂ " + t);
+    return false;
+  });
+});
+const ibObra = ACT["ib"];
+ACT["ib"] = (v) => {
+  const i = +v,
+    l0 = cnv(i),
+    r = ibObra(v);
+  if (S && IX[i] && cnv(i) > l0) {
+    obraNueva(i, cnv(i));
+    pg();
+  }
+  return r;
+};
+function obrasH() {
+  const L = S.obras || [];
+  if (!L.length) return "";
+  return `<div class="c obras"><div class="k"><h3 style="margin:0">\u{1F3D7}︎ ${dualReg("Obras en curso", "Construction in progress")}</h3></div><div class="m">${dualReg("Cada construcción nueva levanta una obra en tu edificio. Funciona desde ya; al terminar la obra la inauguras y ganas prensa y fans.", "Each new building project opens a construction site at your studio. It works right away; when the works finish you open it and win press and fans.")}</div>${L.map(
+    (o) =>
+      `<div class="fila"><div style="flex:1"><b>${esc(ixNom(o.i))}</b> <span class="m">· ${dualReg("nivel", "level")} ${o.l}</span>${barV((100 * (o.t - o.w)) / o.t)}</div><span class="m">${plural(o.w, dualReg("semana", "week"), dualReg("semanas", "weeks"))}</span></div>`,
+  ).join("")}</div>`;
+}
+const vInfObra = vInf;
+vInf = function () {
+  return obrasH() + vInfObra.apply(this, arguments);
+};
+const patRivales = (i) => rvVivos().filter((r) => TE[i][2].some((m) => S.rv[r].sp[m] > 0));
+const patEs = (i) => typeof (S.tech && S.tech[i]) == "number" && S.tech[i] <= TE[i][0] && !(S.patV && S.patV[i]);
+const patAnual = (i) => Math.round(tcx(i) * 0.02 * patRivales(i).length);
+function patValor(i) {
+  const y = yr(),
+    fin = S.tech[i] + PAT_ANOS,
+    anos = Math.max(0, fin - Math.max(y, TE[i][0] + 1)),
+    lic = y < TE[i][0] || (y == TE[i][0] && teFecha(i) > semIni(S.t)) ? tcx(i) * 0.12 * patRivales(i).length : 0;
+  return Math.round((patAnual(i) * anos + lic) * 0.6);
+}
+on("semana", () => {
+  if (wk() != 1 || !S.tech) return;
+  const y = yr();
+  let tot = 0,
+    n = 0;
+  Object.keys(S.tech).forEach((k) => {
+    const i = +k;
+    if (!TE[i] || !patEs(i)) return;
+    if (y == S.tech[i] + PAT_ANOS) {
+      nws(L4("Vence tu patente de #: ahora cualquiera puede usar el invento sin pagarte.", "Your patent on # expires: anyone can now use the invention without paying you.", "Ton brevet sur # expire : tout le monde peut désormais utiliser l'invention sans te payer.", "Sua patente de # vence: agora qualquer um pode usar a invenção sem pagar a você.").replace("#", teNom(i)));
+      return;
+    }
+    if (y <= TE[i][0] || y > S.tech[i] + PAT_ANOS) return;
+    const L = patRivales(i),
+      p = Math.round(tcx(i) * 0.02);
+    if (!L.length || p <= 0) return;
+    L.forEach((r) => (S.rv[r].cash -= p));
+    tot += p * L.length;
+    n++;
+  });
+  if (tot > 0) {
+    gana("licencias", tot);
+    nws(L4("Regalías de # patentes: los rivales te pagan $ este año.", "Royalties from # patents: rivals pay you $ this year.", "Redevances de # brevets : les rivaux te versent $ cette année.", "Royalties de # patentes: os rivais pagam $ a você neste ano.").replace("#", n).replace("$", fm(tot)));
+  }
+});
+ACT["patv"] = (v) => {
+  const i = +v;
+  if (!TE[i] || !patEs(i)) return;
+  const g = patValor(i),
+    L = rvVivos().sort((a, b) => S.rv[b].cash - S.rv[a].cash),
+    r = L[0];
+  if (g <= 0 || r == null) return toast(dualReg("Nadie quiere comprar esa patente", "Nobody wants to buy that patent"));
+  S.patV = S.patV || {};
+  S.patV[i] = yr();
+  S.rv[r].cash -= g;
+  gana("ventas", g);
+  nws(L4("Vendes a % tu patente de #: $.", "You sell your patent on # to %: $.", "Tu vends à % ton brevet sur # : $.", "Você vende a % sua patente de #: $.").replace("%", S.rv[r].n).replace("#", teNom(i)).replace("$", fm(g)));
+  sonar("ok");
+  return pg();
+};
+function patH() {
+  const y = yr(),
+    L = Object.keys(S.tech || {})
+      .map(Number)
+      .filter((i) => TE[i] && patEs(i) && y < S.tech[i] + PAT_ANOS);
+  const ayuda = dualReg("Investiga un invento antes de su fecha real y lo patentas: cuando llegue para todos, los rivales te pagan una licencia y después regalías cada año, hasta que la patente vence a los 20 años.", "Research an invention before its real date and you patent it: when it reaches everyone, rivals pay you a licence and then royalties every year, until the patent expires after 20 years.");
+  return `<div class="c"><div class="k"><h3 style="margin:0">\u{1F4DC}︎ ${dualReg("Tus patentes", "Your patents")}</h3><span class="m">${L.length}</span></div><div class="m">${ayuda}</div>${L.map((i) => {
+    const pend = y <= TE[i][0],
+      g = patValor(i);
+    return `<div class="fila"><div style="flex:1"><b>${esc(teNom(i))}</b><div class="m">${dualReg("vence en", "expires in")} ${S.tech[i] + PAT_ANOS} · ${pend ? dualReg("regalías desde", "royalties from") + " " + (TE[i][0] + 1) : "≈ " + fm(patAnual(i)) + " " + dualReg("al año", "a year")}</div></div>${g > 0 ? bt("patv", i, dualReg("Vender", "Sell") + " · " + fm(g), "") : ""}</div>`;
+  }).join("")}</div>`;
+}
+const vTecPat = vTec;
+vTec = function () {
+  return patH() + vTecPat.apply(this, arguments);
+};
+function valorEstudio() {
+  const f = S.fin && S.fin.length ? S.fin[S.fin.length - 1] : null,
+    fil = S.rv.reduce((a, r) => a + (r.own && !r.dead ? valR(r) : 0), 0);
+  return Math.max(0, Math.round(Math.max(0, f ? f.u : 0) * 6 + S.cash - banDeuda() + (f ? f.ing : 0) * 0.5 + infV() * 0.5 + fil));
+}
+function valorPuesto(v) {
+  const L = S.rv.filter((r) => !r.ind && !r.dead && !r.own);
+  return [1 + L.filter((r) => valR(r) > v).length, L.length + 1];
+}
+on("semana", () => {
+  if (wk() != 1) return;
+  S.valH = (S.valH || []).concat([{ y: yr(), v: valorEstudio() }]).slice(-60);
+});
+const resumenValor = resumen;
+resumen = function () {
+  const h = resumenValor.apply(this, arguments),
+    v = valorEstudio(),
+    [p, n] = valorPuesto(v),
+    fila = `<div><div class="m">${dualReg("Valor de la compañía", "Company value")}</div><b>${fm(v)}</b> <span class="m">· ${dualReg("puesto", "rank")} ${p}/${n}</span></div>`,
+    k = h.lastIndexOf("</div></div>");
+  return k > 0 ? h.slice(0, k) + fila + h.slice(k) : h;
+};
+function valorH() {
+  const v = valorEstudio(),
+    [p, n] = valorPuesto(v),
+    H = (S.valH || []).slice(-8),
+    mx = Math.max(1, v, ...H.map((x) => x.v));
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("grafica")} ${dualReg("Valor de la compañía", "Company value")}</h3><b>${fm(v)}</b></div><div class="m">${dualReg("Lo que pagaría un comprador por tu estudio: seis veces la utilidad del último año, la caja sin deudas, la mitad de los ingresos, la mitad de lo invertido en construcciones y tus filiales. Los rivales se valoran igual.", "What a buyer would pay for your studio: six times last year's profit, cash minus debt, half of revenue, half of what you invested in buildings and your subsidiaries. Rivals are valued the same way.")}</div><div class="m"><b>${dualReg("Puesto", "Rank")} ${p} ${dualReg("de", "of")} ${n}</b></div>${H.length ? `<div class="tabla">${H.map((x) => `<div class="fila"><span>${x.y}</span><span style="flex:1;margin:0 8px">${barV((100 * x.v) / mx)}</span><b>${fm(x.v, x.y)}</b></div>`).join("")}</div>` : ""}</div>`;
+}
+const vFinValor = vFin;
+vFin = function () {
+  return valorH() + vFinValor.apply(this, arguments);
+};
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {
   const t = document.getElementById("top"),
