@@ -850,9 +850,16 @@ html.una-mano #top{top:auto;bottom:var(--navh,64px);border-bottom:0;border-top:1
 html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 0 var(--sec)}
 }
 .lan-pin .m{color:inherit;opacity:.88;text-transform:uppercase;letter-spacing:.06em;font-size:.72rem}
+.c.peri,.zine .c.peri,body .c.peri{background:linear-gradient(#f3ecdc,#e9dfc6)!important;color:#2a2418!important;border-color:#2a2418!important}
+.c.peri :is(h2,h3,b,span,p,div,small,.peri-n,.peri-t,.peri-op){color:#2a2418!important;text-shadow:none!important}
+.c.peri .m,.c.peri .m *{color:#5d543f!important}
+.c.peri .fila,.c.peri button.fila{border-color:rgba(42,36,24,.25)!important;background:transparent!important;box-shadow:none!important}
+.c.peri button.fila:hover{background:rgba(42,36,24,.08)!important}
+.c.peri .peri-cab{border-bottom-color:#2a2418!important}
+.c.peri .peri-t::first-letter{color:#7a1f12!important}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.2";
+const VERN = "1.3";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -62819,6 +62826,206 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Títulos, sinopsis y críticas más variados, sin títulos repetidos ni errores de concordancia.", "More varied titles, synopses and reviews, with no repeated titles or agreement errors.", "Titres, synopsis et critiques plus variés, sans titres répétés ni fautes d'accord.", "Títulos, sinopses e críticas mais variados, sem títulos repetidos nem erros de concordância."],
   ["Paquetes de mundo (.iamundo): estudios, talentos y obras que aparecen en su año y franquicias que se pueden comprar con sus personajes.", "World packs (.iamundo): studios, talents and works that appear in their year, and franchises you can buy with their characters.", "Packs de monde (.iamundo) : studios, talents et œuvres qui apparaissent à leur année, et franchises à acheter avec leurs personnages.", "Pacotes de mundo (.iamundo): estúdios, talentos e obras que aparecem no seu ano e franquias que podem ser compradas com seus personagens."],
   ["Versión 1.2", "Version 1.2", "Version 1.2", "Versão 1.2"],
+  ["Una película rodada solo con teléfonos gana un gran festival", "A film shot only on phones wins a major festival", "Un film tourné uniquement au téléphone gagne un grand festival", "Um filme rodado só com celulares vence um grande festival"],
+  ["Los actores firman los primeros contratos por sus dobles digitales", "Actors sign the first contracts for their digital doubles", "Les acteurs signent les premiers contrats pour leurs doubles numériques", "Os atores assinam os primeiros contratos por seus dublês digitais"],
+  ["Las salas de cine se vuelven clubes por suscripción", "Cinemas become subscription clubs", "Les salles de cinéma deviennent des clubs par abonnement", "As salas de cinema viram clubes por assinatura"],
+  ["Un videojuego con un millón de personajes que recuerdan al jugador", "A video game with a million characters who remember the player", "Un jeu vidéo avec un million de personnages qui se souviennent du joueur", "Um videogame com um milhão de personagens que lembram do jogador"],
+  ["Las bibliotecas prestan novelas leídas con la voz de su autor", "Libraries lend novels read in their author's voice", "Les bibliothèques prêtent des romans lus avec la voix de leur auteur", "As bibliotecas emprestam romances lidos com a voz do autor"],
+  ["El streaming se divide en cientos de canales de nicho", "Streaming splits into hundreds of niche channels", "Le streaming se divise en centaines de chaînes de niche", "O streaming se divide em centenas de canais de nicho"],
+  ["Vuelve el cine de barrio: pequeñas salas en cada edificio", "Neighborhood cinema returns: small screens in every building", "Le cinéma de quartier revient : de petites salles dans chaque immeuble", "Volta o cinema de bairro: pequenas salas em cada prédio"],
+  ["Primera ópera escrita a cuatro manos por una compositora y una IA", "First opera written jointly by a composer and an AI", "Premier opéra écrit à quatre mains par une compositrice et une IA", "Primeira ópera escrita a quatro mãos por uma compositora e uma IA"],
+  ["Los conciertos de estadio se ven en realidad mixta en todo el planeta", "Stadium concerts are watched in mixed reality all over the planet", "Les concerts de stade se regardent en réalité mixte sur toute la planète", "Os shows de estádio são vistos em realidade mista no planeta todo"],
+  ["Las ciudades flotantes abren sus propios cines", "Floating cities open their own cinemas", "Les villes flottantes ouvrent leurs propres cinémas", "As cidades flutuantes abrem seus próprios cinemas"],
+  ["Centenario de la llegada a la Luna: récord de documentales", "Centenary of the Moon landing: a record year for documentaries", "Centenaire des premiers pas sur la Lune : record de documentaires", "Centenário da chegada à Lua: recorde de documentários"],
+  ["Se prohíben los finales generados sin crédito humano", "Generated endings without human credit are banned", "Les fins générées sans crédit humain sont interdites", "Proíbem-se os finais gerados sem crédito humano"],
+  ["Los libros en papel vuelven como objeto de lujo", "Paper books return as a luxury object", "Les livres papier reviennent comme objet de luxe", "Os livros de papel voltam como objeto de luxo"],
+  ["Primera huelga de guionistas sintéticos", "First strike by synthetic screenwriters", "Première grève de scénaristes synthétiques", "Primeira greve de roteiristas sintéticos"],
+  ["El cine olfativo llega a las grandes salas", "Smell-o-vision reaches the big cinemas", "Le cinéma olfactif arrive dans les grandes salles", "O cinema olfativo chega às grandes salas"],
+  ["Se estrena una serie que durará toda la vida de su protagonista", "A series premieres that will last its lead's whole life", "Une série sort et durera toute la vie de son héros", "Estreia uma série que vai durar a vida inteira do protagonista"],
+  ["Los videojuegos se estudian en las escuelas como literatura", "Video games are studied at school as literature", "Les jeux vidéo s'étudient à l'école comme la littérature", "Os videogames são estudados na escola como literatura"],
+  ["Primera transmisión en vivo desde la superficie de Marte", "First live broadcast from the surface of Mars", "Première diffusion en direct depuis la surface de Mars", "Primeira transmissão ao vivo da superfície de Marte"],
+  ["Nace el turismo de rodaje en masa", "Mass film-location tourism is born", "Naissance du tourisme de tournage de masse", "Nasce o turismo de locações em massa"],
+  ["Se reconstruyen las películas mudas perdidas a partir de fragmentos", "Lost silent films are rebuilt from fragments", "Les films muets perdus sont reconstruits à partir de fragments", "Os filmes mudos perdidos são reconstruídos a partir de fragmentos"],
+  ["Abre el primer teatro en una estación espacial", "The first theatre on a space station opens", "Le premier théâtre d'une station spatiale ouvre", "Abre o primeiro teatro em uma estação espacial"],
+  ["Los cines de la Tierra se declaran patrimonio", "Earth's cinemas are declared heritage sites", "Les cinémas de la Terre sont déclarés patrimoine", "Os cinemas da Terra são declarados patrimônio"],
+  ["La Luna tiene su primera discográfica", "The Moon gets its first record label", "La Lune a sa première maison de disques", "A Lua tem sua primeira gravadora"],
+  ["Primer musical cantado y bailado en gravedad lunar", "First musical sung and danced in lunar gravity", "Première comédie musicale chantée et dansée en gravité lunaire", "Primeiro musical cantado e dançado na gravidade lunar"],
+  ["Los idiomas de las colonias entran en los subtítulos oficiales", "Colony languages join the official subtitles", "Les langues des colonies entrent dans les sous-titres officiels", "Os idiomas das colônias entram nas legendas oficiais"],
+  ["Se entregan los primeros premios de las colonias", "The first colony awards are handed out", "Les premiers prix des colonies sont remis", "São entregues os primeiros prêmios das colônias"],
+  ["Primer estudio de cine con sede fuera de la Tierra", "First film studio headquartered off Earth", "Premier studio de cinéma installé hors de la Terre", "Primeiro estúdio de cinema com sede fora da Terra"],
+  ["Se ponen de moda los dramas de época sobre el siglo XXI", "Period dramas about the 21st century become fashionable", "Les drames d'époque sur le XXIe siècle sont à la mode", "Os dramas de época sobre o século XXI viram moda"],
+  ["Una telenovela se emite a la vez en la Tierra, la Luna y Marte", "A soap opera airs at once on Earth, the Moon and Mars", "Un feuilleton est diffusé à la fois sur la Terre, la Lune et Mars", "Uma novela vai ao ar ao mesmo tempo na Terra, na Lua e em Marte"],
+  ["Un talento sintético gana el premio a mejor actuación", "A synthetic talent wins best performance", "Un talent synthétique gagne le prix de la meilleure interprétation", "Um talento sintético ganha o prêmio de melhor atuação"],
+  ["Se funda la primera escuela de cine de Marte", "The first film school on Mars is founded", "Fondation de la première école de cinéma de Mars", "Fundada a primeira escola de cinema de Marte"],
+  ["Una partida de videojuego cumple cien años sin interrupción", "A video game session turns a hundred years old without a break", "Une partie de jeu vidéo atteint cent ans sans interruption", "Uma partida de videogame completa cem anos sem parar"],
+  ["Vuelve la radio: las colonias escuchan novelas por onda corta", "Radio returns: the colonies listen to serials on shortwave", "La radio revient : les colonies écoutent des feuilletons en ondes courtes", "O rádio volta: as colônias ouvem novelas em ondas curtas"],
+  ["Trescientos años del cine: funciones gratis en todo el sistema solar", "Three hundred years of cinema: free screenings across the solar system", "Trois cents ans de cinéma : projections gratuites dans tout le système solaire", "Trezentos anos de cinema: sessões grátis em todo o sistema solar"],
+  ["Las obras viajan en cápsulas a los asteroides mineros", "Works travel in capsules to the mining asteroids", "Les œuvres voyagent en capsules vers les astéroïdes miniers", "As obras viajam em cápsulas até os asteroides de mineração"],
+  ["Primer festival de teatro de Marte", "First theatre festival on Mars", "Premier festival de théâtre de Mars", "Primeiro festival de teatro de Marte"],
+  ["Las ciudades subterráneas de Marte abren salas", "Mars's underground cities open cinemas", "Les villes souterraines de Mars ouvrent des salles", "As cidades subterrâneas de Marte abrem salas"],
+  ["Aparece en un satélite una copia perdida de una obra del siglo XX", "A lost copy of a 20th-century work turns up on a satellite", "Une copie perdue d'une œuvre du XXe siècle réapparaît sur un satellite", "Aparece em um satélite uma cópia perdida de uma obra do século XX"],
+  ["Las giras llegan a las lunas de Júpiter", "Tours reach the moons of Jupiter", "Les tournées atteignent les lunes de Jupiter", "As turnês chegam às luas de Júpiter"],
+  ["Primer estreno a bordo de una nave generacional", "First premiere aboard a generation ship", "Première avant-première à bord d'un vaisseau générationnel", "Primeira estreia a bordo de uma nave geracional"],
+  ["Reconstruyen el sonido de los teatros del siglo XVIII", "The sound of 18th-century theatres is rebuilt", "On reconstitue le son des théâtres du XVIIIe siècle", "Reconstroem o som dos teatros do século XVIII"],
+  ["Nace el registro único de derechos del sistema solar", "A single solar-system rights registry is born", "Naissance du registre unique des droits du système solaire", "Nasce o registro único de direitos do sistema solar"],
+  ["Las colonias ya producen más obras que la Tierra", "The colonies now produce more works than Earth", "Les colonies produisent désormais plus d'œuvres que la Terre", "As colônias já produzem mais obras que a Terra"],
+  ["Vuelve la moda de la ópera barroca", "Baroque opera comes back into fashion", "L'opéra baroque revient à la mode", "A ópera barroca volta à moda"],
+  ["Mil autores escriben juntos una sola novela", "A thousand authors write a single novel together", "Mille auteurs écrivent ensemble un seul roman", "Mil autores escrevem juntos um único romance"],
+  ["Cierra el último cine de película de 35 milímetros", "The last 35-millimetre film cinema closes", "Le dernier cinéma en pellicule 35 millimètres ferme", "Fecha o último cinema de película de 35 milímetros"],
+  ["Se envían obras a una sonda que viaja a otra estrella", "Works are sent to a probe travelling to another star", "Des œuvres sont envoyées à une sonde vers une autre étoile", "Obras são enviadas a uma sonda rumo a outra estrela"],
+  ["Gran festival por los seis siglos del espectáculo", "Grand festival for six centuries of entertainment", "Grand festival pour les six siècles du spectacle", "Grande festival pelos seis séculos do espetáculo"],
+  ["Cámaras sin lente", "Lensless cameras", "Caméras sans objectif", "Câmeras sem lente"],
+  ["Cámaras del tamaño de un botón que filman en cualquier lugar", "Button-sized cameras that shoot anywhere", "Des caméras de la taille d'un bouton qui filment partout", "Câmeras do tamanho de um botão que filmam em qualquer lugar"],
+  ["Partituras vivas", "Living scores", "Partitions vivantes", "Partituras vivas"],
+  ["La música se adapta al ritmo de cada función", "The music adapts to the pace of each performance", "La musique s'adapte au rythme de chaque représentation", "A música se adapta ao ritmo de cada apresentação"],
+  ["Libros con la voz del autor", "Books in the author's voice", "Livres avec la voix de l'auteur", "Livros com a voz do autor"],
+  ["Cada libro trae la voz de quien lo escribió", "Every book comes with its writer's voice", "Chaque livre arrive avec la voix de son auteur", "Cada livro traz a voz de quem o escreveu"],
+  ["Guiones colaborativos con IA", "AI co-written scripts", "Scénarios coécrits avec l'IA", "Roteiros colaborativos com IA"],
+  ["Equipos humanos y asistentes escriben juntos", "Human teams and assistants write together", "Des équipes humaines et des assistants écrivent ensemble", "Equipes humanas e assistentes escrevem juntos"],
+  ["Escenarios robóticos", "Robotic stages", "Scènes robotisées", "Palcos robóticos"],
+  ["Decorados que cambian solos entre escenas", "Sets that change by themselves between scenes", "Des décors qui changent seuls entre les scènes", "Cenários que mudam sozinhos entre as cenas"],
+  ["Personajes con memoria", "Characters with memory", "Personnages à mémoire", "Personagens com memória"],
+  ["Personajes que recuerdan cada partida", "Characters who remember every playthrough", "Des personnages qui se souviennent de chaque partie", "Personagens que lembram de cada partida"],
+  ["Cine olfativo", "Smell-o-vision", "Cinéma olfactif", "Cinema olfativo"],
+  ["Aromas sincronizados con cada escena", "Scents synchronized with every scene", "Des odeurs synchronisées avec chaque scène", "Aromas sincronizados com cada cena"],
+  ["Papel electrónico eterno", "Everlasting e-paper", "Papier électronique éternel", "Papel eletrônico eterno"],
+  ["Libros de una sola hoja que nunca se gasta", "Single-sheet books that never wear out", "Des livres d'une seule feuille qui ne s'use jamais", "Livros de uma só folha que nunca se gasta"],
+  ["Doblaje con la voz original", "Dubbing in the original voice", "Doublage avec la voix d'origine", "Dublagem com a voz original"],
+  ["Cada intérprete habla todos los idiomas con su propia voz", "Every performer speaks every language in their own voice", "Chaque interprète parle toutes les langues avec sa propre voix", "Cada intérprete fala todos os idiomas com a própria voz"],
+  ["Luz sin sombras", "Shadowless light", "Lumière sans ombres", "Luz sem sombras"],
+  ["Iluminación que se coloca sola donde la escena la necesita", "Lighting that places itself where the scene needs it", "Un éclairage qui se place tout seul là où la scène en a besoin", "Iluminação que se posiciona sozinha onde a cena precisa"],
+  ["Transmisión desde Marte", "Broadcasting from Mars", "Diffusion depuis Mars", "Transmissão de Marte"],
+  ["Señales en directo desde el planeta rojo", "Live signals from the red planet", "Des signaux en direct depuis la planète rouge", "Sinais ao vivo do planeta vermelho"],
+  ["Restauración total de archivo", "Full archive restoration", "Restauration totale des archives", "Restauração total de arquivo"],
+  ["Las obras perdidas se reconstruyen a partir de fragmentos", "Lost works are rebuilt from fragments", "Les œuvres perdues se reconstruisent à partir de fragments", "As obras perdidas se reconstroem a partir de fragmentos"],
+  ["Acústica de baja gravedad", "Low-gravity acoustics", "Acoustique en basse gravité", "Acústica de baixa gravidade"],
+  ["Teatros y salas pensados para la Luna", "Theatres and halls designed for the Moon", "Des théâtres et des salles pensés pour la Lune", "Teatros e salas pensados para a Lua"],
+  ["Subtítulos de las colonias", "Colony subtitles", "Sous-titres des colonies", "Legendas das colônias"],
+  ["Obras listas para los nuevos idiomas de las colonias", "Works ready for the colonies' new languages", "Des œuvres prêtes pour les nouvelles langues des colonies", "Obras prontas para os novos idiomas das colônias"],
+  ["Teatro en anillos orbitales", "Orbital-ring theatre", "Théâtre en anneaux orbitaux", "Teatro em anéis orbitais"],
+  ["Escenarios que giran con la estación", "Stages that turn with the station", "Des scènes qui tournent avec la station", "Palcos que giram com a estação"],
+  ["Estudios marcianos", "Martian studios", "Studios martiens", "Estúdios marcianos"],
+  ["Platós y oficinas propias en Marte", "Your own sound stages and offices on Mars", "Plateaux et bureaux propres sur Mars", "Estúdios e escritórios próprios em Marte"],
+  ["Cápsulas de obras", "Work capsules", "Capsules d'œuvres", "Cápsulas de obras"],
+  ["Paquetes que llevan obras a los asteroides mineros", "Packages that carry works to the mining asteroids", "Des colis qui emportent des œuvres vers les astéroïdes miniers", "Pacotes que levam obras aos asteroides de mineração"],
+  ["Giras jovianas", "Jovian tours", "Tournées joviennes", "Turnês jovianas"],
+  ["Escenarios en las lunas de Júpiter", "Stages on the moons of Jupiter", "Des scènes sur les lunes de Jupiter", "Palcos nas luas de Júpiter"],
+  ["Derechos solares unificados", "Unified solar rights", "Droits solaires unifiés", "Direitos solares unificados"],
+  ["Un solo registro de derechos para todo el sistema solar", "A single rights registry for the whole solar system", "Un seul registre des droits pour tout le système solaire", "Um só registro de direitos para todo o sistema solar"],
+  ["Ópera en ingravidez", "Zero-gravity opera", "Opéra en apesanteur", "Ópera em gravidade zero"],
+  ["Cantantes y bailarines que flotan sobre el público", "Singers and dancers floating above the audience", "Des chanteurs et danseurs qui flottent au-dessus du public", "Cantores e bailarinos que flutuam sobre o público"],
+  ["Narrativa colectiva", "Collective storytelling", "Narration collective", "Narrativa coletiva"],
+  ["Historias escritas por miles de autores a la vez", "Stories written by thousands of authors at once", "Des histoires écrites par des milliers d'auteurs à la fois", "Histórias escritas por milhares de autores ao mesmo tempo"],
+  ["Señal interestelar", "Interstellar signal", "Signal interstellaire", "Sinal interestelar"],
+  ["Obras enviadas a otras estrellas", "Works sent to other stars", "Des œuvres envoyées vers d'autres étoiles", "Obras enviadas a outras estrelas"],
+  ["Obras pensadas para la Luna", "Works made for the Moon", "Des œuvres pensées pour la Lune", "Obras pensadas para a Lua"],
+  ["Hecho bajo un cielo negro.", "Made under a black sky.", "Fait sous un ciel noir.", "Feito sob um céu negro."],
+  ["Superproducciones marcianas", "Martian blockbusters", "Superproductions martiennes", "Superproduções marcianas"],
+  ["Marte es el nuevo Hollywood.", "Mars is the new Hollywood.", "Mars est le nouvel Hollywood.", "Marte é a nova Hollywood."],
+  ["Obras para los mineros del cinturón", "Works for the belt miners", "Des œuvres pour les mineurs de la ceinture", "Obras para os mineiros do cinturão"],
+  ["Arte para quien trabaja lejos.", "Art for those who work far away.", "De l'art pour ceux qui travaillent loin.", "Arte para quem trabalha longe."],
+  ["Ópera y teatro en estaciones", "Opera and theatre on stations", "Opéra et théâtre dans les stations", "Ópera e teatro em estações"],
+  ["La voz llega a la última fila del espacio.", "The voice reaches the back row of space.", "La voix atteint le dernier rang de l'espace.", "A voz chega à última fila do espaço."],
+  ["Libros para viajes largos", "Books for long voyages", "Des livres pour les longs voyages", "Livros para viagens longas"],
+  ["Una historia por cada año de viaje.", "A story for every year of travel.", "Une histoire pour chaque année de voyage.", "Uma história para cada ano de viagem."],
+  ["Mundos persistentes entre planetas", "Persistent worlds between planets", "Des mondes persistants entre planètes", "Mundos persistentes entre planetas"],
+  ["Tu partida no se termina.", "Your game never ends.", "Ta partie ne se termine jamais.", "Sua partida não termina."],
+  ["Sagas entre colonias", "Sagas across colonies", "Des sagas entre colonies", "Sagas entre colônias"],
+  ["Cada colonia, una temporada.", "Every colony, a season.", "Chaque colonie, une saison.", "Cada colônia, uma temporada."],
+  ["Música del espacio profundo", "Deep-space music", "Musique de l'espace profond", "Música do espaço profundo"],
+  ["Escucha el silencio.", "Listen to the silence.", "Écoute le silence.", "Escute o silêncio."],
+  ["Obras para naves generacionales", "Works for generation ships", "Des œuvres pour vaisseaux générationnels", "Obras para naves geracionais"],
+  ["Historias para tus nietos.", "Stories for your grandchildren.", "Des histoires pour tes petits-enfants.", "Histórias para seus netos."],
+  ["El conglomerado interplanetario", "The interplanetary conglomerate", "Le conglomérat interplanétaire", "O conglomerado interplanetário"],
+  ["En todos los mundos a la vez.", "In every world at once.", "Dans tous les mondes à la fois.", "Em todos os mundos ao mesmo tempo."],
+  ["Club de cine por suscripción", "Subscription film club", "Club de cinéma par abonnement", "Clube de cinema por assinatura"],
+  ["Socios que pagan cada mes por ver estrenos: más ingreso con más fans", "Members who pay monthly to see premieres: more income with more fans", "Des membres qui paient chaque mois pour voir les nouveautés : plus de revenus avec plus de fans", "Sócios que pagam todo mês para ver estreias: mais receita com mais fãs"],
+  ["Sala de cine olfativo", "Smell-o-vision cinema", "Salle de cinéma olfactif", "Sala de cinema olfativo"],
+  ["Funciones con aromas: atraen a curiosos y nostálgicos", "Screenings with scents: they draw the curious and the nostalgic", "Des séances parfumées : elles attirent curieux et nostalgiques", "Sessões com aromas: atraem curiosos e nostálgicos"],
+  ["Agencia de turismo de rodaje", "Film-location tourism agency", "Agence de tourisme de tournage", "Agência de turismo de locações"],
+  ["Viajes a las locaciones de tus obras famosas", "Trips to the locations of your famous works", "Des voyages sur les lieux de tournage de tes œuvres célèbres", "Viagens às locações das suas obras famosas"],
+  ["Discoteca lunar", "Lunar nightclub", "Discothèque lunaire", "Discoteca lunar"],
+  ["Música en baja gravedad para turistas y colonos", "Low-gravity music for tourists and settlers", "De la musique en basse gravité pour touristes et colons", "Música em baixa gravidade para turistas e colonos"],
+  ["Servicio de cápsulas de obras", "Work-capsule service", "Service de capsules d'œuvres", "Serviço de cápsulas de obras"],
+  ["Lleva tus obras a los asteroides mineros", "Carries your works to the mining asteroids", "Emporte tes œuvres vers les astéroïdes miniers", "Leva suas obras aos asteroides de mineração"],
+  ["Teatro joviano", "Jovian theatre", "Théâtre jovien", "Teatro joviano"],
+  ["Funciones para las colonias de las lunas de Júpiter", "Shows for the colonies on Jupiter's moons", "Des spectacles pour les colonies des lunes de Jupiter", "Apresentações para as colônias das luas de Júpiter"],
+  ["Montaña rusa magnética", "Maglev roller coaster", "Montagnes russes magnétiques", "Montanha-russa magnética"],
+  ["Paseo submarino", "Underwater ride", "Promenade sous-marine", "Passeio submarino"],
+  ["Simulador de gravedad cero", "Zero-gravity simulator", "Simulateur d'apesanteur", "Simulador de gravidade zero"],
+  ["Bosque de hologramas sólidos", "Solid-hologram forest", "Forêt d'hologrammes solides", "Floresta de hologramas sólidos"],
+  ["Viaje por los anillos de Saturno", "Voyage through Saturn's rings", "Voyage dans les anneaux de Saturne", "Viagem pelos anéis de Saturno"],
+  ["Caída libre orbital", "Orbital free fall", "Chute libre orbitale", "Queda livre orbital"],
+  ["Serie interactiva por temporadas", "Interactive season series", "Série interactive par saisons", "Série interativa por temporadas"],
+  ["Telenovela entre colonias", "Inter-colony soap opera", "Feuilleton entre colonies", "Novela entre colônias"],
+  ["Concierto holográfico", "Holographic concert", "Concert holographique", "Show holográfico"],
+  ["Directo desde Marte", "Live from Mars", "En direct de Mars", "Ao vivo de Marte"],
+  ["Reality en las colonias", "Colony reality show", "Téléréalité des colonies", "Reality nas colônias"],
+  ["Escuela de cine marciana", "Martian film school", "École de cinéma martienne", "Escola de cinema marciana"],
+  ["+1 de crítica por nivel en cine y series", "+1 critics per level in film and series", "+1 de critique par niveau en cinéma et séries", "+1 de crítica por nível em cinema e séries"],
+  ["Teatro en anillo orbital", "Orbital-ring theatre", "Théâtre en anneau orbital", "Teatro em anel orbital"],
+  ["+3 de público por nivel en teatro", "+3 audience per level in theatre", "+3 de public par niveau au théâtre", "+3 de público por nível no teatro"],
+  ["Estación de cápsulas", "Capsule station", "Station de capsules", "Estação de cápsulas"],
+  ["+4 % de ventas por nivel en música y libros", "+4% sales per level in music and books", "+4 % de ventes par niveau en musique et livres", "+4 % de vendas por nível em música e livros"],
+  ["Antena interestelar", "Interstellar antenna", "Antenne interstellaire", "Antena interestelar"],
+  ["+2 de público por nivel en cine, series y música", "+2 audience per level in film, series and music", "+2 de public par niveau en cinéma, séries et musique", "+2 de público por nível em cinema, séries e música"],
+  ["Ola de calor en los festivales", "Heatwave at the festivals", "Canicule sur les festivals", "Onda de calor nos festivais"],
+  ["El calor récord obliga a mover los festivales de verano. ¿Pagas funciones nocturnas climatizadas?", "Record heat forces summer festivals to move. Do you pay for cooled night screenings?", "La chaleur record oblige à déplacer les festivals d'été. Paies-tu des séances nocturnes climatisées ?", "O calor recorde obriga a mudar os festivais de verão. Você paga sessões noturnas climatizadas?"],
+  ["Pagar salas climatizadas (1 % de caja, +1 de prestigio)", "Pay for cooled halls (1% of cash, +1 prestige)", "Payer des salles climatisées (1 % de trésorerie, +1 de prestige)", "Pagar salas climatizadas (1 % do caixa, +1 de prestígio)"],
+  ["Cancelar las funciones de verano (−2 de público en cine y teatro hasta octubre)", "Cancel summer shows (−2 audience in film and theatre until October)", "Annuler les séances d'été (−2 de public en cinéma et théâtre jusqu'en octobre)", "Cancelar as sessões de verão (−2 de público em cinema e teatro até outubro)"],
+  ["Derecho a apagar la publicidad", "The right to switch off ads", "Le droit de couper la publicité", "Direito de desligar a publicidade"],
+  ["Una ley deja que el público apague los anuncios personalizados. ¿Cómo financias tus obras?", "A law lets audiences switch off personalized ads. How do you fund your works?", "Une loi permet au public de couper la publicité personnalisée. Comment finances-tu tes œuvres ?", "Uma lei deixa o público desligar os anúncios personalizados. Como você financia suas obras?"],
+  ["Más patrocinio de marcas (+1 % de caja, −1 de crítica por un año)", "More brand sponsorship (+1% of cash, −1 critics for a year)", "Plus de parrainage de marques (+1 % de trésorerie, −1 de critique pendant un an)", "Mais patrocínio de marcas (+1 % do caixa, −1 de crítica por um ano)"],
+  ["Confiar en la calidad (+2 de crítica por un año)", "Trust in quality (+2 critics for a year)", "Miser sur la qualité (+2 de critique pendant un an)", "Confiar na qualidade (+2 de crítica por um ano)"],
+  ["Premio a una obra interactiva", "An award for an interactive work", "Un prix pour une œuvre interactive", "Prêmio para uma obra interativa"],
+  ["La Academia premia por primera vez una obra interactiva. ¿Te sumas a la nueva forma de contar?", "The Academy honours an interactive work for the first time. Do you join the new way of telling stories?", "L'Académie récompense pour la première fois une œuvre interactive. Rejoins-tu cette nouvelle façon de raconter ?", "A Academia premia pela primeira vez uma obra interativa. Você entra na nova forma de contar?"],
+  ["Invertir en obras interactivas (1,5 % de caja, +3 de público en series y videojuegos por dos años)", "Invest in interactive works (1.5% of cash, +3 audience in series and games for two years)", "Investir dans les œuvres interactives (1,5 % de trésorerie, +3 de public en séries et jeux pendant deux ans)", "Investir em obras interativas (1,5 % do caixa, +3 de público em séries e games por dois anos)"],
+  ["Defender las obras clásicas (+2 de crítica en cine y teatro por dos años)", "Defend classic works (+2 critics in film and theatre for two years)", "Défendre les œuvres classiques (+2 de critique en cinéma et théâtre pendant deux ans)", "Defender as obras clássicas (+2 de crítica em cinema e teatro por dois anos)"],
+  ["Primera transmisión desde Marte", "First broadcast from Mars", "Première diffusion depuis Mars", "Primeira transmissão de Marte"],
+  ["Las cámaras llegan a la superficie de Marte. ¿Compras los derechos de la primera serie documental?", "Cameras reach the surface of Mars. Do you buy the rights to the first documentary series?", "Les caméras atteignent la surface de Mars. Achètes-tu les droits de la première série documentaire ?", "As câmeras chegam à superfície de Marte. Você compra os direitos da primeira série documental?"],
+  ["Comprar los derechos (2 % de caja, +3 % de fans)", "Buy the rights (2% of cash, +3% fans)", "Acheter les droits (2 % de trésorerie, +3 % de fans)", "Comprar os direitos (2 % do caixa, +3 % de fãs)"],
+  ["Dejarlo a los rivales", "Leave it to the rivals", "Laisser faire les rivaux", "Deixar para os rivais"],
+  ["Los cines de la Tierra, patrimonio", "Earth's cinemas, heritage sites", "Les cinémas de la Terre, patrimoine", "Os cinemas da Terra, patrimônio"],
+  ["Las salas de la Tierra se declaran patrimonio. ¿Restauras las tuyas?", "Earth's cinemas are declared heritage sites. Do you restore yours?", "Les salles de la Terre sont déclarées patrimoine. Restaures-tu les tiennes ?", "As salas da Terra são declaradas patrimônio. Você restaura as suas?"],
+  ["Restaurarlas (1 % de caja, +3 de prestigio)", "Restore them (1% of cash, +3 prestige)", "Les restaurer (1 % de trésorerie, +3 de prestige)", "Restaurá-las (1 % do caixa, +3 de prestígio)"],
+  ["Vendérselas al Estado (+1 % de caja)", "Sell them to the state (+1% of cash)", "Les vendre à l'État (+1 % de trésorerie)", "Vendê-las ao Estado (+1 % do caixa)"],
+  ["Trescientos años del cine", "Three hundred years of cinema", "Trois cents ans de cinéma", "Trezentos anos de cinema"],
+  ["El cine cumple 300 años. ¿Organizas funciones gratuitas de tus clásicos?", "Cinema turns 300. Do you hold free screenings of your classics?", "Le cinéma a 300 ans. Organises-tu des projections gratuites de tes classiques ?", "O cinema faz 300 anos. Você organiza sessões grátis dos seus clássicos?"],
+  ["Funciones gratis (1 % de caja, +5 de prestigio y +5 % de fans)", "Free screenings (1% of cash, +5 prestige and +5% fans)", "Projections gratuites (1 % de trésorerie, +5 de prestige et +5 % de fans)", "Sessões grátis (1 % do caixa, +5 de prestígio e +5 % de fãs)"],
+  ["Reestrenar los clásicos con entrada (+1,5 % de caja)", "Re-release the classics with tickets (+1.5% of cash)", "Ressortir les classiques en payant (+1,5 % de trésorerie)", "Relançar os clássicos com ingresso (+1,5 % do caixa)"],
+  ["Registro de derechos del sistema solar", "Solar-system rights registry", "Registre des droits du système solaire", "Registro de direitos do sistema solar"],
+  ["Nace un registro único de derechos para todo el sistema solar. ¿Registras todo tu catálogo?", "A single rights registry is born for the whole solar system. Do you register your entire catalog?", "Un registre unique des droits naît pour tout le système solaire. Enregistres-tu tout ton catalogue ?", "Nasce um registro único de direitos para todo o sistema solar. Você registra todo o seu catálogo?"],
+  ["Registrar el catálogo (1 % de caja, +2 de prestigio)", "Register the catalog (1% of cash, +2 prestige)", "Enregistrer le catalogue (1 % de trésorerie, +2 de prestige)", "Registrar o catálogo (1 % do caixa, +2 de prestígio)"],
+  ["Registrar solo lo nuevo", "Register only new works", "N'enregistrer que les nouveautés", "Registrar só o novo"],
+  ["El último cine de 35 milímetros", "The last 35 mm cinema", "Le dernier cinéma 35 mm", "O último cinema de 35 milímetros"],
+  ["Cierra el último cine que proyecta película de 35 milímetros. ¿Lo compras para mantenerlo vivo?", "The last cinema projecting 35 mm film closes. Do you buy it to keep it alive?", "Le dernier cinéma qui projette en 35 mm ferme. L'achètes-tu pour le garder en vie ?", "Fecha o último cinema que projeta película de 35 milímetros. Você o compra para mantê-lo vivo?"],
+  ["Comprarlo (2 % de caja, +4 de prestigio)", "Buy it (2% of cash, +4 prestige)", "L'acheter (2 % de trésorerie, +4 de prestige)", "Comprá-lo (2 % do caixa, +4 de prestígio)"],
+  ["Despedirlo con una función especial (+3 % de fans)", "Say goodbye with a special screening (+3% fans)", "Lui dire adieu avec une séance spéciale (+3 % de fans)", "Despedir-se com uma sessão especial (+3 % de fãs)"],
+  ["Tormenta solar", "Solar storm", "Tempête solaire", "Tempestade solar"],
+  ["Una tormenta solar corta las transmisiones a las colonias.", "A solar storm cuts transmissions to the colonies.", "Une tempête solaire coupe les transmissions vers les colonies.", "Uma tempestade solar corta as transmissões para as colônias."],
+  ["Pagar satélites de respaldo (1 % de caja)", "Pay for backup satellites (1% of cash)", "Payer des satellites de secours (1 % de trésorerie)", "Pagar satélites de reserva (1 % do caixa)"],
+  ["Esperar (−2 de público en series y música por dos meses)", "Wait (−2 audience in series and music for two months)", "Attendre (−2 de public en séries et musique pendant deux mois)", "Esperar (−2 de público em séries e música por dois meses)"],
+  ["Los talentos sintéticos piden descanso", "Synthetic talents ask for rest", "Les talents synthétiques demandent du repos", "Os talentos sintéticos pedem descanso"],
+  ["Los talentos sintéticos piden semanas de mantenimiento pagadas.", "Synthetic talents ask for paid maintenance weeks.", "Les talents synthétiques demandent des semaines de maintenance payées.", "Os talentos sintéticos pedem semanas de manutenção pagas."],
+  ["Aceptar (1 % de caja, +1 de prestigio)", "Accept (1% of cash, +1 prestige)", "Accepter (1 % de trésorerie, +1 de prestige)", "Aceitar (1 % do caixa, +1 de prestígio)"],
+  ["Negarte (−3 de prestigio)", "Refuse (−3 prestige)", "Refuser (−3 de prestige)", "Recusar (−3 de prestígio)"],
+  ["Fiebre por lo antiguo", "A craze for the old days", "Fièvre de l'ancien", "Febre pelo antigo"],
+  ["El público pide obras como las de hace dos siglos.", "Audiences want works like those from two centuries ago.", "Le public réclame des œuvres comme celles d'il y a deux siècles.", "O público pede obras como as de dois séculos atrás."],
+  ["Producir a la antigua (+3 de público en cine por un año)", "Make them the old way (+3 audience in film for a year)", "Produire à l'ancienne (+3 de public en cinéma pendant un an)", "Produzir à moda antiga (+3 de público em cinema por um ano)"],
+  ["Seguir innovando (+2 de crítica por un año)", "Keep innovating (+2 critics for a year)", "Continuer à innover (+2 de critique pendant un an)", "Continuar inovando (+2 de crítica por um ano)"],
+  ["Una colonia sin señal", "A colony without signal", "Une colonie sans signal", "Uma colônia sem sinal"],
+  ["Una colonia de Marte lleva meses sin recibir obras. Te piden enviar tu catálogo.", "A Mars colony has gone months without new works. They ask you to send your catalog.", "Une colonie de Mars n'a reçu aucune œuvre depuis des mois. On te demande d'envoyer ton catalogue.", "Uma colônia de Marte está há meses sem receber obras. Pedem que você envie seu catálogo."],
+  ["Enviarlo gratis (+2 de prestigio y +2 % de fans)", "Send it for free (+2 prestige and +2% fans)", "L'envoyer gratuitement (+2 de prestige et +2 % de fans)", "Enviar grátis (+2 de prestígio e +2 % de fãs)"],
+  ["Cobrar el envío (+1 % de caja)", "Charge for it (+1% of cash)", "Faire payer l'envoi (+1 % de trésorerie)", "Cobrar o envio (+1 % do caixa)"],
+  ["Falla el archivo eterno", "The eternal archive fails", "Panne des archives éternelles", "Falha no arquivo eterno"],
+  ["Una falla en el Archivo eterno borra copias de obras antiguas. ¿Pagas la restauración de las tuyas?", "A failure in the Eternal Archive wipes copies of old works. Do you pay to restore yours?", "Une panne des Archives éternelles efface des copies d'œuvres anciennes. Paies-tu la restauration des tiennes ?", "Uma falha no Arquivo eterno apaga cópias de obras antigas. Você paga a restauração das suas?"],
+  ["Pagar la restauración (1 % de caja)", "Pay for restoration (1% of cash)", "Payer la restauration (1 % de trésorerie)", "Pagar a restauração (1 % do caixa)"],
+  ["Dejarlo así (−2 de prestigio)", "Leave it (−2 prestige)", "Laisser comme ça (−2 de prestige)", "Deixar assim (−2 de prestígio)"],
+  ["Turistas en tus locaciones", "Tourists at your locations", "Des touristes sur tes lieux de tournage", "Turistas nas suas locações"],
+  ["Miles de turistas visitan los lugares donde filmaste tus obras. ¿Cobras entrada?", "Thousands of tourists visit the places where you filmed. Do you charge admission?", "Des milliers de touristes visitent les lieux où tu as tourné. Fais-tu payer l'entrée ?", "Milhares de turistas visitam os lugares onde você filmou. Você cobra entrada?"],
+  ["Cobrar entrada (+1 % de caja)", "Charge admission (+1% of cash)", "Faire payer l'entrée (+1 % de trésorerie)", "Cobrar entrada (+1 % do caixa)"],
+  ["Entrada libre (+3 % de fans)", "Free entry (+3% fans)", "Entrée libre (+3 % de fans)", "Entrada livre (+3 % de fãs)"],
+  ["tus construcciones del futuro", "your future facilities", "tes installations du futur", "suas instalações do futuro"],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -69761,7 +69968,12 @@ on("semana", () => {
   });
   if (tot > 0) {
     gana("licencias", tot);
-    nws(L4("Regalías de # patentes: los rivales te pagan $ este año.", "Royalties from # patents: rivals pay you $ this year.", "Redevances de # brevets : les rivaux te versent $ cette année.", "Royalties de # patentes: os rivais pagam $ a você neste ano.").replace("#", n).replace("$", fm(tot)));
+    nws(
+      (n == 1
+        ? L4("Regalías de tu patente: los rivales te pagan $ este año.", "Royalties from your patent: rivals pay you $ this year.", "Redevances de ton brevet : les rivaux te versent $ cette année.", "Royalties da sua patente: os rivais pagam $ a você neste ano.")
+        : L4("Regalías de # patentes: los rivales te pagan $ este año.", "Royalties from # patents: rivals pay you $ this year.", "Redevances de # brevets : les rivaux te versent $ cette année.", "Royalties de # patentes: os rivais pagam $ a você neste ano.")
+      ).replace("#", n).replace("$", fm(tot)),
+    );
   }
 });
 ACT["patv"] = (v) => {
@@ -72952,6 +73164,85 @@ Object.assign(TX.es.ayuda, {
   becas: ["Becas automáticas", "Actívalas en Talento → Academia. Cada mes, hasta el número que elijas de tus talentos firmados (con contrato exclusivo) empiezan el mejor curso de su oficio que puedan tomar, y tú pagas el curso. Mientras estudian pueden seguir trabajando en tus obras. Si alguien ya domina su oficio o no tiene energía, espera al mes siguiente."],
   mundo: ["Paquete de mundo", "Importa un archivo .iamundo en Estudio → Editor. Trae estudios, talentos y obras con sus fechas: cada estudio aparece el año en que se fundó y cierra cuando le toca, cada talento debuta a su edad y se retira cuando corresponde, y las obras salen como estrenos de su estudio cuando llega su año. Las obras anteriores al año de tu partida se pueden comprar como franquicias en Obras → Franquicias, con sus personajes. «Importar y reemplazar a los rivales» deja solo los estudios del paquete; «Importar y sumar» los agrega a los que ya tienes. Lo mejor es importarlo al empezar una partida. Los paquetes los hace la comunidad y no son parte oficial del juego."],
 });
+const FUT5 = [[2028, 3, 14, "Una película rodada solo con teléfonos gana un gran festival"], [2031, 2, 9, "Los actores firman los primeros contratos por sus dobles digitales"], [2033, 10, 1, "Las salas de cine se vuelven clubes por suscripción"], [2037, 5, 20, "Un videojuego con un millón de personajes que recuerdan al jugador"], [2039, 4, 23, "Las bibliotecas prestan novelas leídas con la voz de su autor"], [2044, 1, 15, "El streaming se divide en cientos de canales de nicho"], [2047, 9, 12, "Vuelve el cine de barrio: pequeñas salas en cada edificio"], [2049, 11, 5, "Primera ópera escrita a cuatro manos por una compositora y una IA"], [2056, 7, 18, "Los conciertos de estadio se ven en realidad mixta en todo el planeta"], [2064, 6, 3, "Las ciudades flotantes abren sus propios cines"], [2069, 7, 20, "Centenario de la llegada a la Luna: récord de documentales"], [2073, 8, 30, "Se prohíben los finales generados sin crédito humano"], [2076, 4, 2, "Los libros en papel vuelven como objeto de lujo"], [2081, 3, 1, "Primera huelga de guionistas sintéticos"], [2088, 10, 10, "El cine olfativo llega a las grandes salas"], [2096, 1, 21, "Se estrena una serie que durará toda la vida de su protagonista"], [2103, 9, 1, "Los videojuegos se estudian en las escuelas como literatura"], [2108, 11, 2, "Primera transmisión en vivo desde la superficie de Marte"], [2114, 5, 16, "Nace el turismo de rodaje en masa"], [2119, 2, 14, "Se reconstruyen las películas mudas perdidas a partir de fragmentos"], [2122, 8, 8, "Abre el primer teatro en una estación espacial"], [2128, 4, 18, "Los cines de la Tierra se declaran patrimonio"], [2134, 12, 5, "La Luna tiene su primera discográfica"], [2137, 6, 21, "Primer musical cantado y bailado en gravedad lunar"], [2145, 3, 30, "Los idiomas de las colonias entran en los subtítulos oficiales"], [2153, 2, 20, "Se entregan los primeros premios de las colonias"], [2158, 9, 9, "Primer estudio de cine con sede fuera de la Tierra"], [2164, 5, 5, "Se ponen de moda los dramas de época sobre el siglo XXI"], [2169, 10, 14, "Una telenovela se emite a la vez en la Tierra, la Luna y Marte"], [2172, 3, 3, "Un talento sintético gana el premio a mejor actuación"], [2181, 11, 11, "Se funda la primera escuela de cine de Marte"], [2189, 1, 1, "Una partida de videojuego cumple cien años sin interrupción"], [2193, 7, 7, "Vuelve la radio: las colonias escuchan novelas por onda corta"], [2195, 12, 28, "Trescientos años del cine: funciones gratis en todo el sistema solar"], [2208, 4, 4, "Las obras viajan en cápsulas a los asteroides mineros"], [2212, 8, 15, "Primer festival de teatro de Marte"], [2217, 2, 2, "Las ciudades subterráneas de Marte abren salas"], [2226, 10, 26, "Aparece en un satélite una copia perdida de una obra del siglo XX"], [2235, 6, 6, "Las giras llegan a las lunas de Júpiter"], [2243, 9, 19, "Primer estreno a bordo de una nave generacional"], [2247, 5, 12, "Reconstruyen el sonido de los teatros del siglo XVIII"], [2256, 9, 1, "Nace el registro único de derechos del sistema solar"], [2261, 1, 31, "Las colonias ya producen más obras que la Tierra"], [2268, 4, 14, "Vuelve la moda de la ópera barroca"], [2272, 11, 20, "Mil autores escriben juntos una sola novela"], [2279, 10, 31, "Cierra el último cine de película de 35 milímetros"], [2284, 3, 21, "Se envían obras a una sonda que viaja a otra estrella"], [2296, 6, 1, "Gran festival por los seis siglos del espectáculo"]];
+FUT5.forEach(([y, m, d, t]) => { if (!HIST.some((h) => h[3] == t)) HIST.push([y, m, d, t, "ficci\u00F3n"]); });
+HIST.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2]);
+if (!TE.some((e) => e[1] == "Cámaras sin lente")) TE.push([2033, "Cámaras sin lente", [0, 1], 3, 5, "ficci\u00F3n", "Cámaras del tamaño de un botón que filman en cualquier lugar", 1.5]);
+if (!TE.some((e) => e[1] == "Partituras vivas")) TE.push([2038, "Partituras vivas", [4, 3], 6, 12, "ficci\u00F3n", "La música se adapta al ritmo de cada función", 1.5]);
+if (!TE.some((e) => e[1] == "Libros con la voz del autor")) TE.push([2044, "Libros con la voz del autor", [5], 2, 2, "ficci\u00F3n", "Cada libro trae la voz de quien lo escribió", 1.5]);
+if (!TE.some((e) => e[1] == "Guiones colaborativos con IA")) TE.push([2049, "Guiones colaborativos con IA", [0, 1, 2, 3], 9, 9, "ficci\u00F3n", "Equipos humanos y asistentes escriben juntos", 1.6]);
+if (!TE.some((e) => e[1] == "Escenarios robóticos")) TE.push([2055, "Escenarios robóticos", [3], 4, 4, "ficci\u00F3n", "Decorados que cambian solos entre escenas", 1.7]);
+if (!TE.some((e) => e[1] == "Personajes con memoria")) TE.push([2063, "Personajes con memoria", [2], 11, 11, "ficci\u00F3n", "Personajes que recuerdan cada partida", 1.8]);
+if (!TE.some((e) => e[1] == "Cine olfativo")) TE.push([2069, "Cine olfativo", [0], 7, 20, "ficci\u00F3n", "Aromas sincronizados con cada escena", 1.6]);
+if (!TE.some((e) => e[1] == "Papel electrónico eterno")) TE.push([2076, "Papel electrónico eterno", [5], 3, 3, "ficci\u00F3n", "Libros de una sola hoja que nunca se gasta", 1.5]);
+if (!TE.some((e) => e[1] == "Doblaje con la voz original")) TE.push([2082, "Doblaje con la voz original", [0, 1, 2], 5, 5, "ficci\u00F3n", "Cada intérprete habla todos los idiomas con su propia voz", 1.8]);
+if (!TE.some((e) => e[1] == "Luz sin sombras")) TE.push([2097, "Luz sin sombras", [0, 1, 3], 8, 8, "ficci\u00F3n", "Iluminación que se coloca sola donde la escena la necesita", 1.7]);
+if (!TE.some((e) => e[1] == "Transmisión desde Marte")) TE.push([2109, "Transmisión desde Marte", [1, 4], 1, 1, "ficci\u00F3n", "Señales en directo desde el planeta rojo", 2]);
+if (!TE.some((e) => e[1] == "Restauración total de archivo")) TE.push([2118, "Restauración total de archivo", [0, 1, 4], 10, 10, "ficci\u00F3n", "Las obras perdidas se reconstruyen a partir de fragmentos", 1.7]);
+if (!TE.some((e) => e[1] == "Acústica de baja gravedad")) TE.push([2136, "Acústica de baja gravedad", [4, 3], 4, 4, "ficci\u00F3n", "Teatros y salas pensados para la Luna", 2]);
+if (!TE.some((e) => e[1] == "Subtítulos de las colonias")) TE.push([2146, "Subtítulos de las colonias", [0, 1, 2, 5], 6, 6, "ficci\u00F3n", "Obras listas para los nuevos idiomas de las colonias", 1.8]);
+if (!TE.some((e) => e[1] == "Teatro en anillos orbitales")) TE.push([2167, "Teatro en anillos orbitales", [3], 9, 1, "ficci\u00F3n", "Escenarios que giran con la estación", 2.4]);
+if (!TE.some((e) => e[1] == "Estudios marcianos")) TE.push([2181, "Estudios marcianos", [0, 1, 2], 10, 10, "ficci\u00F3n", "Platós y oficinas propias en Marte", 2.6]);
+if (!TE.some((e) => e[1] == "Cápsulas de obras")) TE.push([2209, "Cápsulas de obras", [0, 1, 4, 5], 2, 2, "ficci\u00F3n", "Paquetes que llevan obras a los asteroides mineros", 2.2]);
+if (!TE.some((e) => e[1] == "Giras jovianas")) TE.push([2236, "Giras jovianas", [3, 4], 7, 7, "ficci\u00F3n", "Escenarios en las lunas de Júpiter", 2.8]);
+if (!TE.some((e) => e[1] == "Derechos solares unificados")) TE.push([2257, "Derechos solares unificados", [0, 1, 2, 3, 4, 5], 5, 5, "ficci\u00F3n", "Un solo registro de derechos para todo el sistema solar", 2]);
+if (!TE.some((e) => e[1] == "Ópera en ingravidez")) TE.push([2270, "Ópera en ingravidez", [3, 4], 3, 3, "ficci\u00F3n", "Cantantes y bailarines que flotan sobre el público", 2.7]);
+if (!TE.some((e) => e[1] == "Narrativa colectiva")) TE.push([2280, "Narrativa colectiva", [5, 2], 11, 11, "ficci\u00F3n", "Historias escritas por miles de autores a la vez", 2.4]);
+if (!TE.some((e) => e[1] == "Señal interestelar")) TE.push([2295, "Señal interestelar", [0, 1, 4], 12, 12, "ficci\u00F3n", "Obras enviadas a otras estrellas", 3]);
+if (!EMR.some((e) => e[1] == "Selene Studios")) EMR.push([2145, "Selene Studios", 22, [3, 2, 2, 3, 4, 2], "in", "Obras pensadas para la Luna", "Hecho bajo un cielo negro.", 0.8]);
+if (!EMR.some((e) => e[1] == "Cráter Rojo Producciones")) EMR.push([2160, "Cráter Rojo Producciones", 0, [5, 4, 3, 0, 0, 0], "tq", "Superproducciones marcianas", "Marte es el nuevo Hollywood.", 1.1]);
+if (!EMR.some((e) => e[1] == "Colectivo Ceres")) EMR.push([2172, "Colectivo Ceres", 11, [2, 2, 5, 2, 2, 2], "ec", "Obras para los mineros del cinturón", "Arte para quien trabaja lejos.", 0.6]);
+if (!EMR.some((e) => e[1] == "Ópera Orbital")) EMR.push([2188, "Ópera Orbital", 14, [0, 0, 0, 6, 4, 0], "pr", "Ópera y teatro en estaciones", "La voz llega a la última fila del espacio.", 0.7]);
+if (!EMR.some((e) => e[1] == "Biblioteca Titán")) EMR.push([2201, "Biblioteca Titán", 10, [0, 1, 0, 0, 0, 6], "pr", "Libros para viajes largos", "Una historia por cada año de viaje.", 0.7]);
+if (!EMR.some((e) => e[1] == "Nebulosa Juegos")) EMR.push([2215, "Nebulosa Juegos", 23, [0, 1, 6, 0, 0, 0], "in", "Mundos persistentes entre planetas", "Tu partida no se termina.", 1.0]);
+if (!EMR.some((e) => e[1] == "Anillo de Saturno Films")) EMR.push([2230, "Anillo de Saturno Films", 5, [5, 5, 1, 1, 1, 0], "fr", "Sagas entre colonias", "Cada colonia, una temporada.", 0.9]);
+if (!EMR.some((e) => e[1] == "Eco Profundo")) EMR.push([2248, "Eco Profundo", 20, [3, 2, 2, 2, 5, 2], "in", "Música del espacio profundo", "Escucha el silencio.", 0.6]);
+if (!EMR.some((e) => e[1] == "Generación Estelar")) EMR.push([2266, "Generación Estelar", 12, [4, 5, 3, 2, 2, 3], "fa", "Obras para naves generacionales", "Historias para tus nietos.", 0.8]);
+if (!EMR.some((e) => e[1] == "Proxima Media")) EMR.push([2283, "Proxima Media", 0, [5, 5, 5, 3, 3, 3], "tq", "El conglomerado interplanetario", "En todos los mundos a la vez.", 1.3]);
+if (!NEG.some((x) => x[0] == "cin5")) NEG.push(["cin5", "Club de cine por suscripción", 2033, 0, 0, 0.8, 0.03, 0.014, 3, "Socios que pagan cada mes por ver estrenos: más ingreso con más fans"]);
+if (!NEG.some((x) => x[0] == "olf5")) NEG.push(["olf5", "Sala de cine olfativo", 2069, 0, 0, 1.2, 0.045, 0.02, 2, "Funciones con aromas: atraen a curiosos y nostálgicos"]);
+if (!NEG.some((x) => x[0] == "tur5")) NEG.push(["tur5", "Agencia de turismo de rodaje", 2114, 0, 0, 1.5, 0.05, 0.02, 3, "Viajes a las locaciones de tus obras famosas"]);
+if (!NEG.some((x) => x[0] == "lun5")) NEG.push(["lun5", "Discoteca lunar", 2134, 0, 4, 2, 0.07, 0.03, 2, "Música en baja gravedad para turistas y colonos"]);
+if (!NEG.some((x) => x[0] == "cap5")) NEG.push(["cap5", "Servicio de cápsulas de obras", 2209, 0, 0, 2.2, 0.08, 0.04, 2, "Lleva tus obras a los asteroides mineros"]);
+if (!NEG.some((x) => x[0] == "jov5")) NEG.push(["jov5", "Teatro joviano", 2236, 0, 3, 3, 0.1, 0.05, 2, "Funciones para las colonias de las lunas de Júpiter"]);
+if (!PQA.some((x) => x[0] == "Montaña rusa magnética")) { PQA.push(["Montaña rusa magnética", "Maglev roller coaster", 2060, 0.4, 1800, 3, 1]); regEN("Montaña rusa magnética", "Maglev roller coaster"); }
+if (!PQA.some((x) => x[0] == "Paseo submarino")) { PQA.push(["Paseo submarino", "Underwater ride", 2075, 0.35, 1400, 1, 3]); regEN("Paseo submarino", "Underwater ride"); }
+if (!PQA.some((x) => x[0] == "Simulador de gravedad cero")) { PQA.push(["Simulador de gravedad cero", "Zero-gravity simulator", 2105, 0.45, 1200, 3, 1]); regEN("Simulador de gravedad cero", "Zero-gravity simulator"); }
+if (!PQA.some((x) => x[0] == "Bosque de hologramas sólidos")) { PQA.push(["Bosque de hologramas sólidos", "Solid-hologram forest", 2196, 0.5, 2600, 1, 3]); regEN("Bosque de hologramas sólidos", "Solid-hologram forest"); }
+if (!PQA.some((x) => x[0] == "Viaje por los anillos de Saturno")) { PQA.push(["Viaje por los anillos de Saturno", "Voyage through Saturn's rings", 2240, 0.7, 2000, 2, 3]); regEN("Viaje por los anillos de Saturno", "Voyage through Saturn's rings"); }
+if (!PQA.some((x) => x[0] == "Caída libre orbital")) { PQA.push(["Caída libre orbital", "Orbital free fall", 2265, 0.8, 900, 3, 0]); regEN("Caída libre orbital", "Orbital free fall"); }
+if (!FTV.some((x) => x[0] == "Serie interactiva por temporadas")) FTV.push(["Serie interactiva por temporadas", 2042, [8, 16], [20, 60], 10, 40]);
+if (!FTV.some((x) => x[0] == "Telenovela entre colonias")) FTV.push(["Telenovela entre colonias", 2169, [60, 300], [20, 45], 120, 40]);
+if (!TVG.some((x) => x[0] == "holo5")) TVG.push(["holo5", "Concierto holográfico", 2071, 54, 0.6, [0.3, 1.3, 1.3, 1, 0.7, 0.5], "#a78bfa", 4, {}, 1.1]);
+if (!TVG.some((x) => x[0] == "marte5")) TVG.push(["marte5", "Directo desde Marte", 2109, 57, 0.8, [0.5, 1, 1.2, 1.2, 1.1, 1], "#ef4444", 0, {}, 1.2]);
+if (!TVG.some((x) => x[0] == "colon5")) TVG.push(["colon5", "Reality en las colonias", 2120, 55, 0.5, [0.8, 1.3, 1.2, 1, 0.8, 0.6], "#f472b6", 4, {}, 1.1]);
+{ const ti = TE.findIndex((e) => e[1] == "Estudios marcianos"); if (!IX.some((x) => x[0] == "Escuela de cine marciana")) IX.push(["Escuela de cine marciana", 9, "+1 de crítica por nivel en cine y series", 2181, 2.6, ti >= 0 ? ["t", ti] : null]); }
+{ const ti = TE.findIndex((e) => e[1] == "Teatro en anillos orbitales"); if (!IX.some((x) => x[0] == "Teatro en anillo orbital")) IX.push(["Teatro en anillo orbital", 9, "+3 de público por nivel en teatro", 2167, 2.4, ti >= 0 ? ["t", ti] : null]); }
+{ const ti = TE.findIndex((e) => e[1] == "Cápsulas de obras"); if (!IX.some((x) => x[0] == "Estación de cápsulas")) IX.push(["Estación de cápsulas", 9, "+4 % de ventas por nivel en música y libros", 2209, 2.2, ti >= 0 ? ["t", ti] : null]); }
+{ const ti = TE.findIndex((e) => e[1] == "Señal interestelar"); if (!IX.some((x) => x[0] == "Antena interestelar")) IX.push(["Antena interestelar", 9, "+2 de público por nivel en cine, series y música", 2295, 3, ti >= 0 ? ["t", ti] : null]); }
+GANCHOS.mods.push((P, add) => {
+  const l = (n) => ixK(n);
+  let c = 0, a = 0;
+  if ([0, 1].includes(P.m)) c += l("Escuela de cine marciana");
+  if (P.m == 3) a += 3 * l("Teatro en anillo orbital");
+  if ([0, 1, 4].includes(P.m)) a += 2 * l("Antena interestelar");
+  if (c || a) add(c, a, dual("tus construcciones del futuro", "your future facilities"));
+});
+GANCHOS.ventas.push((P) => ([4, 5].includes(P.m) ? 1 + 0.04 * ixK("Estación de cápsulas") : 1));
+if (!EVT.some((e) => e.n == "Ola de calor en los festivales")) { EVT.push({ h: 1, n: "Ola de calor en los festivales", x: "El calor récord obliga a mover los festivales de verano. ¿Pagas funciones nocturnas climatizadas?", c: () => 1, o: [["Pagar salas climatizadas (1 % de caja, +1 de prestigio)", () => { gasta("eventos", cc(0.01)); S.pop = cl((S.pop || 0) + 1); }], ["Cancelar las funciones de verano (−2 de público en cine y teatro hasta octubre)", () => { bonAdd({ n: "Ola de calor", m: [0, 3], c: 0, a: -2, h: tDe(dnum(yr(), 10, 1)) }); }]] }); HEV.push([2041, 7, 15, "Ola de calor en los festivales"]); }
+if (!EVT.some((e) => e.n == "Derecho a apagar la publicidad")) { EVT.push({ h: 1, n: "Derecho a apagar la publicidad", x: "Una ley deja que el público apague los anuncios personalizados. ¿Cómo financias tus obras?", c: () => 1, o: [["Más patrocinio de marcas (+1 % de caja, −1 de crítica por un año)", () => { gana("otros", cc(0.01)); bonAdd({ n: "Patrocinio", c: -1, a: 0, h: S.t + 52 }); }], ["Confiar en la calidad (+2 de crítica por un año)", () => { bonAdd({ n: "Sin anuncios", c: 2, a: 0, h: S.t + 52 }); }]] }); HEV.push([2053, 5, 1, "Derecho a apagar la publicidad"]); }
+if (!EVT.some((e) => e.n == "Premio a una obra interactiva")) { EVT.push({ h: 1, n: "Premio a una obra interactiva", x: "La Academia premia por primera vez una obra interactiva. ¿Te sumas a la nueva forma de contar?", c: () => 1, o: [["Invertir en obras interactivas (1,5 % de caja, +3 de público en series y videojuegos por dos años)", () => { gasta("eventos", cc(0.015)); bonAdd({ n: "Obras interactivas", m: [1, 2], c: 1, a: 3, h: S.t + 104 }); }], ["Defender las obras clásicas (+2 de crítica en cine y teatro por dos años)", () => { bonAdd({ n: "Clásicos", m: [0, 3], c: 2, a: 0, h: S.t + 104 }); }]] }); HEV.push([2061, 3, 10, "Premio a una obra interactiva"]); }
+if (!EVT.some((e) => e.n == "Primera transmisión desde Marte")) { EVT.push({ h: 1, n: "Primera transmisión desde Marte", x: "Las cámaras llegan a la superficie de Marte. ¿Compras los derechos de la primera serie documental?", c: () => 1, o: [["Comprar los derechos (2 % de caja, +3 % de fans)", () => { gasta("eventos", cc(0.02)); S.fans = Math.round((S.fans || 0) * 1.03); }], ["Dejarlo a los rivales", () => {  }]] }); HEV.push([2108, 11, 2, "Primera transmisión desde Marte"]); }
+if (!EVT.some((e) => e.n == "Los cines de la Tierra, patrimonio")) { EVT.push({ h: 1, n: "Los cines de la Tierra, patrimonio", x: "Las salas de la Tierra se declaran patrimonio. ¿Restauras las tuyas?", c: () => 1, o: [["Restaurarlas (1 % de caja, +3 de prestigio)", () => { gasta("eventos", cc(0.01)); S.pop = cl((S.pop || 0) + 3); }], ["Vendérselas al Estado (+1 % de caja)", () => { gana("otros", cc(0.01)); }]] }); HEV.push([2128, 4, 18, "Los cines de la Tierra, patrimonio"]); }
+if (!EVT.some((e) => e.n == "Trescientos años del cine")) { EVT.push({ h: 1, n: "Trescientos años del cine", x: "El cine cumple 300 años. ¿Organizas funciones gratuitas de tus clásicos?", c: () => 1, o: [["Funciones gratis (1 % de caja, +5 de prestigio y +5 % de fans)", () => { gasta("eventos", cc(0.01)); S.pop = cl((S.pop || 0) + 5); S.fans = Math.round((S.fans || 0) * 1.05); }], ["Reestrenar los clásicos con entrada (+1,5 % de caja)", () => { gana("otros", cc(0.015)); }]] }); HEV.push([2195, 12, 28, "Trescientos años del cine"]); }
+if (!EVT.some((e) => e.n == "Registro de derechos del sistema solar")) { EVT.push({ h: 1, n: "Registro de derechos del sistema solar", x: "Nace un registro único de derechos para todo el sistema solar. ¿Registras todo tu catálogo?", c: () => 1, o: [["Registrar el catálogo (1 % de caja, +2 de prestigio)", () => { gasta("eventos", cc(0.01)); S.pop = cl((S.pop || 0) + 2); }], ["Registrar solo lo nuevo", () => {  }]] }); HEV.push([2256, 9, 1, "Registro de derechos del sistema solar"]); }
+if (!EVT.some((e) => e.n == "El último cine de 35 milímetros")) { EVT.push({ h: 1, n: "El último cine de 35 milímetros", x: "Cierra el último cine que proyecta película de 35 milímetros. ¿Lo compras para mantenerlo vivo?", c: () => 1, o: [["Comprarlo (2 % de caja, +4 de prestigio)", () => { gasta("eventos", cc(0.02)); S.pop = cl((S.pop || 0) + 4); }], ["Despedirlo con una función especial (+3 % de fans)", () => { S.fans = Math.round((S.fans || 0) * 1.03); }]] }); HEV.push([2279, 10, 31, "El último cine de 35 milímetros"]); }
+if (!EVT.some((e) => e.n == "Tormenta solar")) EVT.push({ n: "Tormenta solar", x: "Una tormenta solar corta las transmisiones a las colonias.", c: () => S && yr() >= 2110, o: [["Pagar satélites de respaldo (1 % de caja)", () => { gasta("eventos", cc(0.01)); }], ["Esperar (−2 de público en series y música por dos meses)", () => { bonAdd({ n: "Tormenta solar", m: [1, 4], c: 0, a: -2, h: S.t + 9 }); }]] });
+if (!EVT.some((e) => e.n == "Los talentos sintéticos piden descanso")) EVT.push({ n: "Los talentos sintéticos piden descanso", x: "Los talentos sintéticos piden semanas de mantenimiento pagadas.", c: () => S && yr() >= 2125, o: [["Aceptar (1 % de caja, +1 de prestigio)", () => { gasta("eventos", cc(0.01)); S.pop = cl((S.pop || 0) + 1); }], ["Negarte (−3 de prestigio)", () => { S.pop = cl((S.pop || 0) - 3); }]] });
+if (!EVT.some((e) => e.n == "Fiebre por lo antiguo")) EVT.push({ n: "Fiebre por lo antiguo", x: "El público pide obras como las de hace dos siglos.", c: () => S && yr() >= 2160, o: [["Producir a la antigua (+3 de público en cine por un año)", () => { bonAdd({ n: "A la antigua", m: [0], c: 0, a: 3, h: S.t + 52 }); }], ["Seguir innovando (+2 de crítica por un año)", () => { bonAdd({ n: "Innovación", c: 2, a: 0, h: S.t + 52 }); }]] });
+if (!EVT.some((e) => e.n == "Una colonia sin señal")) EVT.push({ n: "Una colonia sin señal", x: "Una colonia de Marte lleva meses sin recibir obras. Te piden enviar tu catálogo.", c: () => S && yr() >= 2180, o: [["Enviarlo gratis (+2 de prestigio y +2 % de fans)", () => { S.pop = cl((S.pop || 0) + 2); S.fans = Math.round((S.fans || 0) * 1.02); }], ["Cobrar el envío (+1 % de caja)", () => { gana("otros", cc(0.01)); }]] });
+if (!EVT.some((e) => e.n == "Falla el archivo eterno")) EVT.push({ n: "Falla el archivo eterno", x: "Una falla en el Archivo eterno borra copias de obras antiguas. ¿Pagas la restauración de las tuyas?", c: () => S && yr() >= 2140, o: [["Pagar la restauración (1 % de caja)", () => { gasta("eventos", cc(0.01)); }], ["Dejarlo así (−2 de prestigio)", () => { S.pop = cl((S.pop || 0) - 2); }]] });
+if (!EVT.some((e) => e.n == "Turistas en tus locaciones")) EVT.push({ n: "Turistas en tus locaciones", x: "Miles de turistas visitan los lugares donde filmaste tus obras. ¿Cobras entrada?", c: () => S && yr() >= 2114 && S.pj.filter((p) => p.st >= 3 && (p.a || 0) >= 80).length >= 3, o: [["Cobrar entrada (+1 % de caja)", () => { gana("otros", cc(0.01)); }], ["Entrada libre (+3 % de fans)", () => { S.fans = Math.round((S.fans || 0) * 1.03); }]] });
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {
   const t = document.getElementById("top"),

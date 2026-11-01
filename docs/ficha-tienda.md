@@ -70,10 +70,10 @@ Idiomas: español, inglés, francés y portugués.
 Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales; el juego no está afiliado a ellos. El casino del juego usa dinero ficticio: no hay apuestas con dinero real.
 ```
 
-**Notas de la versión 1.2** (377/500)
+**Notas de la versión 1.3** (416/500)
 
 ```
-Versión 1.2: la pantalla ya no salta al tocar opciones; fechas de cada obra; archivo dividido en propias, compradas y con rivales; venta de negocios, cines y parques; parques con gestión automática; encargos a tus talentos firmados; menos interrupciones al avanzar y propuestas para tu avatar; becas automáticas; títulos y críticas más variados, y paquetes de mundo (.iamundo).
+Versión 1.3: más historia hasta el año 2300 (hitos, inventos, estudios del espacio, negocios, atracciones, programas de TV, construcciones y momentos históricos); el periódico se lee bien en todos los temas; pantalla estable al tocar; fechas de cada obra; archivo en tres secciones; venta de negocios, cines y parques; encargos a tus talentos; menos interrupciones; becas automáticas, y paquetes de mundo (.iamundo).
 ```
 
 ## English (en-US)
@@ -129,10 +129,10 @@ Languages: Spanish, English, French and Portuguese.
 The real works, awards, people, brands and places in the game are historical and cultural references; the game is not affiliated with them. The in-game casino uses fictional money: there is no real-money gambling.
 ```
 
-**Notas de la versión 1.2** (360/500)
+**Notas de la versión 1.3** (402/500)
 
 ```
-Version 1.2: the screen no longer jumps when you tap options; dates for every work; archive split into own, bought and with rivals; sell businesses, cinemas and parks; park auto-management; commissions to your signed talents; fewer interruptions and proposals for your avatar; automatic scholarships; more varied titles and reviews; and world packs (.iamundo).
+Version 1.3: more history up to the year 2300 (milestones, inventions, space studios, businesses, rides, TV shows, facilities and historic moments); the newspaper is readable in every theme; a steady screen when you tap; dates for every work; a three-part archive; sell businesses, cinemas and parks; commissions to your talents; fewer interruptions; automatic scholarships; and world packs (.iamundo).
 ```
 
 ## Français (fr-FR)
@@ -188,10 +188,10 @@ Langues : espagnol, anglais, français et portugais.
 Les œuvres, prix, personnes, marques et lieux réels présents dans le jeu sont des références historiques et culturelles ; le jeu n'y est pas affilié. Le casino du jeu utilise de l'argent fictif : il n'y a pas de jeu d'argent réel.
 ```
 
-**Notas de la versión 1.2** (403/500)
+**Notas de la versión 1.3** (435/500)
 
 ```
-Version 1.2 : l'écran ne saute plus quand tu touches une option ; dates de chaque œuvre ; archives divisées en propres, achetées et avec des rivaux ; vente d'entreprises, cinémas et parcs ; gestion automatique des parcs ; commandes à tes talents sous contrat ; moins d'interruptions et propositions pour ton avatar ; bourses automatiques ; titres et critiques plus variés ; et packs de monde (.iamundo).
+Version 1.3 : plus d'histoire jusqu'en 2300 (étapes, inventions, studios de l'espace, entreprises, attractions, émissions de TV, installations et moments historiques) ; le journal se lit bien dans tous les thèmes ; écran stable au toucher ; dates de chaque œuvre ; archives en trois parties ; vente d'entreprises, cinémas et parcs ; commandes à tes talents ; moins d'interruptions ; bourses automatiques ; et packs de monde (.iamundo).
 ```
 
 ## Português (pt-BR)
@@ -247,8 +247,8 @@ Idiomas: espanhol, inglês, francês e português.
 As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais; o jogo não é afiliado a eles. O cassino do jogo usa dinheiro fictício: não há apostas com dinheiro real.
 ```
 
-**Notas de la versión 1.2** (367/500)
+**Notas de la versión 1.3** (400/500)
 
 ```
-Versão 1.2: a tela não pula mais ao tocar opções; datas de cada obra; arquivo dividido em próprias, compradas e com rivais; venda de negócios, cinemas e parques; gestão automática dos parques; encomendas aos seus talentos contratados; menos interrupções e propostas para seu avatar; bolsas automáticas; títulos e críticas mais variados; e pacotes de mundo (.iamundo).
+Versão 1.3: mais história até o ano 2300 (marcos, invenções, estúdios do espaço, negócios, atrações, programas de TV, instalações e momentos históricos); o jornal fica legível em todos os temas; tela estável ao tocar; datas de cada obra; arquivo em três partes; venda de negócios, cinemas e parques; encomendas aos seus talentos; menos interrupções; bolsas automáticas; e pacotes de mundo (.iamundo).
 ```

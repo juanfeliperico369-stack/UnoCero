@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.2
+## INDUSTRY ART · versión 1.3
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -54,6 +54,14 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Decisiones al avanzar**: eliges cuántas ventanas quieres (Muchas, Normal, Pocas o Solo importantes), y tu avatar recibe propuestas para trabajar con otros estudios según sus especialidades.
 - **Paquetes de mundo (`.iamundo`)**: la comunidad puede crear archivos con estudios, talentos y obras que aparecen en su año y franquicias que se compran con sus personajes. Se importan en Estudio → Editor.
 
+### El futuro, hasta 2300
+
+De 2027 a 2300 el juego tiene su propia historia de ficción:
+- Hitos nuevos e inventos como el cine olfativo, la transmisión desde Marte o la ópera en ingravidez.
+- Estudios rivales que nacen en la Luna, Marte y las colonias.
+- Negocios, atracciones de parque, formatos y programas de TV y construcciones del futuro.
+- Momentos históricos que piden una decisión, como los 300 años del cine o el cierre del último cine de 35 mm.
+
 ### Modos de juego
 
 - **Seis siglos**: campaña de nueve capítulos de 1737 a 2150, cada uno con su reto.
@@ -68,7 +76,7 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.2 están en `entregables/`.
+Los paquetes de la versión 1.3 están en `entregables/`.
 
 ### Lanzamiento
 
