@@ -1,0 +1,63 @@
+plugins {
+    id 'com.android.application'
+}
+
+// The game is a single HTML file: it is copied into the app assets on every build.
+def juego = rootProject.file('../industry-art/index.html')
+if (juego.exists()) {
+    copy {
+        from juego
+        into "$projectDir/src/main/assets"
+    }
+}
+
+def firma = new Properties()
+def archivoFirma = rootProject.file('keystore.properties')
+if (archivoFirma.exists()) {
+    archivoFirma.withInputStream { firma.load(it) }
+}
+
+android {
+    namespace 'com.onezero.industryart'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.onezero.industryart'
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+    }
+
+    signingConfigs {
+        release {
+            if (archivoFirma.exists()) {
+                storeFile rootProject.file(firma['storeFile'])
+                storePassword firma['storePassword']
+                keyAlias firma['keyAlias']
+                keyPassword firma['keyPassword']
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            if (archivoFirma.exists()) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.22')
+    implementation 'androidx.webkit:webkit:1.12.1'
+    implementation 'androidx.activity:activity:1.9.3'
+    implementation 'androidx.core:core:1.13.1'
+}

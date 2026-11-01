@@ -21,6 +21,16 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Temas especiales**: Espacial, Navidad, Halloween, Hollywood clásico, Bollywood, Anime, Cómic, Píxel, Plano 2D, Noir y Synthwave. Cambian los colores y decoran las ilustraciones; Píxel dibuja las ilustraciones en píxeles y Hollywood clásico y Noir las pasan a blanco y negro.
 - **Decoración de temporada**: en cualquier tema, el edificio celebra Halloween, Navidad y Año Nuevo según el calendario del juego.
 
+### Android
+
+El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/index.html`.
+
+1. Copia `android/keystore.properties.ejemplo` como `android/keystore.properties` y completa la ruta y la contraseña de tu llave de subida.
+2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
+3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
+
+Los paquetes de la versión 1.0 están en `entregables/`. Las sugerencias para el lanzamiento están en `docs/sugerencias-y-lanzamiento.md`.
+
 ### Capturas
 
 ![Antes y ahora](industry-art/capturas/antes-despues.png)
