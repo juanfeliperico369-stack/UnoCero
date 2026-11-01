@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.1
+## INDUSTRY ART · versión 1.2
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -44,6 +44,16 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Encargos**: los proyectos que te proponen se pueden encomendar a una filial o a un rival para que lo hagan todo, o para editarlos tú.
 - **Streaming y TV**: los lotes del catálogo suman títulos reales y la compra automática licencia contenido cada mes con un presupuesto.
 
+### Gestión del estudio
+
+- **Fechas de cada obra**: la idea, el inicio del proyecto, el estreno y el tiempo total.
+- **Archivo en tres secciones**: obras propias, compradas y hechas con rivales.
+- **Encargos a tus talentos firmados**: entrégale un material a un talento firmado para que se encargue de todo o para editarlo tú.
+- **Venta de negocios, cadenas de cines y parques temáticos**. Los parques ampliados ya pueden mantenerse solos y tienen gestión automática de precio y mantenimiento.
+- **Academia**: becas automáticas para tus talentos firmados, que pueden estudiar y trabajar a la vez.
+- **Decisiones al avanzar**: eliges cuántas ventanas quieres (Muchas, Normal, Pocas o Solo importantes), y tu avatar recibe propuestas para trabajar con otros estudios según sus especialidades.
+- **Paquetes de mundo (`.iamundo`)**: la comunidad puede crear archivos con estudios, talentos y obras que aparecen en su año y franquicias que se compran con sus personajes. Se importan en Estudio → Editor.
+
 ### Modos de juego
 
 - **Seis siglos**: campaña de nueve capítulos de 1737 a 2150, cada uno con su reto.
@@ -58,7 +68,7 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.1 están en `entregables/`.
+Los paquetes de la versión 1.2 están en `entregables/`.
 
 ### Lanzamiento
 

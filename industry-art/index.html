@@ -852,7 +852,7 @@ html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 
 .lan-pin .m{color:inherit;opacity:.88;text-transform:uppercase;letter-spacing:.06em;font-size:.72rem}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.1";
+const VERN = "1.2";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -1332,6 +1332,7 @@ function siguienteAviso() {
     S.hrV = 0;
     return herB();
   }
+  if (S.avp5V != null) return avp5B();
   if (S.avE != null) return avEB();
   if (S.ofA) return avOfB();
   if (S.candV) {
@@ -1453,7 +1454,7 @@ const TX = {
       ],
       academia: [
         "Academia",
-        "Taller, Especializaci\u00F3n y Maestr\u00EDa suben de +1 a +5 la experiencia en un oficio. Mientras estudia, el talento no entra a obras nuevas. Un talento becado te cobra 10 % menos para siempre.",
+        "Taller, Especialización y Maestría suben de +1 a +5 la experiencia en un oficio. Mientras estudia, el talento puede seguir trabajando en tus obras. Un talento becado te cobra 10 % menos para siempre. Con «Becas automáticas», tus talentos firmados empiezan un curso solos cada mes.",
       ],
       cartelera: [
         "Cartelera real",
@@ -8014,8 +8015,8 @@ const ENX = {
   "Aqu\u00ED ves tus obras por etapa: producci\u00F3n, listas para estrenar, marketing, cartelera y archivo. Cada obra nace como franquicia. \u00ABUsar material\u00BB adapta obras de dominio p\u00FAblico o derechos que compres.":
     "Here you see your works by stage: production, ready to release, marketing, in theaters and archive. Every work is born as a franchise. \u00ABUse material\u00BB adapts public domain works or rights you buy.",
   "Crear una obra": "Create a work",
-  "Taller, Especializaci\u00F3n y Maestr\u00EDa suben de +1 a +5 la experiencia en un oficio. Mientras estudia, el talento no entra a obras nuevas. Un talento becado te cobra 10 % menos para siempre.":
-    "Workshop, Specialization and Mastery raise experience in a trade by +1 to +5. While studying, the talent can't join new works. A talent on a scholarship charges you 10% less forever.",
+  "Taller, Especialización y Maestría suben de +1 a +5 la experiencia en un oficio. Mientras estudia, el talento puede seguir trabajando en tus obras. Un talento becado te cobra 10 % menos para siempre. Con «Becas automáticas», tus talentos firmados empiezan un curso solos cada mes.":
+    "Workshop, Specialization and Master's raise experience in a trade by +1 to +5. While studying, the talent can keep working on your works. A talent you give a scholarship charges you 10% less forever. With «Automatic scholarships», your signed talents start a course on their own every month.",
   "Cartelera real": "Real box office",
   "Cada semana el p\u00FAblico de cada regi\u00F3n y edad se reparte entre todas las obras en cartelera (tuyas y de los rivales) y la opci\u00F3n de quedarse en casa, que gana fuerza con la radio, la TV, el video, internet y el streaming.":
     "Every week the audience of each region and age is split among all works in theaters (yours and rivals') and the option of staying home, which grows stronger with radio, TV, video, internet and streaming.",
@@ -10206,7 +10207,7 @@ const LA = sp(
   "Erickson,Rojas,Tanaka,Moreau,Okafor,Silva,Petrov,Haddad,Lindqvist,Navarro,Kim,Rossi,Duarte,Singh,Weber,Ortega,Mbeki,Cruz,Nolan,Vega",
 );
 const T1 = sp("Noche,Eco,Frontera,Aurora,Sombra,V\u00E9rtigo,Marea,Cenizas,Reflejo,Horizonte,Umbral,Cometa");
-const T2 = sp("de cristal,final,eterno,sin nombre,perdido,del norte,en llamas,de invierno,secreto,imposible");
+const T2 = sp("de cristal,final,eterno,perdido,del norte,en llamas,de invierno,secreto,imposible,de medianoche,del sur,de plata");
 const CAP = [
   500, 1000, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000, 10000000, 25000000, 50000000, 100000000,
   250000000, 500000000, 1000000000,
@@ -14020,12 +14021,12 @@ function conArt(x) {
   const p = w.split(/[ ,]/)[0],
     q = p.toLowerCase(),
     keep = /^[A-ZÁÉÍÓÚÑ]{2,}$/.test(p) || /\s[A-ZÁÉÍÓÚÑ]/.test(w),
-    t = keep ? w : lc(w);
+    t = /^[A-ZÁÉÍÓÚÑ]{2,}$/.test(p) ? w : lc(w);
   if (SIN_ART.has(q)) return w;
   let a = "el";
   if (ARF_M.has(q)) a = "el";
   else if (ARF_F.has(q)) a = "la";
-  else if (/as$/.test(q)) a = "las";
+  else if (/as$/.test(q)) a = /^(enigmas|problemas|dilemas|sistemas|dramas|temas|idiomas|poemas|programas|climas|fantasmas|planetas|cometas|mapas|días|traumas|esquemas|emblemas|lemas|carismas|paradigmas|aromas|panoramas|prismas|pijamas)$/.test(q) ? "los" : "las";
   else if (/(iones|dades|tades|tudes|umbres|noches|muertes|mujeres|leyes|flores|redes|voces|luces|raíces|calles|fuentes|mentes|torres|naves)$/.test(q)) a = "las";
   else if (/(es|os|is|us)$/.test(q) && q.length > 3) a = "los";
   else if (/(a|ión|dad|tad|tud|umbre|ez)$/.test(q)) a = "la";
@@ -16723,7 +16724,7 @@ function eqRec(m, b) {
       let best = null,
         bv = -1000000000;
       S.tl.forEach((t) => {
-        if (t.ret || t.es || t.e < 10 || used.has(t.id) || ocupado(t) || t.s[r] <= bv) return;
+        if (t.ret || t.e < 10 || used.has(t.id) || ocupado(t) || t.s[r] <= bv) return;
         const f0 = fee(t, r, m),
           v0 = t.s[r] - (f0 > share ? (f0 / share - 1) * 25 : 0);
         if (v0 <= bv) return;
@@ -16760,7 +16761,7 @@ const agr = (a, b) => {
   return a + " " + (pl ? (fem ? g[1] : b == "final" || b == "imposible" ? g[1] : b + "s") : fem ? g[0] : b);
 };
 const titDoble = () => (IDI == "en" && typeof titGenEN == "function" ? titGenEN() : agr(pk(T1), pk(T2)));
-const ttl0 = () => (IDI == "en" && typeof titGenEN == "function" ? titGenEN() : R() < 0.4 ? titDoble() : ((a, b) => (a == "El \u00FAltimo" && /^de (las|la) /.test(b) ? "La \u00FAltima" : a) + " " + b)(pk(T3), pk(T4)));
+const ttl0 = () => (IDI == "en" && typeof titGenEN == "function" ? titGenEN() : R() < 0.4 ? titDoble() : ((a, b) => (a == "El \u00FAltimo" ? (/^de (las|la) /.test(b) ? "La \u00FAltima" : /^(de los |del )/.test(b) ? a : "El reino") : a) + " " + b)(pk(T3), pk(T4)));
 const pdO = (x, i) => ({
   i: "p" + i,
   n: x[0],
@@ -17138,7 +17139,7 @@ function producir() {
   const bz = m[1]
     .map((r) => S.tl[W.crew[r]])
     .concat((W.cast || []).map((c) => S.tl[c.t]))
-    .find((t) => t && (t.es || (ocupado(t) && !(W.cast || []).some((c) => c.t == t.id && (c.sob || 1) >= 1.6))));
+    .find((t) => t && ocupado(t) && !(W.cast || []).some((c) => c.t == t.id && (c.sob || 1) >= 1.6));
   if (bz) return bz.n + (bz.es ? " est\u00E1 estudiando" : " est\u00E1 ocupado con un rival");
   if (m[1].some((r) => !S.tl[W.crew[r]] && !rolOpc(W.m, r))) return "Falta completar el equipo";
   const nr = m[1]
@@ -17474,7 +17475,7 @@ function actorRec(c, W2, used, lim) {
     bv = -1000000000;
   const no = W2.m == W.m ? wNo() : { ag: 2 };
   S.tl.forEach((t) => {
-    if (t.ret || t.es || t.e < 10 || used.has(t.id) || ocupado(t) || (t.r != 7 && !(t.you && S.sp.includes(7)))) return;
+    if (t.ret || t.e < 10 || used.has(t.id) || ocupado(t) || (t.r != 7 && !(t.you && S.sp.includes(7)))) return;
     if (nego(t, 7, no).k == 2) return;
     const f = fee(t, 7, W2.m) * IMP[c.i][2],
       v = t.s[7] + (t.ge && t.ge == c.x ? 6 : c.ant && t.ge ? -40 : 0) - (f > lim ? (f / Math.max(1, lim) - 1) * 30 : 0);
@@ -18148,7 +18149,7 @@ function sinop(P) {
     ai = DX.ar[0].indexOf((P.ar || [])[0]);
   if (P.m == 4)
     return `${g} · un ${TY[4][0][0] == (P.ty || [])[0] ? "disco" : "trabajo musical"} sobre ${tm.length ? (P.tm || []).slice(0, 2).map(conArt).join(" y ") : "lo que nos mueve"}.`;
-  let s = `${ep}${lug}, ${quien} ${pm.length ? pm.join(" y luego ") : "se ve obligad" + o + " a cambiar su vida"}.`.replace(/\{o\}/g, o);
+  let s = `${ep}${lug}, ${quien} ${pm.length ? pm.join(" y luego ") : sinopDef5(P)}.`.replace(/\{o\}/g, o);
   if (tm.length) s += " Una historia sobre " + (P.tm || []).slice(0, 2).map(conArt).join(" y ") + ".";
   if (ai >= 0) s += " " + ARF[ai];
   return s;
@@ -18540,7 +18541,6 @@ function crewSel(r) {
     L = S.tl.filter(
       (t) =>
         !t.ret &&
-        (!t.es || sel == t.id) &&
         (t.e >= 10 || sel == t.id) &&
         (!ocupado(t) || sel == t.id) &&
         (nego(t, r, no).k != 2 || sel == t.id),
@@ -18680,7 +18680,6 @@ const pjAct = (c, k) => {
       .filter(
         (t) =>
           !t.ret &&
-          !t.es &&
           (t.r == 7 || t.you || c.t == t.id) &&
           (t.e >= 10 || c.t == t.id) &&
           (!ocupado(t) || c.t == t.id) &&
@@ -20391,7 +20390,7 @@ ${rel.length ? `<div class="m">Relaciones: ${rel.join(" \u00B7 ")}</div>` : ""}
   }</div>${typeof tFilmo == "function" ? tFilmo(t, ps) : ""}
 <div class="bts" style="margin-top:10px">${bt("lc", t.id, (sl ? "\u2605 Quitar de" : "\u2606 Agregar a") + " la lista corta")}${t.ret ? "" : bt("stu", t.id, ic("academia") + (t.es ? " Curso" : t.you ? " Estudiar" : " Becar"))}${t.you || t.ret ? "" : bt("ct", t.id, t.ex ? "Rescindir contrato" : "Contrato exclusivo")}</div>
 ${
-  !t.ret && !t.es && !ocupado(t) && enProd2.length
+  !t.ret && !ocupado(t) && enProd2.length
     ? `<h3>Sumar a una producción en marcha</h3>${enProd2
         .slice(0, 4)
         .map((p) =>
@@ -20430,7 +20429,7 @@ function tFil() {
       ((!c0 && !c1) || t.you || ((c0 ? fee(t, t.r, 0) >= c0 : 1) && (c1 ? fee(t, t.r, 0) <= c1 : 1))),
   );
 }
-const disp = (t) => (t.ret ? -2 : t.es || ocupado(t) ? -1 : t.e);
+const disp = (t) => (t.ret ? -2 : ocupado(t) ? -1 : t.e);
 function vT() {
   S.tl.forEach((t) => {
     if (t.gr == null && !t.ret) tat2(t);
@@ -20689,7 +20688,6 @@ function tpkL() {
   let L = S.tl.filter(
     (t) =>
       !t.ret &&
-      !t.es &&
       (t.e >= 10 || t.id == sel) &&
       (!ocupado(t) || t.id == sel) &&
       (k == "c" ? !TPF.of || t.r == r || t.you : t.r == 7 || t.you) &&
@@ -21406,11 +21404,12 @@ function prodSem(P) {
     pr = Math.min(1, k / P.pw);
   P.lin.push([Math.round(pr * 1000), Math.round(pr * (1 + (P.fo - 1) * Math.min(1, pr * 1.2)) * 1000)]);
   if (P.lin.length > 60) P.lin.shift();
-  if (S.pre || R() > 0.035) return;
+  if (S.pre || R() > 0.035 || !decLibre5()) return;
   if (R() < 0.5) {
     S.dlm = S.dlm || [];
     if (!S.dlm.some((d) => d.id == P.id)) {
       S.dlm.push({ id: P.id, k: ri(0, DIL.length - 1) });
+      S.dec5t = S.t;
       pausa("dilema");
     }
   } else {
@@ -22334,7 +22333,8 @@ const revH = (P) =>
     : "";
 let FIL2 = { q: "", s: "y" };
 function vFilmo() {
-  const L = S.pj.filter((p) => p.st >= 3 && (!FIL2.q || p.n.toLowerCase().includes(FIL2.q))),
+  const L0 = S.pj.filter((p) => p.st >= 3 && (!FIL2.q || p.n.toLowerCase().includes(FIL2.q))),
+    L = FILO5 == "t" ? L0 : L0.filter((p) => filOrigen5(p) == FILO5),
     s = FIL2.s;
   L.sort((a, b) =>
     s == "c"
@@ -22351,8 +22351,8 @@ function vFilmo() {
     fr = uniq(S.pj.map((p) => p.fid)).length;
   return (
     bioH() +
-    `<div class="c"><div class="k"><h3 style="margin:0">Panel del estudio</h3>${bi("filmo")}</div><div class="g"><div><div class="m">Taquilla de toda la vida (hoy)</div><b>${fm0(life)}</b></div><div><div class="m">Obras estrenadas</div><b>${L.length}</b></div><div><div class="m">Franquicias</div><b>${fr}</b></div><div><div class="m">Fans</div><b>${nfc(S.fans || 0)}</b></div><div><div class="m">Premios</div><b>${S.win}</b></div><div><div class="m">Prestigio</div><b>${Math.round(S.pop)}</b></div></div><canvas id="yh" style="height:140px;margin-top:6px"></canvas></div>${cronH()}
-<div class="c"><h3 style="margin:0 0 6px">Filmografía</h3><input type="text" placeholder="Buscar" value="${esc(FIL2.q)}" onchange="FIL2.q=this.value.toLowerCase().trim();pg()"><select onchange="FIL2.s=this.value;pg()">${[
+    `<div class="c"><div class="k"><h3 style="margin:0">Panel del estudio</h3>${bi("filmo")}</div><div class="g"><div><div class="m">Taquilla de toda la vida (hoy)</div><b>${fm0(life)}</b></div><div><div class="m">Obras estrenadas</div><b>${L0.length}</b></div><div><div class="m">Franquicias</div><b>${fr}</b></div><div><div class="m">Fans</div><b>${nfc(S.fans || 0)}</b></div><div><div class="m">Premios</div><b>${S.win}</b></div><div><div class="m">Prestigio</div><b>${Math.round(S.pop)}</b></div></div><canvas id="yh" style="height:140px;margin-top:6px"></canvas></div>${cronH()}
+<div class="c"><h3 style="margin:0 0 6px">Filmografía</h3>${filOrigenH(L0)}<input type="text" placeholder="Buscar" value="${esc(FIL2.q)}" onchange="FIL2.q=this.value.toLowerCase().trim();pg()"><select onchange="FIL2.s=this.value;pg()">${[
       ["y", "M\u00E1s recientes"],
       ["c", "Mejor cr\u00EDtica"],
       ["a", "Mejor p\u00FAblico"],
@@ -22364,7 +22364,7 @@ function vFilmo() {
       L.slice(0, 60)
         .map(
           (p) =>
-            `<button class="fila lista" data-a="det" data-v="${p.id}"><span>${esc(p.n)}<span class="m"> · ${dy(p)} · ${MD[p.m][0]}${lab(p) ? " \u00B7 " + lab(p) : ""}</span></span><span class="m">${p.c | 0}/${p.a | 0} · ${fm0(p.gR || 0)}</span></button>`,
+            `<button class="fila lista" data-a="det" data-v="${p.id}"><span>${esc(p.n)}<span class="m"> · ${filFecha5(p)} · ${MD[p.m][0]}${lab(p) ? " \u00B7 " + lab(p) : ""}</span></span><span class="m">${p.c | 0}/${p.a | 0} · ${fm0(p.gR || 0)}</span></button>`,
         )
         .join("") || '<div class="m">A\u00FAn no hay estrenos.</div>'
     }</div></div>`
@@ -24381,7 +24381,7 @@ function elencoVuelve(W2) {
     const t = S.tl[c.t];
     if (!t || t.you) return;
     c.sob = 1;
-    const why = t.ret ? "se retir\u00F3" : t.es ? "est\u00E1 estudiando" : "";
+    const why = t.ret ? "se retir\u00F3" : "";
     if (why) {
       W2.rej.push(c.n + " (" + t.n + " " + why + ")");
       c.t = null;
@@ -32164,7 +32164,7 @@ function evSemana() {
     pausa("evento");
     return;
   }
-  if (S.t % 2 == 1 && S.evp == null && R() < evProb()) {
+  if (S.t % 2 == 1 && S.evp == null && decLibre5() && R() < evProb()) {
     S.evu = S.evu || {};
     const L = [];
     EVT.forEach((e, i) => {
@@ -32177,6 +32177,7 @@ function evSemana() {
       S.evp = x[0];
       S.evx = x[1] === true || x[1] === 1 ? null : x[1];
       S.evu[x[0]] = S.t;
+      S.dec5t = S.t;
       pausa("evento");
     }
   }
@@ -33188,11 +33189,11 @@ const TX1 = sp(
   "Obsidiana,Paralelo,Medianoche,Espejismo,Tempestad,Rel\u00E1mpago,Laberinto,Zafiro,Cicatriz,Penumbra,Equinoccio,Furia,Br\u00FAjula,Quimera,Destello,N\u00F3mada,Vendaval,\u00CDcaro,Ra\u00EDces,Silencio,Hechizo,Coraza,Remolino,Utop\u00EDa,Vigilia",
 );
 const TX2 = sp(
-  "La \u00FAltima frontera,El precio del oro,Ciudad de humo,La hija del faro,Los a\u00F1os salvajes,El club de los martes,Bajo la misma luna,La casa de los relojes,El hombre sin sombra,Corazones de acero,La isla de las voces,El tren de medianoche,Dos veranos,El jard\u00EDn de invierno,Hijos del trueno,La noche m\u00E1s larga,Puerto escondido,El ladr\u00F3n de mapas,Las cartas del capit\u00E1n,El \u00FAltimo baile",
+  "La \u00FAltima frontera,El precio del oro,Ciudad de humo,La hija del faro,Los a\u00F1os salvajes,El club de los martes,Bajo la misma luna,La casa de los relojes,El hombre sin sombra,Corazones de acero,La isla de las voces,El tren de medianoche,Dos veranos,El jard\u00EDn de invierno,Hijos del trueno,La noche m\u00E1s larga,Puerto escondido,El ladr\u00F3n de mapas,Las cartas del capit\u00E1n,El \u00FAltimo baile,Cartas a nadie,El verano que nos cambió,Los que se quedan,Antes de que amanezca,Hija de la tormenta,La memoria del agua,Un lugar llamado hogar,Los olvidados del puerto,El sonido de la nieve,Nadie vuelve igual,La última función,El color del silencio,Las horas robadas,Nunca fuimos héroes,Todo lo que perdimos,La ciudad que no duerme,Mientras dure la luz,El año del cometa,Los días contados,Una casa en el aire,El peso de la corona,La pasajera del último vagón,Cuando caiga la nieve,Lejos de casa,El viaje de regreso,Sin mirar atrás,El jardín de las mentiras,La orilla del mundo,Instrucciones para volver,El hombre de la radio,Las reglas del juego,Tres días en abril,Una canción para Marta,El idioma de los pájaros,La fiesta del fin,Agua de mayo,El rumor del mar,Los hijos del viento,La noche de los faros,Cuentas pendientes,El último tren a casa,La isla de los gatos,Mentiras de verano,El mapa del tesoro,La fuga de los tres,Nuestro último verano,Puertas abiertas,El taller de los sueños,Mil kilómetros al sur,Ecos de la calle,Hora de partir,Media vida,El club de los insomnes,Un invierno en París,La sombra del almendro,La carta que nunca llegó,El guardián del puente,Las dos orillas,Bailar en la cuerda floja,La hermana menor",
 );
 function ttlR() {
   const x = R();
-  return x < 0.3 ? ttl0() : x < 0.55 ? pk(TX1) : x < 0.85 ? pk(TX2) : agr(pk(TX1), pk(T2));
+  return x < 0.2 ? ttl0() : x < 0.32 ? pk(TX1) : x < 0.56 ? pk(TX2) : x < 0.66 ? agr(pk(TX1), pk(T2)) : titGen();
 }
 const RVA = [
   ["Compa\u00F1\u00EDa Aurora", 1895],
@@ -33913,7 +33914,7 @@ function rvVida() {
   EMR.forEach((e, k) => {
     if (!S.emr.includes(k) && y >= e[0] && rvVivos().length < rvMax()) rvNace(k);
   });
-  if ((rvVivos().length < 8 && R() < 0.5) || (y > 2150 && R() < 0.12 && rvVivos().length < rvMax())) rvGenera();
+  if (!(S.mr5 && S.mr5.solo && rvVivos().length >= 4) && ((rvVivos().length < 8 && R() < 0.5) || (y > 2150 && R() < 0.12 && rvVivos().length < rvMax()))) rvGenera();
   S.rv.forEach((r) => {
     r.nobY = r.nobA | 0;
     r.nobA = 0;
@@ -35324,11 +35325,12 @@ const AVV = [
   ],
 ];
 on("mes", () => {
-  if (!S || S.pre || S.avE != null) return;
-  if (R() < 0.06) {
+  if (!S || S.pre || S.avE != null || !decLibre5()) return;
+  if (R() < 0.06 * decAv5()) {
     const L = AVV.map((_, i) => i).filter((i) => typeof avOk != "function" || avOk(i));
     if (L.length) {
       S.avE = pk(L);
+      S.dec5t = S.t;
       pausa("avatar");
     }
   }
@@ -35628,7 +35630,7 @@ const PZO = [
   ["tl", "Talentos nuevos cada a\u00F1o", ["Pocos", "Normales", "Muchos"]],
 ];
 const rvMax = () => Math.round(rvBase(S ? yr() : 1950) * (S && S.pz ? [0.55, 1, 1.33][S.pz.rv | 0] : 1));
-const evProb = () => 0.16 * (S && S.pz ? [0.5, 1, 1.7][S.pz.ev | 0] : 1) * (S && S.df >= 3 ? 1.25 : 1);
+const evProb = () => 0.16 * decProb5() * (S && S.pz ? [0.5, 1, 1.7][S.pz.ev | 0] : 1) * (S && S.df >= 3 ? 1.25 : 1);
 const pzOn = (k) => !(S && S.pz && S.pz[k] === 0);
 function tpH() {
   const tp = +($("#ntp") ? $("#ntp").value : 0);
@@ -43416,12 +43418,12 @@ function titGen(fam) {
   if (r < 0.64) return titArt(g, 1) + " " + (g[0] == "f" ? (g.length > 1 ? "últimas" : "última") : g.length > 1 ? "últimos" : "último") + " " + titMin(s[0]);
   if (r < 0.7) {
     const s2 = titS();
-    return s[0] + " y " + titMin(s2[0]);
+    return parOk5(s[0], s2[0]) ? s[0] + " y " + titMin(s2[0]) : s[0] + " " + c[0];
   }
   const ab = pk(TITV.ABS)[0];
   return (
     [
-      () => "Operación " + s[0],
+      () => (g.length > 1 ? "Crónicas " + titDe(g) + " " + titMin(s[0]) : "Operación " + s[0]),
       () => "El reino " + titDe(g) + " " + titMin(s[0]),
       () => "Sombras de " + ab,
       () => "Un amor " + c[0],
@@ -43480,8 +43482,8 @@ function titJuego(gn) {
   const s = titS(),
     r = R(),
     sub = () => titArt(titS()[1] == "f" ? "f" : "m", 1) + " " + titMin(titS()[0]) + " " + titForma(titA(), "m");
-  if (r < 0.3) return s[0] + ": " + titGen().replace(/^./, (c) => c.toUpperCase());
-  if (r < 0.45) return "Operación " + s[0];
+  if (r < 0.3) return s[0] + ": " + pk(SUBJ5);
+  if (r < 0.45) return s[1].length > 1 ? "Leyendas " + titDe(s[1]) + " " + titMin(s[0]) : "Operación " + s[0];
   if (r < 0.6) return "Leyendas " + titDe(s[1]) + " " + titMin(s[0]);
   if (r < 0.72) return s[0] + " " + pk(sp("Zero,Prime,Infinito,Origen,Arena,Rush,Tactics,Legends,Nova,Rally"));
   return titGen();
@@ -43491,7 +43493,10 @@ function titLibro(gn) {
     s = titS();
   if (r < 0.15) return pk(NMR[NMRde(S ? S.sede : 0)][R() < 0.5 ? 0 : 1]);
   if (r < 0.28) return "Cartas desde " + titArt(s[1]) + " " + titMin(s[0]);
-  if (r < 0.4) return titArt(s[1], 1) + " " + titMin(s[0]) + " " + titDe(titS()[1]) + " " + titMin(titS()[0]);
+  if (r < 0.4) {
+    const s2 = titS();
+    return titArt(s[1], 1) + " " + titMin(s[0]) + " " + titDe(s2[1]) + " " + titMin(s2[0]);
+  }
   if (r < 0.5) return "Diario " + titDe(s[1]) + " " + titMin(s[0]) + " " + titForma(titA(), s[1]);
   return titGen();
 }
@@ -54172,7 +54177,7 @@ wz = function () {
 const nrmExt = (x) => String(x || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 function protExt() {
   const sel = W.crew[7],
-    L = S.tl.filter((t) => !t.ret && !t.dead && !t.es && (t.r == 7 || t.you) && (t.e >= 10 || t.id == sel) && (!ocupado(t) || t.id == sel)).sort((a, b) => (b.you ? 1 : 0) - (a.you ? 1 : 0) || b.s[7] - a.s[7]).slice(0, 60);
+    L = S.tl.filter((t) => !t.ret && !t.dead && (t.r == 7 || t.you) && (t.e >= 10 || t.id == sel) && (!ocupado(t) || t.id == sel)).sort((a, b) => (b.you ? 1 : 0) - (a.you ? 1 : 0) || b.s[7] - a.s[7]).slice(0, 60);
   return `<select data-k="crew.7" onchange="wv(this)" aria-label="${dualReg("Actor protagonista", "Lead actor")}"><option value="">— ${dualReg("elige al protagonista", "pick the lead")} —</option>${L.map((t) => `<option value="${t.id}"${sel == t.id ? " selected" : ""}>${esc(t.n)}${t.you ? " (" + dualReg("tú", "you") + ")" : ""} · ${t.s[7]} · ${t.age} ${dualReg("años", "yrs")}${t.you ? "" : " · " + fm(fee(t, 7, W.m))}</option>`).join("")}</select><div class="m">${dualReg("Es el intérprete del Equipo.", "This is the Crew performer.")}</div>`;
 }
 const POLExt = ["Elecciones", "Campaña electoral", "Corrupción", "Golpe de Estado", "Dictadura", "Revolución", "Democracia", "Populismo", "Diplomacia", "Exilio político", "Censura", "Magnicidio", "Guerra fría", "Movimientos sociales", "Poder y propaganda", "Separatismo"];
@@ -62644,6 +62649,176 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Versión 0.1", "Version 0.1", "Version 0.1", "Versão 0.1"],
   ["Versión 1.1", "Version 1.1", "Version 1.1", "Versão 1.1"],
   ["Versión 1.0", "Version 1.0", "Version 1.0", "Versão 1.0"],
+  ["Taller, Especialización y Maestría suben de +1 a +5 la experiencia en un oficio. Mientras estudia, el talento puede seguir trabajando en tus obras. Un talento becado te cobra 10 % menos para siempre. Con «Becas automáticas», tus talentos firmados empiezan un curso solos cada mes.", "Workshop, Specialization and Master's raise experience in a trade by +1 to +5. While studying, the talent can keep working on your works. A talent you give a scholarship charges you 10% less forever. With «Automatic scholarships», your signed talents start a course on their own every month.", "Atelier, Spécialisation et Master augmentent de +1 à +5 l'expérience dans un métier. Pendant ses études, le talent peut continuer à travailler sur tes œuvres. Un talent boursier te facture 10 % de moins pour toujours. Avec « Bourses automatiques », tes talents sous contrat commencent un cours tout seuls chaque mois.", "Oficina, Especialização e Mestrado aumentam de +1 a +5 a experiência em um ofício. Enquanto estuda, o talento pode continuar trabalhando nas suas obras. Um talento bolsista cobra 10 % menos para sempre. Com «Bolsas automáticas», seus talentos contratados começam um curso sozinhos todo mês."],
+  ["Cada giro está bien ganado.", "Every twist is well earned.", "Chaque rebondissement est mérité.", "Cada reviravolta é bem conquistada."],
+  ["Un final que deja pensando días.", "An ending that stays with you for days.", "Une fin qui hante pendant des jours.", "Um final que fica na cabeça por dias."],
+  ["Escrita con humor y con corazón.", "Written with humor and heart.", "Écrit avec humour et avec cœur.", "Escrito com humor e coração."],
+  ["Se adivina el final desde la primera escena.", "You can guess the ending from the first scene.", "On devine la fin dès la première scène.", "Dá para adivinhar o final desde a primeira cena."],
+  ["Demasiadas ideas y ninguna terminada.", "Too many ideas and none finished.", "Trop d'idées et aucune menée à terme.", "Ideias demais e nenhuma terminada."],
+  ["Una interpretación para el recuerdo.", "A performance to remember.", "Une interprétation mémorable.", "Uma atuação para lembrar."],
+  ["La química del reparto es evidente.", "The cast's chemistry is obvious.", "La complicité de la distribution saute aux yeux.", "A química do elenco é evidente."],
+  ["Hasta los secundarios roban escenas.", "Even the supporting cast steals scenes.", "Même les seconds rôles volent la vedette.", "Até os coadjuvantes roubam cenas."],
+  ["El protagonista nunca termina de convencer.", "The lead never quite convinces.", "Le rôle principal ne convainc jamais vraiment.", "O protagonista nunca chega a convencer."],
+  ["Gritan mucho y emocionan poco.", "Lots of shouting, little feeling.", "Beaucoup de cris, peu d'émotion.", "Muito grito e pouca emoção."],
+  ["Un ritmo que no deja respirar.", "A pace that never lets you breathe.", "Un rythme qui ne laisse pas respirer.", "Um ritmo que não deixa respirar."],
+  ["Sabe cuándo callar y cuándo estallar.", "It knows when to go quiet and when to explode.", "Elle sait quand se taire et quand exploser.", "Sabe quando calar e quando explodir."],
+  ["Una mirada propia en cada escena.", "A voice of its own in every scene.", "Un regard personnel dans chaque scène.", "Um olhar próprio em cada cena."],
+  ["Le sobran veinte minutos.", "It's twenty minutes too long.", "Elle a vingt minutes de trop.", "Sobram vinte minutos."],
+  ["Cambia de tono sin avisar.", "It changes tone without warning.", "Elle change de ton sans prévenir.", "Muda de tom sem avisar."],
+  ["Efectos que sirven a la historia.", "Effects that serve the story.", "Des effets au service de l'histoire.", "Efeitos a serviço da história."],
+  ["Cada imagen parece un cuadro.", "Every frame looks like a painting.", "Chaque image ressemble à un tableau.", "Cada imagem parece um quadro."],
+  ["Hay escenas que se quedarán en la historia del cine.", "Some scenes will go down in film history.", "Certaines scènes resteront dans l'histoire du cinéma.", "Há cenas que vão ficar na história do cinema."],
+  ["Se notan los hilos.", "You can see the strings.", "On voit les ficelles.", "Dá para ver os fios."],
+  ["Tanta pantalla verde cansa.", "So much green screen wears you out.", "Tant d'écran vert finit par lasser.", "Tanta tela verde cansa."],
+  ["Una banda sonora para escuchar aparte.", "A soundtrack worth listening to on its own.", "Une bande originale à écouter à part.", "Uma trilha sonora para ouvir à parte."],
+  ["El silencio también está bien usado.", "Even the silence is well used.", "Même le silence est bien utilisé.", "Até o silêncio é bem usado."],
+  ["Cada tema llega en el momento justo.", "Every cue lands at the right moment.", "Chaque thème arrive au bon moment.", "Cada tema chega no momento certo."],
+  ["La música dice lo que hay que sentir.", "The music tells you what to feel.", "La musique dit quoi ressentir.", "A música diz o que se deve sentir."],
+  ["Una banda sonora que se olvida al salir.", "A score you forget on the way out.", "Une musique qu'on oublie en sortant.", "Uma trilha que se esquece na saída."],
+  ["Cada episodio termina en el momento justo.", "Every episode ends at the perfect moment.", "Chaque épisode s'arrête au moment parfait.", "Cada episódio termina no momento certo."],
+  ["Una temporada sin relleno.", "A season with no filler.", "Une saison sans remplissage.", "Uma temporada sem enrolação."],
+  ["Los personajes crecen capítulo a capítulo.", "The characters grow episode by episode.", "Les personnages grandissent d'épisode en épisode.", "Os personagens crescem capítulo a capítulo."],
+  ["Estira la trama sin necesidad.", "It stretches the plot for no reason.", "Elle étire l'intrigue sans raison.", "Estica a trama sem necessidade."],
+  ["Un final de temporada que no cierra nada.", "A season finale that resolves nothing.", "Une fin de saison qui ne conclut rien.", "Um final de temporada que não fecha nada."],
+  ["Un elenco que da ganas de volver cada semana.", "A cast that makes you want to come back every week.", "Une distribution qui donne envie de revenir chaque semaine.", "Um elenco que dá vontade de voltar toda semana."],
+  ["La protagonista sostiene la serie entera.", "The lead carries the whole series.", "L'héroïne porte toute la série.", "A protagonista sustenta a série inteira."],
+  ["Personajes que ya se sienten de la familia.", "Characters who already feel like family.", "Des personnages qui font déjà partie de la famille.", "Personagens que já parecem da família."],
+  ["El reparto parece cansado.", "The cast looks tired.", "La distribution semble fatiguée.", "O elenco parece cansado."],
+  ["Nadie consigue que nos importen sus personajes.", "Nobody makes us care about their characters.", "Personne ne nous rend ses personnages attachants.", "Ninguém faz a gente se importar com os personagens."],
+  ["Se ve como el mejor cine.", "It looks like the best cinema.", "On dirait du grand cinéma.", "Parece o melhor do cinema."],
+  ["Un ritmo perfecto para ver de un tirón.", "Perfectly paced for binge-watching.", "Un rythme parfait pour tout regarder d'une traite.", "Um ritmo perfeito para maratonar."],
+  ["Cada episodio tiene su propia personalidad.", "Each episode has its own personality.", "Chaque épisode a sa propre personnalité.", "Cada episódio tem personalidade própria."],
+  ["Episodios que parecen hechos en serie.", "Episodes that feel mass-produced.", "Des épisodes qui semblent faits à la chaîne.", "Episódios que parecem feitos em série."],
+  ["La segunda mitad pierde el rumbo.", "The second half loses its way.", "La seconde moitié perd le cap.", "A segunda metade perde o rumo."],
+  ["Una producción que no tiene nada que envidiarle al cine.", "A production that rivals the big screen.", "Une production qui n'a rien à envier au cinéma.", "Uma produção que não deve nada ao cinema."],
+  ["Decorados que cuentan tanto como los diálogos.", "Sets that say as much as the dialogue.", "Des décors qui racontent autant que les dialogues.", "Cenários que contam tanto quanto os diálogos."],
+  ["Una apertura que nadie querrá saltarse.", "An opening nobody will want to skip.", "Un générique que personne ne voudra sauter.", "Uma abertura que ninguém vai querer pular."],
+  ["Se nota que el presupuesto no alcanzó.", "You can tell the budget ran short.", "On sent que le budget n'a pas suffi.", "Dá para notar que o orçamento não deu."],
+  ["Los mismos tres decorados una y otra vez.", "The same three sets over and over.", "Les trois mêmes décors encore et encore.", "Os mesmos três cenários sempre."],
+  ["Una canción de cabecera que se queda contigo.", "A theme song that sticks with you.", "Un générique qui reste en tête.", "Uma música de abertura que gruda."],
+  ["La música marca cada giro de la temporada.", "The music marks every turn of the season.", "La musique souligne chaque tournant de la saison.", "A música marca cada virada da temporada."],
+  ["Una selección de canciones impecable.", "An impeccable song selection.", "Une sélection de chansons impeccable.", "Uma seleção de músicas impecável."],
+  ["La misma melodía en cada escena triste.", "The same melody in every sad scene.", "La même mélodie à chaque scène triste.", "A mesma melodia em toda cena triste."],
+  ["La música de fondo no se calla nunca.", "The background music never stops.", "La musique de fond ne s'arrête jamais.", "A música de fundo nunca para."],
+  ["Una historia que da ganas de terminar el juego.", "A story that makes you want to finish the game.", "Une histoire qui donne envie de finir le jeu.", "Uma história que dá vontade de terminar o jogo."],
+  ["Cada decisión pesa.", "Every choice matters.", "Chaque choix compte.", "Cada decisão pesa."],
+  ["Un mundo con historia en cada rincón.", "A world with history in every corner.", "Un monde avec une histoire dans chaque recoin.", "Um mundo com história em cada canto."],
+  ["La historia es una excusa para disparar.", "The story is just an excuse to shoot.", "L'histoire n'est qu'un prétexte pour tirer.", "A história é só desculpa para atirar."],
+  ["Misiones de recadero, una tras otra.", "Fetch quests, one after another.", "Des quêtes de coursier, l'une après l'autre.", "Missões de leva e traz, uma atrás da outra."],
+  ["Un doblaje de primera.", "First-class voice acting.", "Un doublage de premier ordre.", "Uma dublagem de primeira."],
+  ["Personajes que parecen vivos.", "Characters who feel alive.", "Des personnages qui semblent vivants.", "Personagens que parecem vivos."],
+  ["El villano está a la altura.", "The villain lives up to it.", "Le méchant est à la hauteur.", "O vilão está à altura."],
+  ["Diálogos leídos sin ganas.", "Lines read without any spark.", "Des répliques lues sans envie.", "Falas lidas sem vontade."],
+  ["Compañeros que estorban más de lo que ayudan.", "Companions who get in the way more than they help.", "Des compagnons qui gênent plus qu'ils n'aident.", "Companheiros que atrapalham mais do que ajudam."],
+  ["Controles precisos y adictivos.", "Precise, addictive controls.", "Des commandes précises et addictives.", "Controles precisos e viciantes."],
+  ["Una curva de dificultad muy bien medida.", "A beautifully judged difficulty curve.", "Une courbe de difficulté très bien dosée.", "Uma curva de dificuldade muito bem medida."],
+  ["Imposible soltar el mando.", "Impossible to put the controller down.", "Impossible de lâcher la manette.", "Impossível largar o controle."],
+  ["Se vuelve repetitivo a las pocas horas.", "It gets repetitive after a few hours.", "Il devient répétitif au bout de quelques heures.", "Fica repetitivo depois de poucas horas."],
+  ["Una cámara que pelea contra el jugador.", "A camera that fights the player.", "Une caméra qui se bat contre le joueur.", "Uma câmera que briga com o jogador."],
+  ["Un apartado gráfico de otro nivel.", "Visuals on another level.", "Des graphismes d'un autre niveau.", "Gráficos de outro nível."],
+  ["Un estilo visual inconfundible.", "An unmistakable visual style.", "Un style visuel inimitable.", "Um estilo visual inconfundível."],
+  ["Funciona fluido de principio a fin.", "It runs smoothly from start to finish.", "Il tourne avec fluidité du début à la fin.", "Roda liso do começo ao fim."],
+  ["Tiempos de carga eternos.", "Endless loading times.", "Des temps de chargement interminables.", "Tempos de carregamento eternos."],
+  ["Le hacía falta otro año de pulido.", "It needed another year of polish.", "Il lui manquait une année de finition.", "Precisava de mais um ano de polimento."],
+  ["Una banda sonora que acompaña cada nivel.", "A soundtrack that fits every level.", "Une bande-son qui accompagne chaque niveau.", "Uma trilha que acompanha cada fase."],
+  ["El sonido avisa del peligro antes que la vista.", "The sound warns you of danger before your eyes do.", "Le son prévient du danger avant les yeux.", "O som avisa do perigo antes dos olhos."],
+  ["Melodías que se tararean días después.", "Tunes you'll hum for days.", "Des mélodies qu'on fredonne des jours après.", "Melodias que a gente cantarola por dias."],
+  ["La misma canción en bucle durante horas.", "The same song on loop for hours.", "La même chanson en boucle pendant des heures.", "A mesma música em loop por horas."],
+  ["Efectos de sonido sacados de un banco gratuito.", "Sound effects straight from a free library.", "Des bruitages tirés d'une banque gratuite.", "Efeitos sonoros tirados de um banco grátis."],
+  ["Un texto que el público aplaude a mitad de escena.", "A script the audience applauds mid-scene.", "Un texte que le public applaudit en pleine scène.", "Um texto que o público aplaude no meio da cena."],
+  ["Diálogos que suenan a verdad.", "Dialogue that rings true.", "Des dialogues qui sonnent juste.", "Diálogos que soam verdadeiros."],
+  ["Un tercer acto que deja la sala en silencio.", "A third act that leaves the house silent.", "Un troisième acte qui laisse la salle muette.", "Um terceiro ato que deixa a plateia em silêncio."],
+  ["Monólogos que no terminan nunca.", "Monologues that never end.", "Des monologues qui n'en finissent pas.", "Monólogos que nunca terminam."],
+  ["Un texto que envejeció mal.", "A script that has aged badly.", "Un texte qui a mal vieilli.", "Um texto que envelheceu mal."],
+  ["Un elenco que llena el escenario.", "A cast that fills the stage.", "Une troupe qui remplit la scène.", "Um elenco que enche o palco."],
+  ["Ovación de pie en cada función.", "A standing ovation every night.", "Une ovation debout à chaque représentation.", "Aplausos de pé em cada sessão."],
+  ["Una voz que llega hasta el último palco.", "A voice that reaches the last box.", "Une voix qui porte jusqu'à la dernière loge.", "Uma voz que chega até o último camarote."],
+  ["Se les olvida el texto.", "They forget their lines.", "Ils oublient leur texte.", "Esquecem o texto."],
+  ["Actúan para la cámara que no está.", "They act for a camera that isn't there.", "Ils jouent pour une caméra absente.", "Atuam para uma câmera que não existe."],
+  ["Una puesta en escena que respira.", "A staging that breathes.", "Une mise en scène qui respire.", "Uma encenação que respira."],
+  ["Las transiciones son pura magia.", "The transitions are pure magic.", "Les transitions sont de la pure magie.", "As transições são pura mágica."],
+  ["El teatro como debe ser.", "Theatre as it should be.", "Le théâtre comme il doit être.", "Teatro como deve ser."],
+  ["Entradas y salidas sin ningún sentido.", "Entrances and exits that make no sense.", "Des entrées et sorties sans aucun sens.", "Entradas e saídas sem nenhum sentido."],
+  ["El intermedio llega como un alivio.", "The interval comes as a relief.", "L'entracte arrive comme un soulagement.", "O intervalo chega como um alívio."],
+  ["Una escenografía que deja sin aliento.", "Breathtaking set design.", "Une scénographie à couper le souffle.", "Uma cenografia de tirar o fôlego."],
+  ["La luz cuenta la historia.", "The lighting tells the story.", "La lumière raconte l'histoire.", "A luz conta a história."],
+  ["Vestuario de museo.", "Museum-worthy costumes.", "Des costumes dignes d'un musée.", "Figurino de museu."],
+  ["Los cambios de decorado rompen el ritmo.", "Set changes break the rhythm.", "Les changements de décor cassent le rythme.", "As trocas de cenário quebram o ritmo."],
+  ["Un vestuario prestado de otra obra.", "Costumes borrowed from another play.", "Des costumes empruntés à une autre pièce.", "Um figurino emprestado de outra peça."],
+  ["Una orquesta que eleva cada escena.", "An orchestra that lifts every scene.", "Un orchestre qui élève chaque scène.", "Uma orquestra que eleva cada cena."],
+  ["Canciones que el público sale cantando.", "Songs the audience leaves singing.", "Des chansons que le public fredonne en sortant.", "Músicas que o público sai cantando."],
+  ["El sonido llena el teatro sin tapar a nadie.", "The sound fills the theatre without drowning anyone.", "Le son remplit le théâtre sans couvrir personne.", "O som enche o teatro sem abafar ninguém."],
+  ["Números musicales metidos con calzador.", "Shoehorned musical numbers.", "Des numéros musicaux casés de force.", "Números musicais enfiados à força."],
+  ["La orquesta va por un lado y el elenco por otro.", "The orchestra goes one way and the cast another.", "L'orchestre va d'un côté et la troupe de l'autre.", "A orquestra vai para um lado e o elenco para outro."],
+  ["Letras que hablan de verdad.", "Lyrics that speak the truth.", "Des paroles qui parlent vrai.", "Letras que falam de verdade."],
+  ["Cada verso tiene algo que decir.", "Every line has something to say.", "Chaque vers a quelque chose à dire.", "Cada verso tem algo a dizer."],
+  ["Un disco con algo que contar de principio a fin.", "An album with a story from start to finish.", "Un album qui raconte quelque chose du début à la fin.", "Um disco com algo a contar do começo ao fim."],
+  ["Rimas fáciles y sin alma.", "Easy rhymes with no soul.", "Des rimes faciles et sans âme.", "Rimas fáceis e sem alma."],
+  ["El mismo estribillo en todas las canciones.", "The same chorus in every song.", "Le même refrain dans chaque chanson.", "O mesmo refrão em todas as músicas."],
+  ["Una voz que eriza la piel.", "A voice that gives you goosebumps.", "Une voix qui donne la chair de poule.", "Uma voz que arrepia."],
+  ["Se nota que lo vive en cada nota.", "You can tell they live every note.", "On sent qu'il vit chaque note.", "Dá para ver que vive cada nota."],
+  ["En directo será aún mejor.", "It'll be even better live.", "En concert, ce sera encore mieux.", "Ao vivo vai ser ainda melhor."],
+  ["Afinada pero sin emoción.", "In tune but without feeling.", "Juste mais sans émotion.", "Afinada, mas sem emoção."],
+  ["Demasiado autotune para tan poca voz.", "Too much autotune for so little voice.", "Trop d'autotune pour si peu de voix.", "Autotune demais para tão pouca voz."],
+  ["Una producción limpia y moderna.", "A clean, modern production.", "Une production propre et moderne.", "Uma produção limpa e moderna."],
+  ["Cada canción suena distinta y todas suenan al artista.", "Every song sounds different and all sound like the artist.", "Chaque chanson est différente et toutes sonnent comme l'artiste.", "Cada música soa diferente e todas soam como o artista."],
+  ["Arreglos llenos de detalles.", "Arrangements full of detail.", "Des arrangements pleins de détails.", "Arranjos cheios de detalhes."],
+  ["Suena a la radio de hace cinco años.", "It sounds like the radio from five years ago.", "Ça sonne comme la radio d'il y a cinq ans.", "Soa como o rádio de cinco anos atrás."],
+  ["Un disco largo sin una sola sorpresa.", "A long album without a single surprise.", "Un long album sans une seule surprise.", "Um disco longo sem uma única surpresa."],
+  ["Una mezcla que se disfruta con buenos auriculares.", "A mix worth good headphones.", "Un mixage à savourer avec un bon casque.", "Uma mixagem para curtir com bons fones."],
+  ["Sonidos que nadie había probado antes.", "Sounds nobody had tried before.", "Des sons que personne n'avait essayés avant.", "Sons que ninguém tinha testado antes."],
+  ["Graves que hacen temblar el suelo.", "Bass that shakes the floor.", "Des basses qui font trembler le sol.", "Graves que fazem o chão tremer."],
+  ["Todo suena demasiado alto.", "Everything is mixed too loud.", "Tout sonne trop fort.", "Tudo soa alto demais."],
+  ["Una mezcla que entierra la voz.", "A mix that buries the vocals.", "Un mixage qui enterre la voix.", "Uma mixagem que enterra a voz."],
+  ["Melodías que se quedan para siempre.", "Melodies that stay forever.", "Des mélodies qui restent pour toujours.", "Melodias que ficam para sempre."],
+  ["Un single hecho para sonar en todas partes.", "A single made to be heard everywhere.", "Un single fait pour passer partout.", "Um single feito para tocar em todo lugar."],
+  ["El mejor trabajo de su carrera.", "The best work of their career.", "Le meilleur travail de sa carrière.", "O melhor trabalho da carreira."],
+  ["Ningún tema destaca.", "No track stands out.", "Aucun morceau ne se démarque.", "Nenhuma faixa se destaca."],
+  ["Suena a muchos discos y a ninguno propio.", "It sounds like many albums and none its own.", "Ça ressemble à plein d'albums et à aucun en propre.", "Soa como muitos discos e nenhum próprio."],
+  ["Imposible dejarlo a medias.", "Impossible to put down.", "Impossible à lâcher.", "Impossível largar pela metade."],
+  ["Una trama tejida con precisión de relojero.", "A plot woven with clockwork precision.", "Une intrigue tissée avec une précision d'horloger.", "Uma trama tecida com precisão de relojoeiro."],
+  ["Un final que obliga a releerlo.", "An ending that makes you read it again.", "Une fin qui oblige à le relire.", "Um final que obriga a reler."],
+  ["Promete mucho y cumple poco.", "It promises a lot and delivers little.", "Il promet beaucoup et tient peu.", "Promete muito e cumpre pouco."],
+  ["Un final apresurado.", "A rushed ending.", "Une fin bâclée.", "Um final apressado."],
+  ["Personajes que se sienten de carne y hueso.", "Characters who feel flesh and blood.", "Des personnages de chair et d'os.", "Personagens de carne e osso."],
+  ["Una protagonista que no se olvida.", "A heroine you won't forget.", "Une héroïne qu'on n'oublie pas.", "Uma protagonista inesquecível."],
+  ["Hasta el villano tiene sus razones.", "Even the villain has his reasons.", "Même le méchant a ses raisons.", "Até o vilão tem suas razões."],
+  ["Personajes que solo existen para mover la trama.", "Characters who only exist to move the plot.", "Des personnages qui n'existent que pour faire avancer l'intrigue.", "Personagens que só existem para mover a trama."],
+  ["Todos hablan igual.", "Everyone talks the same.", "Tout le monde parle pareil.", "Todos falam igual."],
+  ["Una prosa que se lee como música.", "Prose that reads like music.", "Une prose qui se lit comme de la musique.", "Uma prosa que se lê como música."],
+  ["Cada frase está pensada.", "Every sentence is deliberate.", "Chaque phrase est pesée.", "Cada frase é pensada."],
+  ["Una voz narrativa única.", "A unique narrative voice.", "Une voix narrative unique.", "Uma voz narrativa única."],
+  ["Descripciones que no terminan nunca.", "Descriptions that go on forever.", "Des descriptions interminables.", "Descrições que não terminam nunca."],
+  ["Una prosa recargada que cansa.", "Overwrought prose that wears you out.", "Une prose chargée qui fatigue.", "Uma prosa carregada que cansa."],
+  ["Una edición preciosa.", "A beautiful edition.", "Une très belle édition.", "Uma edição preciosa."],
+  ["Las ilustraciones son un regalo.", "The illustrations are a gift.", "Les illustrations sont un cadeau.", "As ilustrações são um presente."],
+  ["Una portada que pide ser comprada.", "A cover that begs to be bought.", "Une couverture qui donne envie de l'acheter.", "Uma capa que pede para ser comprada."],
+  ["Una traducción torpe.", "A clumsy translation.", "Une traduction maladroite.", "Uma tradução desajeitada."],
+  ["Le faltó una corrección a fondo.", "It needed a thorough proofread.", "Il lui manquait une relecture sérieuse.", "Faltou uma revisão a fundo."],
+  ["Un ritmo que atrapa desde la primera página.", "A rhythm that hooks you from page one.", "Un rythme qui accroche dès la première page.", "Um ritmo que prende desde a primeira página."],
+  ["Capítulos cortos que se leen solos.", "Short chapters that read themselves.", "Des chapitres courts qui se lisent tout seuls.", "Capítulos curtos que se leem sozinhos."],
+  ["Sabe cuándo acelerar y cuándo detenerse.", "It knows when to speed up and when to pause.", "Il sait quand accélérer et quand ralentir.", "Sabe quando acelerar e quando parar."],
+  ["El segundo tercio se hace cuesta arriba.", "The middle third is an uphill climb.", "Le deuxième tiers est laborieux.", "O segundo terço é uma subida."],
+  ["Capítulos que no aportan nada.", "Chapters that add nothing.", "Des chapitres qui n'apportent rien.", "Capítulos que não acrescentam nada."],
+  ["Fechas de la obra", "Work dates", "Dates de l'œuvre", "Datas da obra"],
+  ["Decisiones al avanzar", "Decisions while advancing", "Décisions en avançant", "Decisões ao avançar"],
+  ["Propuestas para ti", "Proposals for you", "Propositions pour toi", "Propostas para você"],
+  ["Becas automáticas", "Automatic scholarships", "Bourses automatiques", "Bolsas automáticas"],
+  ["Paquete de mundo", "World pack", "Pack de monde", "Pacote de mundo"],
+  ["En la ficha de cada obra ves cuándo nació la idea, cuándo empezó el proyecto, cuándo se estrenó y cuánto tardó en total. Sirve para comparar cuánto te toma cada medio. En Obras → Filmografía el archivo se divide en tres: Propias (hechas por tu compañía y tus filiales), Compradas (proyectos, guiones y franquicias que compraste) y Con rivales (coproducciones y encargos). Dato: «Avatar» pasó más de diez años en un cajón, esperando a que la tecnología de efectos pudiera hacerla.", "In each work's profile you see when the idea was born, when the project started, when it was released and how long it took in total. It helps you compare how long each medium takes. In Works → Filmography the archive is split in three: Own (made by your company and subsidiaries), Bought (projects, scripts and franchises you bought) and With rivals (co-productions and commissions). Fact: «Avatar» spent more than ten years in a drawer, waiting for effects technology to catch up.", "Dans la fiche de chaque œuvre, tu vois quand l'idée est née, quand le projet a commencé, quand il est sorti et combien de temps il a pris au total. Cela permet de comparer la durée de chaque média. Dans Œuvres → Filmographie, les archives se divisent en trois : Propres (faites par ta compagnie et tes filiales), Achetées (projets, scénarios et franchises achetés) et Avec des rivaux (coproductions et commandes). Anecdote : « Avatar » est resté plus de dix ans dans un tiroir, en attendant que la technologie des effets permette de le faire.", "Na ficha de cada obra você vê quando nasceu a ideia, quando o projeto começou, quando estreou e quanto tempo levou no total. Serve para comparar quanto cada mídia demora. Em Obras → Filmografia o arquivo se divide em três: Próprias (feitas pela sua empresa e filiais), Compradas (projetos, roteiros e franquias que você comprou) e Com rivais (coproduções e encomendas). Curiosidade: «Avatar» passou mais de dez anos na gaveta, esperando a tecnologia de efeitos permitir fazê-lo."],
+  ["Elige cuántas veces el juego se detiene para pedirte una decisión: Muchas (como antes), Normal (al menos 5 semanas entre una y otra y nada en los primeros 6 meses), Pocas (al menos 12 semanas) o Solo importantes (premios, deudas, la junta, ofertas y momentos históricos). Las propuestas para tu avatar nunca se pierden: esperan en Talento → Tu avatar. Lo cambias en Ajustes.", "Choose how often the game stops to ask you for a decision: Many (as before), Normal (at least 5 weeks between them and nothing in the first 6 months), Few (at least 12 weeks) or Only important (awards, debts, the board, offers and historic moments). Proposals for your avatar are never lost: they wait in Talent → Your avatar. Change it in Settings.", "Choisis à quelle fréquence le jeu s'arrête pour te demander une décision : Beaucoup (comme avant), Normal (au moins 5 semaines entre deux et rien les 6 premiers mois), Peu (au moins 12 semaines) ou Seulement importantes (prix, dettes, le conseil, offres et moments historiques). Les propositions pour ton avatar ne se perdent jamais : elles attendent dans Talent → Ton avatar. Tu le changes dans Paramètres.", "Escolha quantas vezes o jogo para e pede uma decisão: Muitas (como antes), Normal (pelo menos 5 semanas entre uma e outra e nada nos primeiros 6 meses), Poucas (pelo menos 12 semanas) ou Só importantes (prêmios, dívidas, diretoria, ofertas e momentos históricos). As propostas para seu avatar nunca se perdem: esperam em Talento → Seu avatar. Você muda isso em Configurações."],
+  ["Según las especialidades de tu avatar, otros estudios te proponen dirigir, actuar, escribir, componer, producir o diseñar una de sus obras, o hacer un proyecto en conjunto. Si aceptas, cobras, ganas experiencia en esa especialidad y fama para tu estudio, pero tu avatar queda ocupado unas semanas. Puedes pedir más dinero (a veces aceptan y a veces se retiran). Un proyecto en conjunto hace que ese estudio pague parte de tu próxima obra y se quede con esa parte de lo que gane. Dato: Orson Welles financiaba sus propias películas actuando en las de otros.", "Based on your avatar's specialties, other studios ask you to direct, act, write, compose, produce or design one of their works, or to do a joint project. If you accept, you get paid, gain experience in that specialty and fame for your studio, but your avatar is busy for a few weeks. You can ask for more money (sometimes they agree, sometimes they walk away). A joint project makes that studio pay part of your next work and keep that share of what it earns. Fact: Orson Welles funded his own films by acting in other people's.", "Selon les spécialités de ton avatar, d'autres studios te proposent de réaliser, jouer, écrire, composer, produire ou concevoir une de leurs œuvres, ou de faire un projet commun. Si tu acceptes, tu es payé, tu gagnes de l'expérience dans cette spécialité et de la renommée pour ton studio, mais ton avatar est occupé quelques semaines. Tu peux demander plus d'argent (parfois ils acceptent, parfois ils renoncent). Un projet commun fait payer à ce studio une partie de ta prochaine œuvre en échange de cette part des gains. Anecdote : Orson Welles finançait ses propres films en jouant dans ceux des autres.", "Segundo as especialidades do seu avatar, outros estúdios propõem que você dirija, atue, escreva, componha, produza ou crie uma das obras deles, ou faça um projeto conjunto. Se aceitar, você recebe, ganha experiência nessa especialidade e fama para seu estúdio, mas seu avatar fica ocupado algumas semanas. Você pode pedir mais dinheiro (às vezes aceitam, às vezes desistem). Um projeto conjunto faz esse estúdio pagar parte da sua próxima obra e ficar com essa parte do que ela ganhar. Curiosidade: Orson Welles financiava seus filmes atuando nos dos outros."],
+  ["Actívalas en Talento → Academia. Cada mes, hasta el número que elijas de tus talentos firmados (con contrato exclusivo) empiezan el mejor curso de su oficio que puedan tomar, y tú pagas el curso. Mientras estudian pueden seguir trabajando en tus obras. Si alguien ya domina su oficio o no tiene energía, espera al mes siguiente.", "Turn them on in Talent → Academy. Every month, up to the number you choose of your signed talents (with an exclusive contract) start the best course in their trade they can take, and you pay for it. While studying they can keep working on your works. If someone already masters their trade or has no energy, they wait until next month.", "Active-les dans Talent → Académie. Chaque mois, jusqu'au nombre choisi de tes talents sous contrat exclusif commencent le meilleur cours de leur métier qu'ils peuvent suivre, et tu paies le cours. Pendant leurs études, ils peuvent continuer à travailler sur tes œuvres. Si quelqu'un maîtrise déjà son métier ou manque d'énergie, il attend le mois suivant.", "Ative em Talento → Academia. Todo mês, até o número que você escolher dos seus talentos contratados (com contrato exclusivo) começam o melhor curso do ofício que puderem fazer, e você paga o curso. Enquanto estudam podem continuar trabalhando nas suas obras. Se alguém já domina o ofício ou está sem energia, espera o mês seguinte."],
+  ["Importa un archivo .iamundo en Estudio → Editor. Trae estudios, talentos y obras con sus fechas: cada estudio aparece el año en que se fundó y cierra cuando le toca, cada talento debuta a su edad y se retira cuando corresponde, y las obras salen como estrenos de su estudio cuando llega su año. Las obras anteriores al año de tu partida se pueden comprar como franquicias en Obras → Franquicias, con sus personajes. «Importar y reemplazar a los rivales» deja solo los estudios del paquete; «Importar y sumar» los agrega a los que ya tienes. Lo mejor es importarlo al empezar una partida. Los paquetes los hace la comunidad y no son parte oficial del juego.", "Import an .iamundo file in Studio → Editor. It brings studios, talents and works with their dates: each studio appears the year it was founded and closes when its time comes, each talent debuts at their age and retires when due, and works come out as their studio's releases when their year arrives. Works from before your game's year can be bought as franchises in Works → Franchises, with their characters. «Import and replace rivals» keeps only the pack's studios; «Import and add» adds them to the ones you have. Best imported when starting a game. Packs are made by the community and are not an official part of the game.", "Importe un fichier .iamundo dans Studio → Éditeur. Il apporte des studios, des talents et des œuvres avec leurs dates : chaque studio apparaît l'année de sa fondation et ferme le moment venu, chaque talent débute à son âge et se retire quand il le faut, et les œuvres sortent comme sorties de leur studio quand leur année arrive. Les œuvres antérieures à l'année de ta partie s'achètent comme franchises dans Œuvres → Franchises, avec leurs personnages. « Importer et remplacer les rivaux » ne garde que les studios du pack ; « Importer et ajouter » les ajoute à ceux que tu as. Mieux vaut l'importer en début de partie. Les packs sont faits par la communauté et ne font pas partie officielle du jeu.", "Importe um arquivo .iamundo em Estúdio → Editor. Ele traz estúdios, talentos e obras com suas datas: cada estúdio aparece no ano em que foi fundado e fecha quando chega a hora, cada talento estreia na sua idade e se aposenta quando deve, e as obras saem como estreias do seu estúdio quando chega o ano delas. As obras anteriores ao ano da sua partida podem ser compradas como franquias em Obras → Franquias, com seus personagens. «Importar e substituir os rivais» deixa só os estúdios do pacote; «Importar e somar» os adiciona aos que você já tem. É melhor importar ao começar uma partida. Os pacotes são feitos pela comunidade e não são parte oficial do jogo."],
+  ["La pantalla ya no salta al inicio al tocar opciones: se queda fija en lo que tocaste, también cuando el contenido cambia.", "The screen no longer jumps to the top when you tap options: it stays on what you tapped, even when the content changes.", "L'écran ne saute plus en haut quand tu touches une option : il reste sur ce que tu as touché, même quand le contenu change.", "A tela não pula mais para o início ao tocar opções: fica no que você tocou, mesmo quando o conteúdo muda."],
+  ["Fechas de cada obra: idea, inicio, estreno y tiempo total. El archivo se divide en Propias, Compradas y Con rivales.", "Dates for every work: idea, start, release and total time. The archive is split into Own, Bought and With rivals.", "Dates de chaque œuvre : idée, début, sortie et durée totale. Les archives se divisent en Propres, Achetées et Avec des rivaux.", "Datas de cada obra: ideia, início, estreia e tempo total. O arquivo se divide em Próprias, Compradas e Com rivais."],
+  ["Vende tus negocios, cadenas de cines y parques temáticos. Los parques ampliados ya pueden mantenerse solos y tienen gestión automática.", "Sell your businesses, cinema chains and theme parks. Expanded parks can now pay for themselves and have auto-management.", "Vends tes entreprises, chaînes de cinéma et parcs à thème. Les parcs agrandis peuvent maintenant s'autofinancer et ont une gestion automatique.", "Venda seus negócios, redes de cinema e parques temáticos. Os parques ampliados já podem se manter sozinhos e têm gestão automática."],
+  ["Encomienda tu material a uno de tus talentos firmados para que se encargue de todo o para editarlo tú.", "Commission your material to one of your signed talents to handle everything, or edit it yourself.", "Confie ton matériel à un de tes talents sous contrat pour qu'il s'occupe de tout, ou édite-le toi-même.", "Encomende seu material a um dos seus talentos contratados para cuidar de tudo, ou edite você mesmo."],
+  ["Menos interrupciones: elige cuántas decisiones quieres al avanzar. Tu avatar recibe propuestas para dirigir, actuar, escribir o hacer proyectos con otros estudios.", "Fewer interruptions: choose how many decisions you want while advancing. Your avatar gets proposals to direct, act, write or do projects with other studios.", "Moins d'interruptions : choisis combien de décisions tu veux en avançant. Ton avatar reçoit des propositions pour réaliser, jouer, écrire ou faire des projets avec d'autres studios.", "Menos interrupções: escolha quantas decisões quer ao avançar. Seu avatar recebe propostas para dirigir, atuar, escrever ou fazer projetos com outros estúdios."],
+  ["Becas automáticas para tus firmados, que ahora pueden estudiar y trabajar a la vez.", "Automatic scholarships for your signed talents, who can now study and work at the same time.", "Bourses automatiques pour tes talents sous contrat, qui peuvent maintenant étudier et travailler en même temps.", "Bolsas automáticas para seus contratados, que agora podem estudar e trabalhar ao mesmo tempo."],
+  ["Títulos, sinopsis y críticas más variados, sin títulos repetidos ni errores de concordancia.", "More varied titles, synopses and reviews, with no repeated titles or agreement errors.", "Titres, synopsis et critiques plus variés, sans titres répétés ni fautes d'accord.", "Títulos, sinopses e críticas mais variados, sem títulos repetidos nem erros de concordância."],
+  ["Paquetes de mundo (.iamundo): estudios, talentos y obras que aparecen en su año y franquicias que se pueden comprar con sus personajes.", "World packs (.iamundo): studios, talents and works that appear in their year, and franchises you can buy with their characters.", "Packs de monde (.iamundo) : studios, talents et œuvres qui apparaissent à leur année, et franchises à acheter avec leurs personnages.", "Pacotes de mundo (.iamundo): estúdios, talentos e obras que aparecem no seu ano e franquias que podem ser compradas com seus personagens."],
+  ["Versión 1.2", "Version 1.2", "Version 1.2", "Versão 1.2"],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -64294,7 +64469,7 @@ const evRel = () => S.pj.filter((p) => p.st >= 3 && !p.rr).length;
 const evAnios = () => yr() - (S.y0 || yr());
 const evPop = () => S.pop || 0;
 const AVREQ = {
-  0: [35, 3, 0, 1895],
+  0: [50, 10, 1, 1895],
   1: [25, 2, 0, 1930],
   2: [0, 1, 0, 0],
   4: [45, 8, 0, 0],
@@ -64314,7 +64489,7 @@ function avOk(i) {
   return evPop() >= r[0] && evRel() >= r[1] && (S.win | 0) >= r[2] && yr() >= r[3];
 }
 const EVREQ = {
-  "Una escuela pide que des clases": () => evPop() >= 35 && evRel() >= 3,
+  "Una escuela pide que des clases": () => evPop() >= 50 && evRel() >= 10 && evAnios() >= 5,
   "Una estrella quiere trabajar contigo": () => evPop() >= 30 && evRel() >= 2,
   "Un gigante quiere comprar parte de tu estudio": () => evRel() >= 3,
   "Una marca quiere patrocinarte": () => evPop() >= 15 && evRel() >= 2,
@@ -65887,7 +66062,7 @@ function bibVuelve(x) {
   c.sob = 1;
   c.na = 0;
   c.ant = 1;
-  if (W.m == 5 || !t || t.ret || t.dead || t.es || (W.cast || []).some((z) => z.t == c.t)) c.t = null;
+  if (W.m == 5 || !t || t.ret || t.dead || (W.cast || []).some((z) => z.t == c.t)) c.t = null;
   else if (!t.you && ocupado(t)) c.sob = 1.6;
   (W.cast = W.cast || []).push(c);
 }
@@ -67077,7 +67252,7 @@ const escFee = (t, m) => (t.you ? 0 : Math.round(fee(t, 0, m) * 0.35));
 const escSem = (t, w) => cl(Math.round(3 + (w.cx | 0) * 1.5 + (w.cast || []).length / 4 + (100 - (t.s[0] | 0)) / 25), 3, 16);
 function idEscPick(it) {
   const L = S.tl
-    .filter((t) => !t.ret && !t.dead && !t.es && (t.r == 0 || t.you) && (t.e >= 10 || t.you) && !ocupado(t))
+    .filter((t) => !t.ret && !t.dead && (t.r == 0 || t.you) && (t.e >= 10 || t.you) && !ocupado(t))
     .sort((a, b) => (b.you ? 1 : 0) - (a.you ? 1 : 0) || b.s[0] - a.s[0])
     .slice(0, 40);
   if (!L.length) return toast(tx4("No hay escritores libres", "No writers available", "Aucun scénariste libre", "Não há escritores livres"));
@@ -71042,22 +71217,98 @@ if (typeof DIC_FR != "undefined") DIC_FR["Puesto"] = "Rang";
 if (typeof DIC_PT != "undefined") DIC_PT["Puesto"] = "Posição";
 WLB.ap1 = () => L4("# personas", "# people", "# personnes", "# pessoas").replace("#", W.ap1 | 0);
 WLB.ap2 = () => L4("# personas", "# people", "# personnes", "# pessoas").replace("#", W.ap2 | 0);
-let SCX = null;
+let SCX = null,
+  SCXF = 0;
 const SCX_NO = ["x", "salir", "new", "start", "rapida", "cargar", "campj", "campp", "retoj", "retop", "ldsi", "ofsi", "frp"];
-const scxBusca = (raiz, c) => {
-  if (!raiz || !c.a) return null;
+const scxSel = (a, v) => {
   try {
-    return raiz.querySelector('[data-a="' + CSS.escape(c.a) + '"]' + (c.v != null ? '[data-v="' + CSS.escape(c.v) + '"]' : ""));
+    return '[data-a="' + CSS.escape(a) + '"]' + (v != null ? '[data-v="' + CSS.escape(v) + '"]' : "");
   } catch (e) {
     return null;
   }
 };
+const scxRaiz = (enHoja) => (enHoja ? document.querySelector("#md.on .hoja") : document.getElementById("main") || document.getElementById("app"));
+function scxAncla(el, raiz) {
+  const a = el.dataset.a,
+    v = el.dataset.v,
+    q = a != null ? scxSel(a, v) : el.dataset.k ? '[data-k="' + CSS.escape(el.dataset.k) + '"]' : el.id ? "#" + CSS.escape(el.id) : null;
+  if (!q) return null;
+  const L = Array.from(raiz.querySelectorAll(q));
+  return { el, q, i: Math.max(0, L.indexOf(el)), top: el.getBoundingClientRect().top };
+}
+function scxGuarda(b) {
+  const hj = document.querySelector("#md.on .hoja"),
+    enHoja = !!(b.closest && b.closest("#md")),
+    raiz = scxRaiz(enHoja);
+  if (!raiz) return null;
+  const A = [],
+    a0 = scxAncla(b, raiz);
+  if (a0) A.push(a0);
+  const r0 = b.getBoundingClientRect().top,
+    vh = innerHeight;
+  Array.from(raiz.querySelectorAll("[data-a]"))
+    .filter((x) => x !== b && !x.closest("#inf-p"))
+    .map((x) => [x, x.getBoundingClientRect().top])
+    .filter(([, t]) => t > -40 && t < vh + 40)
+    .sort((x, y) => Math.abs(x[1] - r0) - Math.abs(y[1] - r0))
+    .slice(0, 6)
+    .forEach(([x]) => {
+      const k = scxAncla(x, raiz);
+      if (k) A.push(k);
+    });
+  return { a: b.dataset.a, A, enHoja, hs: hj ? hj.scrollTop : 0, ht: String(HOJAT).split("|")[0], ws: window.scrollY, tab, sub: SUB.join(","), hoja: !!hj, t0: performance.now() };
+}
+function scxFija(c) {
+  const hj = document.querySelector("#md.on .hoja");
+  if (c.enHoja) {
+    if (!hj || String(HOJAT).split("|")[0] != c.ht) return false;
+  } else if ((hj && !c.hoja) || tab != c.tab || SUB.join(",") != c.sub) return false;
+  const raiz = scxRaiz(c.enHoja);
+  if (!raiz) return false;
+  for (const k of c.A) {
+    let el = k.el && k.el.isConnected && raiz.contains(k.el) ? k.el : null;
+    if (!el) {
+      const L = raiz.querySelectorAll(k.q);
+      el = L[k.i] || (L.length == 1 ? L[0] : null);
+    }
+    if (!el || !el.getClientRects().length) continue;
+    const d = el.getBoundingClientRect().top - k.top;
+    if (Math.abs(d) > 2) {
+      if (c.enHoja) hj.scrollTop += d;
+      else window.scrollBy(0, d);
+    }
+    return true;
+  }
+  if (c.enHoja) {
+    if (Math.abs(hj.scrollTop - c.hs) > 2) hj.scrollTop = c.hs;
+  } else if (Math.abs(window.scrollY - c.ws) > 2) window.scrollTo(0, c.ws);
+  return true;
+}
+function scxBloquea(c) {
+  if (!c) return;
+  const id = ++SCXF,
+    paso = () => {
+      if (id != SCXF || performance.now() - c.t0 > 900) return;
+      if (!scxFija(c)) return;
+      requestAnimationFrame(paso);
+    };
+  paso();
+}
+["touchstart", "wheel", "keydown"].forEach((ev) =>
+  window.addEventListener(
+    ev,
+    (e) => {
+      if (ev == "keydown" && !/Arrow|Page|Home|End/.test(e.key || "")) return;
+      SCXF++;
+    },
+    { passive: true, capture: true },
+  ),
+);
 document.addEventListener(
   "click",
   (e) => {
-    const b = e.target.closest && e.target.closest("[data-a]"),
-      hj = document.querySelector("#md.on .hoja");
-    SCX = b && !b.disabled ? { a: b.dataset.a, v: b.dataset.v, top: b.getBoundingClientRect().top, enHoja: !!b.closest("#md"), hs: hj ? hj.scrollTop : 0, ht: String(HOJAT).split("|")[0], ws: window.scrollY, tab, sub: SUB.join(","), hoja: !!hj } : null;
+    const b = e.target.closest && e.target.closest("[data-a]");
+    SCX = b && !b.disabled && !b.closest("#inf-p") ? scxGuarda(b) : null;
   },
   true,
 );
@@ -71065,27 +71316,20 @@ document.addEventListener("click", () => {
   const c = SCX;
   SCX = null;
   if (!c || SCX_NO.includes(c.a)) return;
-  const fija = () => {
-    const hj = document.querySelector("#md.on .hoja");
-    if (c.enHoja) {
-      if (!hj || String(HOJAT).split("|")[0] != c.ht) return;
-      const el = scxBusca(hj, c);
-      if (el) {
-        const d = el.getBoundingClientRect().top - c.top;
-        if (Math.abs(d) > 2) hj.scrollTop += d;
-      } else if (Math.abs(hj.scrollTop - c.hs) > 2) hj.scrollTop = c.hs;
-      return;
-    }
-    if ((hj && !c.hoja) || tab != c.tab || SUB.join(",") != c.sub) return;
-    const el = scxBusca(document.getElementById("app"), c);
-    if (el) {
-      const d = el.getBoundingClientRect().top - c.top;
-      if (Math.abs(d) > 2) window.scrollBy(0, d);
-    } else if (Math.abs(window.scrollY - c.ws) > 2) window.scrollTo(0, c.ws);
-  };
-  fija();
-  requestAnimationFrame(fija);
+  scxBloquea(c);
 });
+document.addEventListener(
+  "change",
+  (e) => {
+    const el = e.target;
+    if (!el || !el.closest || el.type == "file") return;
+    const c = scxGuarda(el);
+    if (!c) return;
+    c.a = "change";
+    setTimeout(() => scxBloquea(Object.assign(c, { t0: performance.now() })), 0);
+  },
+  true,
+);
 const PJ_CANON = {
   "el conde Drácula": [2, 3], "Jonathan Harker": [0, 11], "Mina Harker": [0, 11], "Lucy Westenra": [10, 1], "Abraham Van Helsing": [1, 5], Renfield: [3, 3], "las novias de Drácula": [3, 3], "Arthur Holmwood": [4, 1], "John Seward": [4, 8], "Quincey Morris": [4, 11],
   "Victor Frankenstein": [16, 8], "la criatura": [3, 2], "Robert Walton": [12, 7], "Henry Clerval": [4, 11],
@@ -71470,7 +71714,7 @@ ACT["crm"] = () => {
   return r;
 };
 const repartoVuelve = repartoRec;
-const pjVivo = (id) => id != null && S.tl[id] && !S.tl[id].ret && !S.tl[id].es && !S.tl[id].dead;
+const pjVivo = (id) => id != null && S.tl[id] && !S.tl[id].ret && !S.tl[id].dead;
 const pjFijo = (c) => c && (c.ant || c.ta != null) && c.i != 2 && !c.vir;
 repartoRec = function (W2) {
   const keep = (W2.cast || []).map((c) => (pjFijo(c) && pjVivo(c.t) ? c.t : null));
@@ -71756,10 +72000,957 @@ const tvLicHAuto = tvLicH;
 tvLicH = function () {
   return tvLicHAuto.apply(this, arguments) + tvAutoH();
 };
+
+const MES4 = { es: "ene feb mar abr may jun jul ago sep oct nov dic", en: "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec", fr: "janv. févr. mars avr. mai juin juil. août sept. oct. nov. déc.", pt: "jan fev mar abr mai jun jul ago set out nov dez" };
+function fechaObra(t) {
+  const a = dnA(semIni(t)),
+    l = CFG.idi,
+    M = (MES4[l] || MES4.es).split(" ");
+  return l == "en" ? `${M[a.m - 1]} ${a.d}, ${a.y}` : `${a.d} ${M[a.m - 1]} ${a.y}`;
+}
+function duraObra(w) {
+  w = Math.max(0, Math.round(w));
+  const m = Math.round(w / 4.345),
+    an = Math.round((w / 52) * 10) / 10;
+  if (w < 9) return L4(`${w} ${w == 1 ? "semana" : "semanas"}`, `${w} ${w == 1 ? "week" : "weeks"}`, `${w} ${w == 1 ? "semaine" : "semaines"}`, `${w} ${w == 1 ? "semana" : "semanas"}`);
+  if (w < 104) return L4(`${w} semanas (unos ${m} meses)`, `${w} weeks (about ${m} months)`, `${w} semaines (environ ${m} mois)`, `${w} semanas (cerca de ${m} meses)`);
+  const a = String(an).replace(".", CFG.idi == "en" ? "." : ",");
+  return L4(`${w} semanas (unos ${a} años)`, `${w} weeks (about ${a} years)`, `${w} semaines (environ ${a} ans)`, `${w} semanas (cerca de ${a} anos)`);
+}
+on("semana", () => {
+  if (!S || !S.mt) return;
+  S.mt.forEach((m) => {
+    if (m && m.t0 == null) m.t0 = S.t;
+  });
+});
+const matAplicaFecha = matAplica;
+matAplica = function (m) {
+  const r = matAplicaFecha.apply(this, arguments);
+  if (m && m.t0 != null && W) W.ti0 = m.t0;
+  return r;
+};
+const idGuardaFecha = idGuarda;
+idGuarda = function () {
+  const it = idGuardaFecha.apply(this, arguments);
+  if (it && it.t0 == null) it.t0 = W && W.ti0 != null ? W.ti0 : S.t;
+  return it;
+};
+const idAbreFecha = idAbre;
+idAbre = function (it, etapa) {
+  const r = idAbreFecha.apply(this, arguments);
+  if (W && it) W.ti0 = it.t0 != null ? it.t0 : it.y != null ? Math.max(0, (it.y - S.y0) * 52) : null;
+  return r;
+};
+GANCHOS.prod.push((P, W2) => {
+  P.t0 = S.t;
+  if (W2 && W2.ti0 != null && W2.ti0 <= S.t) P.ti = W2.ti0;
+  const m = W2 && W2.mt && W2.mt.i != null ? S.mt[W2.mt.i] : null;
+  if ((m && m.own40) || (W2 && W2.gs && W2.gs.au)) P.cmp5 = 1;
+});
+const obraEstreno = (P) => {
+  const r = P.r0 == null ? P.rt : P.r0;
+  return r != null && P.st >= 3 ? r : null;
+};
+function obraFechasH(P) {
+  if (!P || P.id == null) return "";
+  const est = obraEstreno(P),
+    ini = P.t0,
+    idea = P.ti != null ? P.ti : ini,
+    fila = (k, v) => `<div class="fila"><span>${k}</span><b>${v}</b></div>`,
+    F = [];
+  if (idea != null && P.ti != null && P.ti != ini) F.push(fila(L4("Idea", "Idea", "Idée", "Ideia"), fechaObra(idea)));
+  if (ini != null) F.push(fila(L4("Inicio del proyecto", "Project start", "Début du projet", "Início do projeto"), fechaObra(ini)));
+  else if (P.y) F.push(fila(L4("Inicio del proyecto", "Project start", "Début du projet", "Início do projeto"), String(P.y)));
+  if (est != null) F.push(fila(L4("Estreno", "Release", "Sortie", "Estreia"), fechaObra(est)));
+  else if (P.rt != null && P.rt > S.t) F.push(fila(L4("Estreno previsto", "Planned release", "Sortie prévue", "Estreia prevista"), fechaObra(P.rt)));
+  if (idea != null && est != null) {
+    F.push(fila(L4("Tiempo total, de la idea al estreno", "Total time, from idea to release", "Durée totale, de l'idée à la sortie", "Tempo total, da ideia à estreia"), duraObra(est - idea)));
+    if (P.ti != null && ini != null && P.ti != ini) F.push(fila(L4("Producción, del inicio al estreno", "Production, from start to release", "Production, du début à la sortie", "Produção, do início à estreia"), duraObra(est - ini)));
+  } else if (idea != null && est == null && P.st < 3) F.push(fila(L4("En marcha desde hace", "In progress for", "En cours depuis", "Em andamento há"), duraObra(S.t - idea)));
+  if (!F.length) return "";
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("calendario")} ${L4("Fechas de la obra", "Work dates", "Dates de l'œuvre", "Datas da obra")}</h3>${bi("fechas")}</div>${F.join("")}</div>`;
+}
+GANCHOS.ficha.push((P) => obraFechasH(P));
+const filOrigen5 = (p) => (p.cop != null || p.enc != null ? "r" : p.rwk != null || p.rvo != null || p.cmp5 || p.id < 0 ? "c" : "p");
+let FILO5 = "p";
+ACT["filo5"] = (v) => {
+  FILO5 = ["p", "c", "r", "t"].includes(v) ? v : "p";
+  return pg();
+};
+function filOrigenH(L0) {
+  const n = { p: 0, c: 0, r: 0, t: L0.length };
+  L0.forEach((p) => n[filOrigen5(p)]++);
+  const lab = { p: L4("Propias", "Own", "Propres", "Próprias"), c: L4("Compradas", "Bought", "Achetées", "Compradas"), r: L4("Con rivales", "With rivals", "Avec des rivaux", "Com rivais"), t: L4("Todas", "All", "Toutes", "Todas") };
+  const nota = { p: L4("Hechas y producidas por tu compañía y tus filiales.", "Made and produced by your company and your subsidiaries.", "Faites et produites par ta compagnie et tes filiales.", "Feitas e produzidas pela sua empresa e suas filiais."), c: L4("Proyectos, guiones y franquicias que compraste a otros.", "Projects, scripts and franchises you bought from others.", "Projets, scénarios et franchises achetés à d'autres.", "Projetos, roteiros e franquias que você comprou de outros."), r: L4("Coproducciones y encargos hechos junto con estudios rivales.", "Co-productions and commissions made with rival studios.", "Coproductions et commandes faites avec des studios rivaux.", "Coproduções e encomendas feitas com estúdios rivais."), t: "" };
+  return `<div class="chips">${["p", "c", "r", "t"].map((k) => chx("filo5", k, `${lab[k]} <span class="m">${n[k]}</span>`, FILO5 == k)).join("")}</div>${nota[FILO5] ? `<div class="m">${nota[FILO5]}</div>` : ""}`;
+}
+const filFecha5 = (p) => {
+  const r = p.r0 == null ? p.rt : p.r0;
+  return r != null ? fechaObra(r) : dy(p);
+};
+
+const pqMtF = (p) => [0.6, 1, 1.6][pqD(p, "mt", 1)] || 1;
+const pqSemNivel = pqSem;
+pqSem = function (p) {
+  const s = pqSemNivel.apply(this, arguments);
+  if (!p || !(p.l > 1)) return s;
+  const b = pqCosto(p.l - 1) * 0.0025,
+    f = (1 + 0.75 * (p.l - 1)) / Math.pow(2, p.l - 1);
+  return Object.assign({}, s, { cost: Math.max(0, s.cost - b * pqMtF(p) * (1 - f)) });
+};
+const VENTA5 = { k: "", t: 0 };
+function ventaConfirma(k, txt) {
+  const n = Date.now();
+  if (VENTA5.k == k && n - VENTA5.t < 5000) {
+    VENTA5.k = "";
+    return true;
+  }
+  VENTA5.k = k;
+  VENTA5.t = n;
+  toast(txt || L4("Toca otra vez para confirmar la venta", "Tap again to confirm the sale", "Touche encore pour confirmer la vente", "Toque de novo para confirmar a venda"));
+  return false;
+}
+function pqValor(p) {
+  let inv = 0;
+  for (let l = 0; l < (p.l | 0); l++) inv += pqCosto(l);
+  inv += (p.a40 || []).reduce((t, i) => t + (PQA[i] ? pqCosto(0) * PQA[i][3] : 0), 0);
+  const s = pqSem(p),
+    net = Math.max(0, s.ing - s.cost);
+  return Math.round(inv * 0.6 * (pqD(p, "est", 80) / 100 + 0.2) + net * 52 * 3);
+}
+ACT["pqv5"] = (v) => {
+  const k = +v,
+    p = (S.pq || [])[k];
+  if (!p) return;
+  const val = pqValor(p),
+    nom = p.tf != null && frG(p.tf) ? frG(p.tf).n : CT[p.r];
+  if (!ventaConfirma("pq" + k, L4(`Vender el parque por ${fm(val)}: toca otra vez para confirmar`, `Sell the park for ${fm(val)}: tap again to confirm`, `Vendre le parc pour ${fm(val)} : touche encore pour confirmer`, `Vender o parque por ${fm(val)}: toque de novo para confirmar`))) return;
+  S.pq.splice(k, 1);
+  capital(val);
+  nws(L4(`Vendes tu parque (${nom}) por ${fm(val)}.`, `You sell your park (${nom}) for ${fm(val)}.`, `Tu vends ton parc (${nom}) pour ${fm(val)}.`, `Você vende seu parque (${nom}) por ${fm(val)}.`));
+  bit(L4(`Vendes el parque (${nom}).`, `You sell the park (${nom}).`, `Tu vends le parc (${nom}).`, `Você vende o parque (${nom}).`));
+  return pg();
+};
+ACT["pqau5"] = (v) => {
+  const p = (S.pq || [])[+v];
+  if (!p) return;
+  p.au5 = p.au5 ? 0 : 1;
+  if (p.au5) pqAuto5(p, 1);
+  toast(p.au5 ? L4("Gestión automática activada: ajusta el precio y el mantenimiento cada mes", "Auto-management on: it adjusts price and maintenance every month", "Gestion automatique activée : elle ajuste le prix et l'entretien chaque mois", "Gestão automática ativada: ajusta preço e manutenção todo mês") : L4("Gestión automática desactivada", "Auto-management off", "Gestion automatique désactivée", "Gestão automática desativada"));
+  return pg();
+};
+function pqAuto5(p, ya) {
+  if (!p || p.cer > S.t) return;
+  const pr0 = pqD(p, "pr", 1),
+    mt0 = pqD(p, "mt", 1);
+  let best = null;
+  [0.7, 0.85, 1, 1.15, 1.3, 1.5].forEach((pr) =>
+    [0, 1, 2].forEach((mt) => {
+      if (mt == 0 && pqD(p, "est", 80) < 60) return;
+      p.pr = pr;
+      p.mt = mt;
+      const s = pqSem(p),
+        net = s.ing - s.cost - Math.max(0, 55 - (s.tgt || 60)) * s.ing * 0.004;
+      if (!best || net > best.net) best = { pr, mt, net };
+    }),
+  );
+  p.pr = pr0;
+  p.mt = mt0;
+  if (best) {
+    p.pr = best.pr;
+    p.mt = best.mt;
+  }
+  if (pqD(p, "est", 80) < 45) {
+    const rn = Math.round(pqCosto(p.l - 1) * 0.05);
+    if (S.cash > rn * 4) ACT["pqr"](String((S.pq || []).indexOf(p)));
+  }
+}
+on("semana", () => {
+  if (!S || !S.pq || mesT(S.t) == mesT(S.t - 1)) return;
+  S.pq.forEach((p) => p.au5 && pqAuto5(p));
+});
+const pqCardVenta = pqCard;
+pqCard = function (p, k, fr) {
+  const h = pqCardVenta.apply(this, arguments),
+    s = pqSem(p),
+    net = s.ing - s.cost,
+    aviso =
+      net < 0
+        ? `<div class="m" style="color:var(--r)">${L4(`Pierde ${fm(-net)} por semana. Sube los fans o la popularidad de sus franquicias, añade atracciones o activa la gestión automática.`, `It loses ${fm(-net)} a week. Grow your fans or its franchises' popularity, add rides or turn on auto-management.`, `Il perd ${fm(-net)} par semaine. Augmente tes fans ou la popularité de ses franchises, ajoute des attractions ou active la gestion automatique.`, `Perde ${fm(-net)} por semana. Aumente os fãs ou a popularidade das franquias, adicione atrações ou ative a gestão automática.`)}</div>`
+        : `<div class="m">${L4(`Gana ${fm(net)} por semana.`, `It earns ${fm(net)} a week.`, `Il gagne ${fm(net)} par semaine.`, `Ganha ${fm(net)} por semana.`)}</div>`,
+    extra = `${aviso}<div class="bts" style="margin-top:6px">${chx("pqau5", k, L4("Gestión automática", "Auto-management", "Gestion automatique", "Gestão automática"), p.au5)}${bt("pqv5", k, L4("Vender", "Sell", "Vendre", "Vender") + " · " + fm(pqValor(p)))}</div>`;
+  return h.replace(/<\/div>$/, extra + "</div>");
+};
+function owValor(i) {
+  const t = Math.min(3, S.ow[i] | 0);
+  let v = thc(i);
+  for (let k = 1; k < t; k++) v += Math.round(thc(i) * OWT[k][3]);
+  return Math.round(v * 0.8);
+}
+const owUpHVenta = owUpH;
+owUpH = function (i) {
+  return owUpHVenta.apply(this, arguments) + bt("owv5", i, L4("Vender", "Sell", "Vendre", "Vender") + " · " + fm(owValor(i)));
+};
+ACT["owv5"] = (v) => {
+  const i = +v;
+  if (!S.ow[i]) return;
+  const val = owValor(i);
+  if (!ventaConfirma("ow" + i, L4(`Vender la cadena por ${fm(val)}: toca otra vez. Conservas un acuerdo de distribución en ese país.`, `Sell the chain for ${fm(val)}: tap again. You keep a distribution deal in that country.`, `Vendre la chaîne pour ${fm(val)} : touche encore. Tu gardes un accord de distribution dans ce pays.`, `Vender a rede por ${fm(val)}: toque de novo. Você mantém um acordo de distribuição nesse país.`))) return;
+  S.ow[i] = 0;
+  S.ag[i] = 1;
+  capital(val);
+  nws(L4(`Vendes la cadena ${EXN[i]} en ${CY[i][0]} por ${fm(val)}.`, `You sell the ${EXN[i]} chain in ${CY[i][0]} for ${fm(val)}.`, `Tu vends la chaîne ${EXN[i]} en ${CY[i][0]} pour ${fm(val)}.`, `Você vende a rede ${EXN[i]} em ${CY[i][0]} por ${fm(val)}.`));
+  return pg();
+};
+function negValor(x) {
+  const l = negLv(x[0]);
+  let inv = 0;
+  for (let j = 0; j < l; j++) inv += Math.round(TB(x[4]) * x[5] * Math.pow(1.6, j));
+  const g = negIng(x),
+    u = Math.round(TB(x[4]) * x[7] * Math.max(1, l));
+  return Math.round(inv * 0.7 + Math.max(0, g - u) * 24);
+}
+ACT["negv5"] = (v) => {
+  const x = NEG.find((z) => z[0] == v);
+  if (!x || !negLv(v)) return;
+  const val = negValor(x);
+  if (!ventaConfirma("neg" + v, L4(`Vender ${x[1].toLowerCase()} por ${fm(val)}: toca otra vez para confirmar`, `Sell it for ${fm(val)}: tap again to confirm`, `Vendre pour ${fm(val)} : touche encore pour confirmer`, `Vender por ${fm(val)}: toque de novo para confirmar`))) return;
+  S.nego[v] = 0;
+  capital(val);
+  nws(L4(`Vendes tu ${x[1].toLowerCase()} por ${fm(val)}.`, `You sell your business for ${fm(val)}.`, `Tu vends ton entreprise pour ${fm(val)}.`, `Você vende seu negócio por ${fm(val)}.`));
+  return pg();
+};
+const negHVenta = negH;
+negH = function () {
+  let h = negHVenta.apply(this, arguments);
+  NEG.filter(negOk).forEach((x) => {
+    if (!negLv(x[0])) return;
+    const q = `data-a="negc" data-v="${x[0]}"`,
+      i = h.indexOf(q);
+    const btn = bt("negv5", x[0], L4("Vender", "Sell", "Vendre", "Vender") + " · " + fm(negValor(x)));
+    if (i >= 0) {
+      const j = h.indexOf("</button>", i);
+      if (j > 0) h = h.slice(0, j + 9) + btn + h.slice(j + 9);
+    } else {
+      const m = `<b>${esc(x[1])}</b>`,
+        a = h.indexOf(m);
+      if (a >= 0) {
+        const c = h.indexOf('<div class="m">', a);
+        if (c > 0) h = h.slice(0, c) + `<div class="bts">${btn}</div>` + h.slice(c);
+      }
+    }
+  });
+  return h;
+};
+
+const misFirmados = () => (S.tl || []).filter((t) => t && t.ex && !t.ret && !t.dead && !t.you && !ocupado(t));
+function talMedio5(t, x) {
+  const y = yr(),
+    ok = (j) => MD[j] && y >= MD[j][2] && MD[j][1].includes(t.r);
+  if (x && x.m40 != null && MD[x.m40] && y >= MD[x.m40][2]) return x.m40;
+  const pref = { 0: [5, 0, 3], 1: [0, 1, 3], 2: [0, 1, 3], 3: [2, 0, 3], 4: [0, 1, 3], 5: [4, 3, 0], 6: [5, 0], 7: [0, 3, 1] }[t.r] || [0, 3];
+  const m = pref.find(ok);
+  return m != null ? m : MD.findIndex((d, j) => ok(j)) >= 0 ? MD.findIndex((d, j) => ok(j)) : 3;
+}
+let TALENC5 = null;
+function talEncargo5(v) {
+  const L = misFirmados().sort((a, b) => b.s[b.r] - a.s[a.r]);
+  if (!L.length) return toast(L4("Todavía no tienes talentos firmados libres: dales un contrato exclusivo desde su ficha en Talento", "You have no free signed talents yet: give them an exclusive contract from their profile in Talent", "Tu n'as pas encore de talents sous contrat disponibles : donne-leur un contrat exclusif depuis leur fiche dans Talent", "Você ainda não tem talentos contratados livres: dê um contrato exclusivo pela ficha deles em Talento"));
+  return fxPick({
+    t: L4("Encomendar a un talento firmado", "Commission a signed talent", "Confier à un talent sous contrat", "Encomendar a um talento contratado"),
+    items: L.slice(0, 80).map((t) => ({ v: t.id, l: t.n, nt: 1, s: `${RO[t.r]} ${t.s[t.r]}${t.age ? " · " + t.age + " " + L4("años", "yrs", "ans", "anos") : ""}`, g: RO[t.r] })),
+    orden: false,
+    ok: (s) => {
+      const t = S.tl[+s[0]];
+      if (!t) return;
+      TALENC5 = { id: t.id, v };
+      op(`<div class="c"><div class="k"><h2 style="margin:0">${ic("talento")} ${dualReg("Encomendar", "Commission")}</h2>${btx()}</div><p>${L4("¿Cómo quieres encomendarlo a <b>#</b>?", "How do you want to commission it to <b>#</b>?", "Comment veux-tu le confier à <b>#</b> ?", "Como você quer encomendar a <b>#</b>?").replace("#", esc(t.n))}</p><div class="bts">${bt("talA5", "", "✔︎ " + L4("Que se encargue de todo", "Let them handle everything", "Qu'il s'occupe de tout", "Que cuide de tudo"), "a")}${bt("talE5", "", "✎︎ " + dualReg("Encomendar y editar", "Commission and edit"))}</div><div class="m">${L4(
+        "Tu talento lidera el proyecto en su especialidad y elige al resto del equipo con tu presupuesto. Cuenta como una idea suya: sube su moral y la obra gana un poco de calidad.",
+        "Your talent leads the project in their specialty and picks the rest of the team with your budget. It counts as their idea: their morale goes up and the work gains some quality.",
+        "Ton talent dirige le projet dans sa spécialité et choisit le reste de l'équipe avec ton budget. Cela compte comme son idée : son moral monte et l'œuvre gagne un peu de qualité.",
+        "Seu talento lidera o projeto na sua especialidade e escolhe o resto da equipe com seu orçamento. Conta como ideia dele: a moral sobe e a obra ganha um pouco de qualidade.",
+      )}</div></div>`);
+    },
+  });
+}
+function talEncHaz5(auto) {
+  const e = TALENC5;
+  TALENC5 = null;
+  if (!e) return;
+  const t = S.tl[e.id];
+  if (!t) return;
+  const [t0, i0] = String(e.v).split("|"),
+    x = t0 == "o" ? S.mt[+i0] : null,
+    md = talMedio5(t, x);
+  ACT["mtg"](t0 + "|" + i0 + "|" + md);
+  if (!W) return;
+  W.md = "d";
+  W.etapa = 2;
+  W.crew = W.crew && Object.keys(W.crew).length ? W.crew : eqRec(W.m, BD());
+  const roles = MD[W.m][1],
+    r = roles.includes(t.r) ? t.r : roles.slice().sort((a, b) => (t.s[b] | 0) - (t.s[a] | 0))[0];
+  W.crew[r] = t.id;
+  W.idT = t.id;
+  try {
+    repartoRec(W);
+  } catch (er) {}
+  if (!auto) {
+    W.tab = 3;
+    return wz();
+  }
+  W.nm = W.nm || ttlR();
+  const P = producir();
+  if (!P || typeof P == "string") {
+    toast(String(P || dualReg("Hace falta completar algo: revisa el creador", "Something needs completing: check the creator")));
+    W.tab = 3;
+    return wz();
+  }
+  cx();
+  W = null;
+  sonar("ok");
+  nws(L4("# se encarga de todo: «%» ya está en producción.", "# handles everything: «%» is already in production.", "# s'occupe de tout : «%» est déjà en production.", "# cuida de tudo: «%» já está em produção.").replace("#", t.n).replace("%", P.n));
+  toast(dualReg("Encargo hecho", "Commission placed"));
+  return pg();
+}
+ACT["talA5"] = () => talEncHaz5(1);
+ACT["talE5"] = () => talEncHaz5(0);
+ACT["mttal5"] = (v) => talEncargo5(v);
+const mtencTal = ACT["mtenc"];
+ACT["mtenc"] = (v) => {
+  const L = misFirmados();
+  if (!L.length) return mtencTal(v);
+  return fxPick({
+    t: dualReg("Encomendar el material", "Commission the material"),
+    items: [
+      { v: "tal", l: L4("Uno de tus talentos firmados…", "One of your signed talents…", "Un de tes talents sous contrat…", "Um dos seus talentos contratados…"), nt: 1, s: L4(`${L.length} disponibles`, `${L.length} available`, `${L.length} disponibles`, `${L.length} disponíveis`), g: L4("Tu gente", "Your people", "Tes gens", "Sua gente") },
+      { v: "otros", l: L4("Una filial, un rival o tus artistas…", "A subsidiary, a rival or your artists…", "Une filiale, un rival ou tes artistes…", "Uma filial, um rival ou seus artistas…"), nt: 1, s: "", g: L4("Otros estudios", "Other studios", "Autres studios", "Outros estúdios") },
+    ],
+    orden: false,
+    ok: (s) => (String(s[0]) == "tal" ? talEncargo5(v) : mtencTal(v)),
+  });
+};
+const matHTal = matH;
+matH = function (m) {
+  let h = matHTal.apply(this, arguments);
+  return h.replace(/(<button[^>]*data-a="mta" data-v="o\|(\d+)"[^>]*>[\s\S]*?<\/button>)/g, (all, b, i) => b + bt("mtenc", "o|" + i, L4("Encomendar", "Commission", "Confier", "Encomendar")));
+};
+
+const DEC5 = { m: [0, 1.3, 1.3, 0.45], n: [5, 0.75, 1, 0.35], p: [12, 0.4, 0.5, 0.25], i: [99999, 0, 0, 0.2] };
+const decModo5 = () => (CFG && DEC5[CFG.dec5] ? CFG.dec5 : "n");
+const decProb5 = () => DEC5[decModo5()][1];
+const decAv5 = () => DEC5[decModo5()][2];
+function decLibre5() {
+  if (!S) return true;
+  const m = decModo5();
+  if (m == "m") return true;
+  if (S.t < 26) return false;
+  return S.t - (S.dec5t == null ? -99999 : S.dec5t) >= DEC5[m][0];
+}
+function decCfgH() {
+  const m = decModo5(),
+    O = [
+      ["m", L4("Muchas", "Many", "Beaucoup", "Muitas")],
+      ["n", L4("Normal", "Normal", "Normal", "Normal")],
+      ["p", L4("Pocas", "Few", "Peu", "Poucas")],
+      ["i", L4("Solo importantes", "Only important", "Seulement importantes", "Só importantes")],
+    ],
+    X = {
+      m: L4("Como antes: eventos, dilemas de producción y propuestas cuando toque.", "As before: events, production dilemmas and proposals whenever they come.", "Comme avant : événements, dilemmes de production et propositions quand ils arrivent.", "Como antes: eventos, dilemas de produção e propostas quando vierem."),
+      n: L4("Al menos 5 semanas entre una decisión y otra, y nada en los primeros 6 meses.", "At least 5 weeks between decisions, and nothing in the first 6 months.", "Au moins 5 semaines entre deux décisions, et rien les 6 premiers mois.", "Pelo menos 5 semanas entre uma decisão e outra, e nada nos primeiros 6 meses."),
+      p: L4("Al menos 12 semanas entre decisiones. Ideal para avanzar rápido.", "At least 12 weeks between decisions. Ideal to move fast.", "Au moins 12 semaines entre décisions. Idéal pour avancer vite.", "Pelo menos 12 semanas entre decisões. Ideal para avançar rápido."),
+      i: L4("Solo lo que no puede esperar: premios, deudas, la junta, ofertas y momentos históricos. Las propuestas para tu avatar te esperan en Talento → Tu avatar.", "Only what can't wait: awards, debts, the board, offers and historic moments. Proposals for your avatar wait in Talent → Your avatar.", "Seulement ce qui ne peut pas attendre : prix, dettes, le conseil, offres et moments historiques. Les propositions pour ton avatar t'attendent dans Talent → Ton avatar.", "Só o que não pode esperar: prêmios, dívidas, a diretoria, ofertas e momentos históricos. As propostas para seu avatar esperam em Talento → Seu avatar."),
+    };
+  return `<div class="c dec5"><div class="k"><b>${L4("Decisiones al avanzar", "Decisions while advancing", "Décisions en avançant", "Decisões ao avançar")}</b>${bi("decisiones")}</div><div class="chips">${O.map(([k, n]) => chx("dec5", k, n, m == k)).join("")}</div><div class="m">${X[m]}</div></div>`;
+}
+ACT["dec5"] = (v) => {
+  CFG.dec5 = DEC5[v] ? v : "n";
+  cfgSv();
+  return ajM();
+};
+const ajMDec = ajM;
+ajM = function () {
+  const r = ajMDec.apply(this, arguments),
+    h = document.querySelector("#md.on .hoja");
+  if (h && !h.querySelector(".dec5")) {
+    const c = h.querySelector(".c");
+    if (c) c.insertAdjacentHTML("afterend", decCfgH());
+    else h.insertAdjacentHTML("beforeend", decCfgH());
+  }
+  return r;
+};
+const AVROL5 = {
+  0: [() => L4("escribir", "write", "écrire", "escrever"), [5, 0, 1, 3]],
+  1: [() => L4("dirigir", "direct", "réaliser", "dirigir"), [0, 1, 3]],
+  2: [() => L4("producir", "produce", "produire", "produzir"), [0, 1, 2, 3]],
+  3: [() => L4("diseñar el arte de", "design the art for", "concevoir la direction artistique de", "criar a arte de"), [2, 0, 3]],
+  4: [() => L4("hacer la fotografía de", "shoot", "signer la photographie de", "fazer a fotografia de"), [0, 1]],
+  5: [() => L4("componer la música de", "compose the music for", "composer la musique de", "compor a música de"), [4, 0, 3, 1]],
+  6: [() => L4("editar", "edit", "monter", "editar"), [5, 0, 1]],
+  7: [() => L4("actuar en", "act in", "jouer dans", "atuar em"), [0, 1, 3]],
+};
+const avp5 = () => (S.avp5 = (S.avp5 || []).filter((x) => x.e > S.t));
+function avp5Nueva(forzar) {
+  const me = yo();
+  if (!me || me.ret || me.dead || (ocupado(me) && !forzar)) return null;
+  const y = yr(),
+    roles = [0, 1, 2, 3, 4, 5, 6, 7]
+      .filter((r) => (me.s[r] | 0) >= 20 || (S.sp || []).includes(r))
+      .sort((a, b) => (me.s[b] | 0) - (me.s[a] | 0))
+      .slice(0, 3);
+  if (!roles.length) return null;
+  const r = roles[Math.floor(R() * roles.length * 0.999)],
+    meds = AVROL5[r][1].filter((m) => MD[m] && y >= MD[m][2] && MD[m][1].includes(r));
+  if (!meds.length) return null;
+  const m = meds[Math.floor(R() * meds.length * 0.999)],
+    rv = rivL(m).filter((i) => S.rv[i] && !S.rv[i].dead && !S.rv[i].own);
+  if (!rv.length) return null;
+  const o = rv.sort((a, b) => (S.rv[b].sp[m] | 0) - (S.rv[a].sp[m] | 0))[Math.floor(R() * Math.min(4, rv.length) * 0.999)];
+  let f = 0;
+  try {
+    f = fee(Object.assign({}, me, { you: 0 }), r, m);
+  } catch (er) {
+    f = TB(m) * 0.02;
+  }
+  const cop = R() < 0.18,
+    w = ri(8, 20),
+    x = {
+      id: "a" + (S.avN5 = (S.avN5 | 0) + 1),
+      r,
+      m,
+      o,
+      n: ttlR(),
+      pj: r == 7 ? (typeof nomPj == "function" ? nomPj(R() < 0.5 ? "F" : "M") : "") : "",
+      fee: Math.max(1000, Math.round(f * (1.1 + R() * 0.6))),
+      w,
+      e: S.t + 10,
+      cop,
+    };
+  if (cop) x.k = 0.3 + Math.round(R() * 2) / 10;
+  avp5().push(x);
+  return x;
+}
+function avp5Txt(x) {
+  const rv = S.rv[x.o] ? S.rv[x.o].n : "?",
+    med = MD[x.m][0].toLowerCase();
+  if (x.cop)
+    return L4(
+      `${rv} te propone hacer juntos un proyecto de ${med}: pagan el ${Math.round(x.k * 100)} % de tu próxima obra de cualquier medio y se quedan con esa parte de lo que gane.`,
+      `${rv} proposes a joint ${med} project: they pay ${Math.round(x.k * 100)}% of your next work in any medium and keep that share of what it earns.`,
+      `${rv} te propose un projet commun de ${med} : ils paient ${Math.round(x.k * 100)} % de ta prochaine œuvre, quel que soit le média, et gardent cette part de ses gains.`,
+      `${rv} propõe um projeto conjunto de ${med}: pagam ${Math.round(x.k * 100)} % da sua próxima obra de qualquer mídia e ficam com essa parte do que ela ganhar.`,
+    );
+  const que = AVROL5[x.r][0]();
+  return L4(
+    `${rv} quiere que tú, ${yo().n}, vayas a ${que} «${x.n}» (${med})${x.pj ? `, en el papel de ${x.pj}` : ""}. Son ${x.w} semanas y pagan ${fm(x.fee)}. Ganas experiencia en tu especialidad y fama, pero no podrás trabajar en tus obras mientras tanto.`,
+    `${rv} wants you, ${yo().n}, to ${que} "${x.n}" (${med})${x.pj ? `, playing ${x.pj}` : ""}. It's ${x.w} weeks and pays ${fm(x.fee)}. You gain experience in your specialty and fame, but you can't work on your own works meanwhile.`,
+    `${rv} veut que toi, ${yo().n}, tu ailles ${que} « ${x.n} » (${med})${x.pj ? `, dans le rôle de ${x.pj}` : ""}. C'est ${x.w} semaines payées ${fm(x.fee)}. Tu gagnes de l'expérience dans ta spécialité et de la renommée, mais tu ne pourras pas travailler sur tes œuvres pendant ce temps.`,
+    `${rv} quer que você, ${yo().n}, vá ${que} «${x.n}» (${med})${x.pj ? `, no papel de ${x.pj}` : ""}. São ${x.w} semanas e pagam ${fm(x.fee)}. Você ganha experiência na sua especialidade e fama, mas não poderá trabalhar nas suas obras enquanto isso.`,
+  );
+}
+function avp5Card(x, pop) {
+  return `<div class="c sub"><div class="k"><b>${x.cop ? L4("Proyecto en conjunto", "Joint project", "Projet commun", "Projeto conjunto") : RO[x.r]} · ${esc(S.rv[x.o] ? S.rv[x.o].n : "")}</b><span class="m">${L4("vence en", "expires in", "expire dans", "vence em")} ${Math.max(0, x.e - S.t)} ${L4("sem", "wk", "sem", "sem")}</span></div><p class="m" style="margin:4px 0">${esc(avp5Txt(x))}</p><div class="bts">${bt("avp5", "si|" + x.id + (pop ? "|p" : ""), L4("Aceptar", "Accept", "Accepter", "Aceitar"), "a")}${x.cop ? "" : bt("avp5", "neg|" + x.id + (pop ? "|p" : ""), L4("Pedir más dinero", "Ask for more money", "Demander plus", "Pedir mais dinheiro"))}${bt("avp5", "no|" + x.id + (pop ? "|p" : ""), L4("Rechazar", "Decline", "Refuser", "Recusar"))}</div></div>`;
+}
+function avp5B() {
+  const x = avp5().find((z) => z.id == S.avp5V);
+  if (!x) {
+    S.avp5V = null;
+    return siguienteAviso();
+  }
+  op(`<div class="c"><h2 style="margin:0 0 6px">${ic("talento")} ${L4("Una propuesta para ti", "A proposal for you", "Une proposition pour toi", "Uma proposta para você")}</h2><div class="m">${esc(yo().n)} · ${yo().age} ${L4("años", "years old", "ans", "anos")}</div></div>${avp5Card(x, 1)}`, 1);
+}
+ACT["avp5"] = (v) => {
+  const [a, id, pop] = String(v).split("|"),
+    L = avp5(),
+    x = L.find((z) => z.id == id),
+    me = yo();
+  const fin = () => {
+    if (pop) {
+      S.avp5V = null;
+      MODAL = 0;
+      cx();
+      pg();
+      return siguienteAviso();
+    }
+    return pg();
+  };
+  if (!x || !me) return fin();
+  const rv = S.rv[x.o];
+  if (a == "neg") {
+    if (R() < 0.5) {
+      x.fee = Math.round(x.fee * 1.3);
+      toast(L4(`${rv ? rv.n : ""} acepta: ahora pagan ${fm(x.fee)}`, `${rv ? rv.n : ""} agrees: they now pay ${fm(x.fee)}`, `${rv ? rv.n : ""} accepte : ils paient maintenant ${fm(x.fee)}`, `${rv ? rv.n : ""} aceita: agora pagam ${fm(x.fee)}`));
+      return pop ? avp5B() : pg();
+    }
+    S.avp5 = L.filter((z) => z !== x);
+    toast(L4("Retiraron la propuesta", "They withdrew the proposal", "Ils ont retiré la proposition", "Retiraram a proposta"));
+    return fin();
+  }
+  S.avp5 = L.filter((z) => z !== x);
+  if (a == "no") return fin();
+  if (x.cop) {
+    if (S.cop40) toast(dual("Ya tienes una coproducción pendiente", "You already have a pending co-production"));
+    else {
+      S.cop40 = { o: x.o, k: x.k };
+      nws(L4(`Aceptas el proyecto en conjunto con ${rv.n}: pagarán el ${Math.round(x.k * 100)} % de tu próxima obra.`, `You accept the joint project with ${rv.n}: they'll pay ${Math.round(x.k * 100)}% of your next work.`, `Tu acceptes le projet commun avec ${rv.n} : ils paieront ${Math.round(x.k * 100)} % de ta prochaine œuvre.`, `Você aceita o projeto conjunto com ${rv.n}: pagarão ${Math.round(x.k * 100)} % da sua próxima obra.`));
+    }
+    return fin();
+  }
+  const s0 = me.s[x.r] | 0,
+    sube = Math.max(1, Math.round((4 + R() * 3) * (1 - s0 / 130)));
+  me.s[x.r] = Math.min(99, s0 + sube);
+  me.e = cl((me.e == null ? 80 : me.e) - Math.min(25, x.w));
+  me.ocu = S.t + x.w;
+  gana("otros", x.fee);
+  S.pop = cl((S.pop || 0) + 1 + Math.round((rv ? rv.sp[x.m] | 0 : 3) / 3));
+  (S.avC5 = S.avC5 || []).push({ y: yr(), r: x.r, m: x.m, o: rv ? rv.n : "", n: x.n, pj: x.pj, fee: x.fee, s: sube });
+  if (S.avC5.length > 60) S.avC5.shift();
+  nws(L4(`${me.n} acepta ${AVROL5[x.r][0]()} «${x.n}» para ${rv ? rv.n : ""}: +${sube} en ${RO[x.r]}.`, `${me.n} agrees to ${AVROL5[x.r][0]()} "${x.n}" for ${rv ? rv.n : ""}: +${sube} in ${RO[x.r]}.`, `${me.n} accepte de ${AVROL5[x.r][0]()} « ${x.n} » pour ${rv ? rv.n : ""} : +${sube} en ${RO[x.r]}.`, `${me.n} aceita ${AVROL5[x.r][0]()} «${x.n}» para ${rv ? rv.n : ""}: +${sube} em ${RO[x.r]}.`));
+  bit(L4(`Trabajas fuera del estudio: «${x.n}» con ${rv ? rv.n : ""}.`, `You work outside the studio: "${x.n}" with ${rv ? rv.n : ""}.`, `Tu travailles hors du studio : « ${x.n} » avec ${rv ? rv.n : ""}.`, `Você trabalha fora do estúdio: «${x.n}» com ${rv ? rv.n : ""}.`));
+  return fin();
+};
+on("mes", () => {
+  if (!S || S.pre || S.bot || S.t < 26) return;
+  const L = avp5();
+  if (L.length >= 3 || R() > 0.18 * decAv5() + 0.03) return;
+  const x = avp5Nueva();
+  if (!x) return;
+  if (decLibre5() && S.avp5V == null) {
+    S.avp5V = x.id;
+    S.dec5t = S.t;
+    pausa("avatar");
+  } else nws(L4("Tienes una propuesta nueva para tu avatar en Talento → Tu avatar.", "You have a new proposal for your avatar in Talent → Your avatar.", "Tu as une nouvelle proposition pour ton avatar dans Talent → Ton avatar.", "Você tem uma nova proposta para seu avatar em Talento → Seu avatar."));
+});
+const vAvatarProp = vAvatar;
+vAvatar = function () {
+  const h = vAvatarProp.apply(this, arguments),
+    L = avp5(),
+    C = (S.avC5 || []).slice(-8).reverse();
+  const prop = `<div class="c"><div class="k"><h3 style="margin:0">${L4("Propuestas para ti", "Proposals for you", "Propositions pour toi", "Propostas para você")}</h3>${bi("propuestas")}</div>${L.length ? L.map((x) => avp5Card(x)).join("") : `<div class="m">${L4("Por ahora nada. Llegan según tus especialidades: dirigir, actuar, escribir, componer o hacer proyectos con otros estudios.", "Nothing for now. They arrive according to your specialties: directing, acting, writing, composing or projects with other studios.", "Rien pour l'instant. Elles arrivent selon tes spécialités : réaliser, jouer, écrire, composer ou faire des projets avec d'autres studios.", "Nada por enquanto. Chegam segundo suas especialidades: dirigir, atuar, escrever, compor ou fazer projetos com outros estúdios.")}</div>`}${
+    C.length ? `<h3 style="margin:10px 0 4px">${L4("Tu carrera fuera del estudio", "Your career outside the studio", "Ta carrière hors du studio", "Sua carreira fora do estúdio")}</h3>${C.map((c) => `<div class="fila"><span>${c.y} · «${esc(c.n)}»<span class="m"> · ${RO[c.r]} · ${esc(c.o)}${c.pj ? " · " + esc(c.pj) : ""}</span></span><b>+${c.s}</b></div>`).join("")}` : ""
+  }</div>`;
+  return prop + h;
+};
+
+function becaAuto5() {
+  if (!S || !S.beca5) return 0;
+  const L = S.tl.filter((t) => t && t.ex && !t.you && !t.ret && !t.dead && !t.es && (t.age || 30) < 75).sort((a, b) => (a.s[a.r] | 0) - (b.s[b.r] | 0));
+  let n = 0,
+    c = 0;
+  for (const t of L) {
+    if (n >= (S.beca5n || 3)) break;
+    const r = t.r,
+      P = [2, 1, 0].filter((p) => !eduK(t, r, p, 0));
+    if (!P.length) continue;
+    const p = P[0],
+      k = eduC(t, r, p);
+    if (S.cash < k * 8) continue;
+    eduE(t, r, p, 0);
+    t.bc = 1;
+    S.ed.n = S.ed.n | 0;
+    n++;
+    c += k;
+  }
+  if (n) nws(L4(`Becas automáticas: ${n} de tus talentos firmados empiezan un curso (${fm(c)}).`, `Automatic scholarships: ${n} of your signed talents start a course (${fm(c)}).`, `Bourses automatiques : ${n} de tes talents sous contrat commencent un cours (${fm(c)}).`, `Bolsas automáticas: ${n} dos seus talentos contratados começam um curso (${fm(c)}).`));
+  return n;
+}
+on("mes", () => {
+  try {
+    becaAuto5();
+  } catch (er) {}
+});
+ACT["beca5"] = (v) => {
+  if (v == "n") S.beca5n = ((S.beca5n || 3) % 6) + 1;
+  else {
+    S.beca5 = S.beca5 ? 0 : 1;
+    if (S.beca5) {
+      const n = becaAuto5();
+      toast(L4(`Becas automáticas activadas${n ? ": " + n + " empiezan ya" : ""}`, `Automatic scholarships on${n ? ": " + n + " start now" : ""}`, `Bourses automatiques activées${n ? " : " + n + " commencent maintenant" : ""}`, `Bolsas automáticas ativadas${n ? ": " + n + " começam agora" : ""}`));
+    }
+  }
+  return pg();
+};
+const eduABeca = eduA;
+eduA = function () {
+  const h = eduABeca.apply(this, arguments),
+    nF = (S.tl || []).filter((t) => t && t.ex && !t.you && !t.ret && !t.dead).length;
+  return (
+    h +
+    `<div class="c"><div class="k"><h3 style="margin:0">${L4("Becas automáticas", "Automatic scholarships", "Bourses automatiques", "Bolsas automáticas")}</h3>${bi("becas")}</div><div class="m">${L4(
+      `Cada mes, hasta ${S.beca5n || 3} de tus ${nF} talentos firmados empiezan el mejor curso de su oficio que puedan tomar. Siguen trabajando mientras estudian.`,
+      `Every month, up to ${S.beca5n || 3} of your ${nF} signed talents start the best course in their trade they can take. They keep working while they study.`,
+      `Chaque mois, jusqu'à ${S.beca5n || 3} de tes ${nF} talents sous contrat commencent le meilleur cours de leur métier qu'ils peuvent suivre. Ils continuent à travailler pendant leurs études.`,
+      `Todo mês, até ${S.beca5n || 3} dos seus ${nF} talentos contratados começam o melhor curso do ofício que puderem fazer. Continuam trabalhando enquanto estudam.`,
+    )}</div><div class="chips">${chx("beca5", "on", S.beca5 ? L4("Activadas", "On", "Activées", "Ativadas") : L4("Desactivadas", "Off", "Désactivées", "Desativadas"), S.beca5)}${chx("beca5", "n", L4(`Hasta ${S.beca5n || 3} al mes`, `Up to ${S.beca5n || 3} a month`, `Jusqu'à ${S.beca5n || 3} par mois`, `Até ${S.beca5n || 3} por mês`), 0)}</div></div>`
+  );
+};
+
+const PAR5 = new Set("Noche,Silencio,Promesa,Memoria,Sombra,Fuego,Luna,Tormenta,Sueño,Danza,Carnaval,Aurora,Cenizas,Herencia,Espejo,Máscara,Viento,Marea,Corona,Sangre,Música,Lluvia,Verano,Invierno,Deseo,Pólvora,Rosa,Rosas,Hielo,Furia,Gloria,Ruido,Orgullo,Miedo,Esperanza,Destino,Locura,Calma,Niebla,Humo,Oro,Plata,Sal,Mar,Tierra,Cielo".split(","));
+const parOk5 = (a, b) => a != b && PAR5.has(a) && PAR5.has(b);
+const SUBJ5 = "El despertar,La rebelión,Origen,Renacer,El último bastión,Guerra de clanes,La caída,Más allá del horizonte,El legado,Sombras del pasado,El retorno,Tierra prometida,La gran expedición,Corazón salvaje,Edición definitiva,Los siete reinos,Fuera del mapa,La ciudad perdida,El primer contacto,Hasta el amanecer,Cazadores de tormentas,El trono vacío,Bajo tierra,La última partida".split(",");
+function sinopDef5(P) {
+  const V = Object.values(PMF || {}).filter((x) => typeof x == "string");
+  if (!V.length) return "se ve obligad{o} a cambiar su vida";
+  const h = Math.abs(hs(String(P && P.n) + "|" + ((P && P.id) || 0)));
+  return h % 5 == 0 ? "se ve obligad{o} a cambiar su vida" : V[h % V.length];
+}
+let TITU5 = { t: -1, n: -1, s: null },
+  TITD5 = 0;
+function titUsados5() {
+  if (TITU5.s && TITU5.t == S.t && TITU5.n == (S.pj || []).length) return TITU5.s;
+  const s = new Set(),
+    add = (n) => n && s.add(String(n).toLowerCase());
+  (S.pj || []).forEach((p) => add(p.n));
+  (S.rw || []).forEach((e) => e && add(e.n));
+  (S.mt || []).forEach((m) => m && add(m.n));
+  (S.titR5 || []).forEach((n) => s.add(n));
+  TITU5 = { t: S.t, n: (S.pj || []).length, s };
+  return s;
+}
+function titUnico5(f) {
+  return function () {
+    if (!S || TITD5 > 0) return f.apply(this, arguments);
+    TITD5++;
+    let t;
+    try {
+      const U = titUsados5();
+      for (let i = 0; i < 12; i++) {
+        t = f.apply(this, arguments);
+        if (!U.has(String(t).toLowerCase())) break;
+      }
+      const k = String(t).toLowerCase();
+      U.add(k);
+      S.titR5 = (S.titR5 || []).concat([k]).slice(-300);
+    } finally {
+      TITD5--;
+    }
+    return t;
+  };
+}
+ttlR = titUnico5(ttlR);
+titGen = titUnico5(titGen);
+tituloObra = titUnico5(tituloObra);
+
+const MUNDO_TIPO = "INDUSTRY ART · mundo";
+const MUNDO_DEB = [22, 24, 25, 22, 23, 18, 22, 18];
+const normP5 = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+function paisIdx5(n) {
+  if (typeof n == "number") return cl(n | 0, 0, CY.length - 1);
+  const k = normP5(n),
+    i = CY.findIndex((c) => normP5(c[0]) == k);
+  return i >= 0 ? i : 0;
+}
+function generoOk5(m, g) {
+  const L = sp(MD[m][5]);
+  return L.includes(g) ? g : L[0];
+}
+function mundoImporta(p, reemplazar) {
+  if (!p || (p.tipo != MUNDO_TIPO && p.tipo != "INDUSTRY ART · mundo real")) throw new Error(L4("no es un paquete de mundo", "not a world pack", "ce n'est pas un pack de monde", "não é um pacote de mundo"));
+  const txt = (x, n) => String(x == null ? "" : x).slice(0, n);
+  const M = {
+    n: txt(p.nombre || "Mundo", 60),
+    t0: S.t,
+    solo: reemplazar ? 1 : 0,
+    est: (p.estudios || []).slice(0, 400).map((e) => ({ n: txt(e.n, 40), p: paisIdx5(e.pais), f: e.f | 0, c: e.c ? e.c | 0 : 0, sp: (e.sp || [3, 0, 0, 0, 0, 0]).slice(0, 6).map((x) => cl(x | 0, 0, 6)), k: ESTR[e.est] ? e.est : "tq", esp: txt(e.esp || "Obras de todo tipo", 60), lema: txt(e.lema || "", 80), z: cl(+e.tam || 0.9, 0.3, 1.8) })),
+    tal: (p.talentos || []).slice(0, 3000).map((t) => ({ n: txt(t.n, 40), r: cl(t.r | 0, 0, 7), ge: t.ge == "M" ? "M" : "F", nac: t.nac | 0, mu: t.mu ? t.mu | 0 : 0, na: paisIdx5(t.pais), v: cl(t.v | 0, 20, 99), sec: t.sec || null })),
+    obr: (p.obras || []).slice(0, 5000).map((w) => {
+      const m = cl(w.m | 0, 0, 5);
+      return { n: txt(w.n, 80), m, y: w.y | 0, o: txt(w.o, 40), A: cl(w.A | 0 || 60, 5, 99), C: cl(w.C | 0 || 60, 5, 99), g: generoOk5(m, w.g), fr: txt(w.fr || w.n, 80), pj: txt(w.pjs || "", 400), sn: txt(w.sn || "", 400) };
+    }),
+    comp: [],
+  };
+  S.mr5 = M;
+  if (reemplazar) {
+    EMR.forEach((e, k) => {
+      if (!S.emr.includes(k)) S.emr.push(k);
+    });
+    S.rv.forEach((r) => {
+      if (!r.dead && !r.own && !r.ind && !r.edi && !r.amigo && !r.r5) r.dead = yr();
+    });
+    S.mq = (S.mq || []).filter((q) => S.rv[q.o] && !S.rv[q.o].dead);
+  }
+  const y = yr();
+  M.obr.forEach((w) => {
+    if (w.y < y) w.h = 1;
+  });
+  const r = mundoAplica();
+  return r;
+}
+function mundoAplica() {
+  const M = S && S.mr5;
+  if (!M) return null;
+  const y = yr(),
+    res = { e: 0, t: 0 };
+  M.est.forEach((e) => {
+    if (e.u) return;
+    if (e.c && e.c <= y) {
+      e.u = 1;
+      return;
+    }
+    if (e.f > y) return;
+    e.u = 1;
+    if (S.rv.some((r) => r.n == e.n && !r.dead)) return;
+    EMR.push([e.f, e.n, e.p, e.sp, e.k, e.esp, e.lema, e.z]);
+    const k = EMR.length - 1;
+    S.emr.push(k);
+    rvNace(k);
+    const r = S.rv.find((x) => x.n == e.n && !x.dead);
+    if (r) {
+      r.r5 = 1;
+      r.fy = e.f;
+      r.c5 = e.c || 0;
+      r.nuevo = 0;
+      res.e++;
+    }
+  });
+  S.rv.forEach((r, i) => {
+    if (r.r5 && r.c5 && y >= r.c5 && !r.dead) rvQuiebra(i, L4("cierra sus puertas", "closes its doors", "ferme ses portes", "fecha as portas"));
+  });
+  M.tal.forEach((o) => {
+    if (o.u) return;
+    if (o.mu && o.mu <= y) {
+      o.u = 1;
+      return;
+    }
+    const age = y - o.nac;
+    if (age < MUNDO_DEB[o.r]) return;
+    o.u = 1;
+    if (age > 92 || S.tl.some((t) => t.n == o.n && !t.ret)) return;
+    const k = Math.min(1, (age - MUNDO_DEB[o.r]) / 14),
+      v = Math.round(cl(o.v * (0.6 + 0.4 * k), 20, 99)),
+      t = tmk(S.tl.length, o.r, v, age);
+    Object.assign(t, { n: o.n, ge: o.ge, na: o.na, pot: Math.max(v, o.v), r5: 1, mu5: o.mu || 0, gr: o.r, li: null, fr: null });
+    if (o.sec) Object.keys(o.sec).forEach((j) => (t.s[+j] = cl(o.sec[j] | 0, 1, 99)));
+    try {
+      tat(t, R);
+      tat2(t, R);
+    } catch (er) {}
+    S.tl.push(t);
+    res.t++;
+  });
+  S.tl.forEach((t) => {
+    if (t.r5 && t.mu5 && y >= t.mu5 && !t.ret) {
+      t.ret = 1;
+      t.dead = 1;
+      t.ex = 0;
+    }
+  });
+  return res;
+}
+on("anual", () => {
+  try {
+    if (S && S.mr5) mundoAplica();
+  } catch (er) {}
+});
+on("semana", () => {
+  const M = S && S.mr5;
+  if (!M || !S.mq) return;
+  const y = yr();
+  S.mq.forEach((q) => {
+    if (q.r5 != null) return;
+    q.r5 = 0;
+    const o = S.rv[q.o];
+    if (!o || !o.r5) return;
+    const w = M.obr.find((x) => !x.u && !x.h && x.o == o.n && x.m == q.m && x.y <= y && x.y >= y - 2 && !M.comp.includes(x.fr));
+    if (!w) return;
+    w.u = 1;
+    q.r5 = 1;
+    q.n = w.n;
+    q.A = Math.max(q.A, w.A);
+    q.C = Math.max(q.C, w.C);
+    q.E = Math.max(q.E, Math.round((w.A + w.C) / 2));
+    const L = sp(MD[q.m][5]);
+    if (L.includes(w.g)) q.gn = [w.g];
+  });
+  M.obr.forEach((x) => {
+    if (!x.u && !x.h && x.y < y - 2) x.h = 1;
+  });
+});
+function mundoPrecio5(w) {
+  const y = yr(),
+    ag = Math.max(0, y - w.y);
+  return Math.round(TB(w.m, y) * (0.8 + Math.max(0, w.A - 40) / 18) * (ag <= 30 ? 1 + (30 - ag) / 30 : 0.9));
+}
+function mundoVenta5() {
+  const M = S.mr5;
+  if (!M) return [];
+  const y = yr(),
+    vistos = new Set();
+  return M.obr
+    .filter((w) => (w.h || w.u) && w.y <= y && !M.comp.includes(w.fr) && MD[w.m] && y >= MD[w.m][2])
+    .sort((a, b) => b.A + b.C - (a.A + a.C))
+    .filter((w) => (vistos.has(w.fr) ? false : (vistos.add(w.fr), true)));
+}
+let MUV5 = 0;
+function mundoVentaH5() {
+  const M = S.mr5;
+  if (!M) return "";
+  const L = mundoVenta5(),
+    pag = 6,
+    n = Math.max(1, Math.ceil(L.length / pag)),
+    p = Math.min(MUV5, n - 1);
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("dinero")} ${L4("Franquicias a la venta", "Franchises for sale", "Franchises à vendre", "Franquias à venda")}</h3>${bi("mundo")}</div><div class="m">${esc(M.n)} · ${L4(`${L.length} disponibles`, `${L.length} available`, `${L.length} disponibles`, `${L.length} disponíveis`)}</div>${
+    L.slice(p * pag, p * pag + pag)
+      .map((w) => {
+        const pr = mundoPrecio5(w);
+        return `<div class="fila"><span><b>«${esc(w.fr)}»</b><span class="m"> · ${MD[w.m][0]} · ${w.y} · ${esc(w.o)}</span></span>${bt("muc5", w.fr, L4("Comprar", "Buy", "Acheter", "Comprar") + " · " + fm(pr), S.cash >= pr ? "" : "off")}</div>`;
+      })
+      .join("") || `<div class="m">${L4("Nada a la venta por ahora.", "Nothing for sale right now.", "Rien à vendre pour l'instant.", "Nada à venda agora.")}</div>`
+  }${n > 1 ? `<div class="k">${bt("muv5", Math.max(0, p - 1), ic("atras"))}<span class="m">${p + 1} / ${n}</span>${bt("muv5", Math.min(n - 1, p + 1), ic("adelante"))}</div>` : ""}</div>`;
+}
+ACT["muv5"] = (v) => {
+  MUV5 = +v | 0;
+  return pg();
+};
+ACT["muc5"] = (v) => {
+  const M = S.mr5;
+  if (!M) return;
+  const w = mundoVenta5().find((x) => x.fr == v);
+  if (!w) return;
+  const pr = mundoPrecio5(w);
+  if (S.cash < pr) return toast(dualReg("Fondos insuficientes", "Insufficient funds"));
+  gasta("otros", pr);
+  M.comp.push(w.fr);
+  const det = M.obr.filter((x) => x.fr == w.fr && x.pj).sort((a, b) => a.y - b.y)[0] || w;
+  S.mt.push({ i: "w" + (S.mid = (S.mid | 0) + 1), n: w.fr, a: w.o, y: w.y, k: "Franquicia de " + MD[w.m][0].toLowerCase(), g: [w.g].filter(Boolean), f: cl(Math.round((w.A + w.C) / 2), 30, 95), pd: 0, pr, u: 0, pjs: det.pj ? pjParse(det.pj) : [], sn: det.sn || "", tm: [] });
+  const r = S.rv.find((x) => x.n == w.o && !x.dead);
+  if (r) r.gan = (r.gan || 0) + pr;
+  nws(L4(`Compras la franquicia «${w.fr}» a ${w.o} por ${fm(pr)}: queda en tu material con sus personajes.`, `You buy the «${w.fr}» franchise from ${w.o} for ${fm(pr)}: it goes to your material with its characters.`, `Tu achètes la franchise « ${w.fr} » à ${w.o} pour ${fm(pr)} : elle rejoint ton matériel avec ses personnages.`, `Você compra a franquia «${w.fr}» de ${w.o} por ${fm(pr)}: vai para seu material com os personagens.`));
+  sonar("ok");
+  return pg();
+};
+const frcbMundo = ACT["frcb"];
+ACT["frcb"] = (v, el) => {
+  const n0 = S.mt.length,
+    r = frcbMundo(v, el),
+    M = S.mr5;
+  if (M && S.mt.length > n0) {
+    const m = S.mt[S.mt.length - 1],
+      w = M.obr.find((x) => x.n == m.n || x.fr == m.n);
+    if (w) {
+      const det = M.obr.filter((x) => x.fr == w.fr && x.pj).sort((a, b) => a.y - b.y)[0] || w;
+      if (det.pj) m.pjs = pjParse(det.pj);
+      if (det.sn) m.sn = det.sn;
+      M.comp.push(w.fr);
+    }
+  }
+  return r;
+};
+const vFrMundo = vFr;
+vFr = function () {
+  return mundoVentaH5() + vFrMundo.apply(this, arguments);
+};
+function mundoCardH() {
+  const M = S && S.mr5;
+  const est = M ? `<div class="m">${L4("Activo", "Active", "Actif", "Ativo")}: <b>${esc(M.n)}</b> · ${M.est.length} ${L4("estudios", "studios", "studios", "estúdios")} · ${M.tal.length} ${L4("talentos", "talents", "talents", "talentos")} · ${M.obr.length} ${L4("obras", "works", "œuvres", "obras")} · ${L4("en juego ahora", "in play now", "en jeu maintenant", "em jogo agora")}: ${S.rv.filter((r) => r.r5 && !r.dead).length} ${L4("estudios y", "studios and", "studios et", "estúdios e")} ${S.tl.filter((t) => t.r5 && !t.ret).length} ${L4("talentos", "talents", "talents", "talentos")}</div>` : "";
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("mundo")} ${L4("Paquete de mundo", "World pack", "Pack de monde", "Pacote de mundo")}</h3>${bi("mundo")}</div><div class="m">${L4(
+    "Un paquete de mundo (.iamundo) trae estudios, talentos y obras con sus fechas. Cada estudio aparece el año en que se fundó, cada talento debuta a su edad y las obras salen cuando llega su año. Las anteriores se pueden comprar como franquicias, con sus personajes. Conviene importarlo al empezar una partida.",
+    "A world pack (.iamundo) brings studios, talents and works with their dates. Each studio appears the year it was founded, each talent debuts at their age and works come out when their year arrives. Earlier ones can be bought as franchises, with their characters. Best imported at the start of a game.",
+    "Un pack de monde (.iamundo) apporte des studios, des talents et des œuvres avec leurs dates. Chaque studio apparaît l'année de sa fondation, chaque talent débute à son âge et les œuvres sortent quand leur année arrive. Les précédentes s'achètent comme franchises, avec leurs personnages. Mieux vaut l'importer en début de partie.",
+    "Um pacote de mundo (.iamundo) traz estúdios, talentos e obras com suas datas. Cada estúdio aparece no ano em que foi fundado, cada talento estreia na sua idade e as obras saem quando chega o ano delas. As anteriores podem ser compradas como franquias, com seus personagens. É melhor importar no começo de uma partida.",
+  )}</div>${est}<div class="bts">${bt("mui5", "r", L4("Importar y reemplazar a los rivales", "Import and replace rivals", "Importer et remplacer les rivaux", "Importar e substituir os rivais"), "a")}${bt("mui5", "s", L4("Importar y sumar", "Import and add", "Importer et ajouter", "Importar e somar"))}${M ? bt("mux5", "", L4("Quitar paquete", "Remove pack", "Retirer le pack", "Remover pacote")) : ""}</div></div>`;
+}
+ACT["mui5"] = (v) => {
+  const i = document.createElement("input");
+  i.type = "file";
+  i.accept = ".iamundo,.json,application/json,text/plain";
+  i.onchange = () => {
+    if (!i.files || !i.files[0]) return;
+    const fr = new FileReader();
+    fr.onload = () => {
+      try {
+        const res = mundoImporta(JSON.parse(String(fr.result)), v == "r");
+        toast(L4(`Mundo importado: ${res.e} estudios y ${res.t} talentos ya están en tu partida; el resto llegará en su año.`, `World imported: ${res.e} studios and ${res.t} talents are already in your game; the rest will arrive in their year.`, `Monde importé : ${res.e} studios et ${res.t} talents sont déjà dans ta partie ; le reste arrivera à son année.`, `Mundo importado: ${res.e} estúdios e ${res.t} talentos já estão na sua partida; o resto chega no seu ano.`));
+        pg();
+      } catch (e) {
+        toast(L4("No se pudo importar: ", "Couldn't import: ", "Import impossible : ", "Não foi possível importar: ") + (e && e.message ? e.message : e));
+      }
+    };
+    fr.readAsText(i.files[0]);
+  };
+  i.click();
+};
+ACT["mux5"] = () => {
+  if (!ventaConfirma("mux5", L4("Toca otra vez para quitar el paquete (lo que ya entró se queda)", "Tap again to remove the pack (what already arrived stays)", "Touche encore pour retirer le pack (ce qui est arrivé reste)", "Toque de novo para remover o pacote (o que já entrou fica)"))) return;
+  S.mr5 = null;
+  return pg();
+};
+const vEditMundo = vEdit;
+vEdit = function () {
+  return vEditMundo.apply(this, arguments) + mundoCardH();
+};
 Object.assign(TX.es.ayuda, {
   companias: ["Compañías aliadas", "En Obras → Teatro. Con el tiempo, compañías de teatro, ópera, ballet, títeres, zarzuela, circo, musicales, cabaret, improvisación y nuevo circo te piden firmar: buscan estabilidad. Firmar cuesta su apoyo de un año y después pagas ese apoyo poco a poco cada mes. A cambio, cada mes hacen temporada y te dan su parte de la taquilla (25 a 35 %), crecen en fans y a veces te proponen obras gratis. Puedes mandarlas de gira (más fans y más taquilla durante 8 semanas), hacer una obra nueva con ellas (suben crítica y público), renovarlas tres años o liberarlas. Dato: el circo moderno nació en Londres en 1768, cuando Philip Astley montó acrobacias a caballo dentro de una pista redonda."],
   autocompra: ["Compra automática de contenido", "En Negocio → Streaming y en Negocio → Canal de TV → Licencias. Actívala y elige qué parte de tu caja puede gastar cada mes (1, 3, 5 o 10 %) y la calidad mínima. Al empezar cada mes compra por ti: en la plataforma, licencias de rivales (regatea al 85 %, que siempre aceptan), paquetes cuando hay espacio libre o el catálogo envejece, y lotes de archivo si los marcas; en el canal, licencias por 2 años que también sirven para tu plataforma y, si quieres, las programa en las franjas vacías. «Comprar ahora» hace la compra del mes al instante. Los lotes y paquetes ahora suman títulos reales: arriba de «Crecer el catálogo» ves cuántos tienes, cuántos caben a la vista y cuántos quedaron en bodega. Dato: en 2007 Netflix lanzó su streaming con unas 1.000 películas, frente a más de 70.000 DVD que tenía para alquilar por correo."],
   reediciones: ["Reediciones", "En Obras → Libros. Cada libro estrenado puede tener una edición de bolsillo (desde 1935), un audiolibro (desde 1952) y traducciones. Pagas una vez una parte de lo que ya vendió y la reedición vende durante meses; cuanto más público tuvo el libro, más vende. Dato: en 1935 Penguin lanzó libros de bolsillo al precio de un paquete de cigarrillos y cambió para siempre quién podía comprar libros."],
+});
+{
+FRB["guion"] = (FRB["guion"] || []).concat(["Cada giro está bien ganado.", "Un final que deja pensando días.", "Escrita con humor y con corazón."]);
+FRM["guion"] = (FRM["guion"] || []).concat(["Se adivina el final desde la primera escena.", "Demasiadas ideas y ninguna terminada."]);
+FRB["act"] = (FRB["act"] || []).concat(["Una interpretación para el recuerdo.", "La química del reparto es evidente.", "Hasta los secundarios roban escenas."]);
+FRM["act"] = (FRM["act"] || []).concat(["El protagonista nunca termina de convencer.", "Gritan mucho y emocionan poco."]);
+FRB["dir"] = (FRB["dir"] || []).concat(["Un ritmo que no deja respirar.", "Sabe cuándo callar y cuándo estallar.", "Una mirada propia en cada escena."]);
+FRM["dir"] = (FRM["dir"] || []).concat(["Le sobran veinte minutos.", "Cambia de tono sin avisar."]);
+FRB["fx"] = (FRB["fx"] || []).concat(["Efectos que sirven a la historia.", "Cada imagen parece un cuadro.", "Hay escenas que se quedarán en la historia del cine."]);
+FRM["fx"] = (FRM["fx"] || []).concat(["Se notan los hilos.", "Tanta pantalla verde cansa."]);
+FRB["mus"] = (FRB["mus"] || []).concat(["Una banda sonora para escuchar aparte.", "El silencio también está bien usado.", "Cada tema llega en el momento justo."]);
+FRM["mus"] = (FRM["mus"] || []).concat(["La música dice lo que hay que sentir.", "Una banda sonora que se olvida al salir."]);
+FRB["guion@1"] = (FRB["guion@1"] || []).concat(["Cada episodio termina en el momento justo.", "Una temporada sin relleno.", "Los personajes crecen capítulo a capítulo."]);
+FRM["guion@1"] = (FRM["guion@1"] || []).concat(["Estira la trama sin necesidad.", "Un final de temporada que no cierra nada."]);
+FRB["act@1"] = (FRB["act@1"] || []).concat(["Un elenco que da ganas de volver cada semana.", "La protagonista sostiene la serie entera.", "Personajes que ya se sienten de la familia."]);
+FRM["act@1"] = (FRM["act@1"] || []).concat(["El reparto parece cansado.", "Nadie consigue que nos importen sus personajes."]);
+FRB["dir@1"] = (FRB["dir@1"] || []).concat(["Se ve como el mejor cine.", "Un ritmo perfecto para ver de un tirón.", "Cada episodio tiene su propia personalidad."]);
+FRM["dir@1"] = (FRM["dir@1"] || []).concat(["Episodios que parecen hechos en serie.", "La segunda mitad pierde el rumbo."]);
+FRB["fx@1"] = (FRB["fx@1"] || []).concat(["Una producción que no tiene nada que envidiarle al cine.", "Decorados que cuentan tanto como los diálogos.", "Una apertura que nadie querrá saltarse."]);
+FRM["fx@1"] = (FRM["fx@1"] || []).concat(["Se nota que el presupuesto no alcanzó.", "Los mismos tres decorados una y otra vez."]);
+FRB["mus@1"] = (FRB["mus@1"] || []).concat(["Una canción de cabecera que se queda contigo.", "La música marca cada giro de la temporada.", "Una selección de canciones impecable."]);
+FRM["mus@1"] = (FRM["mus@1"] || []).concat(["La misma melodía en cada escena triste.", "La música de fondo no se calla nunca."]);
+FRB["guion@2"] = (FRB["guion@2"] || []).concat(["Una historia que da ganas de terminar el juego.", "Cada decisión pesa.", "Un mundo con historia en cada rincón."]);
+FRM["guion@2"] = (FRM["guion@2"] || []).concat(["La historia es una excusa para disparar.", "Misiones de recadero, una tras otra."]);
+FRB["act@2"] = (FRB["act@2"] || []).concat(["Un doblaje de primera.", "Personajes que parecen vivos.", "El villano está a la altura."]);
+FRM["act@2"] = (FRM["act@2"] || []).concat(["Diálogos leídos sin ganas.", "Compañeros que estorban más de lo que ayudan."]);
+FRB["dir@2"] = (FRB["dir@2"] || []).concat(["Controles precisos y adictivos.", "Una curva de dificultad muy bien medida.", "Imposible soltar el mando."]);
+FRM["dir@2"] = (FRM["dir@2"] || []).concat(["Se vuelve repetitivo a las pocas horas.", "Una cámara que pelea contra el jugador."]);
+FRB["fx@2"] = (FRB["fx@2"] || []).concat(["Un apartado gráfico de otro nivel.", "Un estilo visual inconfundible.", "Funciona fluido de principio a fin."]);
+FRM["fx@2"] = (FRM["fx@2"] || []).concat(["Tiempos de carga eternos.", "Le hacía falta otro año de pulido."]);
+FRB["mus@2"] = (FRB["mus@2"] || []).concat(["Una banda sonora que acompaña cada nivel.", "El sonido avisa del peligro antes que la vista.", "Melodías que se tararean días después."]);
+FRM["mus@2"] = (FRM["mus@2"] || []).concat(["La misma canción en bucle durante horas.", "Efectos de sonido sacados de un banco gratuito."]);
+FRB["guion@3"] = (FRB["guion@3"] || []).concat(["Un texto que el público aplaude a mitad de escena.", "Diálogos que suenan a verdad.", "Un tercer acto que deja la sala en silencio."]);
+FRM["guion@3"] = (FRM["guion@3"] || []).concat(["Monólogos que no terminan nunca.", "Un texto que envejeció mal."]);
+FRB["act@3"] = (FRB["act@3"] || []).concat(["Un elenco que llena el escenario.", "Ovación de pie en cada función.", "Una voz que llega hasta el último palco."]);
+FRM["act@3"] = (FRM["act@3"] || []).concat(["Se les olvida el texto.", "Actúan para la cámara que no está."]);
+FRB["dir@3"] = (FRB["dir@3"] || []).concat(["Una puesta en escena que respira.", "Las transiciones son pura magia.", "El teatro como debe ser."]);
+FRM["dir@3"] = (FRM["dir@3"] || []).concat(["Entradas y salidas sin ningún sentido.", "El intermedio llega como un alivio."]);
+FRB["fx@3"] = (FRB["fx@3"] || []).concat(["Una escenografía que deja sin aliento.", "La luz cuenta la historia.", "Vestuario de museo."]);
+FRM["fx@3"] = (FRM["fx@3"] || []).concat(["Los cambios de decorado rompen el ritmo.", "Un vestuario prestado de otra obra."]);
+FRB["mus@3"] = (FRB["mus@3"] || []).concat(["Una orquesta que eleva cada escena.", "Canciones que el público sale cantando.", "El sonido llena el teatro sin tapar a nadie."]);
+FRM["mus@3"] = (FRM["mus@3"] || []).concat(["Números musicales metidos con calzador.", "La orquesta va por un lado y el elenco por otro."]);
+FRB["guion@4"] = (FRB["guion@4"] || []).concat(["Letras que hablan de verdad.", "Cada verso tiene algo que decir.", "Un disco con algo que contar de principio a fin."]);
+FRM["guion@4"] = (FRM["guion@4"] || []).concat(["Rimas fáciles y sin alma.", "El mismo estribillo en todas las canciones."]);
+FRB["act@4"] = (FRB["act@4"] || []).concat(["Una voz que eriza la piel.", "Se nota que lo vive en cada nota.", "En directo será aún mejor."]);
+FRM["act@4"] = (FRM["act@4"] || []).concat(["Afinada pero sin emoción.", "Demasiado autotune para tan poca voz."]);
+FRB["dir@4"] = (FRB["dir@4"] || []).concat(["Una producción limpia y moderna.", "Cada canción suena distinta y todas suenan al artista.", "Arreglos llenos de detalles."]);
+FRM["dir@4"] = (FRM["dir@4"] || []).concat(["Suena a la radio de hace cinco años.", "Un disco largo sin una sola sorpresa."]);
+FRB["fx@4"] = (FRB["fx@4"] || []).concat(["Una mezcla que se disfruta con buenos auriculares.", "Sonidos que nadie había probado antes.", "Graves que hacen temblar el suelo."]);
+FRM["fx@4"] = (FRM["fx@4"] || []).concat(["Todo suena demasiado alto.", "Una mezcla que entierra la voz."]);
+FRB["mus@4"] = (FRB["mus@4"] || []).concat(["Melodías que se quedan para siempre.", "Un single hecho para sonar en todas partes.", "El mejor trabajo de su carrera."]);
+FRM["mus@4"] = (FRM["mus@4"] || []).concat(["Ningún tema destaca.", "Suena a muchos discos y a ninguno propio."]);
+FRB["guion@5"] = (FRB["guion@5"] || []).concat(["Imposible dejarlo a medias.", "Una trama tejida con precisión de relojero.", "Un final que obliga a releerlo."]);
+FRM["guion@5"] = (FRM["guion@5"] || []).concat(["Promete mucho y cumple poco.", "Un final apresurado."]);
+FRB["act@5"] = (FRB["act@5"] || []).concat(["Personajes que se sienten de carne y hueso.", "Una protagonista que no se olvida.", "Hasta el villano tiene sus razones."]);
+FRM["act@5"] = (FRM["act@5"] || []).concat(["Personajes que solo existen para mover la trama.", "Todos hablan igual."]);
+FRB["dir@5"] = (FRB["dir@5"] || []).concat(["Una prosa que se lee como música.", "Cada frase está pensada.", "Una voz narrativa única."]);
+FRM["dir@5"] = (FRM["dir@5"] || []).concat(["Descripciones que no terminan nunca.", "Una prosa recargada que cansa."]);
+FRB["fx@5"] = (FRB["fx@5"] || []).concat(["Una edición preciosa.", "Las ilustraciones son un regalo.", "Una portada que pide ser comprada."]);
+FRM["fx@5"] = (FRM["fx@5"] || []).concat(["Una traducción torpe.", "Le faltó una corrección a fondo."]);
+FRB["mus@5"] = (FRB["mus@5"] || []).concat(["Un ritmo que atrapa desde la primera página.", "Capítulos cortos que se leen solos.", "Sabe cuándo acelerar y cuándo detenerse."]);
+FRM["mus@5"] = (FRM["mus@5"] || []).concat(["El segundo tercio se hace cuesta arriba.", "Capítulos que no aportan nada."]);
+}
+Object.assign(TX.es.ayuda, {
+  fechas: ["Fechas de la obra", "En la ficha de cada obra ves cuándo nació la idea, cuándo empezó el proyecto, cuándo se estrenó y cuánto tardó en total. Sirve para comparar cuánto te toma cada medio. En Obras → Filmografía el archivo se divide en tres: Propias (hechas por tu compañía y tus filiales), Compradas (proyectos, guiones y franquicias que compraste) y Con rivales (coproducciones y encargos). Dato: «Avatar» pasó más de diez años en un cajón, esperando a que la tecnología de efectos pudiera hacerla."],
+  decisiones: ["Decisiones al avanzar", "Elige cuántas veces el juego se detiene para pedirte una decisión: Muchas (como antes), Normal (al menos 5 semanas entre una y otra y nada en los primeros 6 meses), Pocas (al menos 12 semanas) o Solo importantes (premios, deudas, la junta, ofertas y momentos históricos). Las propuestas para tu avatar nunca se pierden: esperan en Talento → Tu avatar. Lo cambias en Ajustes."],
+  propuestas: ["Propuestas para ti", "Según las especialidades de tu avatar, otros estudios te proponen dirigir, actuar, escribir, componer, producir o diseñar una de sus obras, o hacer un proyecto en conjunto. Si aceptas, cobras, ganas experiencia en esa especialidad y fama para tu estudio, pero tu avatar queda ocupado unas semanas. Puedes pedir más dinero (a veces aceptan y a veces se retiran). Un proyecto en conjunto hace que ese estudio pague parte de tu próxima obra y se quede con esa parte de lo que gane. Dato: Orson Welles financiaba sus propias películas actuando en las de otros."],
+  becas: ["Becas automáticas", "Actívalas en Talento → Academia. Cada mes, hasta el número que elijas de tus talentos firmados (con contrato exclusivo) empiezan el mejor curso de su oficio que puedan tomar, y tú pagas el curso. Mientras estudian pueden seguir trabajando en tus obras. Si alguien ya domina su oficio o no tiene energía, espera al mes siguiente."],
+  mundo: ["Paquete de mundo", "Importa un archivo .iamundo en Estudio → Editor. Trae estudios, talentos y obras con sus fechas: cada estudio aparece el año en que se fundó y cierra cuando le toca, cada talento debuta a su edad y se retira cuando corresponde, y las obras salen como estrenos de su estudio cuando llega su año. Las obras anteriores al año de tu partida se pueden comprar como franquicias en Obras → Franquicias, con sus personajes. «Importar y reemplazar a los rivales» deja solo los estudios del paquete; «Importar y sumar» los agrega a los que ya tienes. Lo mejor es importarlo al empezar una partida. Los paquetes los hace la comunidad y no son parte oficial del juego."],
 });
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {

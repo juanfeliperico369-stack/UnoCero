@@ -48,6 +48,16 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Compra automática de contenido para streaming y TV.
   - Secuelas que conservan a sus intérpretes.
 
+- **De las pruebas de juego (versión 1.2):**
+  - La pantalla ya no salta al tocar opciones.
+  - Fechas de cada obra y archivo dividido en tres secciones.
+  - Venta de negocios, cadenas de cines y parques, con gestión automática para los parques.
+  - Encargos a tus talentos firmados.
+  - Becas automáticas.
+  - Ritmo de decisiones y propuestas para el avatar.
+  - Títulos, sinopsis y críticas más variados.
+  - Paquetes de mundo (`.iamundo`).
+
 ### Pendientes
 1. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.
 2. **Logros de Google Play Games.** El juego ya tiene logros propios. Conectarlos a Play Games da visibilidad en la tienda, pero exige iniciar sesión con Google y cambiar la política de privacidad y el formulario de datos.

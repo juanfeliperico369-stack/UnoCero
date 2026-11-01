@@ -70,10 +70,10 @@ Idiomas: español, inglés, francés y portugués.
 Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales; el juego no está afiliado a ellos. El casino del juego usa dinero ficticio: no hay apuestas con dinero real.
 ```
 
-**Notas de la versión 1.1** (319/500)
+**Notas de la versión 1.2** (377/500)
 
 ```
-Versión 1.1: compra automática de contenido para streaming y TV, lotes que suman títulos reales, secuelas que conservan a sus intérpretes, encargos completos a filiales o rivales, compañías de teatro, ópera y circo, reediciones de libros, más escritores, equipo de apoyo hasta 500 y bloqueo de jugadores en el modo LAN.
+Versión 1.2: la pantalla ya no salta al tocar opciones; fechas de cada obra; archivo dividido en propias, compradas y con rivales; venta de negocios, cines y parques; parques con gestión automática; encargos a tus talentos firmados; menos interrupciones al avanzar y propuestas para tu avatar; becas automáticas; títulos y críticas más variados, y paquetes de mundo (.iamundo).
 ```
 
 ## English (en-US)
@@ -129,10 +129,10 @@ Languages: Spanish, English, French and Portuguese.
 The real works, awards, people, brands and places in the game are historical and cultural references; the game is not affiliated with them. The in-game casino uses fictional money: there is no real-money gambling.
 ```
 
-**Notas de la versión 1.1** (289/500)
+**Notas de la versión 1.2** (360/500)
 
 ```
-Version 1.1: automatic content buying for streaming and TV, lots that add real titles, sequels that keep their performers, full commissions to subsidiaries or rivals, theatre, opera and circus companies, book reissues, more writers, support crews up to 500 and player blocking in LAN mode.
+Version 1.2: the screen no longer jumps when you tap options; dates for every work; archive split into own, bought and with rivals; sell businesses, cinemas and parks; park auto-management; commissions to your signed talents; fewer interruptions and proposals for your avatar; automatic scholarships; more varied titles and reviews; and world packs (.iamundo).
 ```
 
 ## Français (fr-FR)
@@ -188,10 +188,10 @@ Langues : espagnol, anglais, français et portugais.
 Les œuvres, prix, personnes, marques et lieux réels présents dans le jeu sont des références historiques et culturelles ; le jeu n'y est pas affilié. Le casino du jeu utilise de l'argent fictif : il n'y a pas de jeu d'argent réel.
 ```
 
-**Notas de la versión 1.1** (342/500)
+**Notas de la versión 1.2** (403/500)
 
 ```
-Version 1.1 : achat automatique de contenu pour le streaming et la TV, lots qui ajoutent de vrais titres, suites qui gardent leurs interprètes, commandes complètes aux filiales ou aux rivaux, compagnies de théâtre, d'opéra et de cirque, rééditions de livres, plus d'écrivains, équipes de soutien jusqu'à 500 et blocage de joueurs en mode LAN.
+Version 1.2 : l'écran ne saute plus quand tu touches une option ; dates de chaque œuvre ; archives divisées en propres, achetées et avec des rivaux ; vente d'entreprises, cinémas et parcs ; gestion automatique des parcs ; commandes à tes talents sous contrat ; moins d'interruptions et propositions pour ton avatar ; bourses automatiques ; titres et critiques plus variés ; et packs de monde (.iamundo).
 ```
 
 ## Português (pt-BR)
@@ -247,8 +247,8 @@ Idiomas: espanhol, inglês, francês e português.
 As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais; o jogo não é afiliado a eles. O cassino do jogo usa dinheiro fictício: não há apostas com dinheiro real.
 ```
 
-**Notas de la versión 1.1** (311/500)
+**Notas de la versión 1.2** (367/500)
 
 ```
-Versão 1.1: compra automática de conteúdo para streaming e TV, lotes que somam títulos reais, sequências que mantêm seus intérpretes, encomendas completas a filiais ou rivais, companhias de teatro, ópera e circo, reedições de livros, mais escritores, equipe de apoio até 500 e bloqueio de jogadores no modo LAN.
+Versão 1.2: a tela não pula mais ao tocar opções; datas de cada obra; arquivo dividido em próprias, compradas e com rivais; venda de negócios, cinemas e parques; gestão automática dos parques; encomendas aos seus talentos contratados; menos interrupções e propostas para seu avatar; bolsas automáticas; títulos e críticas mais variados; e pacotes de mundo (.iamundo).
 ```
