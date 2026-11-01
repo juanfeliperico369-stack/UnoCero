@@ -29,6 +29,8 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.webkit.WebViewAssetLoader;
 
+import org.json.JSONObject;
+
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -43,6 +45,7 @@ public class MainActivity extends ComponentActivity {
     private ValueCallback<Uri[]> alElegir;
     private ActivityResultLauncher<Intent> crearArchivo;
     private ActivityResultLauncher<Intent> elegirArchivo;
+    private RedLocal red;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -70,7 +73,6 @@ public class MainActivity extends ComponentActivity {
         WebSettings ajustes = web.getSettings();
         ajustes.setJavaScriptEnabled(true);
         ajustes.setDomStorageEnabled(true);
-        ajustes.setDatabaseEnabled(true);
         ajustes.setMediaPlaybackRequiresUserGesture(false);
         ajustes.setAllowFileAccess(false);
         ajustes.setAllowContentAccess(true);
@@ -110,6 +112,8 @@ public class MainActivity extends ComponentActivity {
             }
         });
 
+        red = new RedLocal(this, (tipo, a, b) -> web.post(() -> web.evaluateJavascript(
+                "window.lanEvento && window.lanEvento(" + JSONObject.quote(tipo) + "," + JSONObject.quote(a) + "," + JSONObject.quote(b) + ")", null)));
         web.addJavascriptInterface(new Puente(), "AndroidBridge");
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -146,6 +150,7 @@ public class MainActivity extends ComponentActivity {
 
     @Override
     protected void onDestroy() {
+        red.destruir();
         web.destroy();
         super.onDestroy();
     }
@@ -215,6 +220,46 @@ public class MainActivity extends ComponentActivity {
                 return;
             }
             runOnUiThread(() -> pedirArchivo(nombre, tipo, datos));
+        }
+
+        @JavascriptInterface
+        public boolean lanDisponible() {
+            return true;
+        }
+
+        @JavascriptInterface
+        public void lanCrear(String nombre) {
+            red.crear(nombre);
+        }
+
+        @JavascriptInterface
+        public void lanBuscar() {
+            red.buscar();
+        }
+
+        @JavascriptInterface
+        public void lanParar() {
+            red.parar();
+        }
+
+        @JavascriptInterface
+        public void lanUnirse(String destino) {
+            red.unirse(destino);
+        }
+
+        @JavascriptInterface
+        public void lanEnviar(String id, String linea) {
+            red.enviar(id, linea);
+        }
+
+        @JavascriptInterface
+        public void lanCerrar(String id) {
+            red.cerrar(id);
+        }
+
+        @JavascriptInterface
+        public void lanSalir() {
+            red.salir();
         }
     }
 }

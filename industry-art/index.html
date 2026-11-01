@@ -832,6 +832,23 @@ html.graf-pixel canvas.pt,html.graf-pixel canvas.tf,html.graf-pixel canvas.rl,ht
 .zine canvas.tf{border-radius:50%;box-shadow:0 0 0 2px var(--ink)}
 
 .zine .pd-d::before{content:var(--orn,"\2726") "\00a0";color:var(--sec);font-family:"Segoe UI Symbol","Noto Sans Symbols 2","Noto Sans Symbols","Apple Symbols","DejaVu Sans",sans-serif;font-weight:400;font-style:normal}
+.lan-pin{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0;padding:10px 14px;border:2px solid var(--ink,#151515);background:var(--sec,#c0392b);color:var(--sect,#fff);border-radius:var(--rad,6px)}
+.lan-pin b{font:700 2rem/1 var(--fd,inherit);letter-spacing:.14em}
+#lan-h textarea,#lan-h input,#lan-h select{width:100%;box-sizing:border-box;margin:6px 0;font:inherit;padding:8px;border:1.5px solid var(--l,#999);border-radius:6px;background:var(--bg);color:var(--t)}
+#lan-h textarea{font-size:.78rem;word-break:break-all}
+#lan-h .k select{width:auto;flex:1}
+#lan-h details summary{cursor:pointer;font-weight:700;margin:8px 0}
+.lan-par{align-items:center;gap:8px}
+.camp.cerrado{opacity:.62}
+.camp.ok{outline:2px solid var(--a,#2e7d32);outline-offset:-2px}
+.camp-h .bar{margin:6px 0}
+.aviso.preset{margin:10px auto;max-width:1280px}
+.aviso.oferta{border-left:6px solid var(--sec,#c0392b)}
+.rasgos .bar{margin:2px 0 0}
+@media (max-width:899px) and (min-height:521px){
+html.una-mano #top{top:auto;bottom:var(--navh,64px);border-bottom:0;border-top:1px solid var(--l);padding-bottom:6px}
+html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 0 var(--sec)}
+}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
 const VERN = "1.0";
@@ -23707,10 +23724,12 @@ const CATLIB = [
   ["man", "Mejor manga"],
   ["poe", "Mejor poesía"],
   ["ens", "Mejor ensayo"],
+  ["ngr", "Mejor novela gráfica"],
+  ["fil", "Mejor libro de filosofía y economía"],
 ];
 const CATLIB_T = { Novela: "nov", "Novela ligera": "nov", "Novela de anticipación": "nov", "Novela por entregas (folletín)": "nov", "Novela epistolar": "nov", "Novela juvenil": "nov", Cómic: "com", "Novela gráfica": "com", Historieta: "com", Webtoon: "com", Manga: "man", Poético: "poe", Ensayo: "ens", Filosofía: "ens", Economía: "ens", "Divulgación científica": "ens", "Crónica y periodismo": "ens", "Biografía y memorias": "ens" };
 const libCat = (p) => CATLIB_T[(p.ty || [])[0]] || "";
-const libCatR = (x) => ["nov", "nov", "nov", "nov", "com", "man", "poe", "ens", "", ""][hs(x.id + "|lib") % 10];
+const libCatR = (x) => ["nov", "nov", "nov", "ngr", "com", "man", "poe", "ens", "fil", ""][hs(x.id + "|lib") % 10];
 const claseJuego = (P) => {
   const b = P.br || 1;
   return b < 0.3 ? "Indie" : b < 0.55 ? "B" : b < 0.8 ? "A" : b < 1.2 ? "AA" : b < 2 ? "AAA" : "AAAA";
@@ -23863,7 +23882,7 @@ function awards(w) {
   EV.forEach((e) => {
     if (w != e.wn && w != e.ww) return;
     if ((e.b && yr() < (AWD[e.b] || 0)) || (e.fy && yr() - 1 < e.fy) || (e.an && yr() < 2001)) return;
-    const bd2 = e.n == "Bastard Awards",
+    const bd2 = e.n == "Bastard Awards" || !!e.peor,
       pop = e.n == "Pop Awards";
     const sc = (v) => (e.j ? JU[e.j](v) : bd2 ? 100 - v.c : pop ? v.h * 0.7 + v.a * 0.3 : v.c * 0.4 + v.a * 0.3 + v.h * 0.3);
     if (w == e.wn) {
@@ -23888,7 +23907,7 @@ function awards(w) {
           p: p.id,
           n: t.n + " \u00B7 \u00AB" + p.n + "\u00BB",
           u: 1,
-          s: (v.c + v.a) / 4 + t.s[e.rl] * 0.5 + cb(p) + ri(-3, 3),
+          s: (bd2 ? 150 - (v.c + v.a) / 4 - t.s[e.rl] * 0.5 : (v.c + v.a) / 4 + t.s[e.rl] * 0.5) + cb(p) + ri(-3, 3),
           t: t.id,
         };
       });
@@ -23906,7 +23925,7 @@ function awards(w) {
             o: x.o,
             n: t.n + " \u00B7 \u00AB" + x.n + "\u00BB",
             u: 0,
-            s: (v.c + v.a) / 4 + t.s[e.rl] * 0.5 + ri(-3, 3),
+            s: (bd2 ? 150 - (v.c + v.a) / 4 - t.s[e.rl] * 0.5 : (v.c + v.a) / 4 + t.s[e.rl] * 0.5) + ri(-3, 3),
             t: ti,
           });
       });
@@ -38412,7 +38431,7 @@ function edifExtras(c, bx, bw, top, T, o, E, h) {
     px = bx + 10,
     ond = Math.sin(T / 260) * 3;
   const pais = paisSede(),
-    img = pais != null ? banderaImg(pais, 24, 15) : null;
+    img = pais != null ? banderaImg(pais, 24, 15, o.y) : null;
   c.strokeStyle = "rgba(30,25,20,.9)";
   c.lineWidth = 1.5;
   c.beginPath();
@@ -38839,8 +38858,8 @@ const BANDERAS = [
   "E:#0051BA,#215B33;g:#FCD116,.12;s:#FFFFFF,.12,.15,.06;s:#FFFFFF,.3,.15,.06;s:#FFFFFF,.21,.3,.06;s:#FFFFFF,.12,.45,.06;s:#FFFFFF,.3,.45,.06",
   "h:#D21034,#009543;P:#FDCE12,0,0,.5,.42,1,.42,1,.58,.5,.58,0,1;P:#000000,0,.08,.48,.46,1,.46,1,.54,.48,.54,0,.92;P:#000000,0,.14,.4,.5,0,.86",
 ];
-function dibujaBandera(c, i, W, H) {
-  const spec = BANDERAS[i];
+function dibujaBandera(c, i, W, H, sp) {
+  const spec = sp || BANDERAS[i];
   if (!spec) return false;
   const lista = (s) =>
       s.split(",").reduce((a, t) => {
@@ -38962,6 +38981,43 @@ function dibujaBandera(c, i, W, H) {
       c.lineTo(0, H);
       c.stroke();
     } else if (t == "u") union(n(a[0]), n(a[1]));
+    else if (t == "U") {
+      const w = W * n(a[0]),
+        h = H * n(a[1]);
+      c.save();
+      c.beginPath();
+      c.rect(0, 0, w, h);
+      c.clip();
+      c.fillStyle = "#012169";
+      c.fillRect(0, 0, w, h);
+      c.strokeStyle = "#FFFFFF";
+      c.lineWidth = h * 0.2;
+      c.beginPath();
+      c.moveTo(0, 0);
+      c.lineTo(w, h);
+      c.moveTo(w, 0);
+      c.lineTo(0, h);
+      c.stroke();
+      c.fillStyle = "#FFFFFF";
+      c.fillRect(w * 0.42, 0, w * 0.16, h);
+      c.fillRect(0, h * 0.37, w, h * 0.26);
+      c.fillStyle = "#C8102E";
+      c.fillRect(w * 0.46, 0, w * 0.08, h);
+      c.fillRect(0, h * 0.42, w, h * 0.16);
+      c.restore();
+    } else if (t == "S") {
+      c.save();
+      c.strokeStyle = a[0];
+      c.lineWidth = H * n(a[1]);
+      c.lineCap = "round";
+      c.beginPath();
+      c.moveTo(W * 0.1, H * 0.12);
+      c.lineTo(W * 0.9, H * 0.88);
+      c.moveTo(W * 0.9, H * 0.12);
+      c.lineTo(W * 0.1, H * 0.88);
+      c.stroke();
+      c.restore();
+    }
     else if (t == "m") {
       circulo(a[0], n(a[1]) * W, n(a[2]) * H, n(a[3]) * H);
       circulo(a[4], n(a[5]) * W, n(a[6]) * H, n(a[7]) * H);
@@ -38993,17 +39049,97 @@ function dibujaBandera(c, i, W, H) {
   });
   return true;
 }
+const BAND_BORGONA = "b:#FFFFFF;S:#C8102E,.14";
+const BAND_UK0 = "U:1,1";
+const BAND_ROJA_UK = "b:#C8102E;u:.5,.5";
+const BAND_HIST = {
+  0: [[1777, "h:#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234,#FFFFFF,#B22234;U:.42,.54"]],
+  1: [[1821, BAND_BORGONA]],
+  2: [[1801, BAND_UK0], [1868, "u:1,1"], [1965, BAND_ROJA_UK]],
+  3: [[1902, "c:13"]],
+  4: [[1821, BAND_BORGONA], [1903, "c:7"]],
+  5: [[1822, "b:#FFFFFF;c:#0F4C9B,.5,.5,.2"], [1889, "b:#009C3B;P:#FFDF00,.5,.1,.92,.5,.5,.9,.08,.5;r:#002776,.44,.33,.12,.34"]],
+  6: [[1816, BAND_BORGONA]],
+  7: [[1810, BAND_BORGONA]],
+  8: [[1818, BAND_BORGONA]],
+  9: [[1821, BAND_BORGONA]],
+  10: [[1801, BAND_UK0]],
+  11: [[1790, "b:#FFFFFF"], [1815, null], [1830, "b:#FFFFFF"]],
+  12: [[1867, "h:#FFFFFF,#000000"], [1919, "h:#000000,#FFFFFF,#DD0000"]],
+  13: [[1785, "b:#FFFFFF;c:#AA151B,.5,.5,.16"], [1931, null], [1939, "h:#DA121A,#F1BF00,#630B57"]],
+  14: [[1861, null], [1946, "v:#009246,#FFFFFF,#CE2B37;r:#1C4BA0,.43,.3,.14,.4;r:#CE2B37,.445,.33,.11,.34;r:#FFFFFF,.485,.33,.03,.34;r:#FFFFFF,.445,.47,.11,.06"]],
+  15: [[1960, "c:10"]],
+  16: [[1922, "c:10"]],
+  17: [[1910, "c:10"], [1928, BAND_ROJA_UK], [1994, "h:#FF7F00,#FFFFFF,#0000A0"]],
+  18: [[1956, "c:11"]],
+  19: [[1963, "c:10"]],
+  20: [[1947, BAND_ROJA_UK]],
+  21: [[1912, "b:#FFD700;c:#E60012,.18,.25,.09"], [1928, "h:#E60012,#FFD700,#3B8EDE,#FFFFFF,#000000"], [1949, "b:#FE0000;k:#000095,.5,.5;c:#FFFFFF,.25,.25,.1"]],
+  25: [[1901, "c:10"]],
+  26: [[1902, "c:10"]],
+  27: [[1970, "c:10"]],
+  28: [[1962, "c:26"]],
+  29: [[1975, "c:25"]],
+  30: [[1858, null], [1883, "h:#000000,#FFD500,#FFFFFF"], [1918, null], [1991, "b:#CC0000;s:#FFD700,.12,.16,.07;r:#FFD700,.08,.32,.09,.035"]],
+  31: [[1997, "b:#012169;u:.5,.5;c:#FFFFFF,.75,.5,.14"]],
+  32: [[1898, BAND_BORGONA], [1952, "c:0"]],
+  33: [[1844, BAND_BORGONA]],
+  34: [[1821, BAND_BORGONA]],
+  35: [[1821, BAND_BORGONA]],
+  36: [[1962, "c:10"]],
+  37: [[1821, BAND_BORGONA]],
+  38: [[1821, BAND_BORGONA]],
+  39: [[1821, BAND_BORGONA]],
+  40: [[1811, BAND_BORGONA]],
+  41: [[1822, BAND_BORGONA]],
+  42: [[1828, BAND_BORGONA]],
+  43: [[1825, BAND_BORGONA]],
+  44: [[1811, BAND_BORGONA]],
+  52: [[1910, "v:#0F4C9B,#FFFFFF;c:#FFD700,.5,.5,.16"]],
+  55: [[1922, "c:10"]],
+  62: [[1957, "c:10"]],
+  63: [[1960, "c:11"]],
+  65: [[1961, "c:10"]],
+  66: [[1962, "c:11"]],
+  67: [[1956, "c:11"]],
+  68: [[1960, "c:11"]],
+  69: [[1960, "c:11"]],
+  70: [[1960, "c:11"]],
+  71: [[1975, "c:52"]],
+  72: [[1945, "h:#AE1C28,#FFFFFF,#21468B"]],
+  73: [[1898, BAND_BORGONA], [1946, "c:0"]],
+  75: [[1957, "c:10"]],
+  76: [[1959, "c:10"]],
+  77: [[1895, "c:21"], [1945, "b:#FFFFFF;c:#BC002D,.5,.5,.3"]],
+  78: [[1947, BAND_ROJA_UK]],
+  79: [[1947, BAND_ROJA_UK], [1971, "c:78"]],
+  80: [[1980, "h:#239F40,#FFFFFF,#DA0000;c:#C09300,.5,.5,.12"]],
+  86: [[1978, "c:10"]],
+  87: [[1980, "c:10"]],
+};
+function banderaSpec(i, y) {
+  const L = BAND_HIST[i];
+  if (L && y != null)
+    for (const [hasta, sp] of L) {
+      if (y >= hasta) continue;
+      if (sp == null) return BANDERAS[i];
+      if (sp.indexOf("c:") == 0 && !sp.includes("#")) return banderaSpec(+sp.slice(2), y);
+      return sp;
+    }
+  return BANDERAS[i];
+}
 const BANDERA_CACHE = {};
-function banderaImg(i, W, H) {
-  const k = i + "|" + W + "|" + H;
+function banderaImg(i, W, H, y) {
+  const sp = banderaSpec(i, y),
+    k = (sp || i) + "|" + W + "|" + H;
   if (BANDERA_CACHE[k]) return BANDERA_CACHE[k];
-  if (!BANDERAS[i]) return null;
+  if (!sp) return null;
   const cv = document.createElement("canvas");
   cv.width = W * 3;
   cv.height = H * 3;
   const x = cv.getContext("2d");
   x.scale(3, 3);
-  dibujaBandera(x, i, W, H);
+  dibujaBandera(x, i, W, H, sp);
   return (BANDERA_CACHE[k] = cv);
 }
 function paisSede() {
@@ -41500,7 +41636,7 @@ function pg() {
     ][tab]();
   const sy0 = window.scrollY || 0;
   $("#app").innerHTML =
-    `<header id="top">${barra()}</header><nav id="nav">${navH()}</nav><main id="main">${S.over ? '<div class="c aviso rojo"><b>' + (S.over == 2 ? "Tu socio tom\u00F3 el control del estudio." : "Cerraste el estudio.") + '</b><div class="m">Mira tu legado o vuelve al men\u00FA para empezar de nuevo.</div><div class="bts">' + bt("cr", "", ic("trofeo") + " Cr\u00E9ditos y legado") + bt("salir", "", "Volver al men\u00FA", "r") + "</div></div>" : ""}${portadillaH()}${subH()}<div class="vista">${v}</div></main>`;
+    `<header id="top">${barra()}</header><nav id="nav">${navH()}</nav><main id="main">${S.over ? '<div class="c aviso rojo"><b>' + (S.over == 3 ? esc(S.overTxt || "") : S.over == 2 ? "Tu socio tom\u00F3 el control del estudio." : "Cerraste el estudio.") + '</b><div class="m">Mira tu legado o vuelve al men\u00FA para empezar de nuevo.</div><div class="bts">' + bt("cr", "", ic("trofeo") + " Cr\u00E9ditos y legado") + bt("salir", "", "Volver al men\u00FA", "r") + "</div></div>" : ""}${portadillaH()}${subH()}<div class="vista">${v}</div></main>`;
   if (sy0) window.scrollTo(0, sy0);
   if (sy0) {
     PGY = sy0;
@@ -41602,7 +41738,7 @@ function resumen() {
 }
 function vE() {
   const L = S.lg;
-  return `<div class="c edificio"><canvas id="ed"></canvas><div class="k" style="margin-top:4px"><span class="m">${esc(S.sn)}${S.lg.x ? " " + LSUF[S.lg.x] : ""} · ${SEDE[S.sdN | 0][0]} · ${eraEst(yr()).n} · toca un piso</span>${bt("dep", "", ic("edificio") + " Departamentos")}</div></div>${tutH()}${guiaOn() ? guiaH() + consejo() : hint() + consejo()}<div class="cols2">${tareas()}${fechas()}</div><div class="cols2">${resumen()}${top5()}</div><div class="cols2"><div class="c"><h3 style="margin:0">Flujo de caja semanal</h3><canvas id="ch" style="height:120px;margin-top:6px"></canvas></div><div class="c"><h3 style="margin:0">Historial anual</h3><canvas id="yh" style="height:150px;margin-top:6px"></canvas></div></div><div class="cols2">${bitH(5)}${buzonH() || '<div class="c"><h3 style="margin:0">' + ic("fans") + ' Cartas de fans</h3><div class="m">Cuando tus obras lleguen al p\u00FAblico, escribir\u00E1n.</div></div>'}</div><div class="cols2"><div class="c"><h3 style="margin:0">Obras por medio</h3><canvas id="dn" style="height:140px;margin-top:6px"></canvas></div><div class="c"><div class="k"><h3 style="margin:0">${ic("trofeo")} Metas</h3>${bt("sub", 1, "Ver metas")}</div><div class="m">${TPN[S.tp | 0]}${S.cf ? " hasta " + S.cf : ""} · logros ${(S.lgr || []).length}/${LOGR.length} · hitos ${S.hm.length}/${HT.length} · misiones abiertas ${(S.mis || []).filter((q) => !q.fin).length}</div></div></div><div class="cols2">${sedeC()}<div class="c"><div class="k"><h3 style="margin:0">Identidad</h3>${bi("identidad")}</div><canvas class="lgv lgp" data-src="s"></canvas><div class="m">${IT[S.ind]} · ${VI[S.vis]} · público ${PU[S.pu]} · ${esc(S.tg)}${S.enf ? " \u00B7 enfoque: " + S.enf.g.concat(S.enf.tm).map(esc).join(", ") : ""}</div><div class="bts">${bt("idt", "", ic("editor") + " Editar logo y colores", "a")}${bt("marca", "", "Cambiar la marca")}</div></div></div>`;
+  return `<div class="c edificio"><canvas id="ed"></canvas><div class="k" style="margin-top:4px"><span class="m">${esc(S.sn)}${S.lg.x ? " " + LSUF[S.lg.x] : ""} · ${SEDE[S.sdN | 0][0]} · ${eraEst(yr()).n} · toca un piso</span><span class="bts">${bt("dep", "", ic("edificio") + " Departamentos")}${bi("edificio2")}</span></div></div>${tutH()}${guiaOn() ? guiaH() + consejo() : hint() + consejo()}<div class="cols2">${tareas()}${fechas()}</div><div class="cols2">${resumen()}${top5()}</div><div class="cols2"><div class="c"><h3 style="margin:0">Flujo de caja semanal</h3><canvas id="ch" style="height:120px;margin-top:6px"></canvas></div><div class="c"><h3 style="margin:0">Historial anual</h3><canvas id="yh" style="height:150px;margin-top:6px"></canvas></div></div><div class="cols2">${bitH(5)}${buzonH() || '<div class="c"><h3 style="margin:0">' + ic("fans") + ' Cartas de fans</h3><div class="m">Cuando tus obras lleguen al p\u00FAblico, escribir\u00E1n.</div></div>'}</div><div class="cols2"><div class="c"><h3 style="margin:0">Obras por medio</h3><canvas id="dn" style="height:140px;margin-top:6px"></canvas></div><div class="c"><div class="k"><h3 style="margin:0">${ic("trofeo")} Metas</h3>${bt("sub", 1, "Ver metas")}</div><div class="m">${TPN[S.tp | 0]}${S.cf ? " hasta " + S.cf : ""} · logros ${(S.lgr || []).length}/${LOGR.length} · hitos ${S.hm.length}/${HT.length} · misiones abiertas ${(S.mis || []).filter((q) => !q.fin).length}</div></div></div><div class="cols2">${sedeC()}<div class="c"><div class="k"><h3 style="margin:0">Identidad</h3>${bi("identidad")}</div><canvas class="lgv lgp" data-src="s"></canvas><div class="m">${IT[S.ind]} · ${VI[S.vis]} · público ${PU[S.pu]} · ${esc(S.tg)}${S.enf ? " \u00B7 enfoque: " + S.enf.g.concat(S.enf.tm).map(esc).join(", ") : ""}</div><div class="bts">${bt("idt", "", ic("editor") + " Editar logo y colores", "a")}${bt("marca", "", "Cambiar la marca")}</div></div></div>`;
 }
 function vTal() {
   const s = SUB[2] | 0;
@@ -41654,7 +41790,7 @@ function ajM() {
   const ch = (a, v, t, on) => `<button class="ch${on ? " on" : ""}" data-a="${a}" data-v="${v}">${t}</button>`;
   let h = `<div class="c"><div class="k"><h2 style="margin:0">${ic("ajustes")} Ajustes</h2><span class="bts">${bi("ajustes")}${btx()}</span></div>
 <label class="m">Idioma · Language</label><div class="chips">${ch("cfgi", "es", "Espa\u00F1ol", (CFG.idi || "es") == "es")}${ch("cfgi", "en", "English", CFG.idi == "en")}${ch("cfgi", "fr", "Fran\u00E7ais", CFG.idi == "fr")}${ch("cfgi", "pt", "Portugu\u00EAs", CFG.idi == "pt")}</div>
-<label class="m">Tema</label><div class="chips">${[
+<div class="k"><label class="m">Tema</label>${bi("temas")}</div><div class="chips">${[
     ["revista", "Revista"],
     ["minimal", "Minimalista"],
     ["oscuro", "Oscuro"],
@@ -41683,7 +41819,7 @@ function ajM() {
   ]
     .map((x) => ch("cfgx", x[0], x[1], CFG.txt == x[0]))
     .join("")}</div>
-<label class="m">Accesibilidad y sonido</label><div class="chips">${ch("cfgb", "dalt", "Colores para daltonismo", CFG.dalt)}${ch("cfgb", "anim", "Animaci\u00F3n", CFG.anim)}${ch("cfgb", "snd", "Sonido", CFG.snd)}${ch("cfgm", "", "M\u00FAsica de fondo", CFG.mus)}${S ? ch("cfgg", "", "Gu\u00EDa de la partida", guiaOn()) : ""}${ch("cfgb", "real", "D\u00F3lares de hoy", CFG.real)}</div>${typeof muxAjH == "function" ? muxAjH() : ""}
+<label class="m">Accesibilidad y sonido</label><div class="chips">${ch("cfgb", "dalt", "Colores para daltonismo", CFG.dalt)}${ch("cfgb", "anim", "Animaci\u00F3n", CFG.anim)}${ch("cfgb", "snd", "Sonido", CFG.snd)}${ch("cfgm", "", "M\u00FAsica de fondo", CFG.mus)}${S ? ch("cfgg", "", "Gu\u00EDa de la partida", guiaOn()) : ""}${ch("cfgb", "real", "D\u00F3lares de hoy", CFG.real)}${ch("cfgb", "mano", "Controles abajo (una mano)", CFG.mano)}</div><div class="m">Controles abajo: la barra de tiempo y caja baja junto al menú, para jugar con el pulgar.</div>${typeof muxAjH == "function" ? muxAjH() : ""}
 <label class="m">Autoguardado</label><div class="chips">${[
     ["mes", "Cada mes"],
     ["anio", "Cada a\u00F1o"],
@@ -42195,7 +42331,7 @@ function nw() {
   PVE.tm = [];
   const o = (a, i = 0) => a.map((x, j) => `<option value="${j}"${j == i ? " selected" : ""}>${x}</option>`).join("");
   const sl = (k, n) =>
-    `<div class="k"><label class="m" for="l-${k}">${n}</label><b class="m" id="o-l${k}"></b></div><input type="range" id="l-${k}" min="0" max="${k == "s" ? 39 : 19}" value="${PV.lg[k]}" oninput="lgSet('pv','${k}',this.value)">`;
+    `<div class="k"><label class="m" for="l-${k}">${n}</label><b class="m" id="o-l${k}"></b></div><input type="range" id="l-${k}" min="0" max="${lgMax(k)}" value="${PV.lg[k]}" oninput="lgSet('pv','${k}',this.value)">`;
   $("#app").innerHTML =
     `<div class="menu"><canvas id="hc" data-big="1" style="height:190px;position:sticky;top:0;z-index:2"></canvas><div class="c"><div class="k"><h2 style="margin:0">Nueva partida</h2><span class="bts">${bi("nueva")}${bt("back", "", ic("atras") + " Volver")}</span></div>
 ${bt("azar", "", ic("dado") + " Inicio al azar: un dado arma toda la partida", "a grande")}
@@ -42788,7 +42924,7 @@ ACT["fanv"] = () => {
 ACT["pz"] = () => {
   autoOff();
   op(
-    `<div class="c"><div class="k"><h2 style="margin:0">${ic("pausa")} Pausa</h2>${btx()}</div><div class="m">${esc(S.sn)} · ${fechaS(S.t)}</div><div class="pz">${bt("x", "", ic("sem") + " Seguir", "a")}${bt("sv", "", ic("guardar") + " Guardar")}${bt("cargar", "", ic("importar") + " Cargar partida")}${bt("aj", "", ic("ajustes") + " Ajustes")}${bt("gd", "", ic("libro") + " C\u00F3mo jugar")}${bt("ctal", "", ic("talento") + " Crear talento")}${bt("ayu", "ritmo", ic("ayuda") + " Ayuda del ritmo")}${bt("cr", "", ic("trofeo") + " Cr\u00E9ditos y legado")}${bt("salir", "", ic("salir") + " Salir al men\u00FA", "r")}</div></div>`,
+    `<div class="c"><div class="k"><h2 style="margin:0">${ic("pausa")} Pausa</h2>${btx()}</div><div class="m">${esc(S.sn)} · ${fechaS(S.t)}</div><div class="pz">${bt("x", "", ic("sem") + " Seguir", "a")}${bt("sv", "", ic("guardar") + " Guardar")}${bt("cargar", "", ic("importar") + " Cargar partida")}${bt("lan", "", ic("globo") + " " + dualReg("Modo LAN", "LAN mode"))}${bt("campa", "", ic("libro") + " " + dualReg("Seis siglos", "Six centuries"))}${bt("reto", "", ic("trofeo") + " " + dualReg("Reto de la semana", "Weekly challenge"))}${bt("aj", "", ic("ajustes") + " Ajustes")}${bt("gd", "", ic("libro") + " C\u00F3mo jugar")}${bt("ctal", "", ic("talento") + " Crear talento")}${bt("ayu", "ritmo", ic("ayuda") + " Ayuda del ritmo")}${bt("cr", "", ic("trofeo") + " Cr\u00E9ditos y legado")}${bt("salir", "", ic("salir") + " Salir al men\u00FA", "r")}</div></div>`,
   );
 };
 ACT["dep"] = () => depM("");
@@ -48358,7 +48494,7 @@ mn = function () {
   const acc = (a, i, t, sub, cls) => `<button class="b ini-b${cls ? " " + cls : ""}" data-a="${a}">${ic(i)}<span><b>${t}</b><small>${sub}</small></span></button>`;
   $("#app").innerHTML = `<div class="menu inicio"><div class="ini-mast"><b>${dual("Edición", "Edition")} ${VERN}</b><span>${dual("De 1700 a 2300", "From 1700 to 2300")}</span></div><div class="hero"><canvas id="hc"></canvas><div class="hero-idi"><button class="ch idi${IDI == "es" ? " on" : ""}" data-a="cfgi" data-v="es" data-l="ES" aria-label="Español"></button><button class="ch idi${IDI == "en" ? " on" : ""}" data-a="cfgi" data-v="en" data-l="EN" aria-label="English"></button></div><div class="hero-txt"><h1 class="titulo">INDUSTRY ART</h1><p>${dual("Dirige tu estudio de cine, TV, videojuegos, teatro, música y libros, de 1700 a 2300.", "Run your film, TV, games, theatre, music and books studio, from 1700 to 2300.")}</p></div></div>
 <div class="ini-acc"><button class="b a ini-nueva" data-a="new">${ic("mas")}<span><b>${dual("Nueva partida", "New game")}</b><small>${dual("Elige época, país, estilo y dificultad", "Choose era, country, style and difficulty")}</small></span></button><button class="b ini-rapida" data-a="rapida">${ic("dado")}<span><b>${dual("Partida rápida", "Quick game")}</b><small>${dual("Empieza ya: el dado elige la época, el país y tu estudio", "Start now: the die picks the era, the country and your studio")}</small></span></button><div id="mcont"></div>
-<h3 class="ini-sum">${dual("Sumario", "Contents")}</h3><div class="ini-g">${acc("tlm", "idea", dual("Taller creativo", "Creative workshop"), dual("Escribe historias con toda la taxonomía", "Write stories with the whole taxonomy"))}${acc("cargar", "guardar", dual("Cargar partida", "Load game"), dual("Elige, borra o importa partidas", "Pick, delete or import games"))}${acc("gdm", "libro", dual("Cómo jugar", "How to play"), dual("Lo esencial en un minuto", "The essentials in a minute"))}${acc("aj", "ajustes", dual("Ajustes", "Settings"), dual("Tema, color, texto, sonido y ranuras", "Theme, colour, text, sound and slots"))}${acc("crm", "trofeo", dual("Créditos", "Credits"), dual("Quién hizo el juego", "Who made the game"))}${acc("pol", "escudo", dual("Privacidad", "Privacy"), dual("Qué pasa con tus datos", "What happens to your data"))}</div></div>
+<h3 class="ini-sum">${dual("Sumario", "Contents")}</h3><div class="ini-g">${acc("campa", "libro", dual("Seis siglos", "Six centuries"), dual("Capítulos de la historia con un reto cada uno", "History chapters, each with a challenge"))}${acc("reto", "trofeo", dual("Reto de la semana", "Weekly challenge"), dual("El mismo mundo para todos, 10 años", "The same world for everyone, 10 years"))}${acc("lan", "globo", dual("Modo LAN", "LAN mode"), dual("Juega con amigos en tu red Wi-Fi", "Play with friends on your Wi-Fi"))}${acc("tlm", "idea", dual("Taller creativo", "Creative workshop"), dual("Escribe historias con toda la taxonomía", "Write stories with the whole taxonomy"))}${acc("cargar", "guardar", dual("Cargar partida", "Load game"), dual("Elige, borra o importa partidas", "Pick, delete or import games"))}${acc("gdm", "libro", dual("Cómo jugar", "How to play"), dual("Lo esencial en un minuto", "The essentials in a minute"))}${acc("aj", "ajustes", dual("Ajustes", "Settings"), dual("Tema, color, texto, sonido y ranuras", "Theme, colour, text, sound and slots"))}${acc("crm", "trofeo", dual("Créditos", "Credits"), dual("Quién hizo el juego", "Who made the game"))}${acc("pol", "escudo", dual("Privacidad", "Privacy"), dual("Qué pasa con tus datos", "What happens to your data"))}</div></div>
 <div class="c ini-part"><div class="k"><h3 style="margin:0">${ic("guardar")} ${dual("Partidas guardadas", "Saved games")}</h3></div><div id="mlist" class="m">${dual("Buscando…", "Searching…")}</div></div>
 <div class="hoy-fecha">${hoyH()}</div><div class="ini-banda">${dual("Tu estudio, tu época, tu legado", "Your studio, your era, your legacy")}</div><footer class="ini-pie"><span>INDUSTRY ART · ${dual("Creado por", "Created by")} ${CREADOR}</span><span class="bts"><button class="lnk" data-a="pol">${dual("Política de privacidad", "Privacy policy")}</button><button class="lnk" data-a="crm">${dual("Créditos", "Credits")}</button></span></footer></div>`;
   listar().then((M) => {
@@ -62213,6 +62349,229 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Lo que pagaría un comprador por tu estudio: seis veces la utilidad del último año, la caja sin deudas, la mitad de los ingresos, la mitad de lo invertido en construcciones y tus filiales. Los rivales se valoran igual.", "What a buyer would pay for your studio: six times last year's profit, cash minus debt, half of revenue, half of what you invested in buildings and your subsidiaries. Rivals are valued the same way.", "Ce qu'un acheteur paierait pour ton studio : six fois le bénéfice de l'an dernier, la trésorerie sans les dettes, la moitié du chiffre d'affaires, la moitié de ce que tu as investi en constructions et tes filiales. Les rivaux sont évalués de la même façon.", "O que um comprador pagaria pelo seu estúdio: seis vezes o lucro do último ano, o caixa sem dívidas, metade da receita, metade do investido em construções e suas filiais. Os rivais são avaliados do mesmo jeito."],
   ["puesto", "rank", "rang", "posição"],
   ["Puesto", "Rank", "Rang", "Posição"],
+  ["Música", "Music", "Musique", "Música"],
+  ["Temas, Historia y símbolos", "Themes, History and symbols", "Thèmes, Histoire et symboles", "Temas, História e símbolos"],
+  ["Tu edificio", "Your building", "Ton bâtiment", "Seu prédio"],
+  ["Obras y remodelaciones", "Works and renovations", "Chantiers et rénovations", "Obras e reformas"],
+  ["Patentes", "Patents", "Brevets", "Patentes"],
+  ["Valor de la compañía", "Company value", "Valeur de l'entreprise", "Valor da empresa"],
+  ["Bolsa de valores", "Stock market", "Bourse", "Bolsa de valores"],
+  ["Ofertas de compra", "Buyout offers", "Offres de rachat", "Ofertas de compra"],
+  ["Seis siglos", "Six centuries", "Six siècles", "Seis séculos"],
+  ["Reto de la semana", "Weekly challenge", "Défi de la semaine", "Desafio da semana"],
+  ["Modo LAN", "LAN mode", "Mode LAN", "Modo LAN"],
+  ["Rasgos", "Traits", "Traits", "Traços"],
+  ["Tarjetas para compartir", "Cards to share", "Cartes à partager", "Cartões para compartilhar"],
+  ["En Ajustes → Música. «Según la época» elige sola: suena lo que estaba de moda en el año de tu partida (o volvió a estarlo), villancicos en diciembre y órgano en Halloween si tienes la decoración de temporada, y la banda sonora de tu tema especial (Píxel, Synthwave, Espacial…). Cambia de pieza cada minuto o dos y «Siguiente» salta a otra. Toca cualquier título para dejarlo fijo y vuelve a «Según la época» cuando quieras. Las canciones de tu sello que pasan de 70 de público o ganan un premio entran a la «Radio del estudio» durante tres años. Cada pieza trae un dato curioso.", "In Settings → Music. «By era» chooses on its own: you hear what was in vogue in your game's year (or came back), carols in December and organ at Halloween if seasonal decoration is on, and the soundtrack of your special theme (Pixel, Synthwave, Space…). It changes piece every minute or two and «Next» skips to another. Tap any title to keep it fixed and go back to «By era» whenever you like. Songs from your label with 70+ audience or an award join the «Studio radio» for three years. Each piece comes with a fun fact.", "Dans Réglages → Musique. «Selon l'époque» choisit tout seul : on entend ce qui était à la mode l'année de ta partie (ou qui l'est redevenu), des chants de Noël en décembre et de l'orgue à Halloween si la décoration de saison est active, et la bande originale de ton thème spécial (Pixel, Synthwave, Spatial…). Le morceau change toutes les une ou deux minutes et «Suivant» passe à un autre. Touche un titre pour le garder et reviens à «Selon l'époque» quand tu veux. Les chansons de ton label avec 70 de public ou plus, ou un prix, entrent dans la «Radio du studio» pendant trois ans. Chaque morceau a une anecdote.", "Em Ajustes → Música. «Conforme a época» escolhe sozinha: toca o que estava na moda no ano da sua partida (ou voltou a estar), canções de Natal em dezembro e órgão no Halloween se a decoração de temporada estiver ativa, e a trilha do seu tema especial (Pixel, Synthwave, Espacial…). Muda de peça a cada um ou dois minutos e «Próximo» pula para outra. Toque em qualquer título para deixá-lo fixo e volte a «Conforme a época» quando quiser. As músicas do seu selo com 70 ou mais de público ou um prêmio entram na «Rádio do estúdio» por três anos. Cada peça traz uma curiosidade."],
+  ["Elige un tema en Ajustes → Tema. «Época» cambia el diseño con los años. «Historia» va más allá: alterna sola las estéticas según el año, las fiestas (Halloween, Navidad) y la época en que cada estilo estuvo de moda o volvió a estarlo; cuando cambia verás «Nueva edición». Cada estética trae su símbolo (✦ ❦ ⚜ ☾ ❄ ⚙ ☀…) en las portadas de sección y en estos botones. En el editor del logo, la barra «Forma del logo» suma 12 símbolos al final: corazón, flor de lis, flor, luna, sol, copo de nieve, destello, engranaje, átomo, calavera, trébol y llama, cada uno con relleno, contorno, anillo y punto.", "Pick a theme in Settings → Theme. «Era» changes the design with the years. «History» goes further: it alternates the aesthetics on its own by year, holidays (Halloween, Christmas) and the time when each style was in vogue or came back; when it changes you'll see «New edition». Each aesthetic has its symbol (✦ ❦ ⚜ ☾ ❄ ⚙ ☀…) on the section covers and on these buttons. In the logo editor, the «Logo shape» slider adds 12 symbols at the end: heart, fleur-de-lis, flower, moon, sun, snowflake, sparkle, gear, atom, skull, clover and flame, each filled, outlined, ringed and dotted.", "Choisis un thème dans Réglages → Thème. «Époque» change le design avec les années. «Histoire» va plus loin : il alterne tout seul les esthétiques selon l'année, les fêtes (Halloween, Noël) et l'époque où chaque style était à la mode ou l'est redevenu ; quand il change, tu verras «Nouvelle édition». Chaque esthétique a son symbole (✦ ❦ ⚜ ☾ ❄ ⚙ ☀…) sur les couvertures de section et sur ces boutons. Dans l'éditeur de logo, la barre «Forme du logo» ajoute 12 symboles à la fin : cœur, fleur de lys, fleur, lune, soleil, flocon, étincelle, engrenage, atome, crâne, trèfle et flamme, chacun plein, en contour, avec anneau et avec point.", "Escolha um tema em Ajustes → Tema. «Época» muda o design com os anos. «História» vai além: alterna sozinha as estéticas conforme o ano, as festas (Halloween, Natal) e a época em que cada estilo esteve na moda ou voltou a estar; quando muda, você verá «Nova edição». Cada estética tem seu símbolo (✦ ❦ ⚜ ☾ ❄ ⚙ ☀…) nas capas de seção e nestes botões. No editor de logo, a barra «Forma do logo» soma 12 símbolos no final: coração, flor-de-lis, flor, lua, sol, floco de neve, brilho, engrenagem, átomo, caveira, trevo e chama, cada um preenchido, em contorno, com anel e com ponto."],
+  ["El edificio crece con tu estudio. Mientras construyes aparecen una grúa y andamios, y al terminar la obra se inaugura. La bandera es la de tu país sede tal como era en ese año: por ejemplo, la del Reino Unido no tuvo la cruz de San Patricio hasta 1801, y Colombia, México o Perú usaban la cruz de Borgoña española antes de su independencia. Toca un piso para ir a esa parte del estudio.", "The building grows with your studio. While you build, a crane and scaffolding appear, and when the works finish they are opened. The flag is your headquarters country's flag as it was that year: for example, the UK's had no St Patrick's cross until 1801, and Colombia, Mexico or Peru used the Spanish cross of Burgundy before independence. Tap a floor to go to that part of the studio.", "Le bâtiment grandit avec ton studio. Pendant les travaux apparaissent une grue et des échafaudages, et à la fin le chantier est inauguré. Le drapeau est celui de ton pays tel qu'il était cette année-là : par exemple, celui du Royaume-Uni n'a eu la croix de saint Patrick qu'en 1801, et la Colombie, le Mexique ou le Pérou utilisaient la croix de Bourgogne espagnole avant leur indépendance. Touche un étage pour aller à cette partie du studio.", "O prédio cresce com seu estúdio. Durante as obras aparecem um guindaste e andaimes, e no fim a obra é inaugurada. A bandeira é a do seu país sede como era naquele ano: por exemplo, a do Reino Unido só teve a cruz de São Patrício em 1801, e Colômbia, México ou Peru usavam a cruz de Borgonha espanhola antes da independência. Toque em um andar para ir a essa parte do estúdio."],
+  ["Al construir o subir de nivel en Negocio → Construcciones, el efecto empieza enseguida y se abre una obra de 10 a 22 semanas. Puede haber lluvias o huelgas (más semanas), sobrecostos o adelantos, y hasta un hallazgo arqueológico que te da prensa. Al terminar la inauguras y ganas fans y un poco de prestigio. Las construcciones con 40 años o más piden remodelación: mientras no lo hagas, cada año pagas en mantenimiento un 2 % de lo que valen. Remodelar cuesta el 30 % de su último nivel, abre una obra corta y las deja como nuevas.", "When you build or level up in Business → Buildings, the effect starts right away and a 10 to 22 week construction site opens. There may be rain or strikes (more weeks), cost overruns or early finishes, and even an archaeological find that gets you press. When it ends you open it and win fans and a bit of prestige. Buildings 40 or more years old need renovation: until you do it, every year you pay 2 % of their value in upkeep. Renovating costs 30 % of the last level, opens a short works period and leaves them like new.", "Quand tu construis ou montes de niveau dans Affaires → Constructions, l'effet commence tout de suite et un chantier de 10 à 22 semaines s'ouvre. Il peut y avoir de la pluie ou des grèves (plus de semaines), des surcoûts ou de l'avance, et même une découverte archéologique qui t'apporte de la presse. À la fin tu l'inaugures et gagnes des fans et un peu de prestige. Les constructions de 40 ans ou plus demandent une rénovation : tant que tu ne la fais pas, tu paies chaque année 2 % de leur valeur en entretien. Rénover coûte 30 % du dernier niveau, ouvre un court chantier et les laisse comme neuves.", "Ao construir ou subir de nível em Negócio → Construções, o efeito começa na hora e abre-se uma obra de 10 a 22 semanas. Pode haver chuvas ou greves (mais semanas), custos extras ou adiantamentos, e até um achado arqueológico que lhe dá imprensa. No fim você inaugura e ganha fãs e um pouco de prestígio. As construções com 40 anos ou mais pedem reforma: enquanto não fizer, todo ano você paga 2 % do valor delas em manutenção. Reformar custa 30 % do último nível, abre uma obra curta e as deixa como novas."],
+  ["Investiga un invento en Negocio → Inventos antes de su fecha real. Si lo terminas a tiempo es tu patente: el año en que llega para todos, los rivales que trabajan en ese medio te pagan una licencia y después regalías cada año, hasta que la patente vence a los 20 años, el plazo real de una patente hoy. Puedes venderla al rival con más dinero: recibes de una vez el 60 % de lo que te quedaría por cobrar.", "Research an invention in Business → Inventions before its real date. If you finish in time it's your patent: the year it reaches everyone, rivals working in that medium pay you a licence and then royalties every year, until the patent expires after 20 years, the real term of a patent today. You can sell it to the richest rival: you get 60 % of what you'd still collect, all at once.", "Recherche une invention dans Affaires → Inventions avant sa date réelle. Si tu finis à temps, c'est ton brevet : l'année où elle arrive pour tous, les rivaux qui travaillent dans ce média te paient une licence puis des redevances chaque année, jusqu'à l'expiration du brevet au bout de 20 ans, la durée réelle d'un brevet aujourd'hui. Tu peux le vendre au rival le plus riche : tu touches d'un coup 60 % de ce qu'il te resterait à encaisser.", "Pesquise uma invenção em Negócio → Invenções antes da data real. Se terminar a tempo, é sua patente: no ano em que chega para todos, os rivais que trabalham nesse meio pagam uma licença e depois royalties todo ano, até a patente vencer aos 20 anos, o prazo real de uma patente hoje. Você pode vendê-la ao rival mais rico: recebe de uma vez 60 % do que ainda teria a receber."],
+  ["Es lo que pagaría un comprador por tu estudio, calculado igual que el de los rivales: seis veces la utilidad del último año, más la caja sin deudas, la mitad de los ingresos, la mitad de lo invertido en construcciones y el valor de tus filiales. Se guarda cada año y te da tu puesto. Cuenta para el reto de la semana, los duelos, la bolsa y las ofertas de compra.", "It's what a buyer would pay for your studio, calculated the same way as for rivals: six times last year's profit, plus cash minus debt, half of revenue, half of what you invested in buildings and the value of your subsidiaries. It's recorded every year and gives you your rank. It counts for the weekly challenge, duels, the stock market and buyout offers.", "C'est ce qu'un acheteur paierait pour ton studio, calculé comme pour les rivaux : six fois le bénéfice de l'an dernier, plus la trésorerie sans les dettes, la moitié du chiffre d'affaires, la moitié de ce que tu as investi en constructions et la valeur de tes filiales. Elle est enregistrée chaque année et te donne ton rang. Elle compte pour le défi de la semaine, les duels, la bourse et les offres de rachat.", "É o que um comprador pagaria pelo seu estúdio, calculado do mesmo jeito que o dos rivais: seis vezes o lucro do último ano, mais o caixa sem dívidas, metade da receita, metade do investido em construções e o valor das suas filiais. Fica registrado todo ano e dá a sua posição. Conta para o desafio da semana, os duelos, a bolsa e as ofertas de compra."],
+  ["Con 5 años de historia y estando en la mitad de arriba por valor, en Negocio → Finanzas puedes vender el 10, 20 o 30 % del estudio, sin pasar del 49 % junto con tu socio. Recibes ese porcentaje del valor menos un 6 % para los bancos. Cada año repartes dividendos: 0, 25 o 50 % de la utilidad por la parte que vendiste. Si el índice de tus acciones cae por debajo de 60, o hay utilidad y no repartes nada, pierdes algo de prestigio. Puedes recomprarlo todo pagando el 110 % de su valor. Dato: las primeras acciones que se negociaron en una bolsa fueron las de la Compañía Holandesa de las Indias Orientales, en Ámsterdam, en 1602.", "With 5 years of history and being in the top half by value, in Business → Finance you can sell 10, 20 or 30 % of the studio, without going over 49 % together with your partner. You receive that share of the value minus 6 % for the banks. Every year you pay dividends: 0, 25 or 50 % of profit for the part you sold. If your share index falls below 60, or there is profit and you pay nothing, you lose some prestige. You can buy it all back for 110 % of its value. Fact: the first shares traded on an exchange were those of the Dutch East India Company, in Amsterdam, in 1602.", "Avec 5 ans d'histoire et en étant dans la moitié supérieure par valeur, dans Affaires → Finances tu peux vendre 10, 20 ou 30 % du studio, sans dépasser 49 % avec ton associé. Tu reçois ce pourcentage de la valeur moins 6 % pour les banques. Chaque année tu verses des dividendes : 0, 25 ou 50 % du bénéfice pour la part vendue. Si l'indice de tes actions passe sous 60, ou s'il y a du bénéfice et que tu ne verses rien, tu perds un peu de prestige. Tu peux tout racheter pour 110 % de sa valeur. Anecdote : les premières actions négociées en bourse furent celles de la Compagnie néerlandaise des Indes orientales, à Amsterdam, en 1602.", "Com 5 anos de história e estando na metade de cima por valor, em Negócio → Finanças você pode vender 10, 20 ou 30 % do estúdio, sem passar de 49 % junto com seu sócio. Recebe essa porcentagem do valor menos 6 % para os bancos. Todo ano você distribui dividendos: 0, 25 ou 50 % do lucro pela parte vendida. Se o índice das suas ações cair abaixo de 60, ou houver lucro e você não distribuir nada, perde um pouco de prestígio. Pode recomprar tudo pagando 110 % do valor. Curiosidade: as primeiras ações negociadas em bolsa foram as da Companhia Holandesa das Índias Orientais, em Amsterdã, em 1602."],
+  ["Si estás entre los 3 estudios más valiosos, un rival rico o un conglomerado puede ofrecer comprarte, como mucho una vez cada 6 años. Ofrecen entre 1,25 y 1,6 veces tu valor y tienes 8 semanas para decidir en Negocio → Finanzas. Si vendes, recibes tu parte (descontando la de tu socio y la de la bolsa) y la partida termina con tu legado. Si rechazas, tu equipo lo celebra y ganas un poco de prestigio.", "If you are among the 3 most valuable studios, a rich rival or a conglomerate may offer to buy you, at most once every 6 years. They offer between 1.25 and 1.6 times your value and you have 8 weeks to decide in Business → Finance. If you sell, you get your share (minus your partner's and the stock market's) and the game ends with your legacy. If you decline, your team celebrates and you gain a bit of prestige.", "Si tu es parmi les 3 studios les plus valorisés, un rival riche ou un conglomérat peut proposer de te racheter, au plus une fois tous les 6 ans. Ils offrent entre 1,25 et 1,6 fois ta valeur et tu as 8 semaines pour décider dans Affaires → Finances. Si tu vends, tu reçois ta part (moins celle de ton associé et de la bourse) et la partie se termine avec ton héritage. Si tu refuses, ton équipe fête ça et tu gagnes un peu de prestige.", "Se você estiver entre os 3 estúdios mais valiosos, um rival rico ou um conglomerado pode oferecer comprá-lo, no máximo uma vez a cada 6 anos. Oferecem entre 1,25 e 1,6 vez o seu valor e você tem 8 semanas para decidir em Negócio → Finanças. Se vender, recebe sua parte (descontando a do sócio e a da bolsa) e a partida termina com seu legado. Se recusar, sua equipe comemora e você ganha um pouco de prestígio."],
+  ["Capítulos de la historia del espectáculo, de 1737 a 2150. Cada uno empieza en un año y un país reales, con una meta y un plazo; la meta y tu avance se ven arriba en Estudio. Al cumplirla se abre el capítulo siguiente; si se acaba el plazo puedes reintentarlo. En ambos casos sigues jugando libre en ese mundo. «Jugar» empieza enseguida y «Personalizar» te deja elegir nombre, logo y avatar. Antes de empezar, tu partida en curso se guarda en una ranura libre.", "Chapters of entertainment history, from 1737 to 2150. Each one starts in a real year and country, with a goal and a deadline; the goal and your progress show at the top of Studio. Meeting it unlocks the next chapter; if time runs out you can retry. Either way you keep playing freely in that world. «Play» starts right away and «Customize» lets you pick name, logo and avatar. Before starting, your current game is saved in a free slot.", "Des chapitres de l'histoire du spectacle, de 1737 à 2150. Chacun commence dans une année et un pays réels, avec un objectif et un délai ; l'objectif et ta progression s'affichent en haut de Studio. L'atteindre ouvre le chapitre suivant ; si le temps est écoulé, tu peux réessayer. Dans les deux cas tu continues à jouer librement dans ce monde. «Jouer» commence tout de suite et «Personnaliser» te laisse choisir nom, logo et avatar. Avant de commencer, ta partie en cours est sauvegardée dans un emplacement libre.", "Capítulos da história do espetáculo, de 1737 a 2150. Cada um começa em um ano e um país reais, com uma meta e um prazo; a meta e seu progresso aparecem no topo de Estúdio. Ao cumpri-la abre-se o capítulo seguinte; se o prazo acabar você pode tentar de novo. Em ambos os casos continua jogando livre nesse mundo. «Jogar» começa na hora e «Personalizar» deixa escolher nome, logo e avatar. Antes de começar, sua partida atual é salva em um espaço livre."],
+  ["Cada semana, de lunes a domingo, hay un mundo nuevo igual para todos: mismo año, misma sede y misma semilla. Juegas 10 años y al final se suman tus puntos: tu valor en millones de dólares de hoy, 25 por cada premio, 10 por cada hito y un poco por tus fans. Tus mejores intentos se guardan en este dispositivo. Con el modo LAN, tus amigos ven tus puntos en el marcador.", "Every week, Monday to Sunday, there is a new world that is the same for everyone: same year, same headquarters and same seed. You play 10 years and at the end your points add up: your value in today's millions of dollars, 25 per award, 10 per milestone and a little for your fans. Your best attempts are saved on this device. With LAN mode, your friends see your points on the scoreboard.", "Chaque semaine, du lundi au dimanche, il y a un nouveau monde identique pour tous : même année, même siège et même graine. Tu joues 10 ans et à la fin tes points s'additionnent : ta valeur en millions de dollars d'aujourd'hui, 25 par prix, 10 par étape et un peu pour tes fans. Tes meilleures tentatives sont gardées sur cet appareil. Avec le mode LAN, tes amis voient tes points sur le tableau.", "Toda semana, de segunda a domingo, há um mundo novo igual para todos: mesmo ano, mesma sede e mesma semente. Você joga 10 anos e no fim seus pontos se somam: seu valor em milhões de dólares de hoje, 25 por prêmio, 10 por marco e um pouco pelos seus fãs. Suas melhores tentativas ficam salvas neste aparelho. Com o modo LAN, seus amigos veem seus pontos no placar."],
+  ["Para jugar con amigos en la misma red Wi-Fi, sin internet ni servidores. En la app de Android: uno toca «Crear sala» y ve un código de 6 dígitos; los demás tocan «Buscar salas», eligen la sala y escriben el código. Los mensajes van cifrados con ese código. En el navegador, o si la búsqueda no funciona en tu red, usen «Conectar con un código»: uno invita, el otro pega el código y devuelve el suyo. Ya conectados verán el marcador (año, valor, fans, premios y últimos estrenos), podrán mandar reacciones, llevar el estudio de un amigo a su mundo como rival y proponer un duelo: todos empiezan una partida nueva en el mismo mundo y gana quien tenga más puntos al final. Sin red, exporta tu estudio como archivo .iaestudio y tu amigo lo importa.", "To play with friends on the same Wi-Fi, without internet or servers. In the Android app: one taps «Create room» and sees a 6-digit code; the others tap «Find rooms», pick the room and type the code. Messages are encrypted with that code. In the browser, or if searching doesn't work on your network, use «Connect with a code»: one invites, the other pastes the code and sends theirs back. Once connected you'll see the scoreboard (year, value, fans, awards and latest releases), send reactions, bring a friend's studio into your world as a rival and propose a duel: everyone starts a new game in the same world and whoever has more points at the end wins. Without a network, export your studio as an .iaestudio file and your friend imports it.", "Pour jouer avec des amis sur le même Wi-Fi, sans internet ni serveurs. Dans l'appli Android : l'un touche «Créer une salle» et voit un code à 6 chiffres ; les autres touchent «Chercher des salles», choisissent la salle et tapent le code. Les messages sont chiffrés avec ce code. Dans le navigateur, ou si la recherche ne marche pas sur ton réseau, utilisez «Se connecter avec un code» : l'un invite, l'autre colle le code et renvoie le sien. Une fois connectés, vous verrez le tableau (année, valeur, fans, prix et dernières sorties), pourrez envoyer des réactions, amener le studio d'un ami dans votre monde comme rival et proposer un duel : tout le monde commence une nouvelle partie dans le même monde et celui qui a le plus de points à la fin gagne. Sans réseau, exporte ton studio en fichier .iaestudio et ton ami l'importe.", "Para jogar com amigos na mesma rede Wi-Fi, sem internet nem servidores. No app de Android: um toca em «Criar sala» e vê um código de 6 dígitos; os outros tocam em «Buscar salas», escolhem a sala e digitam o código. As mensagens vão criptografadas com esse código. No navegador, ou se a busca não funcionar na sua rede, usem «Conectar com um código»: um convida, o outro cola o código e devolve o seu. Já conectados, verão o placar (ano, valor, fãs, prêmios e últimos lançamentos), poderão mandar reações, levar o estúdio de um amigo ao seu mundo como rival e propor um duelo: todos começam uma partida nova no mesmo mundo e vence quem tiver mais pontos no fim. Sem rede, exporte seu estúdio como arquivo .iaestudio e seu amigo o importa."],
+  ["Cada talento tiene cinco rasgos que salen de sus capacidades: Magnetismo (atrae público cuando protagoniza), Rango (se adapta a medios distintos), Estilo (la crítica reconoce su firma como director), Conceptos (ideas claras que gustan a todos, sobre todo en el guion) y Complejidad (más crítica, menos público masivo). Al terminar la producción, los rasgos del protagonista, el director y el guionista suben o bajan la crítica y el público hasta 4 puntos. Lo ves en la ficha de la obra y en la del talento.", "Every talent has five traits that come from their abilities: Magnetism (draws the audience when they star), Range (adapts to different media), Style (critics recognise their signature as a director), Concepts (clear ideas everyone likes, above all in the script) and Complexity (more critics, less mass audience). When production ends, the traits of the lead, the director and the writer raise or lower critics and audience by up to 4 points. You see it on the work's card and on the talent's.", "Chaque talent a cinq traits issus de ses capacités : Magnétisme (attire le public quand il tient le rôle principal), Polyvalence (s'adapte à différents médias), Style (la critique reconnaît sa signature de réalisateur), Concepts (des idées claires qui plaisent à tous, surtout dans le scénario) et Complexité (plus de critique, moins de grand public). À la fin de la production, les traits du rôle principal, du réalisateur et du scénariste font monter ou baisser la critique et le public jusqu'à 4 points. Tu le vois sur la fiche de l'œuvre et sur celle du talent.", "Cada talento tem cinco traços que vêm das suas capacidades: Magnetismo (atrai público quando protagoniza), Versatilidade (se adapta a meios diferentes), Estilo (a crítica reconhece sua assinatura como diretor), Conceitos (ideias claras que agradam a todos, sobretudo no roteiro) e Complexidade (mais crítica, menos público de massa). Ao terminar a produção, os traços do protagonista, do diretor e do roteirista sobem ou baixam a crítica e o público em até 4 pontos. Você vê isso na ficha da obra e na do talento."],
+  ["En la ficha de una obra estrenada abre la «Ficha pop» y toca «Formato historia (9:16)»: crea una imagen vertical con el póster, la crítica, el público, la taquilla y los premios, con los colores y el símbolo de tu tema. Después guárdala o compártela como cualquier imagen.", "On a released work's card open the «Pop card» and tap «Story format (9:16)»: it creates a vertical image with the poster, critics, audience, box office and awards, in your theme's colours and symbol. Then save or share it like any image.", "Sur la fiche d'une œuvre sortie, ouvre la «Fiche pop» et touche «Format story (9:16)» : cela crée une image verticale avec l'affiche, la critique, le public, le box-office et les prix, aux couleurs et au symbole de ton thème. Ensuite, enregistre-la ou partage-la comme n'importe quelle image.", "Na ficha de uma obra lançada, abra a «Ficha pop» e toque em «Formato stories (9:16)»: cria uma imagem vertical com o pôster, a crítica, o público, a bilheteria e os prêmios, com as cores e o símbolo do seu tema. Depois salve ou compartilhe como qualquer imagem."],
+  ["Todas las ranuras están ocupadas: tu partida anterior sigue en los autoguardados", "All slots are full: your previous game stays in the autosaves", "Toutes les cases sont pleines : ta partie précédente reste dans les sauvegardes automatiques", "Todos os espaços estão ocupados: sua partida anterior continua nos salvamentos automáticos"],
+  ["La época, el país y la semilla del mundo ya están fijos. Elige tu nombre, tu logo y tu avatar, y pulsa Empezar.", "The era, the country and the world seed are already set. Choose your name, logo and avatar, then press Start.", "L'époque, le pays et la graine du monde sont déjà fixés. Choisis ton nom, ton logo et ton avatar, puis touche Commencer.", "A época, o país e a semente do mundo já estão definidos. Escolha seu nome, seu logo e seu avatar, e toque em Começar."],
+  ["Seis siglos: capítulos de la historia", "Six centuries: chapters of history", "Six siècles : chapitres de l'histoire", "Seis séculos: capítulos da história"],
+  ["Capítulos de la historia del espectáculo, cada uno con un reto. Al superar uno se abre el siguiente; después puedes seguir jugando libre.", "Chapters of entertainment history, each with a challenge. Beating one unlocks the next; afterwards you can keep playing freely.", "Des chapitres de l'histoire du spectacle, chacun avec un défi. En réussir un ouvre le suivant ; ensuite tu peux continuer à jouer librement.", "Capítulos da história do espetáculo, cada um com um desafio. Ao superar um, abre-se o seguinte; depois você pode continuar jogando livre."],
+  ["superado", "completed", "réussi", "concluído"],
+  ["Meta", "Goal", "Objectif", "Meta"],
+  ["Jugar", "Play", "Jouer", "Jogar"],
+  ["Personalizar", "Customize", "Personnaliser", "Personalizar"],
+  ["Supera el capítulo anterior para abrirlo.", "Beat the previous chapter to unlock it.", "Réussis le chapitre précédent pour l'ouvrir.", "Supere o capítulo anterior para abri-lo."],
+  ["Seis siglos", "Six centuries", "Six siècles", "Seis séculos"],
+  ["¡Capítulo superado!", "Chapter completed!", "Chapitre réussi !", "Capítulo concluído!"],
+  ["Se acabó el tiempo", "Time is up", "Le temps est écoulé", "O tempo acabou"],
+  ["No llegaste a la meta a tiempo. Puedes intentarlo de nuevo o seguir jugando libre en este mundo.", "You didn't reach the goal in time. You can try again or keep playing freely in this world.", "Tu n'as pas atteint l'objectif à temps. Tu peux réessayer ou continuer à jouer librement dans ce monde.", "Você não chegou à meta a tempo. Pode tentar de novo ou continuar jogando livre neste mundo."],
+  ["Siguiente capítulo", "Next chapter", "Chapitre suivant", "Próximo capítulo"],
+  ["Reintentar", "Retry", "Réessayer", "Tentar de novo"],
+  ["Seguir jugando", "Keep playing", "Continuer à jouer", "Continuar jogando"],
+  ["Capítulo", "Chapter", "Chapitre", "Capítulo"],
+  ["Superado. Sigues jugando libre.", "Completed. You keep playing freely.", "Réussi. Tu continues à jouer librement.", "Concluído. Você continua jogando livre."],
+  ["Se acabó el tiempo; sigues jugando libre.", "Time ran out; you keep playing freely.", "Le temps est écoulé ; tu continues à jouer librement.", "O tempo acabou; você continua jogando livre."],
+  ["Reto de la semana", "Weekly challenge", "Défi de la semaine", "Desafio da semana"],
+  ["Todos los que juegan esta semana empiezan en el mismo mundo. Tienes 10 años de juego para sumar puntos; el reto cambia cada lunes.", "Everyone playing this week starts in the same world. You have 10 game years to score points; the challenge changes every Monday.", "Tous ceux qui jouent cette semaine commencent dans le même monde. Tu as 10 ans de jeu pour marquer des points ; le défi change chaque lundi.", "Todos que jogam nesta semana começam no mesmo mundo. Você tem 10 anos de jogo para somar pontos; o desafio muda toda segunda-feira."],
+  ["Semana", "Week", "Semaine", "Semana"],
+  ["Año de inicio", "Start year", "Année de départ", "Ano inicial"],
+  ["Sede", "Headquarters", "Siège", "Sede"],
+  ["valor en millones de hoy + 25 por premio + 10 por hito + fans", "value in today's millions + 25 per award + 10 per milestone + fans", "valeur en millions d'aujourd'hui + 25 par prix + 10 par étape + fans", "valor em milhões de hoje + 25 por prêmio + 10 por marco + fãs"],
+  ["Jugar el reto", "Play the challenge", "Jouer le défi", "Jogar o desafio"],
+  ["Tus mejores intentos", "Your best attempts", "Tes meilleures tentatives", "Suas melhores tentativas"],
+  ["Todavía no hay intentos esta semana.", "No attempts this week yet.", "Pas encore de tentative cette semaine.", "Ainda não há tentativas nesta semana."],
+  ["Reto terminado", "Challenge finished", "Défi terminé", "Desafio concluído"],
+  ["Si juegas en red, tus amigos ven tu puntaje en el marcador LAN. Puedes seguir jugando: los puntos ya quedaron guardados.", "If you play on a network, your friends see your score on the LAN scoreboard. You can keep playing: the points are already saved.", "Si tu joues en réseau, tes amis voient ton score sur le tableau LAN. Tu peux continuer à jouer : les points sont déjà enregistrés.", "Se você joga em rede, seus amigos veem sua pontuação no placar LAN. Pode continuar jogando: os pontos já ficaram salvos."],
+  ["Jugador sin partida", "Player without a game", "Joueur sans partie", "Jogador sem partida"],
+  ["Sala abierta. Comparte el código con quien esté en tu misma red Wi-Fi.", "Room open. Share the code with anyone on your same Wi-Fi.", "Salle ouverte. Partage le code avec ceux qui sont sur ton même Wi-Fi.", "Sala aberta. Compartilhe o código com quem estiver na sua mesma rede Wi-Fi."],
+  ["Se cerró la conexión con la sala.", "The connection to the room closed.", "La connexion avec la salle s'est fermée.", "A conexão com a sala foi encerrada."],
+  ["Alguien intentó entrar con un código incorrecto", "Someone tried to join with a wrong code", "Quelqu'un a essayé d'entrer avec un code incorrect", "Alguém tentou entrar com um código incorreto"],
+  ["Código incorrecto. Pide el código de 6 dígitos a quien abrió la sala.", "Wrong code. Ask the room host for the 6-digit code.", "Code incorrect. Demande le code à 6 chiffres à celui qui a ouvert la salle.", "Código incorreto. Peça o código de 6 dígitos a quem abriu a sala."],
+  ["No se pudo completar la conexión", "The connection could not be completed", "La connexion n'a pas pu aboutir", "Não foi possível completar a conexão"],
+  ["Abriendo la sala…", "Opening the room…", "Ouverture de la salle…", "Abrindo a sala…"],
+  ["Buscando salas en tu red Wi-Fi…", "Looking for rooms on your Wi-Fi…", "Recherche de salles sur ton Wi-Fi…", "Procurando salas na sua rede Wi-Fi…"],
+  ["Escribe el código de 6 dígitos de la sala", "Type the room's 6-digit code", "Tape le code à 6 chiffres de la salle", "Digite o código de 6 dígitos da sala"],
+  ["Conectado.", "Connected.", "Connecté.", "Conectado."],
+  ["Envía este código a tu amigo y pega aquí el código que te devuelva.", "Send this code to your friend and paste here the code they send back.", "Envoie ce code à ton ami et colle ici le code qu'il te renvoie.", "Envie este código ao seu amigo e cole aqui o código que ele devolver."],
+  ["Ese código no es válido", "That code is not valid", "Ce code n'est pas valide", "Esse código não é válido"],
+  ["Conectando…", "Connecting…", "Connexion…", "Conectando…"],
+  ["Devuelve este código a quien te invitó.", "Send this code back to whoever invited you.", "Renvoie ce code à celui qui t'a invité.", "Devolva este código a quem convidou você."],
+  ["Archivo listo", "File ready", "Fichier prêt", "Arquivo pronto"],
+  ["Estudio importado", "Studio imported", "Studio importé", "Estúdio importado"],
+  ["Ese archivo no es un estudio de INDUSTRY ART", "That file is not an INDUSTRY ART studio", "Ce fichier n'est pas un studio d'INDUSTRY ART", "Esse arquivo não é um estúdio de INDUSTRY ART"],
+  ["Duelo LAN", "LAN duel", "Duel LAN", "Duelo LAN"],
+  ["Te retan a un duelo", "You're challenged to a duel", "On te défie en duel", "Desafiam você para um duelo"],
+  ["Todos empiezan en el mismo mundo, con los mismos rivales y sucesos. Gana quien tenga más puntos al final. Tu partida actual se guarda sola.", "Everyone starts in the same world, with the same rivals and events. Whoever has more points at the end wins. Your current game saves itself.", "Tout le monde commence dans le même monde, avec les mêmes rivaux et événements. Celui qui a le plus de points à la fin gagne. Ta partie actuelle se sauvegarde toute seule.", "Todos começam no mesmo mundo, com os mesmos rivais e acontecimentos. Vence quem tiver mais pontos no fim. Sua partida atual é salva sozinha."],
+  ["Aceptar el duelo", "Accept the duel", "Accepter le duel", "Aceitar o duelo"],
+  ["Ahora no", "Not now", "Pas maintenant", "Agora não"],
+  ["Fin del duelo", "Duel over", "Fin du duel", "Fim do duelo"],
+  ["¡Ganaste!", "You won!", "Tu as gagné !", "Você venceu!"],
+  ["Esta vez no", "Not this time", "Pas cette fois", "Desta vez não"],
+  ["Si alguien todavía no termina, su puntaje aparece cuando llegue al año final.", "If someone hasn't finished yet, their score appears when they reach the final year.", "Si quelqu'un n'a pas encore fini, son score apparaît quand il atteint l'année finale.", "Se alguém ainda não terminou, a pontuação aparece quando chegar ao ano final."],
+  ["Quitar de mi mundo", "Remove from my world", "Retirer de mon monde", "Tirar do meu mundo"],
+  ["Llevar a mi mundo", "Bring to my world", "Amener dans mon monde", "Levar ao meu mundo"],
+  ["En tu red", "On your network", "Sur ton réseau", "Na sua rede"],
+  ["Abrir", "Open", "Ouvrir", "Abrir"],
+  ["Esperando a los demás jugadores…", "Waiting for the other players…", "En attente des autres joueurs…", "Esperando os outros jogadores…"],
+  ["Modo LAN", "LAN mode", "Mode LAN", "Modo LAN"],
+  ["Juega con amigos conectados a la misma red Wi-Fi. No hay servidores ni internet: los teléfonos se hablan directamente y los mensajes van cifrados.", "Play with friends on the same Wi-Fi. There are no servers or internet: the phones talk directly and messages are encrypted.", "Joue avec des amis connectés au même Wi-Fi. Pas de serveurs ni d'internet : les téléphones se parlent directement et les messages sont chiffrés.", "Jogue com amigos conectados à mesma rede Wi-Fi. Não há servidores nem internet: os celulares conversam diretamente e as mensagens vão criptografadas."],
+  ["Código de la sala", "Room code", "Code de la salle", "Código da sala"],
+  ["Crear sala", "Create room", "Créer une salle", "Criar sala"],
+  ["Buscar salas", "Find rooms", "Chercher des salles", "Buscar salas"],
+  ["En la app de Android las salas se encuentran solas. Aquí puedes conectarte con un código.", "In the Android app rooms are found automatically. Here you can connect with a code.", "Dans l'appli Android, les salles se trouvent toutes seules. Ici tu peux te connecter avec un code.", "No app de Android as salas são encontradas sozinhas. Aqui você pode se conectar com um código."],
+  ["Conectar con un código", "Connect with a code", "Se connecter avec un code", "Conectar com um código"],
+  ["Uno toca «Invitar» y le envía el código al otro, que lo pega y toca «Unirme»; el otro devuelve su código. Sirve entre el navegador y la app.", "One taps «Invite» and sends the code to the other, who pastes it and taps «Join»; then they send their code back. Works between the browser and the app.", "L'un touche «Inviter» et envoie le code à l'autre, qui le colle et touche «Rejoindre» ; puis il renvoie son code. Ça marche entre le navigateur et l'appli.", "Um toca em «Convidar» e envia o código ao outro, que cola e toca em «Entrar»; depois ele devolve o seu código. Funciona entre o navegador e o app."],
+  ["Invitar", "Invite", "Inviter", "Convidar"],
+  ["Pega aquí el código", "Paste the code here", "Colle le code ici", "Cole o código aqui"],
+  ["Unirme / usar código", "Join / use code", "Rejoindre / utiliser le code", "Entrar / usar código"],
+  ["Salas en tu red", "Rooms on your network", "Salles sur ton réseau", "Salas na sua rede"],
+  ["Código de 6 dígitos", "6-digit code", "Code à 6 chiffres", "Código de 6 dígitos"],
+  ["Entrar", "Join", "Rejoindre", "Entrar"],
+  ["Buscando… Asegúrate de estar en la misma red Wi-Fi que quien abrió la sala.", "Searching… Make sure you're on the same Wi-Fi as the room host.", "Recherche… Vérifie que tu es sur le même Wi-Fi que celui qui a ouvert la salle.", "Procurando… Confira se você está na mesma rede Wi-Fi de quem abriu a sala."],
+  ["Tu código de invitación", "Your invitation code", "Ton code d'invitation", "Seu código de convite"],
+  ["Copiar", "Copy", "Copier", "Copiar"],
+  ["Pega aquí la respuesta", "Paste the answer here", "Colle la réponse ici", "Cole a resposta aqui"],
+  ["Conectar", "Connect", "Connecter", "Conectar"],
+  ["Tu código de respuesta", "Your answer code", "Ton code de réponse", "Seu código de resposta"],
+  ["Marcador", "Scoreboard", "Tableau des scores", "Placar"],
+  ["Reacciones", "Reactions", "Réactions", "Reações"],
+  ["Todos empiezan una partida nueva en el mismo mundo y compiten durante los años que elijas.", "Everyone starts a new game in the same world and competes for the years you choose.", "Tout le monde commence une nouvelle partie dans le même monde et s'affronte pendant les années que tu choisis.", "Todos começam uma partida nova no mesmo mundo e competem durante os anos que você escolher."],
+  ["Proponer duelo", "Propose duel", "Proposer un duel", "Propor duelo"],
+  ["Salir de la LAN", "Leave the LAN", "Quitter le LAN", "Sair da LAN"],
+  ["Cancelar", "Cancel", "Annuler", "Cancelar"],
+  ["Estudios de amigos", "Friends' studios", "Studios d'amis", "Estúdios de amigos"],
+  ["Sin red también: exporta tu estudio como archivo y tu amigo lo importa; aparece como rival en su mundo.", "Without a network too: export your studio as a file and your friend imports it; it shows up as a rival in their world.", "Sans réseau aussi : exporte ton studio en fichier et ton ami l'importe ; il apparaît comme rival dans son monde.", "Sem rede também: exporte seu estúdio como arquivo e seu amigo o importa; ele aparece como rival no mundo dele."],
+  ["Quitar", "Remove", "Retirer", "Tirar"],
+  ["Exportar mi estudio", "Export my studio", "Exporter mon studio", "Exportar meu estúdio"],
+  ["Importar estudio de un amigo", "Import a friend's studio", "Importer le studio d'un ami", "Importar estúdio de um amigo"],
+  ["Empieza o carga una partida para usar los estudios de amigos.", "Start or load a game to use friends' studios.", "Commence ou charge une partie pour utiliser les studios d'amis.", "Comece ou carregue uma partida para usar os estúdios de amigos."],
+  ["Este navegador no permite conexiones directas", "This browser doesn't allow direct connections", "Ce navigateur ne permet pas les connexions directes", "Este navegador não permite conexões diretas"],
+  ["No se pudo usar ese código", "That code could not be used", "Impossible d'utiliser ce code", "Não foi possível usar esse código"],
+  ["Código copiado", "Code copied", "Code copié", "Código copiado"],
+  ["Enviado", "Sent", "Envoyé", "Enviado"],
+  ["Oferta de compra", "Buyout offer", "Offre de rachat", "Oferta de compra"],
+  ["Vender el estudio", "Sell the studio", "Vendre le studio", "Vender o estúdio"],
+  ["Rechazar", "Decline", "Refuser", "Recusar"],
+  ["Quieren comprar tu estudio", "They want to buy your studio", "On veut racheter ton studio", "Querem comprar seu estúdio"],
+  ["Bolsa de valores", "Stock market", "Bourse", "Bolsa de valores"],
+  ["Vende una parte del estudio a inversionistas y recibe dinero hoy. A cambio, cada año repartes dividendos y el precio de tus acciones sigue el valor de la compañía.", "Sell part of the studio to investors and get money today. In exchange you pay dividends every year and your share price follows the company value.", "Vends une partie du studio à des investisseurs et reçois de l'argent aujourd'hui. En échange, tu verses des dividendes chaque année et le cours de tes actions suit la valeur de l'entreprise.", "Venda uma parte do estúdio a investidores e receba dinheiro hoje. Em troca, todo ano você distribui dividendos e o preço das suas ações acompanha o valor da empresa."],
+  ["Los bancos que colocan las acciones se quedan con un 6 %.", "The banks that place the shares keep 6 %.", "Les banques qui placent les actions gardent 6 %.", "Os bancos que colocam as ações ficam com 6 %."],
+  ["Para salir a bolsa necesitas 5 años de historia y estar en la mitad de arriba por valor de la compañía.", "To go public you need 5 years of history and to be in the top half by company value.", "Pour entrer en bourse il te faut 5 ans d'histoire et être dans la moitié supérieure par valeur de l'entreprise.", "Para abrir o capital você precisa de 5 anos de história e estar na metade de cima por valor da empresa."],
+  ["Tu socio ya tiene casi la mitad del estudio.", "Your partner already owns almost half of the studio.", "Ton associé possède déjà presque la moitié du studio.", "Seu sócio já tem quase metade do estúdio."],
+  ["En bolsa", "Listed", "En bourse", "Na bolsa"],
+  ["Índice de tus acciones", "Your share index", "Indice de tes actions", "Índice das suas ações"],
+  ["Tu parte del estudio", "Your share of the studio", "Ta part du studio", "Sua parte do estúdio"],
+  ["Último dividendo", "Last dividend", "Dernier dividende", "Último dividendo"],
+  ["Dividendos: parte de la utilidad que repartes", "Dividends: share of profit you pay out", "Dividendes : part du bénéfice que tu verses", "Dividendos: parte do lucro que você distribui"],
+  ["Recomprar las acciones", "Buy back the shares", "Racheter les actions", "Recomprar as ações"],
+  ["Rasgos", "Traits", "Traits", "Traços"],
+  ["Rasgos del equipo", "Team traits", "Traits de l'équipe", "Traços da equipe"],
+  ["Estreno", "Premiere", "Sortie", "Estreia"],
+  ["Crítica", "Critics", "Critique", "Crítica"],
+  ["Público", "Audience", "Public", "Público"],
+  ["Taquilla", "Box office", "Box-office", "Bilheteria"],
+  ["premio", "award", "prix", "prêmio"],
+  ["premios", "awards", "prix", "prêmios"],
+  ["Formato historia (9:16)", "Story format (9:16)", "Format story (9:16)", "Formato stories (9:16)"],
+  ["Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales. INDUSTRY ART no está afiliado a ellos ni cuenta con su respaldo. La música incluida son arreglos propios de obras de dominio público y composiciones originales.", "The real works, awards, people, brands and places that appear in the game are historical and cultural references. INDUSTRY ART is not affiliated with them or endorsed by them. The included music is original arrangements of public-domain works and original compositions.", "Les œuvres, prix, personnes, marques et lieux réels qui apparaissent dans le jeu sont des références historiques et culturelles. INDUSTRY ART n'y est pas affilié et n'a pas leur soutien. La musique incluse se compose d'arrangements originaux d'œuvres du domaine public et de compositions originales.", "As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais. INDUSTRY ART não é afiliado a eles nem tem o seu apoio. A música incluída são arranjos próprios de obras de domínio público e composições originais."],
+  ["Para remodelar", "Due for renovation", "À rénover", "Para reformar"],
+  ["Tienen 40 años o más: su mantenimiento cuesta cada año un 2 % de lo que valen. Al remodelarlas vuelven a ser nuevas.", "They are 40 years old or more: their upkeep costs 2 % of their value every year. Renovating makes them new again.", "Elles ont 40 ans ou plus : leur entretien coûte chaque année 2 % de leur valeur. En les rénovant, elles redeviennent neuves.", "Têm 40 anos ou mais: a manutenção custa todo ano 2 % do valor delas. Ao reformá-las, voltam a ser novas."],
+  ["Remodelar", "Renovate", "Rénover", "Reformar"],
+  ["Música", "Music", "Musique", "Música"],
+  ["Volumen de la música", "Music volume", "Volume de la musique", "Volume da música"],
+  ["Según la época", "By era", "Selon l'époque", "Conforme a época"],
+  ["Siguiente", "Next", "Suivant", "Próximo"],
+  ["Dato curioso", "Fun fact", "Anecdote", "Curiosidade"],
+  ["Capítulos de la historia con un reto cada uno", "History chapters, each with a challenge", "Des chapitres de l'histoire, chacun avec un défi", "Capítulos da história, cada um com um desafio"],
+  ["El mismo mundo para todos, 10 años", "The same world for everyone, 10 years", "Le même monde pour tous, 10 ans", "O mesmo mundo para todos, 10 anos"],
+  ["Juega con amigos en tu red Wi-Fi", "Play with friends on your Wi-Fi", "Joue avec des amis sur ton Wi-Fi", "Jogue com amigos na sua rede Wi-Fi"],
+  ["Controles abajo (una mano)", "Controls at the bottom (one hand)", "Commandes en bas (une main)", "Controles embaixo (uma mão)"],
+  ["Controles abajo: la barra de tiempo y caja baja junto al menú, para jugar con el pulgar.", "Controls at the bottom: the time and cash bar moves next to the menu, to play with your thumb.", "Commandes en bas : la barre du temps et de la caisse descend près du menu, pour jouer avec le pouce.", "Controles embaixo: a barra de tempo e caixa desce junto ao menu, para jogar com o polegar."],
+  ["Radio del estudio", "Studio radio", "Radio du studio", "Rádio do estúdio"],
+  ["Éxito de tu sello, en la radio.", "A hit from your label, on the radio.", "Un tube de ton label, à la radio.", "Um sucesso do seu selo, no rádio."],
+  ["Magnetismo", "Magnetism", "Magnétisme", "Magnetismo"],
+  ["Rango", "Range", "Polyvalence", "Versatilidade"],
+  ["Estilo", "Style", "Style", "Estilo"],
+  ["Conceptos", "Concepts", "Concepts", "Conceitos"],
+  ["Complejidad", "Complexity", "Complexité", "Complexidade"],
+  ["Atrae al público cuando es la cara de la obra.", "Draws the audience when they are the face of the work.", "Attire le public quand il est le visage de l'œuvre.", "Atrai o público quando é o rosto da obra."],
+  ["Se adapta a medios y géneros distintos.", "Adapts to different media and genres.", "S'adapte à différents médias et genres.", "Se adapta a meios e gêneros diferentes."],
+  ["Deja una firma propia que la crítica reconoce.", "Leaves a personal signature critics recognise.", "Laisse une signature personnelle que la critique reconnaît.", "Deixa uma assinatura própria que a crítica reconhece."],
+  ["Ideas fuertes y claras que gustan a todos.", "Strong, clear ideas everyone likes.", "Des idées fortes et claires qui plaisent à tous.", "Ideias fortes e claras que agradam a todos."],
+  ["Capas y matices: más crítica, menos público masivo.", "Layers and nuance: more critics, less mass audience.", "Des couches et des nuances : plus de critique, moins de grand public.", "Camadas e nuances: mais crítica, menos público de massa."],
+  ["Peor escritor", "Worst writer", "Pire scénariste", "Pior roteirista"],
+  ["Peor director", "Worst director", "Pire réalisateur", "Pior diretor"],
+  ["Peor intérprete", "Worst performer", "Pire interprète", "Pior intérprete"],
+  ["Mejor novela gráfica", "Best graphic novel", "Meilleur roman graphique", "Melhor romance gráfico"],
+  ["Mejor libro de filosofía y economía", "Best philosophy and economics book", "Meilleur livre de philosophie et d'économie", "Melhor livro de filosofia e economia"],
+  ["Estudio de un amigo", "A friend's studio", "Studio d'un ami", "Estúdio de um amigo"],
+  ["Modo LAN", "LAN mode", "Mode LAN", "Modo LAN"],
+  ["Seis siglos", "Six centuries", "Six siècles", "Seis séculos"],
+  ["Reto de la semana", "Weekly challenge", "Défi de la semaine", "Desafio da semana"],
+  ["¡Bien jugado!", "Well played!", "Bien joué !", "Bem jogado!"],
+  ["¡Qué estreno!", "What a premiere!", "Quelle sortie !", "Que estreia!"],
+  ["¡Felicidades por el premio!", "Congrats on the award!", "Bravo pour le prix !", "Parabéns pelo prêmio!"],
+  ["¡Te voy a ganar!", "I'm going to beat you!", "Je vais te battre !", "Vou ganhar de você!"],
+  ["¡Revancha!", "Rematch!", "Revanche !", "Revanche!"],
+  ["Pausa, ya vuelvo", "Break, be right back", "Pause, je reviens", "Pausa, já volto"],
+  ["La Ley de Licencias", "The Licensing Act", "La loi sur les licences", "A Lei de Licenças"],
+  ["Londres, 1737. Una ley nueva obliga a que cada obra pase por la censura del Lord Chambelán y deja el teatro hablado en manos de dos salas con patente. Muchos teatros cierran.", "London, 1737. A new law makes every play pass the Lord Chamberlain's censor and leaves spoken drama to two patent theatres. Many theatres close.", "Londres, 1737. Une nouvelle loi oblige chaque pièce à passer par la censure du Lord Chambellan et réserve le théâtre parlé à deux salles à privilège. Beaucoup de théâtres ferment.", "Londres, 1737. Uma lei nova obriga cada peça a passar pela censura do Lorde Camarista e deixa o teatro falado nas mãos de duas salas com patente. Muitos teatros fecham."],
+  ["Esa censura de los teatros británicos duró hasta 1968.", "That censorship of British theatres lasted until 1968.", "Cette censure des théâtres britanniques a duré jusqu'en 1968.", "Essa censura dos teatros britânicos durou até 1968."],
+  ["Estrena 3 obras de teatro con 60 o más de público antes de 1747.", "Premiere 3 plays with 60 or more audience before 1747.", "Monte 3 pièces avec 60 de public ou plus avant 1747.", "Estreie 3 peças de teatro com 60 ou mais de público antes de 1747."],
+  ["La batalla de Hernani", "The battle of Hernani", "La bataille d'Hernani", "A batalha de Hernani"],
+  ["París, 1830. El estreno de «Hernani», de Victor Hugo, termina en peleas entre clásicos y románticos durante semanas. El público ya no solo mira: toma partido.", "Paris, 1830. The premiere of Victor Hugo's «Hernani» ends in weeks of fights between classicists and romantics. The audience no longer just watches: it takes sides.", "Paris, 1830. La première d'«Hernani», de Victor Hugo, tourne pendant des semaines aux bagarres entre classiques et romantiques. Le public ne se contente plus de regarder : il prend parti.", "Paris, 1830. A estreia de «Hernani», de Victor Hugo, termina em brigas entre clássicos e românticos durante semanas. O público já não só assiste: toma partido."],
+  ["Los románticos llegaron horas antes al estreno y comieron en la sala para asegurarse los asientos.", "The romantics arrived hours early to the premiere and ate inside the theatre to keep their seats.", "Les romantiques sont arrivés des heures avant la première et ont mangé dans la salle pour garder leurs places.", "Os românticos chegaram horas antes da estreia e comeram na sala para garantir os lugares."],
+  ["Consigue 2 obras con 75 o más de crítica antes de 1840.", "Get 2 works with 75 or more critics before 1840.", "Obtiens 2 œuvres avec 75 de critique ou plus avant 1840.", "Consiga 2 obras com 75 ou mais de crítica antes de 1840."],
+  ["Del teatro al cine", "From stage to screen", "Du théâtre au cinéma", "Do teatro ao cinema"],
+  ["París, diciembre de 1895. Los hermanos Lumière cobran entrada por primera vez para ver películas en el Salon Indien del Grand Café. El cine es un invento nuevo y nadie sabe si durará.", "Paris, December 1895. The Lumière brothers charge admission for the first time to watch films at the Grand Café's Salon Indien. Cinema is brand new and nobody knows if it will last.", "Paris, décembre 1895. Les frères Lumière font payer l'entrée pour la première fois pour voir des films au Salon indien du Grand Café. Le cinéma est une invention toute neuve et personne ne sait s'il durera.", "Paris, dezembro de 1895. Os irmãos Lumière cobram ingresso pela primeira vez para ver filmes no Salon Indien do Grand Café. O cinema é uma invenção nova e ninguém sabe se vai durar."],
+  ["Louis Lumière dijo que el cine era «un invento sin futuro».", "Louis Lumière said cinema was «an invention without a future».", "Louis Lumière a dit que le cinéma était «une invention sans avenir».", "Louis Lumière disse que o cinema era «uma invenção sem futuro»."],
+  ["Estrena una película que recaude más de lo que costó antes de 1905.", "Release a film that earns more than it cost before 1905.", "Sors un film qui rapporte plus qu'il n'a coûté avant 1905.", "Lance um filme que arrecade mais do que custou antes de 1905."],
+  ["Nace el cine indio", "Indian cinema is born", "Le cinéma indien naît", "Nasce o cinema indiano"],
+  ["Bombay, 1913. Dadasaheb Phalke estrena «Raja Harishchandra», el primer largometraje indio. Como ninguna mujer aceptaba actuar, un hombre interpretó a la reina.", "Bombay, 1913. Dadasaheb Phalke releases «Raja Harishchandra», the first Indian feature film. Since no woman would act, a man played the queen.", "Bombay, 1913. Dadasaheb Phalke sort «Raja Harishchandra», le premier long métrage indien. Comme aucune femme n'acceptait de jouer, un homme a tenu le rôle de la reine.", "Bombaim, 1913. Dadasaheb Phalke lança «Raja Harishchandra», o primeiro longa-metragem indiano. Como nenhuma mulher aceitava atuar, um homem interpretou a rainha."],
+  ["Hoy la India es el país que produce más películas al año.", "Today India is the country that produces the most films each year.", "Aujourd'hui, l'Inde est le pays qui produit le plus de films par an.", "Hoje a Índia é o país que produz mais filmes por ano."],
+  ["Estrena 2 películas con 65 o más de público antes de 1925.", "Release 2 films with 65 or more audience before 1925.", "Sors 2 films avec 65 de public ou plus avant 1925.", "Lance 2 filmes com 65 ou mais de público antes de 1925."],
+  ["El cine habla", "The movies talk", "Le cinéma parle", "O cinema fala"],
+  ["Hollywood, 1927. «El cantor de jazz» trae canciones y diálogos sincronizados. En pocos años el cine mudo desaparece y muchas estrellas pierden su carrera por su voz.", "Hollywood, 1927. «The Jazz Singer» brings synchronised songs and dialogue. Within a few years silent film disappears and many stars lose their careers because of their voices.", "Hollywood, 1927. «Le Chanteur de jazz» apporte des chansons et des dialogues synchronisés. En quelques années le muet disparaît et beaucoup de vedettes perdent leur carrière à cause de leur voix.", "Hollywood, 1927. «O cantor de jazz» traz canções e diálogos sincronizados. Em poucos anos o cinema mudo desaparece e muitas estrelas perdem a carreira por causa da voz."],
+  ["La película es casi toda muda: solo tiene unos dos minutos de diálogo.", "The film is mostly silent: it has only about two minutes of dialogue.", "Le film est presque entièrement muet : il n'a qu'environ deux minutes de dialogue.", "O filme é quase todo mudo: tem só uns dois minutos de diálogo."],
+  ["Estrena 3 películas con 70 o más de crítica antes de 1937.", "Release 3 films with 70 or more critics before 1937.", "Sors 3 films avec 70 de critique ou plus avant 1937.", "Lance 3 filmes com 70 ou mais de crítica antes de 1937."],
+  ["La televisión llega a casa", "TV comes home", "La télévision arrive à la maison", "A televisão chega em casa"],
+  ["Tokio, 1958. La boda del príncipe heredero, al año siguiente, hará que millones de familias japonesas compren su primer televisor. Las salas de cine empiezan a vaciarse.", "Tokyo, 1958. The crown prince's wedding the next year will make millions of Japanese families buy their first TV set. Cinemas start to empty.", "Tokyo, 1958. Le mariage du prince héritier, l'année suivante, poussera des millions de familles japonaises à acheter leur premier téléviseur. Les cinémas commencent à se vider.", "Tóquio, 1958. O casamento do príncipe herdeiro, no ano seguinte, fará milhões de famílias japonesas comprarem seu primeiro televisor. As salas de cinema começam a esvaziar."],
+  ["El mismo año se estrena «Hakujaden», el primer largometraje japonés de animación a color.", "That same year «Hakujaden» opens, the first Japanese colour animated feature.", "La même année sort «Hakujaden», le premier long métrage d'animation japonais en couleur.", "No mesmo ano estreia «Hakujaden», o primeiro longa japonês de animação em cores."],
+  ["Estrena 2 películas o series con 70 o más de público antes de 1968.", "Release 2 films or series with 70 or more audience before 1968.", "Sors 2 films ou séries avec 70 de public ou plus avant 1968.", "Lance 2 filmes ou séries com 70 ou mais de público antes de 1968."],
+  ["La crisis del videojuego", "The video game crash", "Le krach du jeu vidéo", "A crise do videogame"],
+  ["Estados Unidos, 1983. Demasiadas consolas y juegos malos hunden el mercado: las ventas caen cerca de un 97 % en dos años. Las tiendas regalan cartuchos.", "United States, 1983. Too many consoles and bad games sink the market: sales fall about 97 % in two years. Shops give cartridges away.", "États-Unis, 1983. Trop de consoles et de mauvais jeux font couler le marché : les ventes chutent d'environ 97 % en deux ans. Les magasins donnent les cartouches.", "Estados Unidos, 1983. Consoles demais e jogos ruins afundam o mercado: as vendas caem cerca de 97 % em dois anos. As lojas dão cartuchos de graça."],
+  ["En 2014 se excavó un vertedero de Nuevo México y aparecieron los cartuchos de «E.T.» que Atari enterró en 1983.", "In 2014 a New Mexico landfill was dug up and the «E.T.» cartridges Atari buried in 1983 turned up.", "En 2014, on a fouillé une décharge du Nouveau-Mexique et on a retrouvé les cartouches d'«E.T.» qu'Atari avait enterrées en 1983.", "Em 2014 escavaram um aterro no Novo México e apareceram os cartuchos de «E.T.» que a Atari enterrou em 1983."],
+  ["Lanza 2 videojuegos rentables antes de 1990.", "Release 2 profitable video games before 1990.", "Sors 2 jeux vidéo rentables avant 1990.", "Lance 2 videogames lucrativos antes de 1990."],
+  ["Llega el streaming", "Streaming arrives", "Le streaming arrive", "Chega o streaming"],
+  ["2007. Una empresa que alquilaba DVD por correo empieza a transmitir películas por internet. En diez años cambia cómo el mundo ve series y cine.", "2007. A company that rented DVDs by mail starts streaming films over the internet. Within ten years it changes how the world watches series and films.", "2007. Une entreprise qui louait des DVD par courrier commence à diffuser des films sur internet. En dix ans, elle change la façon dont le monde regarde séries et films.", "2007. Uma empresa que alugava DVDs pelo correio começa a transmitir filmes pela internet. Em dez anos muda como o mundo assiste a séries e filmes."],
+  ["Al principio el servicio tenía unos mil títulos y cada suscriptor podía ver pocas horas al mes.", "At first the service had about a thousand titles and each subscriber could watch only a few hours a month.", "Au début, le service proposait environ mille titres et chaque abonné ne pouvait regarder que quelques heures par mois.", "No começo o serviço tinha uns mil títulos e cada assinante podia ver poucas horas por mês."],
+  ["Abre tu plataforma de streaming y estrena 5 obras antes de 2017.", "Open your streaming platform and release 5 works before 2017.", "Ouvre ta plateforme de streaming et sors 5 œuvres avant 2017.", "Abra sua plataforma de streaming e lance 5 obras antes de 2017."],
+  ["2150. Las historias siguen siendo lo que eran hace seis siglos: alguien cuenta, alguien escucha. Solo cambian las pantallas.", "2150. Stories are still what they were six centuries ago: someone tells, someone listens. Only the screens change.", "2150. Les histoires sont toujours ce qu'elles étaient il y a six siècles : quelqu'un raconte, quelqu'un écoute. Seuls les écrans changent.", "2150. As histórias continuam sendo o que eram há seis séculos: alguém conta, alguém escuta. Só mudam as telas."],
+  ["La obra de teatro que lleva más tiempo en cartel es «La ratonera», de Agatha Christie: se representa en Londres desde 1952 y solo la pandemia la detuvo.", "The longest-running play is Agatha Christie's «The Mousetrap»: it has played in London since 1952 and only the pandemic stopped it.", "La pièce restée le plus longtemps à l'affiche est «La Souricière», d'Agatha Christie : elle se joue à Londres depuis 1952 et seule la pandémie l'a arrêtée.", "A peça há mais tempo em cartaz é «A ratoeira», de Agatha Christie: é encenada em Londres desde 1952 e só a pandemia a interrompeu."],
+  ["Sé el estudio número 1 en valor de la compañía antes de 2175.", "Be the number 1 studio by company value before 2175.", "Sois le studio numéro 1 en valeur d'entreprise avant 2175.", "Seja o estúdio número 1 em valor da empresa antes de 2175."],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -69041,7 +69400,7 @@ muxAjH = function () {
     act = p >= 0 ? p : MUX.p >= 0 ? MUX.p : muxElige(),
     P = MUXP[act] || MUXP[0],
     v = Math.round(muxVol() * 100);
-  return `<label class="m">${dualReg("Música", "Music")}: <b>${v} %</b></label><input type="range" min="0" max="100" step="5" value="${v}" oninput="muxVolSet(this.value);this.previousElementSibling.querySelector('b').textContent=this.value+' %'" aria-label="${dualReg("Volumen de la música", "Music volume")}"><div class="chips">${chx("musp", -1, '<span aria-hidden="true">♫</span> ' + dualReg("Según la época", "By era"), p < 0)}${chx("musn", "", '<span aria-hidden="true">⏭\uFE0E</span> ' + dualReg("Siguiente", "Next"))}</div><div class="m">${dualReg("Según la época: suena la música de moda en tu año y la de las fiestas del calendario; con un tema especial, su banda sonora.", "By era: you hear the music in vogue in your year and the calendar holidays; with a special theme, its soundtrack.")}</div>${MUX_GRUPOS.map(
+  return `<div class="k"><label class="m">${dualReg("Música", "Music")}: <b>${v} %</b></label>${bi("musica")}</div><input type="range" min="0" max="100" step="5" value="${v}" oninput="muxVolSet(this.value);this.previousElementSibling.querySelector('b').textContent=this.value+' %'" aria-label="${dualReg("Volumen de la música", "Music volume")}"><div class="chips">${chx("musp", -1, '<span aria-hidden="true">♫</span> ' + dualReg("Según la época", "By era"), p < 0)}${chx("musn", "", '<span aria-hidden="true">⏭\uFE0E</span> ' + dualReg("Siguiente", "Next"))}</div><div class="m">${dualReg("Según la época: suena la música de moda en tu año y la de las fiestas del calendario; con un tema especial, su banda sonora.", "By era: you hear the music in vogue in your year and the calendar holidays; with a special theme, its soundtrack.")}</div>${MUX_GRUPOS.map(
     ([es, en, k]) =>
       `<label class="m">${dualReg(es, en)}</label><div class="chips">${MUXP.map((x, i) => [x, i])
         .filter(([x]) => (x.tipo || "amb") == k)
@@ -69055,10 +69414,12 @@ const L4 = (es, en, fr, pt) => (CFG.idi == "en" ? en : CFG.idi == "fr" ? fr : CF
 const ixNom = (i) => trX(trTxt(IX[i] ? IX[i][0] : ""));
 const teNom = (i) => trX(trTxt(TE[i] ? TE[i][1] : ""));
 const PAT_ANOS = 20;
-function obraNueva(i, l) {
-  const t = 6 + 4 * l + (IX[i][4] >= 1.5 ? 4 : 0);
+function obraNueva(i, l, rem) {
+  const t = rem ? 4 + 2 * l : 6 + 4 * l + (IX[i][4] >= 1.5 ? 4 : 0);
   S.obras = (S.obras || []).filter((o) => o.i != i);
-  S.obras.push({ i, l, w: t, t, c: px(i, l - 1), ev: 0 });
+  S.obras.push({ i, l, w: t, t, c: px(i, l - 1), ev: 0, rem: rem ? 1 : 0 });
+  S.infY = S.infY || {};
+  if (!rem) S.infY[i] = yr();
 }
 const OBRA_EV = [
   [0, (o) => ((o.w += 2), 0), "Las lluvias retrasan la obra de «#»: dos semanas más.", "Rain delays the construction of «#»: two more weeks.", "La pluie retarde le chantier de «#» : deux semaines de plus.", "As chuvas atrasam a obra de «#»: mais duas semanas."],
@@ -69082,7 +69443,13 @@ on("semana", () => {
     if (--o.w > 0) return true;
     S.fans = Math.round((S.fans || 0) * 1.004 + 150 * o.l);
     S.pop = Math.min(100, (S.pop || 0) + 0.3 * o.l);
-    const t = L4("Inauguras «#» (nivel %): corte de cinta, prensa y nuevos fans.", "You open «#» (level %): ribbon cutting, press and new fans.", "Tu inaugures «#» (niveau %) : ruban coupé, presse et nouveaux fans.", "Você inaugura «#» (nível %): corte de fita, imprensa e novos fãs.")
+    if (o.rem) {
+      S.infY = S.infY || {};
+      S.infY[o.i] = yr();
+    }
+    const t = (o.rem
+      ? L4("Reinauguras «#» renovada (nivel %): como nueva y sin el sobrecosto de mantenimiento.", "You reopen the renovated «#» (level %): like new and without the extra upkeep.", "Tu rouvres «#» rénové (niveau %) : comme neuf et sans le surcoût d'entretien.", "Você reinaugura «#» renovada (nível %): como nova e sem o custo extra de manutenção.")
+      : L4("Inauguras «#» (nivel %): corte de cinta, prensa y nuevos fans.", "You open «#» (level %): ribbon cutting, press and new fans.", "Tu inaugures «#» (niveau %) : ruban coupé, presse et nouveaux fans.", "Você inaugura «#» (nível %): corte de fita, imprensa e novos fãs."))
       .replace("#", ixNom(o.i))
       .replace("%", o.l);
     nws(t);
@@ -69103,12 +69470,13 @@ ACT["ib"] = (v) => {
   return r;
 };
 function obrasH() {
-  const L = S.obras || [];
-  if (!L.length) return "";
-  return `<div class="c obras"><div class="k"><h3 style="margin:0">\u{1F3D7}︎ ${dualReg("Obras en curso", "Construction in progress")}</h3></div><div class="m">${dualReg("Cada construcción nueva levanta una obra en tu edificio. Funciona desde ya; al terminar la obra la inauguras y ganas prensa y fans.", "Each new building project opens a construction site at your studio. It works right away; when the works finish you open it and win press and fans.")}</div>${L.map(
+  const L = S.obras || [],
+    V = typeof remodelables == "function" ? remodelables() : [];
+  if (!L.length && !V.length) return "";
+  return `<div class="c obras"><div class="k"><h3 style="margin:0">\u{1F3D7}︎ ${dualReg("Obras en curso", "Construction in progress")}</h3>${bi("obras")}</div><div class="m">${dualReg("Cada construcción nueva levanta una obra en tu edificio. Funciona desde ya; al terminar la obra la inauguras y ganas prensa y fans.", "Each new building project opens a construction site at your studio. It works right away; when the works finish you open it and win press and fans.")}</div>${L.map(
     (o) =>
-      `<div class="fila"><div style="flex:1"><b>${esc(ixNom(o.i))}</b> <span class="m">· ${dualReg("nivel", "level")} ${o.l}</span>${barV((100 * (o.t - o.w)) / o.t)}</div><span class="m">${plural(o.w, dualReg("semana", "week"), dualReg("semanas", "weeks"))}</span></div>`,
-  ).join("")}</div>`;
+      `<div class="fila"><div style="flex:1"><b>${esc(ixNom(o.i))}</b> <span class="m">· ${o.rem ? L4("remodelación", "renovation", "rénovation", "reforma") : L4("nivel #", "level #", "niveau #", "nível #").replace("#", o.l)}</span>${barV((100 * (o.t - o.w)) / o.t)}</div><span class="m">${L4("# sem.", "# wk", "# sem.", "# sem.").replace("#", o.w)}</span></div>`,
+  ).join("")}${V.length ? `<h3>${dualReg("Para remodelar", "Due for renovation")}</h3><div class="m">${dualReg("Tienen 40 años o más: su mantenimiento cuesta cada año un 2 % de lo que valen. Al remodelarlas vuelven a ser nuevas.", "They are 40 years old or more: their upkeep costs 2 % of their value every year. Renovating makes them new again.")}</div>${V.map((i) => `<div class="fila"><div style="flex:1"><b>${esc(ixNom(i))}</b> <span class="m">· ${L4("desde #", "since #", "depuis #", "desde #").replace("#", S.infY[i])}</span></div>${bt("remo", i, dualReg("Remodelar", "Renovate") + " · " + fm(remCosto(i)), S.cash >= remCosto(i) ? "" : "off")}</div>`).join("")}` : ""}</div>`;
 }
 const vInfObra = vInf;
 vInf = function () {
@@ -69170,10 +69538,10 @@ function patH() {
       .map(Number)
       .filter((i) => TE[i] && patEs(i) && y < S.tech[i] + PAT_ANOS);
   const ayuda = dualReg("Investiga un invento antes de su fecha real y lo patentas: cuando llegue para todos, los rivales te pagan una licencia y después regalías cada año, hasta que la patente vence a los 20 años.", "Research an invention before its real date and you patent it: when it reaches everyone, rivals pay you a licence and then royalties every year, until the patent expires after 20 years.");
-  return `<div class="c"><div class="k"><h3 style="margin:0">\u{1F4DC}︎ ${dualReg("Tus patentes", "Your patents")}</h3><span class="m">${L.length}</span></div><div class="m">${ayuda}</div>${L.map((i) => {
+  return `<div class="c"><div class="k"><h3 style="margin:0">\u{1F4DC}︎ ${dualReg("Tus patentes", "Your patents")}</h3><span class="bts"><span class="m">${L.length}</span>${bi("patentes")}</span></div><div class="m">${ayuda}</div>${L.map((i) => {
     const pend = y <= TE[i][0],
       g = patValor(i);
-    return `<div class="fila"><div style="flex:1"><b>${esc(teNom(i))}</b><div class="m">${dualReg("vence en", "expires in")} ${S.tech[i] + PAT_ANOS} · ${pend ? dualReg("regalías desde", "royalties from") + " " + (TE[i][0] + 1) : "≈ " + fm(patAnual(i)) + " " + dualReg("al año", "a year")}</div></div>${g > 0 ? bt("patv", i, dualReg("Vender", "Sell") + " · " + fm(g), "") : ""}</div>`;
+    return `<div class="fila"><div style="flex:1"><b>${esc(teNom(i))}</b><div class="m">${L4("vence en #", "expires in #", "expire en #", "vence em #").replace("#", S.tech[i] + PAT_ANOS)} · ${pend ? L4("regalías desde #", "royalties from #", "redevances dès #", "royalties a partir de #").replace("#", TE[i][0] + 1) : L4("≈ $ al año", "≈ $ a year", "≈ $ par an", "≈ $ por ano").replace("$", fm(patAnual(i)))}</div></div>${g > 0 ? bt("patv", i, dualReg("Vender", "Sell") + " · " + fm(g), "") : ""}</div>`;
   }).join("")}</div>`;
 }
 const vTecPat = vTec;
@@ -69198,7 +69566,7 @@ resumen = function () {
   const h = resumenValor.apply(this, arguments),
     v = valorEstudio(),
     [p, n] = valorPuesto(v),
-    fila = `<div><div class="m">${dualReg("Valor de la compañía", "Company value")}</div><b>${fm(v)}</b> <span class="m">· ${dualReg("puesto", "rank")} ${p}/${n}</span></div>`,
+    fila = `<div><div class="m">${dualReg("Valor de la compañía", "Company value")}</div><b>${fm(v)}</b> <span class="m">· ${L4("puesto #", "rank #", "rang #", "posição #").replace("#", p + "/" + n)}</span></div>`,
     k = h.lastIndexOf("</div></div>");
   return k > 0 ? h.slice(0, k) + fila + h.slice(k) : h;
 };
@@ -69207,12 +69575,1354 @@ function valorH() {
     [p, n] = valorPuesto(v),
     H = (S.valH || []).slice(-8),
     mx = Math.max(1, v, ...H.map((x) => x.v));
-  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("grafica")} ${dualReg("Valor de la compañía", "Company value")}</h3><b>${fm(v)}</b></div><div class="m">${dualReg("Lo que pagaría un comprador por tu estudio: seis veces la utilidad del último año, la caja sin deudas, la mitad de los ingresos, la mitad de lo invertido en construcciones y tus filiales. Los rivales se valoran igual.", "What a buyer would pay for your studio: six times last year's profit, cash minus debt, half of revenue, half of what you invested in buildings and your subsidiaries. Rivals are valued the same way.")}</div><div class="m"><b>${dualReg("Puesto", "Rank")} ${p} ${dualReg("de", "of")} ${n}</b></div>${H.length ? `<div class="tabla">${H.map((x) => `<div class="fila"><span>${x.y}</span><span style="flex:1;margin:0 8px">${barV((100 * x.v) / mx)}</span><b>${fm(x.v, x.y)}</b></div>`).join("")}</div>` : ""}</div>`;
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("grafica")} ${dualReg("Valor de la compañía", "Company value")}</h3><span class="bts"><b>${fm(v)}</b>${bi("valor")}</span></div><div class="m">${dualReg("Lo que pagaría un comprador por tu estudio: seis veces la utilidad del último año, la caja sin deudas, la mitad de los ingresos, la mitad de lo invertido en construcciones y tus filiales. Los rivales se valoran igual.", "What a buyer would pay for your studio: six times last year's profit, cash minus debt, half of revenue, half of what you invested in buildings and your subsidiaries. Rivals are valued the same way.")}</div><div class="m"><b>${L4("Puesto # de %", "Rank # of %", "Rang # sur %", "Posição # de %").replace("#", p).replace("%", n)}</b></div>${H.length ? `<div class="tabla">${H.map((x) => `<div class="fila"><span>${x.y}</span><span style="flex:1;margin:0 8px">${barV((100 * x.v) / mx)}</span><b>${fm(x.v, x.y)}</b></div>`).join("")}</div>` : ""}</div>`;
 }
 const vFinValor = vFin;
 vFin = function () {
   return valorH() + vFinValor.apply(this, arguments);
 };
+Object.assign(TX.es.ayuda, {
+  musica: ["Música", "En Ajustes → Música. «Según la época» elige sola: suena lo que estaba de moda en el año de tu partida (o volvió a estarlo), villancicos en diciembre y órgano en Halloween si tienes la decoración de temporada, y la banda sonora de tu tema especial (Píxel, Synthwave, Espacial…). Cambia de pieza cada minuto o dos y «Siguiente» salta a otra. Toca cualquier título para dejarlo fijo y vuelve a «Según la época» cuando quieras. Las canciones de tu sello que pasan de 70 de público o ganan un premio entran a la «Radio del estudio» durante tres años. Cada pieza trae un dato curioso."],
+  temas: ["Temas, Historia y símbolos", "Elige un tema en Ajustes → Tema. «Época» cambia el diseño con los años. «Historia» va más allá: alterna sola las estéticas según el año, las fiestas (Halloween, Navidad) y la época en que cada estilo estuvo de moda o volvió a estarlo; cuando cambia verás «Nueva edición». Cada estética trae su símbolo (✦ ❦ ⚜ ☾ ❄ ⚙ ☀…) en las portadas de sección y en estos botones. En el editor del logo, la barra «Forma del logo» suma 12 símbolos al final: corazón, flor de lis, flor, luna, sol, copo de nieve, destello, engranaje, átomo, calavera, trébol y llama, cada uno con relleno, contorno, anillo y punto."],
+  edificio2: ["Tu edificio", "El edificio crece con tu estudio. Mientras construyes aparecen una grúa y andamios, y al terminar la obra se inaugura. La bandera es la de tu país sede tal como era en ese año: por ejemplo, la del Reino Unido no tuvo la cruz de San Patricio hasta 1801, y Colombia, México o Perú usaban la cruz de Borgoña española antes de su independencia. Toca un piso para ir a esa parte del estudio."],
+  obras: ["Obras y remodelaciones", "Al construir o subir de nivel en Negocio → Construcciones, el efecto empieza enseguida y se abre una obra de 10 a 22 semanas. Puede haber lluvias o huelgas (más semanas), sobrecostos o adelantos, y hasta un hallazgo arqueológico que te da prensa. Al terminar la inauguras y ganas fans y un poco de prestigio. Las construcciones con 40 años o más piden remodelación: mientras no lo hagas, cada año pagas en mantenimiento un 2 % de lo que valen. Remodelar cuesta el 30 % de su último nivel, abre una obra corta y las deja como nuevas."],
+  patentes: ["Patentes", "Investiga un invento en Negocio → Inventos antes de su fecha real. Si lo terminas a tiempo es tu patente: el año en que llega para todos, los rivales que trabajan en ese medio te pagan una licencia y después regalías cada año, hasta que la patente vence a los 20 años, el plazo real de una patente hoy. Puedes venderla al rival con más dinero: recibes de una vez el 60 % de lo que te quedaría por cobrar."],
+  valor: ["Valor de la compañía", "Es lo que pagaría un comprador por tu estudio, calculado igual que el de los rivales: seis veces la utilidad del último año, más la caja sin deudas, la mitad de los ingresos, la mitad de lo invertido en construcciones y el valor de tus filiales. Se guarda cada año y te da tu puesto. Cuenta para el reto de la semana, los duelos, la bolsa y las ofertas de compra."],
+  bolsa: ["Bolsa de valores", "Con 5 años de historia y estando en la mitad de arriba por valor, en Negocio → Finanzas puedes vender el 10, 20 o 30 % del estudio, sin pasar del 49 % junto con tu socio. Recibes ese porcentaje del valor menos un 6 % para los bancos. Cada año repartes dividendos: 0, 25 o 50 % de la utilidad por la parte que vendiste. Si el índice de tus acciones cae por debajo de 60, o hay utilidad y no repartes nada, pierdes algo de prestigio. Puedes recomprarlo todo pagando el 110 % de su valor. Dato: las primeras acciones que se negociaron en una bolsa fueron las de la Compañía Holandesa de las Indias Orientales, en Ámsterdam, en 1602."],
+  oferta: ["Ofertas de compra", "Si estás entre los 3 estudios más valiosos, un rival rico o un conglomerado puede ofrecer comprarte, como mucho una vez cada 6 años. Ofrecen entre 1,25 y 1,6 veces tu valor y tienes 8 semanas para decidir en Negocio → Finanzas. Si vendes, recibes tu parte (descontando la de tu socio y la de la bolsa) y la partida termina con tu legado. Si rechazas, tu equipo lo celebra y ganas un poco de prestigio."],
+  siglos: ["Seis siglos", "Capítulos de la historia del espectáculo, de 1737 a 2150. Cada uno empieza en un año y un país reales, con una meta y un plazo; la meta y tu avance se ven arriba en Estudio. Al cumplirla se abre el capítulo siguiente; si se acaba el plazo puedes reintentarlo. En ambos casos sigues jugando libre en ese mundo. «Jugar» empieza enseguida y «Personalizar» te deja elegir nombre, logo y avatar. Antes de empezar, tu partida en curso se guarda en una ranura libre."],
+  reto: ["Reto de la semana", "Cada semana, de lunes a domingo, hay un mundo nuevo igual para todos: mismo año, misma sede y misma semilla. Juegas 10 años y al final se suman tus puntos: tu valor en millones de dólares de hoy, 25 por cada premio, 10 por cada hito y un poco por tus fans. Tus mejores intentos se guardan en este dispositivo. Con el modo LAN, tus amigos ven tus puntos en el marcador."],
+  lan: ["Modo LAN", "Para jugar con amigos en la misma red Wi-Fi, sin internet ni servidores. En la app de Android: uno toca «Crear sala» y ve un código de 6 dígitos; los demás tocan «Buscar salas», eligen la sala y escriben el código. Los mensajes van cifrados con ese código. En el navegador, o si la búsqueda no funciona en tu red, usen «Conectar con un código»: uno invita, el otro pega el código y devuelve el suyo. Ya conectados verán el marcador (año, valor, fans, premios y últimos estrenos), podrán mandar reacciones, llevar el estudio de un amigo a su mundo como rival y proponer un duelo: todos empiezan una partida nueva en el mismo mundo y gana quien tenga más puntos al final. Sin red, exporta tu estudio como archivo .iaestudio y tu amigo lo importa."],
+  rasgos: ["Rasgos", "Cada talento tiene cinco rasgos que salen de sus capacidades: Magnetismo (atrae público cuando protagoniza), Rango (se adapta a medios distintos), Estilo (la crítica reconoce su firma como director), Conceptos (ideas claras que gustan a todos, sobre todo en el guion) y Complejidad (más crítica, menos público masivo). Al terminar la producción, los rasgos del protagonista, el director y el guionista suben o bajan la crítica y el público hasta 4 puntos. Lo ves en la ficha de la obra y en la del talento."],
+  tarjeta: ["Tarjetas para compartir", "En la ficha de una obra estrenada abre la «Ficha pop» y toca «Formato historia (9:16)»: crea una imagen vertical con el póster, la crítica, el público, la taquilla y los premios, con los colores y el símbolo de tu tema. Después guárdala o compártela como cualquier imagen."],
+});
+const REM_ANOS = 40;
+const remCosto = (i) => Math.round(px(i, Math.max(0, cnv(i) - 1)) * 0.3);
+function remodelables() {
+  if (!S || !S.inf) return [];
+  S.infY = S.infY || {};
+  const y = yr(),
+    enObra = (S.obras || []).map((o) => o.i);
+  return IX.map((x, i) => i).filter((i) => cnv(i) > 0 && S.infY[i] != null && y - S.infY[i] >= REM_ANOS && !enObra.includes(i));
+}
+ACT["remo"] = (v) => {
+  const i = +v,
+    c = remCosto(i);
+  if (!IX[i] || !cnv(i)) return;
+  if (S.cash < c) return toast("Fondos insuficientes");
+  gasta("infra", c);
+  obraNueva(i, cnv(i), 1);
+  nws(L4("Empiezan las obras para remodelar «#».", "Renovation works begin at «#».", "Les travaux de rénovation de «#» commencent.", "Começam as obras para reformar «#».").replace("#", ixNom(i)));
+  sonar("ok");
+  return pg();
+};
+on("semana", () => {
+  if (!S || !S.inf) return;
+  S.infY = S.infY || {};
+  IX.forEach((x, i) => {
+    if (cnv(i) > 0 && S.infY[i] == null) S.infY[i] = S.t < 2 ? S.y0 : yr();
+  });
+  if (wk() != 1) return;
+  let tot = 0;
+  remodelables().forEach((i) => (tot += Math.round(px(i, cnv(i) - 1) * 0.02)));
+  if (tot > 0) {
+    gasta("fijos", tot);
+    if (!S.bot) nws(L4("Mantenimiento de construcciones viejas: $. Remodélalas en Negocio → Construcciones.", "Upkeep of old buildings: $. Renovate them in Business → Buildings.", "Entretien des vieux bâtiments : $. Rénove-les dans Affaires → Constructions.", "Manutenção de construções antigas: $. Reforme-as em Negócio → Construções.").replace("$", fm(tot)));
+  }
+});
+const CONGLO = ["Grupo Meridiano", "Atlas Media", "Corporación Cenit", "Holding Albatros", "Sextante Global", "Consorcio Aurora Boreal"];
+const tuParte = () => Math.max(0.01, 1 - ((S.soc && S.soc.p) || 0) - ((S.bolsa && S.bolsa.p) || 0));
+on("mes", () => {
+  if (!S || S.bot || S.over || S.ofC || S.taller || yr() - S.y0 < 8 || (S.ofCy || -99) > yr() - 6) return;
+  const v = valorEstudio();
+  if (v <= 0 || valorPuesto(v)[0] > 3 || R() > 0.06) return;
+  const L = rvVivos().filter((i) => !S.rv[i].own && S.rv[i].cash > v * 1.3),
+    n = L.length ? S.rv[L[Math.floor(R() * L.length)]].n : CONGLO[Math.floor(R() * CONGLO.length)];
+  S.ofC = { n, p: Math.round(v * (1.25 + R() * 0.35)), t: S.t, hasta: S.t + 8, v };
+  S.ofCy = yr();
+  S.ofCAviso = 1;
+  nws(L4("# ofrece comprar tu estudio por $.", "# offers to buy your studio for $.", "# propose d'acheter ton studio pour $.", "# oferece comprar seu estúdio por $.").replace("#", n).replace("$", fm(S.ofC.p)));
+});
+on("semana", () => {
+  if (S && S.ofC && S.t > S.ofC.hasta) {
+    nws(L4("La oferta de # expiró.", "#'s offer expired.", "L'offre de # a expiré.", "A oferta de # expirou.").replace("#", S.ofC.n));
+    S.ofC = null;
+  }
+});
+function ofertaH() {
+  const o = S && S.ofC;
+  if (!o) return "";
+  const parte = tuParte();
+  return `<div class="c aviso oferta"><div class="k"><h3 style="margin:0">\u{1F91D}︎ ${dualReg("Oferta de compra", "Buyout offer")}</h3>${bi("oferta")}</div><p>${L4("<b>#</b> ofrece <b>$</b> por todo el estudio (× % su valor).", "<b>#</b> offers <b>$</b> for the whole studio (× % its value).", "<b>#</b> propose <b>$</b> pour tout le studio (× % sa valeur).", "<b>#</b> oferece <b>$</b> pelo estúdio inteiro (× % o valor dele).").replace("#", esc(o.n)).replace("$", fm(o.p)).replace("%", dec1(o.p / Math.max(1, o.v), 2))}</p><div class="m">${L4("A ti te tocaría <b>$</b> (% %). Si vendes, la partida termina y ves tu legado. La oferta vence en # semanas.", "Your share would be <b>$</b> (% %). If you sell, the game ends and you see your legacy. The offer expires in # weeks.", "Ta part serait de <b>$</b> (% %). Si tu vends, la partie se termine et tu vois ton héritage. L'offre expire dans # semaines.", "Sua parte seria <b>$</b> (% %). Se vender, a partida termina e você vê seu legado. A oferta vence em # semanas.").replace("$", fm(Math.round(o.p * parte))).replace("%", Math.round(parte * 100)).replace("#", Math.max(0, o.hasta - S.t))}</div><div class="bts">${bt("ofsi", "", dualReg("Vender el estudio", "Sell the studio"), "r")}${bt("ofno", "", dualReg("Rechazar", "Decline"), "a")}</div></div>`;
+}
+ACT["ofsi"] = () => {
+  const o = S.ofC;
+  if (!o) return;
+  const g = Math.round(o.p * tuParte());
+  gana("ventas", g);
+  S.ofC = null;
+  S.over = 3;
+  S.overTxt = L4("Vendiste el estudio a # por $.", "You sold the studio to # for $.", "Tu as vendu le studio à # pour $.", "Você vendeu o estúdio a # por $.").replace("#", o.n).replace("$", fm(g));
+  bit(S.overTxt);
+  nws(S.overTxt);
+  sonar("hito");
+  cx();
+  autoSv();
+  return pg();
+};
+ACT["ofno"] = () => {
+  const o = S.ofC;
+  if (!o) return;
+  S.ofC = null;
+  S.pop = cl((S.pop || 0) + 1);
+  nws(L4("Rechazas la oferta de #: tu equipo celebra que el estudio siga siendo tuyo.", "You decline #'s offer: your team celebrates that the studio stays yours.", "Tu refuses l'offre de # : ton équipe fête que le studio reste à toi.", "Você recusa a oferta de #: sua equipe comemora que o estúdio continue seu.").replace("#", o.n));
+  cx();
+  return pg();
+};
+function ofertaM() {
+  S.ofCAviso = 0;
+  if (!S.ofC) return;
+  op(`<div class="c"><div class="k"><h2 style="margin:0">\u{1F91D}︎ ${dualReg("Quieren comprar tu estudio", "They want to buy your studio")}</h2><span class="bts">${bi("oferta")}${btx()}</span></div>${ofertaH()}</div>`);
+}
+const bolsaPuede = () => S && !S.bolsa && yr() - S.y0 >= 5 && valorEstudio() > 0 && valorPuesto(valorEstudio())[0] <= Math.ceil(valorPuesto(valorEstudio())[1] / 2);
+const bolsaMax = () => Math.max(0, 0.49 - ((S.soc && S.soc.p) || 0));
+function bolsaH() {
+  if (!S) return "";
+  const B = S.bolsa,
+    v = valorEstudio();
+  let h = `<div class="c bolsa"><div class="k"><h3 style="margin:0">\u{1F4C8}︎ ${dualReg("Bolsa de valores", "Stock market")}</h3>${bi("bolsa")}</div>`;
+  if (!B) {
+    const ops = [0.1, 0.2, 0.3].filter((p) => p <= bolsaMax() + 1e-9);
+    h += `<div class="m">${dualReg("Vende una parte del estudio a inversionistas y recibe dinero hoy. A cambio, cada año repartes dividendos y el precio de tus acciones sigue el valor de la compañía.", "Sell part of the studio to investors and get money today. In exchange you pay dividends every year and your share price follows the company value.")}</div>`;
+    h += bolsaPuede() && ops.length
+      ? `<div class="bts">${ops.map((p) => bt("ipo", p, L4("Vender el # % · $", "Sell # % · $", "Vendre # % · $", "Vender # % · $").replace("#", Math.round(p * 100)).replace("$", fm(Math.round(v * p * 0.94))))).join("")}</div><div class="m">${dualReg("Los bancos que colocan las acciones se quedan con un 6 %.", "The banks that place the shares keep 6 %.")}</div>`
+      : `<div class="m">${dualReg("Para salir a bolsa necesitas 5 años de historia y estar en la mitad de arriba por valor de la compañía.", "To go public you need 5 years of history and to be in the top half by company value.")}${bolsaMax() < 0.1 ? " " + dualReg("Tu socio ya tiene casi la mitad del estudio.", "Your partner already owns almost half of the studio.") : ""}</div>`;
+  } else {
+    const idx = Math.round((100 * v) / Math.max(1, B.v0)),
+      rc = Math.round(v * B.p * 1.1);
+    h += `<div class="fila"><span>${dualReg("En bolsa", "Listed")}</span><b>${L4("# % desde %", "# % since %", "# % depuis %", "# % desde %").replace("#", Math.round(B.p * 100)).replace("%", B.y)}</b></div><div class="fila"><span>${dualReg("Índice de tus acciones", "Your share index")}</span><b style="color:${idx >= 100 ? "var(--a)" : "var(--r)"}">${idx}</b></div><div class="fila"><span>${dualReg("Tu parte del estudio", "Your share of the studio")}</span><b>${Math.round(tuParte() * 100)} %</b></div><div class="fila"><span>${dualReg("Último dividendo", "Last dividend")}</span><b>${fm(B.ud || 0)}</b></div><label class="m">${dualReg("Dividendos: parte de la utilidad que repartes", "Dividends: share of profit you pay out")}</label><div class="chips">${[0, 0.25, 0.5].map((x) => chx("ipop", x, Math.round(x * 100) + " %", B.pago == x)).join("")}</div><div class="bts">${bt("ipob", "", dualReg("Recomprar las acciones", "Buy back the shares") + " · " + fm(rc), S.cash >= rc ? "" : "off")}</div>`;
+  }
+  return h + "</div>";
+}
+ACT["ipo"] = (v) => {
+  const p = +v;
+  if (!bolsaPuede() || p > bolsaMax() + 1e-9) return;
+  const val = valorEstudio(),
+    g = Math.round(val * p * 0.94);
+  capital(g);
+  S.bolsa = { p, y: yr(), v0: val, pago: 0.25, ud: 0 };
+  nws(L4("# sale a bolsa: vende el % % y recibe $.", "# goes public: sells % % and receives $.", "# entre en bourse : vend % % et reçoit $.", "# abre o capital: vende % % e recebe $.").replace("#", S.sn).replace("%", Math.round(p * 100)).replace("$", fm(g)));
+  bit(L4("Sales a bolsa.", "You go public.", "Tu entres en bourse.", "Você abre o capital."));
+  sonar("hito");
+  return pg();
+};
+ACT["ipop"] = (v) => {
+  if (!S.bolsa) return;
+  S.bolsa.pago = +v;
+  return pg();
+};
+ACT["ipob"] = () => {
+  const B = S.bolsa;
+  if (!B) return;
+  const c = Math.round(valorEstudio() * B.p * 1.1);
+  if (S.cash < c) return toast("Fondos insuficientes");
+  capital(-c);
+  S.bolsa = null;
+  nws(L4("Recompras tus acciones por $: el estudio vuelve a ser privado.", "You buy back your shares for $: the studio is private again.", "Tu rachètes tes actions pour $ : le studio redevient privé.", "Você recompra suas ações por $: o estúdio volta a ser privado.").replace("$", fm(c)));
+  return pg();
+};
+on("semana", () => {
+  if (!S || !S.bolsa || wk() != 1) return;
+  const B = S.bolsa,
+    f = S.fin && S.fin.length ? S.fin[S.fin.length - 1] : null,
+    u = f ? f.u : 0,
+    idx = Math.round((100 * valorEstudio()) / Math.max(1, B.v0));
+  B.ud = 0;
+  if (u > 0 && B.pago > 0) {
+    B.ud = Math.round(u * B.pago * B.p);
+    gasta("socios", B.ud);
+    nws(L4("Pagas $ en dividendos a tus accionistas.", "You pay $ in dividends to your shareholders.", "Tu verses $ de dividendes à tes actionnaires.", "Você paga $ em dividendos aos seus acionistas.").replace("$", fm(B.ud)));
+  }
+  if (idx < 60 || (u > 0 && B.pago == 0 && idx < 90)) {
+    S.pop = cl((S.pop || 0) - 1);
+    nws(L4("Tus acciones valen # y los accionistas están inquietos.", "Your shares are at # and shareholders are uneasy.", "Tes actions valent # et les actionnaires s'inquiètent.", "Suas ações valem # e os acionistas estão inquietos.").replace("#", idx));
+  }
+});
+const vFinNeg = vFin;
+vFin = function () {
+  return ofertaH() + bolsaH() + vFinNeg.apply(this, arguments);
+};
+const pgNeg = pg;
+pg = function () {
+  const r = pgNeg.apply(this, arguments);
+  if (S && !S.bot && S.ofCAviso && !hojaAbierta()) setTimeout(ofertaM, 40);
+  return r;
+};
+let PRESET = null;
+const presetReg = (y, sede) => {
+  const k = REGC.findIndex((r, i) => r[1] == sede && regOk(i, y));
+  return k >= 0 ? { reg: k } : { reg: 0, sd2: sede };
+};
+function presetAplica() {
+  const o = PRESET;
+  if (!o) return;
+  const y = $("#ny");
+  if (y) y.value = o.y;
+  const r = presetReg(o.y, o.sede);
+  PV.reg = r.reg;
+  PV.capY = 0;
+  const sd = $("#nsd");
+  if (sd && r.sd2 != null) sd.value = r.sd2;
+  const se = $("#nsem");
+  if (se) se.value = o.sd;
+  const df = $("#ndf");
+  if (df && o.df != null) df.value = o.df;
+  if (typeof pv == "function") pv();
+}
+async function guardaAntes() {
+  if (!S || S.bot || S.taller || S.pre || S.over) return;
+  try {
+    const M = await listar(),
+      k = ["m2", "m3", "m4", "m5", "m1"].find((x) => !M[x] || (M[x].sd == S.sd && M[x].y0 == S.y0 && M[x].sn == S.sn));
+    if (k) {
+      await guardar(k);
+      toast(L4("Tu partida anterior quedó guardada en la ranura #.", "Your previous game was saved in slot #.", "Ta partie précédente a été sauvegardée dans l'emplacement #.", "Sua partida anterior foi salva no espaço #.").replace("#", k.slice(1)));
+    } else toast(dualReg("Todas las ranuras están ocupadas: tu partida anterior sigue en los autoguardados", "All slots are full: your previous game stays in the autosaves"));
+  } catch (e) {}
+}
+async function partidaPreset(o, rapido) {
+  await guardaAntes();
+  act("new");
+  PRESET = o;
+  if (rapido) act("azar");
+  presetAplica();
+  if (rapido) return act("start");
+  const app = $("#app");
+  if (app) app.insertAdjacentHTML("afterbegin", `<div class="c aviso preset"><b>${esc(o.titulo || "")}</b><div class="m">${dualReg("La época, el país y la semilla del mundo ya están fijos. Elige tu nombre, tu logo y tu avatar, y pulsa Empezar.", "The era, the country and the world seed are already set. Choose your name, logo and avatar, then press Start.")}</div></div>`);
+  window.scrollTo(0, 0);
+}
+const presetNew = ACT["new"];
+ACT["new"] = (v) => {
+  PRESET = null;
+  return presetNew(v);
+};
+const presetStart = ACT["start"];
+ACT["start"] = (v) => {
+  const o = PRESET;
+  if (o) presetAplica();
+  const r = presetStart(v);
+  if (o && S) {
+    PRESET = null;
+    if (o.alIniciar) o.alIniciar(S);
+    pg();
+  }
+  return r;
+};
+const presetMn = mn;
+mn = function () {
+  PRESET = null;
+  return presetMn.apply(this, arguments);
+};
+function puntaje() {
+  if (!S) return 0;
+  return Math.max(0, Math.round((valorEstudio() * hoyF(yr())) / 1e6 + (S.win | 0) * 25 + (S.hm || []).length * 10 + (S.fans || 0) / 50000));
+}
+const lsJ = (k, d) => {
+  try {
+    const v = JSON.parse(LS.g(k) || "null");
+    return v == null ? d : v;
+  } catch (e) {
+    return d;
+  }
+};
+const lsSet = (k, v) => {
+  try {
+    LS.s(k, JSON.stringify(v));
+  } catch (e) {}
+};
+const estrenadas = (f) => S.pj.filter((p) => p.st >= 3 && !p.rr && (!f || f(p))).length;
+const rentable = (p) => (p.gross || 0) > (p.cost || p.paid || Infinity);
+const CAMP = [
+  {
+    y: 1737, sede: 10, hasta: 1747,
+    t: ["La Ley de Licencias", "The Licensing Act"],
+    h: ["Londres, 1737. Una ley nueva obliga a que cada obra pase por la censura del Lord Chambelán y deja el teatro hablado en manos de dos salas con patente. Muchos teatros cierran.", "London, 1737. A new law makes every play pass the Lord Chamberlain's censor and leaves spoken drama to two patent theatres. Many theatres close."],
+    dato: ["Esa censura de los teatros británicos duró hasta 1968.", "That censorship of British theatres lasted until 1968."],
+    meta: ["Estrena 3 obras de teatro con 60 o más de público antes de 1747.", "Premiere 3 plays with 60 or more audience before 1747."],
+    p: () => [estrenadas((p) => p.m == 3 && (p.a || 0) >= 60), 3],
+  },
+  {
+    y: 1830, sede: 11, hasta: 1840,
+    t: ["La batalla de Hernani", "The battle of Hernani"],
+    h: ["París, 1830. El estreno de «Hernani», de Victor Hugo, termina en peleas entre clásicos y románticos durante semanas. El público ya no solo mira: toma partido.", "Paris, 1830. The premiere of Victor Hugo's «Hernani» ends in weeks of fights between classicists and romantics. The audience no longer just watches: it takes sides."],
+    dato: ["Los románticos llegaron horas antes al estreno y comieron en la sala para asegurarse los asientos.", "The romantics arrived hours early to the premiere and ate inside the theatre to keep their seats."],
+    meta: ["Consigue 2 obras con 75 o más de crítica antes de 1840.", "Get 2 works with 75 or more critics before 1840."],
+    p: () => [estrenadas((p) => (p.c || 0) >= 75), 2],
+  },
+  {
+    y: 1895, sede: 11, hasta: 1905,
+    t: ["Del teatro al cine", "From stage to screen"],
+    h: ["París, diciembre de 1895. Los hermanos Lumière cobran entrada por primera vez para ver películas en el Salon Indien del Grand Café. El cine es un invento nuevo y nadie sabe si durará.", "Paris, December 1895. The Lumière brothers charge admission for the first time to watch films at the Grand Café's Salon Indien. Cinema is brand new and nobody knows if it will last."],
+    dato: ["Louis Lumière dijo que el cine era «un invento sin futuro».", "Louis Lumière said cinema was «an invention without a future»."],
+    meta: ["Estrena una película que recaude más de lo que costó antes de 1905.", "Release a film that earns more than it cost before 1905."],
+    p: () => [estrenadas((p) => p.m == 0 && rentable(p)), 1],
+  },
+  {
+    y: 1913, sede: 20, hasta: 1925,
+    t: ["Nace el cine indio", "Indian cinema is born"],
+    h: ["Bombay, 1913. Dadasaheb Phalke estrena «Raja Harishchandra», el primer largometraje indio. Como ninguna mujer aceptaba actuar, un hombre interpretó a la reina.", "Bombay, 1913. Dadasaheb Phalke releases «Raja Harishchandra», the first Indian feature film. Since no woman would act, a man played the queen."],
+    dato: ["Hoy la India es el país que produce más películas al año.", "Today India is the country that produces the most films each year."],
+    meta: ["Estrena 2 películas con 65 o más de público antes de 1925.", "Release 2 films with 65 or more audience before 1925."],
+    p: () => [estrenadas((p) => p.m == 0 && (p.a || 0) >= 65), 2],
+  },
+  {
+    y: 1927, sede: 0, hasta: 1937,
+    t: ["El cine habla", "The movies talk"],
+    h: ["Hollywood, 1927. «El cantor de jazz» trae canciones y diálogos sincronizados. En pocos años el cine mudo desaparece y muchas estrellas pierden su carrera por su voz.", "Hollywood, 1927. «The Jazz Singer» brings synchronised songs and dialogue. Within a few years silent film disappears and many stars lose their careers because of their voices."],
+    dato: ["La película es casi toda muda: solo tiene unos dos minutos de diálogo.", "The film is mostly silent: it has only about two minutes of dialogue."],
+    meta: ["Estrena 3 películas con 70 o más de crítica antes de 1937.", "Release 3 films with 70 or more critics before 1937."],
+    p: () => [estrenadas((p) => p.m == 0 && (p.c || 0) >= 70), 3],
+  },
+  {
+    y: 1958, sede: 22, hasta: 1968,
+    t: ["La televisión llega a casa", "TV comes home"],
+    h: ["Tokio, 1958. La boda del príncipe heredero, al año siguiente, hará que millones de familias japonesas compren su primer televisor. Las salas de cine empiezan a vaciarse.", "Tokyo, 1958. The crown prince's wedding the next year will make millions of Japanese families buy their first TV set. Cinemas start to empty."],
+    dato: ["El mismo año se estrena «Hakujaden», el primer largometraje japonés de animación a color.", "That same year «Hakujaden» opens, the first Japanese colour animated feature."],
+    meta: ["Estrena 2 películas o series con 70 o más de público antes de 1968.", "Release 2 films or series with 70 or more audience before 1968."],
+    p: () => [estrenadas((p) => (p.m == 0 || p.m == 1) && (p.a || 0) >= 70), 2],
+  },
+  {
+    y: 1983, sede: 0, hasta: 1990,
+    t: ["La crisis del videojuego", "The video game crash"],
+    h: ["Estados Unidos, 1983. Demasiadas consolas y juegos malos hunden el mercado: las ventas caen cerca de un 97 % en dos años. Las tiendas regalan cartuchos.", "United States, 1983. Too many consoles and bad games sink the market: sales fall about 97 % in two years. Shops give cartridges away."],
+    dato: ["En 2014 se excavó un vertedero de Nuevo México y aparecieron los cartuchos de «E.T.» que Atari enterró en 1983.", "In 2014 a New Mexico landfill was dug up and the «E.T.» cartridges Atari buried in 1983 turned up."],
+    meta: ["Lanza 2 videojuegos rentables antes de 1990.", "Release 2 profitable video games before 1990."],
+    p: () => [estrenadas((p) => p.m == 2 && rentable(p)), 2],
+  },
+  {
+    y: 2007, sede: 0, hasta: 2017,
+    t: ["Llega el streaming", "Streaming arrives"],
+    h: ["2007. Una empresa que alquilaba DVD por correo empieza a transmitir películas por internet. En diez años cambia cómo el mundo ve series y cine.", "2007. A company that rented DVDs by mail starts streaming films over the internet. Within ten years it changes how the world watches series and films."],
+    dato: ["Al principio el servicio tenía unos mil títulos y cada suscriptor podía ver pocas horas al mes.", "At first the service had about a thousand titles and each subscriber could watch only a few hours a month."],
+    meta: ["Abre tu plataforma de streaming y estrena 5 obras antes de 2017.", "Open your streaming platform and release 5 works before 2017."],
+    p: () => [Math.min(estrenadas((p) => p.y >= 2007), 5) + (S.sv && S.sv.on ? 1 : 0), 6],
+  },
+  {
+    y: 2150, sede: 23, hasta: 2175,
+    t: ["Seis siglos", "Six centuries"],
+    h: ["2150. Las historias siguen siendo lo que eran hace seis siglos: alguien cuenta, alguien escucha. Solo cambian las pantallas.", "2150. Stories are still what they were six centuries ago: someone tells, someone listens. Only the screens change."],
+    dato: ["La obra de teatro que lleva más tiempo en cartel es «La ratonera», de Agatha Christie: se representa en Londres desde 1952 y solo la pandemia la detuvo.", "The longest-running play is Agatha Christie's «The Mousetrap»: it has played in London since 1952 and only the pandemic stopped it."],
+    meta: ["Sé el estudio número 1 en valor de la compañía antes de 2175.", "Be the number 1 studio by company value before 2175."],
+    p: () => [valorPuesto(valorEstudio())[0] == 1 ? 1 : 0, 1],
+  },
+];
+const campProg = () => lsJ("ia.siglos", { ok: [] });
+const campLibre = (i) => i == 0 || campProg().ok.includes(i - 1);
+function campaM() {
+  const pr = campProg();
+  op(`<div class="c"><div class="k"><h2 style="margin:0">${ic("libro")} ${dualReg("Seis siglos: capítulos de la historia", "Six centuries: chapters of history")}</h2><span class="bts">${bi("siglos")}${btx()}</span></div><div class="m">${dualReg("Capítulos de la historia del espectáculo, cada uno con un reto. Al superar uno se abre el siguiente; después puedes seguir jugando libre.", "Chapters of entertainment history, each with a challenge. Beating one unlocks the next; afterwards you can keep playing freely.")}</div>${CAMP.map((c, i) => {
+    const ok = pr.ok.includes(i),
+      libre = campLibre(i);
+    return `<div class="c sub camp${ok ? " ok" : ""}${libre ? "" : " cerrado"}"><div class="k"><b>${i + 1}. ${c.y} · ${esc(LL(c.t))}</b><span class="m">${ok ? "✓ " + dualReg("superado", "completed") : libre ? "" : "\u{1F512}︎"}</span></div><div class="m">${esc(LL(c.h))}</div><div class="m"><b>${dualReg("Meta", "Goal")}:</b> ${esc(LL(c.meta))}</div>${libre ? `<div class="bts">${bt("campj", i, dualReg("Jugar", "Play"), "a")}${bt("campp", i, dualReg("Personalizar", "Customize"))}</div>` : `<div class="m">${dualReg("Supera el capítulo anterior para abrirlo.", "Beat the previous chapter to unlock it.")}</div>`}</div>`;
+  }).join("")}</div>`);
+}
+function campCfg(i) {
+  const c = CAMP[i];
+  return {
+    y: c.y,
+    sede: c.sede,
+    sd: "CAMPANA-" + (i + 1),
+    df: 1,
+    titulo: dualReg("Seis siglos", "Six centuries") + " · " + (i + 1) + ". " + LL(c.t),
+    alIniciar: (s) => {
+      s.camp = { c: i, ok: 0 };
+      s.tp = 1;
+      s.cf = 0;
+    },
+  };
+}
+ACT["campa"] = () => campaM();
+ACT["campj"] = (v) => (campLibre(+v) ? partidaPreset(campCfg(+v), 1) : 0);
+ACT["campp"] = (v) => (campLibre(+v) ? partidaPreset(campCfg(+v), 0) : 0);
+function campRevisa() {
+  if (!S || !S.camp || S.camp.ok || S.camp.fallo || S.bot) return;
+  const c = CAMP[S.camp.c];
+  if (!c) return;
+  const [a, b] = c.p();
+  if (a >= b) {
+    S.camp.ok = 1;
+    const pr = campProg();
+    if (!pr.ok.includes(S.camp.c)) pr.ok.push(S.camp.c);
+    lsSet("ia.siglos", pr);
+    nws(L4("Capítulo superado: #.", "Chapter completed: #.", "Chapitre réussi : #.", "Capítulo concluído: #.").replace("#", LL(c.t)));
+    S.campAviso = 1;
+    sonar("hito");
+  } else if (yr() >= c.hasta) {
+    S.camp.fallo = 1;
+    S.campAviso = 2;
+  }
+}
+on("mes", campRevisa);
+function campAvisoM() {
+  const k = S.campAviso,
+    i = S.camp.c,
+    c = CAMP[i];
+  S.campAviso = 0;
+  const sig = CAMP[i + 1];
+  op(`<div class="c"><div class="k"><h2 style="margin:0">${k == 1 ? "\u{1F3C6}︎ " + dualReg("¡Capítulo superado!", "Chapter completed!") : "⌛︎ " + dualReg("Se acabó el tiempo", "Time is up")}</h2>${btx()}</div><p><b>${i + 1}. ${esc(LL(c.t))}</b></p><div class="m">${k == 1 ? esc(LL(c.dato)) : dualReg("No llegaste a la meta a tiempo. Puedes intentarlo de nuevo o seguir jugando libre en este mundo.", "You didn't reach the goal in time. You can try again or keep playing freely in this world.")}</div><div class="bts">${k == 1 && sig ? bt("campj", i + 1, dualReg("Siguiente capítulo", "Next chapter"), "a") : ""}${k == 2 ? bt("campj", i, dualReg("Reintentar", "Retry"), "a") : ""}${bt("x", "", dualReg("Seguir jugando", "Keep playing"))}</div></div>`);
+}
+function campH() {
+  if (!S || !S.camp) return "";
+  const c = CAMP[S.camp.c];
+  if (!c) return "";
+  const [a, b] = c.p();
+  return `<div class="c camp-h"><div class="k"><h3 style="margin:0">${ic("libro")} ${dualReg("Capítulo", "Chapter")} ${S.camp.c + 1}: ${esc(LL(c.t))}</h3>${bi("siglos")}</div><div class="m">${esc(LL(c.meta))}</div>${barV((100 * Math.min(a, b)) / b)}<div class="m">${S.camp.ok ? "✓ " + dualReg("Superado. Sigues jugando libre.", "Completed. You keep playing freely.") : S.camp.fallo ? dualReg("Se acabó el tiempo; sigues jugando libre.", "Time ran out; you keep playing freely.") : L4("# de % · hasta &", "# of % · until &", "# sur % · jusqu'en &", "# de % · até &").replace("#", Math.min(a, b)).replace("%", b).replace("&", c.hasta)}</div></div>`;
+}
+const isoSemana = (d) => {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())),
+    dia = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - dia);
+  const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  return [t.getUTCFullYear(), Math.ceil(((t - y0) / 86400000 + 1) / 7)];
+};
+const RETO_ANOS = [1750, 1820, 1870, 1900, 1925, 1955, 1980, 2000, 2030, 2080, 2140, 2220];
+function retoHoy() {
+  const [a, w] = isoSemana(new Date()),
+    id = a + "-S" + String(w).padStart(2, "0"),
+    h = hs("RETO|" + id),
+    y = RETO_ANOS[h % RETO_ANOS.length],
+    L = REGC.map((r, i) => i).filter((i) => REGC[i][1] >= 0 && regOk(i, y)),
+    reg = L.length ? L[(h >> 4) % L.length] : 0;
+  return { id, y, sede: REGC[reg][1], reg, anos: 10, sd: "RETO-" + id };
+}
+const retoTabla = (id) => (lsJ("ia.retos", {})[id] || []).slice().sort((a, b) => b.p - a.p);
+function retoM() {
+  const r = retoHoy(),
+    T = retoTabla(r.id);
+  op(`<div class="c"><div class="k"><h2 style="margin:0">${ic("trofeo")} ${dualReg("Reto de la semana", "Weekly challenge")}</h2><span class="bts">${bi("reto")}${btx()}</span></div><div class="m">${dualReg("Todos los que juegan esta semana empiezan en el mismo mundo. Tienes 10 años de juego para sumar puntos; el reto cambia cada lunes.", "Everyone playing this week starts in the same world. You have 10 game years to score points; the challenge changes every Monday.")}</div><div class="fila"><span>${dualReg("Semana", "Week")}</span><b>${r.id}</b></div><div class="fila"><span>${dualReg("Año de inicio", "Start year")}</span><b>${r.y}</b></div><div class="fila"><span>${dualReg("Sede", "Headquarters")}</span><b>${esc(REGC[r.reg][0])}</b></div><div class="fila"><span>${L4("Puntos", "Points", "Points", "Pontos")}</span><b class="m">${dualReg("valor en millones de hoy + 25 por premio + 10 por hito + fans", "value in today's millions + 25 per award + 10 per milestone + fans")}</b></div><div class="bts">${bt("retoj", "", dualReg("Jugar el reto", "Play the challenge"), "a")}${bt("retop", "", dualReg("Personalizar", "Customize"))}</div><h3>${dualReg("Tus mejores intentos", "Your best attempts")}</h3>${T.length ? T.slice(0, 10).map((x, i) => `<div class="fila"><span>${i + 1}. ${esc(x.n)}</span><b>${nf(x.p)}</b></div>`).join("") : `<div class="m">${dualReg("Todavía no hay intentos esta semana.", "No attempts this week yet.")}</div>`}</div>`);
+}
+function retoCfg(r) {
+  return {
+    y: r.y,
+    sede: r.sede,
+    sd: r.sd,
+    df: 1,
+    titulo: dualReg("Reto de la semana", "Weekly challenge") + " · " + r.id,
+    alIniciar: (s) => {
+      s.reto = { id: r.id, hasta: r.y + r.anos };
+      s.tp = 1;
+      s.cf = 0;
+    },
+  };
+}
+ACT["reto"] = () => retoM();
+ACT["retoj"] = () => partidaPreset(retoCfg(retoHoy()), 1);
+ACT["retop"] = () => partidaPreset(retoCfg(retoHoy()), 0);
+on("semana", () => {
+  if (!S || !S.reto || S.reto.fin != null || S.bot || yr() < S.reto.hasta) return;
+  const p = puntaje();
+  S.reto.fin = p;
+  const tb = lsJ("ia.retos", {}),
+    L = (tb[S.reto.id] || []).concat([{ n: S.sn, p, f: Date.now() }]).sort((a, b) => b.p - a.p).slice(0, 10);
+  tb[S.reto.id] = L;
+  Object.keys(tb)
+    .sort()
+    .slice(0, -12)
+    .forEach((k) => delete tb[k]);
+  lsSet("ia.retos", tb);
+  S.retoAviso = 1;
+  nws(L4("Reto terminado: # puntos.", "Challenge finished: # points.", "Défi terminé : # points.", "Desafio concluído: # pontos.").replace("#", nf(p)));
+});
+function retoAvisoM() {
+  S.retoAviso = 0;
+  const T = retoTabla(S.reto.id),
+    k = T.findIndex((x) => x.p == S.reto.fin && x.n == S.sn);
+  op(`<div class="c"><div class="k"><h2 style="margin:0">${ic("trofeo")} ${dualReg("Reto terminado", "Challenge finished")}</h2>${btx()}</div><p><b>${L4("# puntos", "# points", "# points", "# pontos").replace("#", nf(S.reto.fin))}</b>${k >= 0 ? " · " + L4("puesto #", "rank #", "rang #", "posição #").replace("#", k + 1) : ""}</p><div class="m">${dualReg("Si juegas en red, tus amigos ven tu puntaje en el marcador LAN. Puedes seguir jugando: los puntos ya quedaron guardados.", "If you play on a network, your friends see your score on the LAN scoreboard. You can keep playing: the points are already saved.")}</div>${T.slice(0, 5).map((x, i) => `<div class="fila"><span>${i + 1}. ${esc(x.n)}</span><b>${nf(x.p)}</b></div>`).join("")}<div class="bts">${bt("x", "", dualReg("Seguir jugando", "Keep playing"), "a")}</div></div>`);
+}
+function retoH() {
+  if (!S || !S.reto) return "";
+  const falta = S.reto.hasta - yr();
+  return `<div class="c camp-h"><div class="k"><h3 style="margin:0">${ic("trofeo")} ${dualReg("Reto de la semana", "Weekly challenge")} · ${S.reto.id}</h3>${bi("reto")}</div><div class="m">${S.reto.fin != null ? L4("Terminado: # puntos", "Finished: # points", "Terminé : # points", "Concluído: # pontos").replace("#", nf(S.reto.fin)) : L4("Puntos ahora: <b>#</b> · faltan % años", "Points now: <b>#</b> · % years left", "Points actuels : <b>#</b> · encore % ans", "Pontos agora: <b>#</b> · faltam % anos").replace("#", nf(puntaje())).replace("%", Math.max(0, falta))}</div></div>`;
+}
+const vEModos = vE;
+vE = function () {
+  return campH() + retoH() + (typeof lanH == "function" ? lanH() : "") + vEModos.apply(this, arguments);
+};
+const pgModos = pg;
+pg = function () {
+  const r = pgModos.apply(this, arguments);
+  if (S && !S.bot && !hojaAbierta()) {
+    if (S.campAviso) setTimeout(campAvisoM, 40);
+    else if (S.retoAviso) setTimeout(retoAvisoM, 40);
+  }
+  return r;
+};
+const LAN = { via: "", rol: "", pin: "", clave: null, sala: "", pares: {}, conx: {}, salas: {}, rtc: {}, cod: "", codG: "", yo: "", ult: 0, busca: 0, aviso: "", duelos: {} };
+LAN.yo = Math.random().toString(36).slice(2, 10);
+const lanNativo = () => {
+  try {
+    return !!(window.AndroidBridge && AndroidBridge.lanDisponible && AndroidBridge.lanDisponible());
+  } catch (e) {
+    return false;
+  }
+};
+const lanActiva = () => Object.keys(LAN.conx).length > 0;
+const LAN_REAC = [
+  ["\u{1F44F}", "¡Bien jugado!", "Well played!"],
+  ["\u{1F525}", "¡Qué estreno!", "What a premiere!"],
+  ["\u{1F3C6}", "¡Felicidades por el premio!", "Congrats on the award!"],
+  ["\u{1F60F}", "¡Te voy a ganar!", "I'm going to beat you!"],
+  ["\u{1F504}", "¡Revancha!", "Rematch!"],
+  ["☕", "Pausa, ya vuelvo", "Break, be right back"],
+];
+const u8b = (u) => {
+  let s = "";
+  for (let i = 0; i < u.length; i += 8192) s += String.fromCharCode.apply(null, u.subarray(i, i + 8192));
+  return btoa(s);
+};
+const bu8 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+async function lanClave(pin) {
+  const enc = new TextEncoder(),
+    base = await crypto.subtle.importKey("raw", enc.encode(pin), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({ name: "PBKDF2", salt: enc.encode("IndustryArt-LAN-1"), iterations: 120000, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+}
+async function lanCifra(o) {
+  const iv = crypto.getRandomValues(new Uint8Array(12)),
+    ct = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, LAN.clave, new TextEncoder().encode(JSON.stringify(o)));
+  return u8b(iv) + "." + u8b(new Uint8Array(ct));
+}
+async function lanDescifra(l) {
+  const [a, b] = String(l).split("."),
+    pt = await crypto.subtle.decrypt({ name: "AES-GCM", iv: bu8(a) }, LAN.clave, bu8(b));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+function lanCrudo(id, linea) {
+  if (LAN.via == "nsd") {
+    try {
+      AndroidBridge.lanEnviar(id, linea);
+    } catch (e) {}
+    return;
+  }
+  const L = id == "*" ? Object.keys(LAN.rtc) : [id];
+  L.forEach((k) => {
+    const x = LAN.rtc[k];
+    if (x && x.dc && x.dc.readyState == "open") x.dc.send(linea);
+  });
+}
+async function lanEnviar(o, id) {
+  o.de = LAN.yo;
+  const linea = LAN.via == "nsd" ? await lanCifra(o) : JSON.stringify(o);
+  lanCrudo(id || "*", linea);
+}
+function lanTarjeta() {
+  if (!S) return null;
+  const cnt = [0, 0, 0, 0, 0, 0];
+  S.pj.forEach((p) => p.st >= 3 && !p.rr && cnt[p.m]++);
+  const mx = Math.max(1, ...cnt),
+    ult = S.pj
+      .filter((p) => p.st >= 3 && !p.rr)
+      .slice(-3)
+      .map((p) => ({ n: p.n, m: p.m, gR: Math.round(p.gR || 0), c: Math.round(p.c || 0) }));
+  return {
+    id: LAN.yo,
+    n: S.sn,
+    lg: S.lg,
+    pais: S.sede,
+    y: yr(),
+    cls: S.cls || "",
+    v: Math.round(valorEstudio() * hoyF(yr())),
+    fans: S.fans | 0,
+    win: S.win | 0,
+    obras: estrenadas(),
+    pop: Math.round(S.pop || 0),
+    sp: cnt.map((x) => Math.round((5 * x) / mx)),
+    est: S.pop >= 65 ? "pr" : Object.keys(S.fr || {}).length >= 3 ? "fr" : "tq",
+    ult,
+    duelo: S.duelo ? { id: S.duelo.id, p: puntaje() } : null,
+    reto: S.reto ? { id: S.reto.id, p: S.reto.fin != null ? S.reto.fin : puntaje() } : null,
+  };
+}
+function lanEstado(forzar) {
+  if (!lanActiva() || !S || S.bot) return;
+  const t = Date.now();
+  if (!forzar && t - LAN.ult < 4000) return;
+  LAN.ult = t;
+  lanEnviar({ t: "estado", c: lanTarjeta() });
+}
+function lanRecibe(o, desde) {
+  if (!o || typeof o != "object" || o.de == LAN.yo) return;
+  const P = (LAN.pares[o.de] = LAN.pares[o.de] || { de: o.de, n: "?", c: null, conx: desde });
+  if (desde) P.conx = desde;
+  if (o.t == "hola" || o.t == "estado") {
+    const nuevo = !P.c;
+    if (o.c && typeof o.c == "object") {
+      const prev = P.c;
+      P.c = o.c;
+      P.n = String(o.c.n || "?").slice(0, 40);
+      if (prev && S && prev.ult && o.c.ult) {
+        const vistos = prev.ult.map((x) => x.n);
+        o.c.ult.filter((x) => !vistos.includes(x.n)).forEach((x) => nws(L4("Tu amigo # estrena «%».", "Your friend # releases «%».", "Ton ami # sort «%».", "Seu amigo # lança «%».").replace("#", P.n).replace("%", String(x.n).slice(0, 60))));
+      }
+      if (S && S.rv.some((r) => r.amigo == o.de)) amigoRival(o.c);
+      if (o.c.duelo && S && S.duelo && o.c.duelo.id == S.duelo.id) S.duelo.vivo = Object.assign(S.duelo.vivo || {}, { [o.de]: [P.n, o.c.duelo.p] });
+    }
+    if (nuevo) {
+      toast("\u{1F4F6}︎ " + L4("# se une", "# joins", "# rejoint la salle", "# entrou").replace("#", P.n));
+      lanEnviar({ t: "hola", c: lanTarjeta() || { n: dualReg("Jugador sin partida", "Player without a game") } });
+    }
+  } else if (o.t == "reac") {
+    const r = LAN_REAC[o.k | 0];
+    if (r) toast(r[0] + " " + P.n + ": " + LL([r[1], r[2]]));
+  } else if (o.t == "chao") {
+    toast(L4("# salió de la sala", "# left the room", "# a quitté la salle", "# saiu da sala").replace("#", P.n));
+    delete LAN.pares[o.de];
+  } else if (o.t == "duelo" && o.cfg) {
+    LAN.duelos[o.cfg.id] = { cfg: o.cfg, de: o.de, n: P.n };
+    LAN.aviso = o.cfg.id;
+    if (!hojaAbierta()) dueloInvM(o.cfg.id);
+  } else if (o.t == "dueloSi") {
+    toast(L4("# acepta el duelo", "# accepts the duel", "# accepte le duel", "# aceita o duelo").replace("#", P.n));
+  } else if (o.t == "fin" && S && S.duelo && o.id == S.duelo.id) {
+    S.duelo.res = S.duelo.res || {};
+    S.duelo.res[o.de] = [P.n, o.p | 0];
+    if (S.duelo.fin != null && !hojaAbierta()) dueloFinM();
+  }
+  lanRefresca();
+}
+window.lanEvento = async (tipo, a, b) => {
+  if (tipo == "sala") {
+    LAN.aviso = dualReg("Sala abierta. Comparte el código con quien esté en tu misma red Wi-Fi.", "Room open. Share the code with anyone on your same Wi-Fi.");
+  } else if (tipo == "encontrada") {
+    LAN.salas[a] = b;
+  } else if (tipo == "perdida") {
+    delete LAN.salas[a];
+  } else if (tipo == "conectado") {
+    LAN.conx[a] = { ip: b, ok: LAN.rol == "invitado" };
+    if (LAN.rol == "invitado") lanEnviar({ t: "hola", c: lanTarjeta() || { n: dualReg("Jugador sin partida", "Player without a game") } }, a);
+  } else if (tipo == "desconectado") {
+    delete LAN.conx[a];
+    Object.values(LAN.pares).forEach((p) => {
+      if (p.conx == a) {
+        if (LAN.rol == "anfitrion") lanEnviar({ t: "chao", de2: p.de });
+        delete LAN.pares[p.de];
+      }
+    });
+    if (LAN.rol == "invitado" && !lanActiva()) LAN.aviso = dualReg("Se cerró la conexión con la sala.", "The connection to the room closed.");
+  } else if (tipo == "mensaje") {
+    let o;
+    try {
+      o = await lanDescifra(b);
+    } catch (e) {
+      if (LAN.rol == "anfitrion") {
+        try {
+          AndroidBridge.lanCerrar(a);
+        } catch (er) {}
+        toast(dualReg("Alguien intentó entrar con un código incorrecto", "Someone tried to join with a wrong code"));
+      } else {
+        LAN.aviso = dualReg("Código incorrecto. Pide el código de 6 dígitos a quien abrió la sala.", "Wrong code. Ask the room host for the 6-digit code.");
+        lanSalir(1);
+      }
+      return lanRefresca();
+    }
+    if (LAN.conx[a]) LAN.conx[a].ok = true;
+    if (LAN.rol == "anfitrion") Object.keys(LAN.conx).forEach((k) => k != a && lanCrudo(k, b));
+    if (o.t == "chao" && o.de2) o.de = o.de2;
+    lanRecibe(o, a);
+  } else if (tipo == "error") {
+    LAN.aviso = dualReg("No se pudo completar la conexión", "The connection could not be completed") + " (" + a + ").";
+  }
+  lanRefresca();
+};
+function lanPinNuevo() {
+  const a = crypto.getRandomValues(new Uint32Array(1))[0] % 1000000;
+  return String(a).padStart(6, "0");
+}
+async function lanCrear() {
+  lanSalir(1);
+  LAN.via = "nsd";
+  LAN.rol = "anfitrion";
+  LAN.pin = lanPinNuevo();
+  LAN.clave = await lanClave(LAN.pin);
+  LAN.aviso = dualReg("Abriendo la sala…", "Opening the room…");
+  try {
+    AndroidBridge.lanCrear(((S && S.sn) || "Industry Art").slice(0, 40));
+  } catch (e) {}
+  lanRefresca();
+}
+function lanBuscar() {
+  lanSalir(1);
+  LAN.via = "nsd";
+  LAN.rol = "invitado";
+  LAN.busca = 1;
+  LAN.aviso = dualReg("Buscando salas en tu red Wi-Fi…", "Looking for rooms on your Wi-Fi…");
+  try {
+    AndroidBridge.lanBuscar();
+  } catch (e) {}
+  lanRefresca();
+}
+async function lanEntrar(nombre) {
+  const e = $("#lanpin"),
+    pin = e ? e.value.replace(/\D/g, "") : "";
+  if (pin.length != 6) return toast(dualReg("Escribe el código de 6 dígitos de la sala", "Type the room's 6-digit code"));
+  const dest = LAN.salas[nombre];
+  if (!dest) return;
+  LAN.pin = pin;
+  LAN.clave = await lanClave(pin);
+  LAN.sala = nombre;
+  LAN.busca = 0;
+  try {
+    AndroidBridge.lanParar();
+    AndroidBridge.lanUnirse(dest);
+  } catch (er) {}
+  LAN.aviso = L4("Conectando con #…", "Connecting to #…", "Connexion à #…", "Conectando com #…").replace("#", nombre);
+  lanRefresca();
+}
+function lanSalir(silencio) {
+  if (lanActiva()) lanEnviar({ t: "chao" });
+  try {
+    if (LAN.via == "nsd") AndroidBridge.lanSalir();
+  } catch (e) {}
+  Object.values(LAN.rtc).forEach((x) => {
+    try {
+      x.pc.close();
+    } catch (e) {}
+  });
+  Object.assign(LAN, { via: "", rol: "", pin: "", clave: null, sala: "", pares: {}, conx: {}, salas: {}, rtc: {}, cod: "", codG: "", busca: 0 });
+  if (!silencio) {
+    LAN.aviso = "";
+    lanRefresca();
+  }
+}
+const rtcEspera = (pc) =>
+  new Promise((ok) => {
+    if (pc.iceGatheringState == "complete") return ok();
+    const f = () => pc.iceGatheringState == "complete" && ok();
+    pc.addEventListener("icegatheringstatechange", f);
+    setTimeout(ok, 4000);
+  });
+async function rtcComprime(o) {
+  const s = JSON.stringify(o);
+  try {
+    const cs = new Blob([s]).stream().pipeThrough(new CompressionStream("deflate-raw"));
+    return "IA1z" + u8b(new Uint8Array(await new Response(cs).arrayBuffer()));
+  } catch (e) {
+    return "IA1j" + btoa(unescape(encodeURIComponent(s)));
+  }
+}
+async function rtcAbre(c) {
+  c = String(c || "").replace(/\s+/g, "");
+  if (c.startsWith("IA1z")) {
+    const ds = new Blob([bu8(c.slice(4))]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+    return JSON.parse(await new Response(ds).text());
+  }
+  if (c.startsWith("IA1j")) return JSON.parse(decodeURIComponent(escape(atob(c.slice(4)))));
+  throw new Error("codigo");
+}
+function rtcCanal(id, dc) {
+  LAN.rtc[id].dc = dc;
+  dc.onopen = () => {
+    LAN.conx[id] = { ok: true };
+    LAN.codG = "";
+    LAN.aviso = dualReg("Conectado.", "Connected.");
+    lanEnviar({ t: "hola", c: lanTarjeta() || { n: dualReg("Jugador sin partida", "Player without a game") } }, id);
+    lanRefresca();
+  };
+  dc.onclose = () => window.lanEvento("desconectado", id, "");
+  dc.onmessage = (e) => {
+    let o;
+    try {
+      o = JSON.parse(e.data);
+    } catch (er) {
+      return;
+    }
+    if (LAN.rol == "anfitrion") Object.keys(LAN.rtc).forEach((k) => k != id && lanCrudo(k, e.data));
+    if (o.t == "chao" && o.de2) o.de = o.de2;
+    lanRecibe(o, id);
+  };
+}
+async function rtcInvitar() {
+  if (LAN.via && LAN.via != "rtc") lanSalir(1);
+  LAN.via = "rtc";
+  LAN.rol = "anfitrion";
+  const id = "r" + (Object.keys(LAN.rtc).length + 1),
+    pc = new RTCPeerConnection({ iceServers: [] });
+  LAN.rtc[id] = { pc };
+  rtcCanal(id, pc.createDataChannel("ia", { ordered: true }));
+  await pc.setLocalDescription(await pc.createOffer());
+  await rtcEspera(pc);
+  LAN.cod = await rtcComprime({ id, sdp: pc.localDescription.sdp });
+  LAN.codP = id;
+  LAN.aviso = dualReg("Envía este código a tu amigo y pega aquí el código que te devuelva.", "Send this code to your friend and paste here the code they send back.");
+  lanRefresca();
+}
+async function rtcResponder() {
+  const e = $("#lancod");
+  let o;
+  try {
+    o = await rtcAbre(e ? e.value : "");
+  } catch (er) {
+    return toast(dualReg("Ese código no es válido", "That code is not valid"));
+  }
+  if (LAN.rol == "anfitrion" && LAN.codP && LAN.rtc[LAN.codP]) {
+    await LAN.rtc[LAN.codP].pc.setRemoteDescription({ type: "answer", sdp: o.sdp });
+    LAN.cod = "";
+    LAN.aviso = dualReg("Conectando…", "Connecting…");
+    return lanRefresca();
+  }
+  lanSalir(1);
+  LAN.via = "rtc";
+  LAN.rol = "invitado";
+  const id = "r1",
+    pc = new RTCPeerConnection({ iceServers: [] });
+  LAN.rtc[id] = { pc };
+  pc.ondatachannel = (ev) => rtcCanal(id, ev.channel);
+  await pc.setRemoteDescription({ type: "offer", sdp: o.sdp });
+  await pc.setLocalDescription(await pc.createAnswer());
+  await rtcEspera(pc);
+  LAN.codG = await rtcComprime({ id: o.id, sdp: pc.localDescription.sdp });
+  LAN.aviso = dualReg("Devuelve este código a quien te invitó.", "Send this code back to whoever invited you.");
+  lanRefresca();
+}
+function amigoRival(c) {
+  if (!S || !c || !c.n) return null;
+  let r = S.rv.find((x) => x.amigo == c.id);
+  const sz = cl(0.6 + (["Pequeño", "Mediano", "Grande", "Major"].indexOf(c.cls) + 1) * 0.25, 0.5, 1.6),
+    pais = CY[c.pais] ? c.pais : S.sede;
+  if (!r) {
+    const tb0 = tbMain(yr());
+    r = { n: "", reg: CY[pais][1], sp: [1, 0, 0, 0, 0, 0], sz, sz0: sz, q: 58, cash: tb0 * sz * 6, px: 1, w: 0, nm: 0, own: 0, ing: 0, gan: 0, ingA: 0, ganA: 0, bo: [0, 0, 0, 0, 0, 0], hist: [], hits: [], pais, esp: L4("Estudio de un amigo", "A friend's studio", "Studio d'un ami", "Estúdio de um amigo"), est: "tq", lema: "", fy: yr(), nuevo: 1, amigo: c.id };
+    S.rv.push(r);
+    nws(L4("# entra a tu mundo como estudio rival.", "# enters your world as a rival studio.", "# entre dans ton monde comme studio rival.", "# entra no seu mundo como estúdio rival.").replace("#", c.n));
+  }
+  r.n = String(c.n).slice(0, 40);
+  r.dead = 0;
+  r.sz0 = sz;
+  if (Array.isArray(c.sp) && c.sp.some((x) => x > 0)) r.sp = c.sp.map((x) => cl(x | 0, 0, 5));
+  if (ESTR[c.est]) r.est = c.est;
+  r.q = cl(50 + Math.round((c.pop || 50) / 5), 50, 75);
+  r.lgA = c.lg || null;
+  if (c.ult) r.hits = c.ult.map((x) => String(x.n).slice(0, 60)).slice(0, 3);
+  S.amigos = S.amigos || {};
+  S.amigos[c.id] = c;
+  return r;
+}
+function amigoQuita(id) {
+  const r = S && S.rv.find((x) => x.amigo == id);
+  if (r) {
+    r.dead = 1;
+    nws(L4("# deja tu mundo.", "# leaves your world.", "# quitte ton monde.", "# sai do seu mundo.").replace("#", r.n));
+  }
+  if (S && S.amigos) delete S.amigos[id];
+}
+function amigoExporta() {
+  const c = lanTarjeta();
+  if (!c) return;
+  const txt = "INDUSTRY ART ESTUDIO\n" + JSON.stringify(c),
+    n = String(S.sn).replace(/[^\wáéíóúñÁÉÍÓÚÑ -]/g, "").trim().replace(/\s+/g, "_").slice(0, 40) + ".iaestudio";
+  if (typeof guardarNativo == "function" && guardarNativo(n, txt)) return;
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([txt], { type: "application/octet-stream" }));
+  a.download = n;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    URL.revokeObjectURL(a.href);
+    a.remove();
+  }, 1500);
+  toast(dualReg("Archivo listo", "File ready") + ": " + n);
+}
+function amigoImporta(inp) {
+  const f = inp && inp.files && inp.files[0];
+  if (!f || !S) return;
+  const rd = new FileReader();
+  rd.onload = async () => {
+    try {
+      const L = String(rd.result).split("\n");
+      let c = null;
+      if (/^INDUSTRY ART ESTUDIO/.test(L[0])) c = JSON.parse(L[1]);
+      else if (/^INDUSTRY ART/.test(L[0])) {
+        const meta = JSON.parse(L[1]),
+          x = await abrir(meta, b64d(L[2].trim())),
+          cnt = [0, 0, 0, 0, 0, 0];
+        (x.pj || []).forEach((p) => p.st >= 3 && !p.rr && cnt[p.m]++);
+        const mx = Math.max(1, ...cnt);
+        c = { id: "f" + hs(String(x.sd) + "|" + x.sn), n: x.sn, lg: x.lg, pais: x.sede, cls: x.cls || "", pop: x.pop || 50, sp: cnt.map((k) => Math.round((5 * k) / mx)), est: "tq", ult: (x.pj || []).filter((p) => p.st >= 3).slice(-3).map((p) => ({ n: p.n, m: p.m })) };
+      }
+      if (!c || !c.n) throw new Error("x");
+      c.id = c.id || "f" + hs(c.n);
+      if (c.id == LAN.yo) c.id = "f" + hs(c.n + "|copia");
+      amigoRival(c);
+      toast(dualReg("Estudio importado", "Studio imported") + ": " + c.n);
+      lanRefresca();
+      pg();
+    } catch (e) {
+      toast(dualReg("Ese archivo no es un estudio de INDUSTRY ART", "That file is not an INDUSTRY ART studio"));
+    }
+  };
+  rd.readAsText(f);
+}
+const DUELO_ANOS = [5, 10, 20];
+function dueloProponer() {
+  const s1 = $("#ldera"),
+    s2 = $("#ldanos");
+  const e = ERAC[s1 ? +s1.value : 3] || ERAC[3],
+    anos = s2 ? +s2.value : 10,
+    id = Math.random().toString(36).slice(2, 8),
+    h = hs(id),
+    y = Math.min(2300 - anos, e[1] + (h % Math.max(1, Math.min(e[2], e[1] + 25) - e[1] + 1))),
+    L = REGC.map((r, i) => i).filter((i) => REGC[i][1] >= 0 && regOk(i, y)),
+    reg = L.length ? L[(h >> 3) % L.length] : 0;
+  const cfg = { id, y, sede: REGC[reg][1], reg, anos, sd: "DUELO-" + id };
+  lanEnviar({ t: "duelo", cfg });
+  LAN.duelos[id] = { cfg, de: LAN.yo, n: S ? S.sn : "" };
+  dueloEmpieza(id);
+}
+function dueloEmpieza(id) {
+  const d = LAN.duelos[id];
+  if (!d) return;
+  const c = d.cfg;
+  if (d.de != LAN.yo) lanEnviar({ t: "dueloSi", id });
+  partidaPreset(
+    {
+      y: c.y,
+      sede: c.sede,
+      sd: c.sd,
+      df: 1,
+      titulo: dualReg("Duelo LAN", "LAN duel"),
+      alIniciar: (s) => {
+        s.duelo = { id: c.id, hasta: c.y + c.anos, res: {} };
+        s.tp = 1;
+        s.cf = 0;
+        setTimeout(() => lanEstado(1), 200);
+      },
+    },
+    1,
+  );
+}
+function dueloInvM(id) {
+  const d = LAN.duelos[id];
+  if (!d) return;
+  LAN.aviso = "";
+  op(`<div class="c"><div class="k"><h2 style="margin:0">⚔︎ ${dualReg("Te retan a un duelo", "You're challenged to a duel")}</h2>${btx()}</div><p>${L4("<b>#</b> propone un duelo: empieza en <b>%</b> en &, durante @ años.", "<b>#</b> proposes a duel: it starts in <b>%</b> in &, for @ years.", "<b>#</b> propose un duel : départ en <b>%</b> à &, pendant @ ans.", "<b>#</b> propõe um duelo: começa em <b>%</b> em &, durante @ anos.").replace("#", esc(d.n)).replace("%", d.cfg.y).replace("&", esc(REGC[d.cfg.reg] ? REGC[d.cfg.reg][0] : "")).replace("@", d.cfg.anos)}</p><div class="m">${dualReg("Todos empiezan en el mismo mundo, con los mismos rivales y sucesos. Gana quien tenga más puntos al final. Tu partida actual se guarda sola.", "Everyone starts in the same world, with the same rivals and events. Whoever has more points at the end wins. Your current game saves itself.")}</div><div class="bts">${bt("ldsi", id, dualReg("Aceptar el duelo", "Accept the duel"), "a")}${bt("x", "", dualReg("Ahora no", "Not now"))}</div></div>`);
+}
+on("semana", () => {
+  if (!S || !S.duelo || S.duelo.fin != null || S.bot || yr() < S.duelo.hasta) return;
+  S.duelo.fin = puntaje();
+  lanEnviar({ t: "fin", id: S.duelo.id, p: S.duelo.fin });
+  S.dueloAviso = 1;
+});
+function dueloFinM() {
+  if (!S || !S.duelo) return;
+  S.dueloAviso = 0;
+  const yoN = S.sn + " (" + L4("tú", "you", "toi", "você") + ")",
+    L = [[yoN, S.duelo.fin | 0]].concat(Object.values(S.duelo.res || {})).sort((a, b) => b[1] - a[1]),
+    gana = L[0] && L[0][0] == yoN;
+  const H = lsJ("ia.duelos", []);
+  if (!H.some((x) => x.id == S.duelo.id)) {
+    H.unshift({ id: S.duelo.id, f: Date.now(), p: S.duelo.fin, g: gana ? 1 : 0, n: L.length });
+    lsSet("ia.duelos", H.slice(0, 30));
+  }
+  op(`<div class="c"><div class="k"><h2 style="margin:0">⚔︎ ${dualReg("Fin del duelo", "Duel over")}</h2>${btx()}</div><p><b>${gana ? dualReg("¡Ganaste!", "You won!") : dualReg("Esta vez no", "Not this time")}</b></p>${L.map((x, i) => `<div class="fila"><span>${i + 1}. ${esc(x[0])}</span><b>${nf(x[1])}</b></div>`).join("")}<div class="m">${dualReg("Si alguien todavía no termina, su puntaje aparece cuando llegue al año final.", "If someone hasn't finished yet, their score appears when they reach the final year.")}</div><div class="bts">${bt("x", "", dualReg("Seguir jugando", "Keep playing"), "a")}</div></div>`);
+}
+function lanParesH(det) {
+  const P = Object.values(LAN.pares).filter((p) => p.c);
+  if (!P.length) return "";
+  const yo = lanTarjeta();
+  const fila = (c, n, tu) =>
+    `<div class="fila lan-par"><div style="flex:1;min-width:0"><b>${esc(n)}</b>${tu ? ` <span class="m">(${L4("tú", "you", "toi", "você")})</span>` : ""}<div class="m">${[c.y || "—", L4("valor", "value", "valeur", "valor") + " " + fm0(c.v || 0), nfc(c.fans || 0) + " fans", plural(c.win | 0, L4("premio", "award", "prix", "prêmio"), L4("premios", "awards", "prix", "prêmios"))].concat(c.duelo ? ["⚔︎ " + nf(c.duelo.p)] : [], c.reto ? [L4("reto", "challenge", "défi", "desafio") + " " + nf(c.reto.p)] : []).join(" · ")}</div>${det && c.ult && c.ult.length ? `<div class="m">${L4("Últimos estrenos", "Latest releases", "Dernières sorties", "Últimos lançamentos")}: ${c.ult.map((x) => "«" + esc(String(x.n).slice(0, 40)) + "»").join(", ")}</div>` : ""}</div>${det && !tu && S ? (S.rv.some((r) => r.amigo == c.id && !r.dead) ? bt("lnq", c.id, dualReg("Quitar de mi mundo", "Remove from my world")) : bt("lnr", c.id, dualReg("Llevar a mi mundo", "Bring to my world"))) : ""}</div>`;
+  return (yo ? fila(yo, S.sn, 1) : "") + P.map((p) => fila(p.c, p.n)).join("");
+}
+function lanH() {
+  if (!lanActiva()) return "";
+  return `<div class="c lan-h"><div class="k"><h3 style="margin:0">\u{1F4F6}︎ ${dualReg("En tu red", "On your network")}</h3><span class="bts">${bi("lan")}${bt("lan", "", dualReg("Abrir", "Open"))}</span></div>${lanParesH(0) || `<div class="m">${dualReg("Esperando a los demás jugadores…", "Waiting for the other players…")}</div>`}</div>`;
+}
+function lanM() {
+  const nat = lanNativo(),
+    act2 = lanActiva(),
+    salas = Object.keys(LAN.salas);
+  let h = `<div class="c" id="lan-h"><div class="k"><h2 style="margin:0">\u{1F4F6}︎ ${dualReg("Modo LAN", "LAN mode")}</h2><span class="bts">${bi("lan")}${btx()}</span></div><div class="m">${dualReg("Juega con amigos conectados a la misma red Wi-Fi. No hay servidores ni internet: los teléfonos se hablan directamente y los mensajes van cifrados.", "Play with friends on the same Wi-Fi. There are no servers or internet: the phones talk directly and messages are encrypted.")}</div>`;
+  if (LAN.aviso) h += `<div class="c aviso">${esc(LAN.aviso)}</div>`;
+  if (LAN.rol == "anfitrion" && LAN.via == "nsd") h += `<div class="lan-pin"><span class="m">${dualReg("Código de la sala", "Room code")}</span><b>${LAN.pin.slice(0, 3)} ${LAN.pin.slice(3)}</b></div>`;
+  if (!act2 && !LAN.rol) {
+    h += nat
+      ? `<div class="bts">${bt("lnc", "", dualReg("Crear sala", "Create room"), "a")}${bt("lnb", "", dualReg("Buscar salas", "Find rooms"))}</div>`
+      : `<div class="m">${dualReg("En la app de Android las salas se encuentran solas. Aquí puedes conectarte con un código.", "In the Android app rooms are found automatically. Here you can connect with a code.")}</div>`;
+    h += `<details class="lan-cod"><summary>${dualReg("Conectar con un código", "Connect with a code")}</summary><div class="m">${dualReg("Uno toca «Invitar» y le envía el código al otro, que lo pega y toca «Unirme»; el otro devuelve su código. Sirve entre el navegador y la app.", "One taps «Invite» and sends the code to the other, who pastes it and taps «Join»; then they send their code back. Works between the browser and the app.")}</div><div class="bts">${bt("lnri", "", dualReg("Invitar", "Invite"))}</div><textarea id="lancod" rows="3" placeholder="${dualReg("Pega aquí el código", "Paste the code here")}"></textarea><div class="bts">${bt("lnru", "", dualReg("Unirme / usar código", "Join / use code"))}</div></details>`;
+  }
+  if (LAN.busca && !act2)
+    h += `<h3>${dualReg("Salas en tu red", "Rooms on your network")}</h3>${salas.length ? `<input id="lanpin" inputmode="numeric" maxlength="7" placeholder="${dualReg("Código de 6 dígitos", "6-digit code")}">${salas.map((n) => `<div class="fila"><b>${esc(n)}</b>${bt("lne", n, dualReg("Entrar", "Join"), "a")}</div>`).join("")}` : `<div class="m">${dualReg("Buscando… Asegúrate de estar en la misma red Wi-Fi que quien abrió la sala.", "Searching… Make sure you're on the same Wi-Fi as the room host.")}</div>`}`;
+  if (LAN.cod) h += `<label class="m">${dualReg("Tu código de invitación", "Your invitation code")}</label><textarea readonly rows="3" onclick="this.select()">${LAN.cod}</textarea><div class="bts">${bt("lncp", "i", dualReg("Copiar", "Copy"))}</div><textarea id="lancod" rows="3" placeholder="${dualReg("Pega aquí la respuesta", "Paste the answer here")}"></textarea><div class="bts">${bt("lnru", "", dualReg("Conectar", "Connect"), "a")}</div>`;
+  if (LAN.codG) h += `<label class="m">${dualReg("Tu código de respuesta", "Your answer code")}</label><textarea readonly rows="3" onclick="this.select()">${LAN.codG}</textarea><div class="bts">${bt("lncp", "g", dualReg("Copiar", "Copy"))}</div>`;
+  if (act2 || Object.keys(LAN.pares).length) {
+    h += `<h3>${dualReg("Marcador", "Scoreboard")}</h3>${lanParesH(1) || `<div class="m">${dualReg("Esperando a los demás jugadores…", "Waiting for the other players…")}</div>`}`;
+    h += `<h3>${dualReg("Reacciones", "Reactions")}</h3><div class="chips">${LAN_REAC.map((r, i) => `<button class="ch" data-a="lnx" data-v="${i}">${r[0]} ${LL([r[1], r[2]])}</button>`).join("")}</div>`;
+    h += `<h3>⚔︎ ${L4("Duelo", "Duel", "Duel", "Duelo")}</h3><div class="m">${dualReg("Todos empiezan una partida nueva en el mismo mundo y compiten durante los años que elijas.", "Everyone starts a new game in the same world and competes for the years you choose.")}</div><div class="k"><select id="ldera">${ERAC.map((e, i) => `<option value="${i}"${i == 3 ? " selected" : ""}>${esc(e[0])} (${e[1]})</option>`).join("")}</select><select id="ldanos">${DUELO_ANOS.map((a) => `<option value="${a}"${a == 10 ? " selected" : ""}>${L4("# años", "# years", "# ans", "# anos").replace("#", a)}</option>`).join("")}</select></div><div class="bts">${bt("ldp", "", dualReg("Proponer duelo", "Propose duel"), "a")}</div>`;
+    h += `<div class="bts">${bt("lns", "", dualReg("Salir de la LAN", "Leave the LAN"), "r")}</div>`;
+  } else if (LAN.rol) h += `<div class="bts">${bt("lns", "", dualReg("Cancelar", "Cancel"), "r")}</div>`;
+  const am = S ? S.rv.filter((r) => r.amigo && !r.dead) : [];
+  h += `<h3>${dualReg("Estudios de amigos", "Friends' studios")}</h3><div class="m">${dualReg("Sin red también: exporta tu estudio como archivo y tu amigo lo importa; aparece como rival en su mundo.", "Without a network too: export your studio as a file and your friend imports it; it shows up as a rival in their world.")}</div>${am.map((r) => `<div class="fila"><b>${esc(r.n)}</b>${bt("lnq", r.amigo, dualReg("Quitar", "Remove"))}</div>`).join("")}${S ? `<div class="bts">${bt("lnex", "", dualReg("Exportar mi estudio", "Export my studio"))}<label class="b" for="lanimp">${dualReg("Importar estudio de un amigo", "Import a friend's studio")}</label></div><input type="file" id="lanimp" accept=".iaestudio,.iasave,.txt,application/octet-stream" style="display:none" onchange="amigoImporta(this)">` : `<div class="m">${dualReg("Empieza o carga una partida para usar los estudios de amigos.", "Start or load a game to use friends' studios.")}</div>`}`;
+  op(h + "</div>");
+}
+function lanRefresca() {
+  if ($("#lan-h")) {
+    const y = ($("#md .hoja") || {}).scrollTop;
+    lanM();
+    const hj = $("#md .hoja");
+    if (hj && y) hj.scrollTop = y;
+  }
+}
+ACT["lan"] = () => lanM();
+ACT["lnc"] = () => lanCrear();
+ACT["lnb"] = () => lanBuscar();
+ACT["lne"] = (v) => lanEntrar(v);
+ACT["lns"] = () => lanSalir();
+ACT["lnri"] = () => rtcInvitar().catch(() => toast(dualReg("Este navegador no permite conexiones directas", "This browser doesn't allow direct connections")));
+ACT["lnru"] = () => rtcResponder().catch(() => toast(dualReg("No se pudo usar ese código", "That code could not be used")));
+ACT["lncp"] = (v) => {
+  const t = v == "g" ? LAN.codG : LAN.cod;
+  try {
+    navigator.clipboard.writeText(t).then(() => toast(dualReg("Código copiado", "Code copied")));
+  } catch (e) {}
+};
+ACT["lnx"] = (v) => {
+  lanEnviar({ t: "reac", k: +v });
+  const r = LAN_REAC[+v];
+  if (r) toast(r[0] + " " + dualReg("Enviado", "Sent"));
+};
+ACT["lnr"] = (v) => {
+  const p = Object.values(LAN.pares).find((x) => x.c && x.c.id == v);
+  if (p && S) {
+    amigoRival(p.c);
+    lanRefresca();
+  }
+};
+ACT["lnq"] = (v) => {
+  amigoQuita(v);
+  lanRefresca();
+  if (S) pg();
+};
+ACT["lnex"] = () => amigoExporta();
+ACT["ldp"] = () => dueloProponer();
+ACT["ldsi"] = (v) => dueloEmpieza(v);
+const pgLan = pg;
+pg = function () {
+  const r = pgLan.apply(this, arguments);
+  if (S && !S.bot) {
+    lanEstado();
+    if (S.dueloAviso && !hojaAbierta()) setTimeout(dueloFinM, 40);
+  }
+  return r;
+};
+window.addEventListener("beforeunload", () => lanActiva() && lanEnviar({ t: "chao" }));
+const RASGOS_N = [
+  ["Magnetismo", "Magnetism", "Atrae al público cuando es la cara de la obra.", "Draws the audience when they are the face of the work."],
+  ["Rango", "Range", "Se adapta a medios y géneros distintos.", "Adapts to different media and genres."],
+  ["Estilo", "Style", "Deja una firma propia que la crítica reconoce.", "Leaves a personal signature critics recognise."],
+  ["Conceptos", "Concepts", "Ideas fuertes y claras que gustan a todos.", "Strong, clear ideas everyone likes."],
+  ["Complejidad", "Complexity", "Capas y matices: más crítica, menos público masivo.", "Layers and nuance: more critics, less mass audience."],
+];
+function rasgos(t) {
+  if (!t) return [50, 50, 50, 50, 50];
+  const cp = t.cp || [50, 50, 50, 50],
+    s = t.s || [],
+    ma = t.ma || [],
+    fama = Math.min(100, tspw(t) * 1.3),
+    abre = ma.length ? ma.filter((x) => x >= 50).length / ma.length : 0.4;
+  return [
+    cl(Math.round(0.35 * (t.bel == null ? 50 : t.bel) + 0.35 * (s[7] || 30) + 0.3 * fama)),
+    cl(Math.round(0.5 * cp[3] + 50 * abre)),
+    cl(Math.round(0.55 * cp[1] + 0.45 * (s[t.r] || 50))),
+    cl(Math.round(0.55 * cp[0] + 0.45 * Math.max(s[0] || 0, s[1] || 0))),
+    cl(Math.round(0.5 * cp[2] + 0.3 * cp[0] + 0.2 * (hs(t.id + "|cx") % 100))),
+  ];
+}
+function rasgosObra(P) {
+  if (!P || P.rsg || !S) return;
+  const T = (id) => (id != null && S.tl[id] ? S.tl[id] : null),
+    c0 = (P.cast || [])[0],
+    lead = T(c0 && c0.i == 0 ? c0.t : null) || T((P.crew || {})[7]),
+    dir = T((P.crew || {})[1]),
+    wr = T((P.crew || {})[0]);
+  let dc = 0,
+    da = 0;
+  if (lead) {
+    const r = rasgos(lead);
+    da += (r[0] - 50) / 25;
+    dc += (r[1] - 50) / 60;
+  }
+  if (dir) dc += (rasgos(dir)[2] - 50) / 25;
+  if (wr) {
+    const r = rasgos(wr);
+    dc += (r[3] - 50) / 35 + (r[4] - 50) / 45;
+    da += (r[3] - 50) / 90 - (r[4] - 50) / 60;
+  }
+  dc = cl(dc, -4, 4);
+  da = cl(da, -4, 4);
+  P.c = cl((P.c || 50) + dc);
+  P.a = cl((P.a || 50) + da);
+  P.rsg = [Math.round(dc * 10) / 10, Math.round(da * 10) / 10];
+}
+const endProdRasgo = endProd;
+endProd = function (P) {
+  const r = endProdRasgo.apply(this, arguments);
+  try {
+    rasgosObra(P);
+  } catch (e) {}
+  return r;
+};
+function rasgosH(t) {
+  const r = rasgos(t);
+  return `<div class="c rasgos"><div class="k"><h3 style="margin:0">${dualReg("Rasgos", "Traits")}</h3>${bi("rasgos")}</div>${RASGOS_N.map((x, i) => `<div class="k"><span class="m">${LL([x[0], x[1]])}</span><b>${r[i]}</b></div>${barV(r[i])}<div class="m" style="margin-bottom:4px">${esc(LL([x[2], x[3]]))}</div>`).join("")}</div>`;
+}
+const tpRasgo = ACT["tp"];
+ACT["tp"] = (v) => {
+  const r = tpRasgo(v),
+    t = S && S.tl[+v],
+    h = document.querySelector("#md .hoja");
+  if (t && h && !h.querySelector(".rasgos")) h.insertAdjacentHTML("beforeend", rasgosH(t));
+  return r;
+};
+const fichaRasgo = ganchos.ficha;
+ganchos.ficha = function (P) {
+  const h = fichaRasgo.apply(this, arguments);
+  if (!P || !P.rsg || (!P.rsg[0] && !P.rsg[1])) return h;
+  const f = (x) => (x > 0 ? "+" : "") + dec1(x, 1);
+  return h + `<div class="c"><div class="k"><h3 style="margin:0">${dualReg("Rasgos del equipo", "Team traits")}</h3>${bi("rasgos")}</div><div class="m">${L4("Crítica # · público %", "Critics # · audience %", "Critique # · public %", "Crítica # · público %").replace("#", f(P.rsg[0])).replace("%", f(P.rsg[1]))}</div></div>`;
+};
+CATLIB_T["Novela gráfica"] = "ngr";
+CATLIB_T["Filosofía"] = "fil";
+CATLIB_T["Economía"] = "fil";
+EV.filter((e) => e.lib == "ngr").forEach((e) => (e.fy = 1978));
+AW.forEach(([w, n, m], i) => {
+  if (n != "Independent Award" && n != "Bastard Awards") return;
+  const peor = n == "Bastard Awards";
+  [1, 0, 7].forEach((r) => EV.push({ id: "ar" + i + "r" + r, n: (peor ? "Peor " : "Mejor ") + RO[r].toLowerCase() + " · " + n, m, wn: w - 1, ww: w, rl: r, b: n, peor: peor ? 1 : 0 }));
+});
+FV.forEach((f, i) => {
+  const fy = Math.min(...f[1].map((z) => (FESTI.find((x) => x[0] == z[2]) || [0, 0, 0, 0, 1932])[4]));
+  [1, 0, 7].forEach((r) => EV.push({ id: "fr" + i + "r" + r, n: "Mejor " + RO[r].toLowerCase() + " · " + f[0], m: -1, wn: 24, ww: 25, fs: i, rl: r, fy }));
+});
+const NOM = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
+const nomNota = (m) => NOM[((m % 12) + 12) % 12] + (Math.floor(m / 12) - 1);
+const RADIO_EST = [
+  [/rock|metal|punk|grunge|indie|alternativ/i, "rock", "sierra", 150, 4, 4],
+  [/electr|house|techno|disco|dance|trance|edm|synth/i, "house", "sierra", 124, 4, 4],
+  [/jazz|blues|swing|soul|funk|gospel/i, "swing", "metal", 132, 4, 2],
+  [/cl[aá]sic|[oó]pera|orquest|barroc|sinf/i, "coral", "cuerdas", 96, 4, 2],
+  [/hip|rap|trap|lo-?fi|r&b|urban/i, "lofi", "rhodes", 84, 4, 4],
+  [/reggae|latin|salsa|cumbia|bossa|samba|tango|flamenco|merengue|bachata/i, "boogie", "metal", 120, 4, 2],
+  [/folk|country|cantautor|balada|ac[uú]stic|bolero|ranchera/i, "vals", "laud", 100, 3, 2],
+];
+const RADIO_PROG = [
+  [0, 0, [[0, ""], [7, ""], [9, "m"], [5, ""]]],
+  [0, 0, [[0, ""], [9, "m"], [5, ""], [7, ""]]],
+  [0, 0, [[9, "m"], [5, ""], [0, ""], [7, ""]]],
+  [1, 0, [[0, "m"], [8, ""], [3, ""], [10, ""]]],
+  [1, 0, [[0, "m"], [5, "m"], [10, ""], [3, ""]]],
+];
+function radioPieza(P) {
+  let sd = hs(P.id + "|" + P.n) || 7;
+  const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647,
+    gn = (P.gn || []).join(" "),
+    E = RADIO_EST.find((x) => x[0].test(gn)) || [null, "synth", "sierra", 112, 4, 4],
+    [, est, voz, bpm, compas, sub] = E,
+    menor = rnd() < 0.35 || (P.tone != null && P.tone % 3 == 2),
+    prs = RADIO_PROG.filter((p) => p[0] == (menor ? 1 : 0)),
+    pr = prs[Math.floor(rnd() * prs.length)][2],
+    key = Math.floor(rnd() * 12),
+    esc2 = menor ? [0, 2, 3, 5, 7, 8, 10] : [0, 2, 4, 5, 7, 9, 11],
+    RIT = sub == 4 ? [[4, 2, 2, 4, 4], [2, 2, 4, 2, 2, 4], [6, 2, 4, 4], [3, 3, 2, 4, 4], [2, 2, 2, 2, 8], [4, 4, 4, 4]] : compas == 3 ? [[2, 2, 2], [4, 2], [3, 1, 2], [6]] : [[2, 2, 2, 2], [4, 2, 2], [3, 1, 2, 2], [2, 2, 4], [8]];
+  let g = 2 + Math.floor(rnd() * 3);
+  const mot = [];
+  for (let b = 0; b < 2; b++)
+    RIT[Math.floor(rnd() * RIT.length)].forEach((d) => {
+      g = Math.max(0, Math.min(9, g + [-2, -1, -1, 0, 1, 1, 2][Math.floor(rnd() * 7)]));
+      mot.push([g, d]);
+    });
+  const fin = mot.length - 1,
+    frase = mot.concat(
+      mot.map(([x, d], i) => [i == fin ? Math.max(0, x - 1) : x, d]),
+      mot.map(([x, d]) => [Math.min(11, x + 2), d]),
+      mot.map(([x, d], i) => [i == fin ? 0 : x, d]),
+    ),
+    base = 60 + key - (key > 6 ? 12 : 0),
+    mel = frase.map(([x, d]) => nomNota(base + esc2[x % 7] + 12 * Math.floor(x / 7)) + "-" + d).join(" "),
+    ac = pr.concat(pr).map(([o, q]) => NOM[(key + o) % 12] + q).join(" "),
+    who = S.tl[(P.crew || {})[7]];
+  return { n: P.n, en: P.n, comp: who ? who.n : S.sn, tipo: "radio", y: P.y || yr(), v: [[P.y || yr(), (P.y || yr()) + 3]], tg: [], bpm, compas, sub, voz, est, mel, ac, d: ["Éxito de tu sello, en la radio.", "A hit from your label, on the radio."], pid: P.id };
+}
+const MUX_FIJAS = MUXP.length;
+MUX_GRUPOS.push(["Radio del estudio", "Studio radio", "radio"]);
+let RADIO_SD = "";
+function radioActualiza() {
+  if (!S) return;
+  const L = S.pj
+    .filter((p) => p.m == 4 && p.st >= 3 && !p.rr && ((p.a || 0) >= 70 || (p.aw || []).some((a) => /GANADOR/.test(a))))
+    .sort((a, b) => (b.y || 0) - (a.y || 0))
+    .slice(0, 12);
+  const ids = L.map((p) => p.id).join(","),
+    k = S.sd + "|" + ids;
+  if (k == RADIO_SD) return;
+  RADIO_SD = k;
+  MUXP.length = MUX_FIJAS;
+  L.forEach((p) => {
+    try {
+      MUXP.push(radioPieza(p));
+    } catch (e) {}
+  });
+  if (CFG.musp != null && CFG.musp >= MUXP.length) CFG.musp = -1;
+}
+on("mes", () => {
+  if (S && !S.bot) radioActualiza();
+});
+const pgRadio = pg;
+pg = function () {
+  if (S && !S.bot) radioActualiza();
+  else if (!S && MUXP.length > MUX_FIJAS) {
+    MUXP.length = MUX_FIJAS;
+    RADIO_SD = "";
+  }
+  return pgRadio.apply(this, arguments);
+};
+function historiaCanvas(P) {
+  const W0 = 1080,
+    H0 = 1920,
+    cv = document.createElement("canvas");
+  cv.width = W0;
+  cv.height = H0;
+  const c = cv.getContext("2d"),
+    cs = getComputedStyle(document.documentElement),
+    v = (k, d) => (cs.getPropertyValue(k) || "").trim() || d,
+    fondo = v("--p", "#efe9d6"),
+    tinta = v("--ink", "#151515"),
+    sec = v("--sec", "#c0392b"),
+    mast = v("--mast", "#13607a"),
+    mastt = v("--mastt", "#ffffff"),
+    orn = ornTema(document.documentElement.dataset.tm || CFG.tema),
+    tit = typeof TIT == "string" ? TIT : "sans-serif";
+  c.fillStyle = fondo;
+  c.fillRect(0, 0, W0, H0);
+  c.fillStyle = mast;
+  c.fillRect(0, 0, W0, 210);
+  c.fillStyle = sec;
+  c.fillRect(0, 210, W0, 14);
+  c.fillStyle = mastt;
+  c.textAlign = "left";
+  c.textBaseline = "middle";
+  c.font = "700 64px " + tit;
+  c.fillText("INDUSTRY ART", 70, 108);
+  c.textAlign = "right";
+  c.font = "600 34px Cuerpo, sans-serif";
+  c.fillText(trX(trTxt(dualReg("Estreno", "Premiere"))) + " · " + (P.y || yr()), W0 - 70, 108);
+  const pw = 660,
+    ph = 990,
+    px0 = (W0 - pw) / 2,
+    py0 = 290,
+    pc = document.createElement("canvas");
+  pc.width = pw;
+  pc.height = ph;
+  try {
+    if (P.cv40 && typeof covExt == "function") covExt(pc.getContext("2d"), pw, ph, P.cv40, P.n, P.m);
+    else pst(pc.getContext("2d"), pw, ph, P);
+  } catch (e) {}
+  c.fillStyle = tinta;
+  c.fillRect(px0 + 16, py0 + 16, pw, ph);
+  c.drawImage(pc, px0, py0);
+  c.lineWidth = 6;
+  c.strokeStyle = tinta;
+  c.strokeRect(px0, py0, pw, ph);
+  c.textAlign = "center";
+  c.fillStyle = tinta;
+  let fs = 84;
+  c.font = "700 " + fs + "px " + tit;
+  const nom = String(P.n || "");
+  while (c.measureText(nom).width > W0 - 140 && fs > 40) c.font = "700 " + (fs -= 4) + "px " + tit;
+  c.fillText(nom, W0 / 2, 1380);
+  c.font = "500 36px Cuerpo, sans-serif";
+  c.fillStyle = sec;
+  c.fillText(orn + "  " + lgNom(S.sn, S.lg) + "  " + orn, W0 / 2, 1450);
+  const datos = [
+    [dualReg("Crítica", "Critics"), Math.round(P.c || 0)],
+    [dualReg("Público", "Audience"), Math.round(P.a || 0)],
+    [dualReg("Taquilla", "Box office"), fm(P.gross || 0, P.y)],
+  ];
+  datos.forEach(([k, x], i) => {
+    const cx2 = W0 / 2 + (i - 1) * 330;
+    c.fillStyle = tinta;
+    c.font = "700 58px " + tit;
+    c.fillText(String(x), cx2, 1560);
+    c.font = "500 30px Cuerpo, sans-serif";
+    c.fillText(trX(trTxt(k)).toUpperCase(), cx2, 1615);
+  });
+  const pr = (P.aw || []).filter((a) => /GANADOR/.test(a)).length;
+  if (pr) {
+    c.fillStyle = sec;
+    c.font = "700 40px " + tit;
+    c.fillText("★ " + plural(pr, dualReg("premio", "award"), dualReg("premios", "awards")), W0 / 2, 1710);
+  }
+  c.fillStyle = mast;
+  c.fillRect(0, H0 - 120, W0, 120);
+  c.fillStyle = mastt;
+  c.font = "500 30px Cuerpo, sans-serif";
+  c.fillText(MD[P.m][0] + " · " + (P.gn || []).slice(0, 2).join(", "), W0 / 2, H0 - 60);
+  return cv;
+}
+ACT["popst"] = () => {
+  if (!POPX || !POPX.P) return;
+  const cv = historiaCanvas(POPX.P);
+  POPX.url = cv.toDataURL("image/png");
+  POPX.n = POPX.n.replace(/_ficha\.png$|_historia\.png$/, "") + "_historia.png";
+  const im = document.querySelector("#md .pop-img");
+  if (im) im.src = POPX.url;
+};
+const popAbreH = popAbre;
+popAbre = function (P, idea) {
+  const r = popAbreH.apply(this, arguments);
+  if (POPX) POPX.P = P;
+  const b = document.querySelector("#md .pop-img");
+  if (b && P && P.st >= 3 && !document.querySelector("#md [data-a=popst]")) b.insertAdjacentHTML("afterend", `<div class="bts">${bt("popst", "", "\u{1F4F1}︎ " + dualReg("Formato historia (9:16)", "Story format (9:16)"))}${bi("tarjeta")}</div>`);
+  return r;
+};
+function manoAjusta() {
+  const on = !!CFG.mano,
+    r = document.documentElement;
+  r.classList.toggle("una-mano", on);
+  if (!on) return;
+  const n = document.getElementById("nav"),
+    t = document.getElementById("top"),
+    m = document.getElementById("main");
+  if (!n || !t || !m) return;
+  const hn = n.getBoundingClientRect().height,
+    ht = t.getBoundingClientRect().height;
+  r.style.setProperty("--navh", Math.round(hn) + "px");
+  if (getComputedStyle(t).position == "fixed" && t.getBoundingClientRect().top > 2) {
+    m.style.paddingTop = "10px";
+    m.style.paddingBottom = Math.ceil(hn + ht + 14) + "px";
+  }
+}
+const ordMano = ordAjusta;
+ordAjusta = function () {
+  const r = ordMano.apply(this, arguments);
+  try {
+    manoAjusta();
+  } catch (e) {}
+  return r;
+};
+addEventListener("resize", () => {
+  try {
+    manoAjusta();
+  } catch (e) {}
+});
+const creditsAviso = credits;
+credits = function () {
+  const r = creditsAviso.apply(this, arguments),
+    h = document.querySelector("#md .hoja");
+  if (h && !h.querySelector(".aviso-ref"))
+    h.insertAdjacentHTML("beforeend", `<div class="c aviso-ref"><div class="m">${dualReg("Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales. INDUSTRY ART no está afiliado a ellos ni cuenta con su respaldo. La música incluida son arreglos propios de obras de dominio público y composiciones originales.", "The real works, awards, people, brands and places that appear in the game are historical and cultural references. INDUSTRY ART is not affiliated with them or endorsed by them. The included music is original arrangements of public-domain works and original compositions.")}</div></div>`);
+  return r;
+};
+if (typeof DIC_FR != "undefined") DIC_FR["Puesto"] = "Rang";
+if (typeof DIC_PT != "undefined") DIC_PT["Puesto"] = "Posição";
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {
   const t = document.getElementById("top"),
