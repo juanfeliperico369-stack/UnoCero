@@ -849,9 +849,10 @@ html.graf-pixel canvas.pt,html.graf-pixel canvas.tf,html.graf-pixel canvas.rl,ht
 html.una-mano #top{top:auto;bottom:var(--navh,64px);border-bottom:0;border-top:1px solid var(--l);padding-bottom:6px}
 html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 0 var(--sec)}
 }
+.lan-pin .m{color:inherit;opacity:.88;text-transform:uppercase;letter-spacing:.06em;font-size:.72rem}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.0";
+const VERN = "1.1";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -18961,7 +18962,7 @@ function wv(e) {
     W.ty = [0];
     W.sb = [];
     W.cr = [];
-    W.cast = null;
+    W.cast = conPers(W.m) && (W.cast || []).some((c) => c && c.ant) ? W.cast.filter((c) => c && c.ant) : null;
     W.dep = null;
     W.fmt = null;
     W.aiL = 0;
@@ -22728,6 +22729,7 @@ const frList = () => {
   });
   return Object.keys(g)
     .map(Number)
+    .filter((f) => S.pj.some((p) => p.fid == f && !p.sold))
     .sort((a, b) => g[b] - g[a]);
 };
 const frT = (f) => {
@@ -23888,7 +23890,7 @@ function awards(w) {
     if (w == e.wn) {
       const ps = S.pj.filter(
         (p) =>
-          elg(p) &&
+          (elg(p) || (e.fs != null && (p.st == 1 || p.st == 2))) &&
           !p.rr &&
           (e.m < 0 || p.m == e.m) &&
           (e.n != "Independent Award" || (p.br || 1) < 0.4) &&
@@ -24068,7 +24070,7 @@ function stg0() {
   stg(x, w, h);
 }
 function vFest() {
-  const ps = S.pj.filter(elg),
+  const ps = S.pj.filter((p) => elg(p) || p.st == 1 || p.st == 2),
     T = S.awT || [0, 0],
     w = wk();
   const o = S.of
@@ -24082,7 +24084,7 @@ function vFest() {
   let h =
     vitrinaH() +
     `<div class="c"><div class="k"><h3 style="margin:0">Premios principales</h3>${bi("premios")}</div><div class="fila"><span>Ganaste</span><b>${T[1]} de ${T[0]}${T[0] ? " \u00B7 " + pct(T[1] / T[0]) : ""}</b></div><div class="m">${AWP.join(" \u00B7 ")}. Cada premiación mira los estrenos del año anterior.</div></div>`;
-  h += `<div class="c"><h3 style="margin:0">Festival Mundial del Arte</h3><div class="m">Postulación (sem 23) → nominados (24) → ganadores (25) → ofertas por derechos (26). Solo compiten tus obras postuladas, contra lo mejor de los rivales. Elegibles: estrenos de ${yr() - 1}.</div>${FV.map((f, i) => `<div style="margin-top:8px"><b>${esc(f[0])}</b><div class="m">${f[1].map((z) => z[2] + ": " + z[0]).join(" \u00B7 ")}</div>${w == 23 ? `<div class="chips">${ps.length ? ps.map((p) => `<button class="ch${(S.pst[i] || []).includes(p.id) ? " on" : ""}" data-a="pt" data-v="${i}|${p.id}">${esc(p.n)} · ${fm((p.cost || 0) * 0.005)}</button>`).join("") : '<span class="m">Sin obras elegibles</span>'}</div>` : ""}</div>`).join("")}${w != 23 ? '<div class="m" style="margin-top:8px">Las postulaciones abren en la semana 23; el avance se detiene ah\u00ED si tienes obras elegibles.</div>' : ""}</div>${o}`;
+  h += `<div class="c"><h3 style="margin:0">Festival Mundial del Arte</h3><div class="m">Postulación (sem 23) → nominados (24) → ganadores (25) → ofertas por derechos (26). Solo compiten tus obras postuladas, contra lo mejor de los rivales. Elegibles: estrenos de ${yr() - 1}.</div><div class="m">De cualquier medio (cine, series, videojuegos, teatro, música y libros), y también obras listas para estrenar, que llegan al festival como estreno mundial.</div>${FV.map((f, i) => `<div style="margin-top:8px"><b>${esc(f[0])}</b><div class="m">${f[1].map((z) => z[2] + ": " + z[0]).join(" \u00B7 ")}</div>${w == 23 ? `<div class="chips">${ps.length ? ps.map((p) => `<button class="ch${(S.pst[i] || []).includes(p.id) ? " on" : ""}" data-a="pt" data-v="${i}|${p.id}">${esc(p.n)} · ${fm((p.cost || 0) * 0.005)}</button>`).join("") : '<span class="m">Sin obras elegibles</span>'}</div>` : ""}</div>`).join("")}${w != 23 ? '<div class="m" style="margin-top:8px">Las postulaciones abren en la semana 23; el avance se detiene ah\u00ED si tienes obras elegibles.</div>' : ""}</div>${o}`;
   h +=
     `<div class="c k"><span>Puja automática: vender los derechos a la mejor oferta apenas llegue</span>${bt("pja", "", S.pja ? "Activada" : "Apagada", S.pja ? "a" : "")}</div>` +
     cronicaH();
@@ -45169,7 +45171,7 @@ const TVF = [
   ["Noche", "Noche", "22–24 h", 0.75, [0.01, 0.06, 0.25, 0.32, 0.24, 0.12], 0],
 ];
 const TVD = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-const tvAbr = (n) => String(n).replace(/^(The|A|An|El|La|Los|Las|Lo|Un|Una|Le|Les|Il|Der|Die|Das)\s+/i, "").slice(0, 3);
+const tvAbr = (n) => { const x = String(n).replace(/^[«"¡¿'(]+/, "").replace(/^(The|A|An|El|La|Los|Las|Lo|Un|Una|Le|Les|Il|Der|Die|Das)\s+/i, "").slice(0, 3); return x.charAt(0).toUpperCase() + x.slice(1); };
 const tvDN = (i) => (IDI == "en" ? ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][i] : TVD[i]);
 const TVG = [
   ["noticiero", "Noticiero", 1940, 56, 0.5, [0.1, 0.3, 0.6, 1, 1.3, 1.5], "#5b8cff", 3, { 1: 1.15, 5: 1.1 }, 1],
@@ -48377,7 +48379,7 @@ const REDES = [
   ["correo", "Correo", ""],
 ];
 const CREADOR = "OneZero";
-const POL_FECHA = ["24 de octubre de 2026", "October 24, 2026"];
+const POL_FECHA = ["1 de noviembre de 2026", "November 1, 2026"];
 const dual = (es, en) => (IDI == "en" ? en : es);
 Object.assign(ICO, {
   globo: "M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18",
@@ -48424,33 +48426,33 @@ function polH() {
   const S2 = es
     ? [
         ["Quién es el responsable", `INDUSTRY ART es un juego creado por ${CREADOR}. Esta política explica qué pasa con tu información cuando juegas.`],
-        ["Qué datos recogemos", "Ninguno. El juego funciona sin conexión a internet, no pide cuenta ni registro y no recoge datos personales: ni tu nombre real, ni tu ubicación, ni tus contactos, ni identificadores de publicidad, ni datos de uso."],
+        ["Qué datos recogemos", "Ninguno. El juego funciona sin conexión a internet, no pide cuenta ni registro y no recoge datos personales: ni tu nombre real, ni tu ubicación, ni tus contactos, ni identificadores de publicidad, ni datos de uso. Si usas el modo LAN, el nombre de tu estudio, tu logo y tus estadísticas de juego van directamente a los dispositivos de tus amigos en tu misma red, cifrados con el código de la sala; no pasan por ningún servidor y nosotros no podemos verlos."],
         ["Qué se guarda en tu dispositivo", "Tus partidas, ajustes, vitrina, ideas del Taller creativo y la imagen que elijas para tu logo se guardan solo en el almacenamiento local de tu dispositivo (el del navegador o la app). Nunca salen de él, salvo que tú mismo exportes un archivo de partida (.iasave) o un paquete del editor (.iapack) y decidas compartirlo."],
         ["Cómo borrar tus datos", "Puedes borrar cada partida desde la portada o desde Ajustes. Para borrarlo todo, elimina los datos de la app o del sitio en la configuración de tu dispositivo o navegador. Al desinstalar la app también se borran."],
-        ["Permisos", "El juego no pide permisos especiales. Si eliges una imagen para tu logo, se usa el selector de archivos de tu sistema y la imagen se queda en tu dispositivo."],
+        ["Permisos", "La app usa solo permisos normales de red (internet y multidifusión Wi-Fi) para encontrar y abrir salas del modo LAN en tu red local. No pide permisos de ubicación, contactos, cámara ni micrófono. Si eliges una imagen para tu logo, se usa el selector de archivos de tu sistema y la imagen se queda en tu dispositivo."],
         ["Terceros, publicidad y analíticas", "Esta versión no tiene publicidad, compras dentro del juego, analíticas ni servicios de terceros, y no se conecta a ningún servidor. Si en el futuro se agregan, esta política se actualizará antes y te pediremos permiso cuando la ley lo exija."],
         ["Inteligencia artificial dentro del juego", "Las opciones de «IA» del juego son una simulación: no se envía nada a ningún servicio de inteligencia artificial."],
         ["Enlaces a redes", "La portada puede tener enlaces a las redes del creador. Al tocarlos sales del juego y se aplican las políticas de esas plataformas."],
-        ["Niños", "El juego es apto para todo público y no recoge datos de nadie, tampoco de menores de edad."],
-        ["Seguridad", "Como el juego no envía datos por internet, no hay datos tuyos en servidores que puedan filtrarse. Los archivos de partida llevan una suma de verificación para detectar daños. Te recomendamos exportar tus partidas de vez en cuando como copia de seguridad."],
+        ["Niños", "El juego está pensado para mayores de 13 años porque incluye un casino simulado, sin dinero real. No recoge datos de nadie, tampoco de menores de edad."],
+        ["Seguridad", "Como el juego no envía datos por internet, no hay datos tuyos en servidores que puedan filtrarse. En el modo LAN cada mensaje va cifrado (AES-GCM) con el código de 6 dígitos de la sala, y quien no lo tenga no puede entrar ni leer nada. Los archivos de partida llevan una suma de verificación para detectar daños. Te recomendamos exportar tus partidas de vez en cuando como copia de seguridad."],
         ["Tus derechos", "Como no tratamos datos personales, no tenemos datos tuyos que consultar, corregir o borrar. Si tienes dudas, " + contacto.charAt(0).toLowerCase() + contacto.slice(1)],
         ["Cambios", `Si esta política cambia, la nueva versión aparecerá en el juego con su fecha. Vigente desde el ${POL_FECHA[0]}.`],
       ]
     : [
         ["Who is responsible", `INDUSTRY ART is a game created by ${CREADOR}. This policy explains what happens to your information when you play.`],
-        ["What data we collect", "None. The game works offline, needs no account or sign-up and collects no personal data: not your real name, location, contacts, advertising identifiers or usage data."],
+        ["What data we collect", "None. The game works offline, needs no account or sign-up and collects no personal data: not your real name, location, contacts, advertising identifiers or usage data. If you use LAN mode, your studio name, logo and game stats go directly to your friends' devices on the same network, encrypted with the room code; they don't go through any server and we can't see them."],
         ["What is stored on your device", "Your saved games, settings, showcase, Creative Workshop ideas and the image you pick for your logo are stored only in your device's local storage (the browser's or the app's). They never leave it unless you export a save file (.iasave) or an editor pack (.iapack) and choose to share it."],
         ["How to delete your data", "You can delete each saved game from the home screen or from Settings. To delete everything, clear the app's or site's data in your device or browser settings. Uninstalling the app also deletes it."],
-        ["Permissions", "The game asks for no special permissions. If you pick an image for your logo, your system's file picker is used and the image stays on your device."],
+        ["Permissions", "The app only uses normal network permissions (internet and Wi-Fi multicast) to find and open LAN rooms on your local network. It doesn't ask for location, contacts, camera or microphone. If you pick an image for your logo, your system's file picker is used and the image stays on your device."],
         ["Third parties, ads and analytics", "This version has no ads, in-app purchases, analytics or third-party services, and it does not connect to any server. If any are added in the future, this policy will be updated first and we will ask for your consent where the law requires it."],
         ["Artificial intelligence in the game", "The game's «AI» options are a simulation: nothing is sent to any artificial intelligence service."],
         ["Links to social media", "The home screen may include links to the creator's social media. Tapping them takes you out of the game, and those platforms' policies apply."],
-        ["Children", "The game is suitable for all ages and collects no data from anyone, including minors."],
-        ["Security", "Since the game sends no data over the internet, there is no data of yours on servers that could leak. Save files include a checksum to detect damage. We recommend exporting your saved games from time to time as a backup."],
+        ["Children", "The game is meant for ages 13 and up because it includes a simulated casino, with no real money. It collects no data from anyone, including minors."],
+        ["Security", "Since the game sends no data over the internet, there is no data of yours on servers that could leak. In LAN mode every message is encrypted (AES-GCM) with the room's 6-digit code, and anyone without it can't join or read anything. Save files include a checksum to detect damage. We recommend exporting your saved games from time to time as a backup."],
         ["Your rights", "Since we process no personal data, we hold no data of yours to access, correct or delete. If you have questions, " + contacto.charAt(0).toLowerCase() + contacto.slice(1)],
         ["Changes", `If this policy changes, the new version will appear in the game with its date. Effective since ${POL_FECHA[1]}.`],
       ];
-  return `<div class="c pol"><div class="k"><h2 style="margin:0">${ic("escudo")} ${dual("Política de privacidad y seguridad", "Privacy and security policy")}</h2>${btx()}</div><div class="m">${dual("Versión 1.0 · vigente desde el ", "Version 1.0 · effective since ")}${POL_FECHA[es ? 0 : 1]}</div>${S2.map(([t, x], i) => `<h3>${i + 1}. ${t}</h3><p>${x}</p>`).join("")}<p class="m">${contacto}</p></div>`;
+  return `<div class="c pol"><div class="k"><h2 style="margin:0">${ic("escudo")} ${dual("Política de privacidad y seguridad", "Privacy and security policy")}</h2>${btx()}</div><div class="m">${dual("Versión 1.1 · vigente desde el ", "Version 1.1 · effective since ")}${POL_FECHA[es ? 0 : 1]}</div>${S2.map(([t, x], i) => `<h3>${i + 1}. ${t}</h3><p>${x}</p>`).join("")}<p class="m">${contacto}</p></div>`;
 }
 ACT["pol"] = () => op(polH());
 ACT["crm"] = () =>
@@ -53499,14 +53501,14 @@ GANCHOS.mods.push((P, add) => {
 });
 function editH() {
   const L = escExt(),
-    C = S.tl.filter((t) => !t.ret && !t.you && !t.dead && t.age >= 14 && t.r == 0 && !L.some((x) => x.t == t.id)).sort((a, b) => b.s[0] - a.s[0]).slice(0, 6),
+    C = S.tl.filter((t) => !t.ret && !t.you && !t.dead && t.age >= 14 && t.r == 0 && !L.some((x) => x.t == t.id)).sort((a, b) => b.s[0] - a.s[0]).slice(0, 12),
     U = (S.uni40 || []).filter((u) => u.ed),
     F = frList().filter((f) => frPs(f).some((P) => P.m == 5 && P.st >= 3) && !uniDe(f)),
     iI = IX.findIndex((x) => x[0] == "Imprenta propia"),
     lI = iI >= 0 ? cnv(iI) : 0;
   return (
     listaH(5, dualReg("Los más vendidos de la semana", "This week's bestsellers")) +
-    `<div class="c"><h3 style="margin:0 0 6px">${dualReg("Autores de la casa", "In-house authors")} (${L.length})</h3><div class="m">${dual("Escritores con contrato: cada tanto te entregan un manuscrito sin costo (llega a Propuestas) y sus libros contigo ganan +1 de crítica. Cobran un adelanto al año.", "Contracted writers: every so often they deliver a manuscript for free (it arrives in Proposals) and their books with you gain +1 critics. They get a yearly advance.")}</div>${L.map((x) => `<div class="fila"><span>${lnkExt(S.tl[x.t])}<span class="m"> · ${S.tl[x.t].s[0]} · ${dualReg("hasta", "until")} ${S.y0 + Math.floor(x.h / 52)}</span></span>${bt("esc4x", x.t, ic("cerrar"))}</div>`).join("")}${L.length < 5 ? C.map((t) => `<div class="fila"><span>${lnkExt(t)}<span class="m"> · ${t.s[0]} · ${t.age} ${dualReg("años", "yrs")}</span></span>${bt("esc4", t.id, dualReg("Firmar", "Sign") + " · " + fm(escC(t)) + "/" + dualReg("año", "yr"), S.cash >= escC(t) ? "a" : "off")}</div>`).join("") : ""}</div>` +
+    `<div class="c"><h3 style="margin:0 0 6px">${dualReg("Autores de la casa", "In-house authors")} (${L.length})</h3><div class="m">${dual("Escritores con contrato: cada tanto te entregan un manuscrito sin costo (llega a Propuestas) y sus libros contigo ganan +1 de crítica. Cobran un adelanto al año.", "Contracted writers: every so often they deliver a manuscript for free (it arrives in Proposals) and their books with you gain +1 critics. They get a yearly advance.")}</div>${L.map((x) => `<div class="fila"><span>${lnkExt(S.tl[x.t])}<span class="m"> · ${S.tl[x.t].s[0]} · ${dualReg("hasta", "until")} ${S.y0 + Math.floor(x.h / 52)}</span></span>${bt("esc4x", x.t, ic("cerrar"))}</div>`).join("")}${L.length < 30 ? C.map((t) => `<div class="fila"><span>${lnkExt(t)}<span class="m"> · ${t.s[0]} · ${t.age} ${dualReg("años", "yrs")}</span></span>${bt("esc4", t.id, dualReg("Firmar", "Sign") + " · " + fm(escC(t)) + "/" + dualReg("año", "yr"), S.cash >= escC(t) ? "a" : "off")}</div>`).join("") : ""}</div>` +
     `<div class="c"><h3 style="margin:0 0 6px">${dualReg("Universos editoriales", "Publishing universes")}</h3><div class="m">${dual("Al estilo de los grandes universos de superhéroes: une hasta 8 franquicias editoriales en un mismo canon, organiza un gran evento de crossover al año (sube el interés de todas) o reinicia el universo para refrescarlo.", "In the style of the big superhero universes: join up to 8 publishing franchises in one canon, run a big crossover event each year (boosts interest in all of them) or reboot the universe to refresh it.")}</div>${U.map((u) => `<div class="c sub"><div class="k"><b>${esc(u.n)}</b><span class="m">${u.f.length} ${dualReg("franquicias", "franchises")}</span></div><div class="m">${u.f.map((f) => esc(frG(f).n) + (frPjs(f)[0] ? " (" + esc(frPjs(f)[0].n) + ")" : "")).join(" · ")}</div><div class="bts">${bt("fro", u.f[0], dualReg("Abrir", "Open"))}${u.ev == yr() ? "" : bt("ued4", u.f[0], dualReg("Gran evento", "Big event") + " · " + fm(Math.round(TB(5) * 0.6)), "a")}${bt("ure4", u.f[0], dualReg("Reiniciar", "Reboot") + " · " + fm(Math.round(TB(5) * 0.3)))}</div></div>`).join("")}${F.length >= 2 ? `<select onchange="if(this.value!=='')act('ued4n',this.value)"><option value="">+ ${dualReg("Crear universo con tus franquicias editoriales", "Create a universe with your publishing franchises")}</option>${F.slice(0, 30).map((f) => `<option value="${f}">${esc(frG(f).n)}</option>`).join("")}</select>` : `<div class="m">${dualReg("Necesitas dos franquicias editoriales con libros publicados.", "You need two publishing franchises with published books.")}</div>`}</div>` +
     `<div class="c"><h3 style="margin:0 0 6px">${dualReg("Imprenta", "Printing press")}</h3>${filaV(dualReg("Imprenta propia", "Own printing press"), lI ? dualReg("nivel", "level") + " " + lI + "/3" : "—")}${iI >= 0 && lI < 3 && !ixPista(iI) ? `<div class="bts">${bt("ib", iI, (lI ? dualReg("Mejorar", "Upgrade") : dualReg("Construir", "Build")) + " · " + fm(px(iI, lI)), S.cash >= px(iI, lI) ? "" : "off")}</div>` : ""}</div>`
   );
@@ -54561,7 +54563,7 @@ function vFestis() {
   const y = yr(),
     w = wk(),
     R0 = typeof rumores == "function" ? rumores() : [],
-    ps = S.pj.filter(elg),
+    ps = S.pj.filter((p) => elg(p) || p.st == 1 || p.st == 2),
     fe = (nom) => FESTI.find((f) => f[0] == nom),
     sem = (n) => (IDI == "en" ? "week " + n : "semana " + n),
     fase = w < 23 ? dual(`Postulaciones en ${23 - w} semanas`, `Submissions in ${23 - w} weeks`) : w == 23 ? dual("¡Postulaciones abiertas esta semana!", "Submissions open this week!") : w <= 26 ? [dual("Nominados", "Nominees"), dual("Ganadores", "Winners"), dual("Subastas de derechos", "Rights auctions")][w - 24] : dual("Vuelve el año que viene: semana 23", "Back next year: week 23");
@@ -61068,7 +61070,7 @@ regENL([
   };
 })();
 
-function cronoH() {
+function cronoEstH() {
   const L = S.pj.filter((P) => P.st >= 3 && P.y),
     H = [];
   MD.forEach((m, k) => {
@@ -61092,7 +61094,7 @@ function cronoH() {
 const vSalonX = vSalon;
 vSalon = function (s) {
   const h = vSalonX.apply(this, arguments);
-  return (SUB[5] | 0) == 6 ? h + cronoH() : h;
+  return (SUB[5] | 0) == 6 ? h + cronoEstH() : h;
 };
 const vFinX = vFin;
 vFin = function () {
@@ -62372,7 +62374,7 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Si estás entre los 3 estudios más valiosos, un rival rico o un conglomerado puede ofrecer comprarte, como mucho una vez cada 6 años. Ofrecen entre 1,25 y 1,6 veces tu valor y tienes 8 semanas para decidir en Negocio → Finanzas. Si vendes, recibes tu parte (descontando la de tu socio y la de la bolsa) y la partida termina con tu legado. Si rechazas, tu equipo lo celebra y ganas un poco de prestigio.", "If you are among the 3 most valuable studios, a rich rival or a conglomerate may offer to buy you, at most once every 6 years. They offer between 1.25 and 1.6 times your value and you have 8 weeks to decide in Business → Finance. If you sell, you get your share (minus your partner's and the stock market's) and the game ends with your legacy. If you decline, your team celebrates and you gain a bit of prestige.", "Si tu es parmi les 3 studios les plus valorisés, un rival riche ou un conglomérat peut proposer de te racheter, au plus une fois tous les 6 ans. Ils offrent entre 1,25 et 1,6 fois ta valeur et tu as 8 semaines pour décider dans Affaires → Finances. Si tu vends, tu reçois ta part (moins celle de ton associé et de la bourse) et la partie se termine avec ton héritage. Si tu refuses, ton équipe fête ça et tu gagnes un peu de prestige.", "Se você estiver entre os 3 estúdios mais valiosos, um rival rico ou um conglomerado pode oferecer comprá-lo, no máximo uma vez a cada 6 anos. Oferecem entre 1,25 e 1,6 vez o seu valor e você tem 8 semanas para decidir em Negócio → Finanças. Se vender, recebe sua parte (descontando a do sócio e a da bolsa) e a partida termina com seu legado. Se recusar, sua equipe comemora e você ganha um pouco de prestígio."],
   ["Capítulos de la historia del espectáculo, de 1737 a 2150. Cada uno empieza en un año y un país reales, con una meta y un plazo; la meta y tu avance se ven arriba en Estudio. Al cumplirla se abre el capítulo siguiente; si se acaba el plazo puedes reintentarlo. En ambos casos sigues jugando libre en ese mundo. «Jugar» empieza enseguida y «Personalizar» te deja elegir nombre, logo y avatar. Antes de empezar, tu partida en curso se guarda en una ranura libre.", "Chapters of entertainment history, from 1737 to 2150. Each one starts in a real year and country, with a goal and a deadline; the goal and your progress show at the top of Studio. Meeting it unlocks the next chapter; if time runs out you can retry. Either way you keep playing freely in that world. «Play» starts right away and «Customize» lets you pick name, logo and avatar. Before starting, your current game is saved in a free slot.", "Des chapitres de l'histoire du spectacle, de 1737 à 2150. Chacun commence dans une année et un pays réels, avec un objectif et un délai ; l'objectif et ta progression s'affichent en haut de Studio. L'atteindre ouvre le chapitre suivant ; si le temps est écoulé, tu peux réessayer. Dans les deux cas tu continues à jouer librement dans ce monde. «Jouer» commence tout de suite et «Personnaliser» te laisse choisir nom, logo et avatar. Avant de commencer, ta partie en cours est sauvegardée dans un emplacement libre.", "Capítulos da história do espetáculo, de 1737 a 2150. Cada um começa em um ano e um país reais, com uma meta e um prazo; a meta e seu progresso aparecem no topo de Estúdio. Ao cumpri-la abre-se o capítulo seguinte; se o prazo acabar você pode tentar de novo. Em ambos os casos continua jogando livre nesse mundo. «Jogar» começa na hora e «Personalizar» deixa escolher nome, logo e avatar. Antes de começar, sua partida atual é salva em um espaço livre."],
   ["Cada semana, de lunes a domingo, hay un mundo nuevo igual para todos: mismo año, misma sede y misma semilla. Juegas 10 años y al final se suman tus puntos: tu valor en millones de dólares de hoy, 25 por cada premio, 10 por cada hito y un poco por tus fans. Tus mejores intentos se guardan en este dispositivo. Con el modo LAN, tus amigos ven tus puntos en el marcador.", "Every week, Monday to Sunday, there is a new world that is the same for everyone: same year, same headquarters and same seed. You play 10 years and at the end your points add up: your value in today's millions of dollars, 25 per award, 10 per milestone and a little for your fans. Your best attempts are saved on this device. With LAN mode, your friends see your points on the scoreboard.", "Chaque semaine, du lundi au dimanche, il y a un nouveau monde identique pour tous : même année, même siège et même graine. Tu joues 10 ans et à la fin tes points s'additionnent : ta valeur en millions de dollars d'aujourd'hui, 25 par prix, 10 par étape et un peu pour tes fans. Tes meilleures tentatives sont gardées sur cet appareil. Avec le mode LAN, tes amis voient tes points sur le tableau.", "Toda semana, de segunda a domingo, há um mundo novo igual para todos: mesmo ano, mesma sede e mesma semente. Você joga 10 anos e no fim seus pontos se somam: seu valor em milhões de dólares de hoje, 25 por prêmio, 10 por marco e um pouco pelos seus fãs. Suas melhores tentativas ficam salvas neste aparelho. Com o modo LAN, seus amigos veem seus pontos no placar."],
-  ["Para jugar con amigos en la misma red Wi-Fi, sin internet ni servidores. En la app de Android: uno toca «Crear sala» y ve un código de 6 dígitos; los demás tocan «Buscar salas», eligen la sala y escriben el código. Los mensajes van cifrados con ese código. En el navegador, o si la búsqueda no funciona en tu red, usen «Conectar con un código»: uno invita, el otro pega el código y devuelve el suyo. Ya conectados verán el marcador (año, valor, fans, premios y últimos estrenos), podrán mandar reacciones, llevar el estudio de un amigo a su mundo como rival y proponer un duelo: todos empiezan una partida nueva en el mismo mundo y gana quien tenga más puntos al final. Sin red, exporta tu estudio como archivo .iaestudio y tu amigo lo importa.", "To play with friends on the same Wi-Fi, without internet or servers. In the Android app: one taps «Create room» and sees a 6-digit code; the others tap «Find rooms», pick the room and type the code. Messages are encrypted with that code. In the browser, or if searching doesn't work on your network, use «Connect with a code»: one invites, the other pastes the code and sends theirs back. Once connected you'll see the scoreboard (year, value, fans, awards and latest releases), send reactions, bring a friend's studio into your world as a rival and propose a duel: everyone starts a new game in the same world and whoever has more points at the end wins. Without a network, export your studio as an .iaestudio file and your friend imports it.", "Pour jouer avec des amis sur le même Wi-Fi, sans internet ni serveurs. Dans l'appli Android : l'un touche «Créer une salle» et voit un code à 6 chiffres ; les autres touchent «Chercher des salles», choisissent la salle et tapent le code. Les messages sont chiffrés avec ce code. Dans le navigateur, ou si la recherche ne marche pas sur ton réseau, utilisez «Se connecter avec un code» : l'un invite, l'autre colle le code et renvoie le sien. Une fois connectés, vous verrez le tableau (année, valeur, fans, prix et dernières sorties), pourrez envoyer des réactions, amener le studio d'un ami dans votre monde comme rival et proposer un duel : tout le monde commence une nouvelle partie dans le même monde et celui qui a le plus de points à la fin gagne. Sans réseau, exporte ton studio en fichier .iaestudio et ton ami l'importe.", "Para jogar com amigos na mesma rede Wi-Fi, sem internet nem servidores. No app de Android: um toca em «Criar sala» e vê um código de 6 dígitos; os outros tocam em «Buscar salas», escolhem a sala e digitam o código. As mensagens vão criptografadas com esse código. No navegador, ou se a busca não funcionar na sua rede, usem «Conectar com um código»: um convida, o outro cola o código e devolve o seu. Já conectados, verão o placar (ano, valor, fãs, prêmios e últimos lançamentos), poderão mandar reações, levar o estúdio de um amigo ao seu mundo como rival e propor um duelo: todos começam uma partida nova no mesmo mundo e vence quem tiver mais pontos no fim. Sem rede, exporte seu estúdio como arquivo .iaestudio e seu amigo o importa."],
+  ["Para jugar con amigos en la misma red Wi-Fi, sin internet ni servidores. En la app de Android: uno toca «Crear sala» y ve un código de 6 dígitos; los demás tocan «Buscar salas», eligen la sala y escriben el código. Los mensajes van cifrados con ese código. En el navegador, o si la búsqueda no funciona en tu red, usen «Conectar con un código»: uno invita, el otro pega el código y devuelve el suyo. Ya conectados verán el marcador (año, valor, fans, premios y últimos estrenos), podrán mandar reacciones, llevar el estudio de un amigo a su mundo como rival y proponer un duelo: todos empiezan una partida nueva en el mismo mundo y gana quien tenga más puntos al final. Sin red, exporta tu estudio como archivo .iaestudio y tu amigo lo importa. Si alguien de la sala te molesta, toca «Bloquear» en su fila: dejas de ver su nombre, su logo, sus obras y sus mensajes, también en futuras salas.", "To play with friends on the same Wi-Fi, without internet or servers. In the Android app: one taps «Create room» and sees a 6-digit code; the others tap «Find rooms», pick the room and type the code. Messages are encrypted with that code. In the browser, or if searching doesn't work on your network, use «Connect with a code»: one invites, the other pastes the code and sends theirs back. Once connected you'll see the scoreboard (year, value, fans, awards and latest releases), send reactions, bring a friend's studio into your world as a rival and propose a duel: everyone starts a new game in the same world and whoever has more points at the end wins. Without a network, export your studio as an .iaestudio file and your friend imports it. If someone in the room bothers you, tap «Block» on their row: you stop seeing their name, logo, works and messages, also in future rooms.", "Pour jouer avec des amis sur le même Wi-Fi, sans internet ni serveurs. Dans l'appli Android : l'un touche «Créer une salle» et voit un code à 6 chiffres ; les autres touchent «Chercher des salles», choisissent la salle et tapent le code. Les messages sont chiffrés avec ce code. Dans le navigateur, ou si la recherche ne marche pas sur ton réseau, utilisez «Se connecter avec un code» : l'un invite, l'autre colle le code et renvoie le sien. Une fois connectés, vous verrez le tableau (année, valeur, fans, prix et dernières sorties), pourrez envoyer des réactions, amener le studio d'un ami dans votre monde comme rival et proposer un duel : tout le monde commence une nouvelle partie dans le même monde et celui qui a le plus de points à la fin gagne. Sans réseau, exporte ton studio en fichier .iaestudio et ton ami l'importe. Si quelqu'un dans la salle te dérange, touche «Bloquer» sur sa ligne : tu ne vois plus son nom, son logo, ses œuvres ni ses messages, même dans les prochaines salles.", "Para jogar com amigos na mesma rede Wi-Fi, sem internet nem servidores. No app de Android: um toca em «Criar sala» e vê um código de 6 dígitos; os outros tocam em «Buscar salas», escolhem a sala e digitam o código. As mensagens vão criptografadas com esse código. No navegador, ou se a busca não funcionar na sua rede, usem «Conectar com um código»: um convida, o outro cola o código e devolve o seu. Já conectados, verão o placar (ano, valor, fãs, prêmios e últimos lançamentos), poderão mandar reações, levar o estúdio de um amigo ao seu mundo como rival e propor um duelo: todos começam uma partida nova no mesmo mundo e vence quem tiver mais pontos no fim. Sem rede, exporte seu estúdio como arquivo .iaestudio e seu amigo o importa. Se alguém da sala incomodar, toque em «Bloquear» na linha dele: você deixa de ver o nome, o logo, as obras e as mensagens, também em salas futuras."],
   ["Cada talento tiene cinco rasgos que salen de sus capacidades: Magnetismo (atrae público cuando protagoniza), Rango (se adapta a medios distintos), Estilo (la crítica reconoce su firma como director), Conceptos (ideas claras que gustan a todos, sobre todo en el guion) y Complejidad (más crítica, menos público masivo). Al terminar la producción, los rasgos del protagonista, el director y el guionista suben o bajan la crítica y el público hasta 4 puntos. Lo ves en la ficha de la obra y en la del talento.", "Every talent has five traits that come from their abilities: Magnetism (draws the audience when they star), Range (adapts to different media), Style (critics recognise their signature as a director), Concepts (clear ideas everyone likes, above all in the script) and Complexity (more critics, less mass audience). When production ends, the traits of the lead, the director and the writer raise or lower critics and audience by up to 4 points. You see it on the work's card and on the talent's.", "Chaque talent a cinq traits issus de ses capacités : Magnétisme (attire le public quand il tient le rôle principal), Polyvalence (s'adapte à différents médias), Style (la critique reconnaît sa signature de réalisateur), Concepts (des idées claires qui plaisent à tous, surtout dans le scénario) et Complexité (plus de critique, moins de grand public). À la fin de la production, les traits du rôle principal, du réalisateur et du scénariste font monter ou baisser la critique et le public jusqu'à 4 points. Tu le vois sur la fiche de l'œuvre et sur celle du talent.", "Cada talento tem cinco traços que vêm das suas capacidades: Magnetismo (atrai público quando protagoniza), Versatilidade (se adapta a meios diferentes), Estilo (a crítica reconhece sua assinatura como diretor), Conceitos (ideias claras que agradam a todos, sobretudo no roteiro) e Complexidade (mais crítica, menos público de massa). Ao terminar a produção, os traços do protagonista, do diretor e do roteirista sobem ou baixam a crítica e o público em até 4 pontos. Você vê isso na ficha da obra e na do talento."],
   ["En la ficha de una obra estrenada abre la «Ficha pop» y toca «Formato historia (9:16)»: crea una imagen vertical con el póster, la crítica, el público, la taquilla y los premios, con los colores y el símbolo de tu tema. Después guárdala o compártela como cualquier imagen.", "On a released work's card open the «Pop card» and tap «Story format (9:16)»: it creates a vertical image with the poster, critics, audience, box office and awards, in your theme's colours and symbol. Then save or share it like any image.", "Sur la fiche d'une œuvre sortie, ouvre la «Fiche pop» et touche «Format story (9:16)» : cela crée une image verticale avec l'affiche, la critique, le public, le box-office et les prix, aux couleurs et au symbole de ton thème. Ensuite, enregistre-la ou partage-la comme n'importe quelle image.", "Na ficha de uma obra lançada, abra a «Ficha pop» e toque em «Formato stories (9:16)»: cria uma imagem vertical com o pôster, a crítica, o público, a bilheteria e os prêmios, com as cores e o símbolo do seu tema. Depois salve ou compartilhe como qualquer imagem."],
   ["Todas las ranuras están ocupadas: tu partida anterior sigue en los autoguardados", "All slots are full: your previous game stays in the autosaves", "Toutes les cases sont pleines : ta partie précédente reste dans les sauvegardes automatiques", "Todos os espaços estão ocupados: sua partida anterior continua nos salvamentos automáticos"],
@@ -62572,6 +62574,76 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["2150. Las historias siguen siendo lo que eran hace seis siglos: alguien cuenta, alguien escucha. Solo cambian las pantallas.", "2150. Stories are still what they were six centuries ago: someone tells, someone listens. Only the screens change.", "2150. Les histoires sont toujours ce qu'elles étaient il y a six siècles : quelqu'un raconte, quelqu'un écoute. Seuls les écrans changent.", "2150. As histórias continuam sendo o que eram há seis séculos: alguém conta, alguém escuta. Só mudam as telas."],
   ["La obra de teatro que lleva más tiempo en cartel es «La ratonera», de Agatha Christie: se representa en Londres desde 1952 y solo la pandemia la detuvo.", "The longest-running play is Agatha Christie's «The Mousetrap»: it has played in London since 1952 and only the pandemic stopped it.", "La pièce restée le plus longtemps à l'affiche est «La Souricière», d'Agatha Christie : elle se joue à Londres depuis 1952 et seule la pandémie l'a arrêtée.", "A peça há mais tempo em cartaz é «A ratoeira», de Agatha Christie: é encenada em Londres desde 1952 e só a pandemia a interrompeu."],
   ["Sé el estudio número 1 en valor de la compañía antes de 2175.", "Be the number 1 studio by company value before 2175.", "Sois le studio numéro 1 en valeur d'entreprise avant 2175.", "Seja o estúdio número 1 em valor da empresa antes de 2175."],
+  ["De cualquier medio (cine, series, videojuegos, teatro, música y libros), y también obras listas para estrenar, que llegan al festival como estreno mundial.", "From any medium (film, series, games, theatre, music and books), and also works ready to release, which reach the festival as a world premiere.", "De tout média (cinéma, séries, jeux vidéo, théâtre, musique et livres), et aussi les œuvres prêtes à sortir, présentées au festival en première mondiale.", "De qualquer meio (cinema, séries, videogames, teatro, música e livros), e também obras prontas para estrear, que chegam ao festival como estreia mundial."],
+  ["Franquicias que vendiste", "Franchises you sold", "Franchises que tu as vendues", "Franquias que você vendeu"],
+  ["vendida", "sold", "vendue", "vendida"],
+  ["Volver a comprar", "Buy it back", "Racheter", "Comprar de volta"],
+  ["Vendiste esta franquicia. Puedes volver a comprarla a quien la tiene.", "You sold this franchise. You can buy it back from its owner.", "Tu as vendu cette franchise. Tu peux la racheter à son propriétaire.", "Você vendeu esta franquia. Pode comprá-la de volta de quem a tem."],
+  ["Vendiste los derechos de esta obra con su franquicia.", "You sold this work's rights with its franchise.", "Tu as vendu les droits de cette œuvre avec sa franchise.", "Você vendeu os direitos desta obra com a franquia."],
+  ["Encomendar", "Commission", "Confier", "Encomendar"],
+  ["Que se encarguen de todo", "Let them handle everything", "Qu'ils s'occupent de tout", "Que cuidem de tudo"],
+  ["Encomendar y editar", "Commission and edit", "Confier et modifier", "Encomendar e editar"],
+  ["«Que se encarguen de todo»: ellos eligen equipo, presupuesto y estilo según su manera de trabajar, y la obra entra a producción enseguida. «Encomendar y editar»: abre el creador con su propuesta para que la ajustes.", "«Let them handle everything»: they pick team, budget and style their way, and the work goes into production right away. «Commission and edit»: opens the creator with their proposal so you can adjust it.", "«Qu'ils s'occupent de tout» : ils choisissent l'équipe, le budget et le style à leur manière, et l'œuvre entre aussitôt en production. «Confier et modifier» : ouvre le créateur avec leur proposition pour que tu l'ajustes.", "«Que cuidem de tudo»: eles escolhem equipe, orçamento e estilo do jeito deles, e a obra entra em produção na hora. «Encomendar e editar»: abre o criador com a proposta deles para você ajustar."],
+  ["Hace falta completar algo: revisa el creador", "Something needs completing: check the creator", "Il manque quelque chose : vérifie le créateur", "Falta completar algo: confira o criador"],
+  ["Encargo hecho", "Commission placed", "Commande passée", "Encomenda feita"],
+  ["Tu filial: produce y te reparte utilidades", "Your subsidiary: produces and shares profits", "Ta filiale : produit et partage ses bénéfices", "Sua filial: produz e divide os lucros"],
+  ["Tus filiales", "Your subsidiaries", "Tes filiales", "Suas filiais"],
+  ["Produce y cobra un 15 %", "Produces and charges 15%", "Produit et prend 15 %", "Produz e cobra 15 %"],
+  ["Rivales", "Rivals", "Rivaux", "Rivais"],
+  ["Encomendar el material", "Commission the material", "Confier le matériel", "Encomendar o material"],
+  ["Tus artistas firmados…", "Your signed artists…", "Tes artistes sous contrat…", "Seus artistas contratados…"],
+  ["Grabar con una banda o solista de tu sello", "Record with a band or solo artist of your label", "Enregistrer avec un groupe ou un soliste de ton label", "Gravar com uma banda ou solista do seu selo"],
+  ["Compañías aliadas", "Allied companies", "Compagnies alliées", "Companhias aliadas"],
+  ["Compañías de teatro, ópera, ballet, circo y más firman contigo: tú les das un apoyo anual y estabilidad; ellas hacen temporadas, te dan una parte de su taquilla y te proponen obras.", "Theatre, opera, ballet, circus companies and more sign with you: you give them yearly support and stability; they run seasons, give you a share of their box office and propose works.", "Des compagnies de théâtre, d'opéra, de ballet, de cirque et plus signent avec toi : tu leur donnes un soutien annuel et de la stabilité ; elles font des saisons, te donnent une part de leur billetterie et te proposent des œuvres.", "Companhias de teatro, ópera, balé, circo e mais assinam com você: você lhes dá apoio anual e estabilidade; elas fazem temporadas, dão uma parte da bilheteria e propõem obras."],
+  ["Firmar", "Sign", "Signer", "Assinar"],
+  ["de gira", "on tour", "en tournée", "em turnê"],
+  ["Nueva obra con ellos", "New work with them", "Nouvelle œuvre avec eux", "Nova obra com eles"],
+  ["Gira", "Tour", "Tournée", "Turnê"],
+  ["Renovar", "Renew", "Renouveler", "Renovar"],
+  ["Liberar", "Release", "Libérer", "Liberar"],
+  ["Todavía ninguna compañía te propuso firmar: llegan con el tiempo, sobre todo si tu estudio tiene prestigio.", "No company has offered to sign yet: they come over time, especially if your studio has prestige.", "Aucune compagnie ne t'a encore proposé de signer : elles arrivent avec le temps, surtout si ton studio a du prestige.", "Nenhuma companhia propôs assinar ainda: elas chegam com o tempo, sobretudo se seu estúdio tiver prestígio."],
+  ["Compañía de teatro", "Theatre company", "Compagnie de théâtre", "Companhia de teatro"],
+  ["Compañía de ópera", "Opera company", "Compagnie d'opéra", "Companhia de ópera"],
+  ["Compañía de ballet", "Ballet company", "Compagnie de ballet", "Companhia de balé"],
+  ["Teatro de títeres", "Puppet theatre", "Théâtre de marionnettes", "Teatro de bonecos"],
+  ["Compañía de zarzuela", "Zarzuela company", "Compagnie de zarzuela", "Companhia de zarzuela"],
+  ["Musicales", "Musical theatre", "Comédies musicales", "Musicais"],
+  ["Teatro de improvisación", "Improv troupe", "Troupe d'improvisation", "Teatro de improviso"],
+  ["Nuevo circo", "Contemporary circus", "Nouveau cirque", "Novo circo"],
+  ["Reediciones", "Reissues", "Rééditions", "Reedições"],
+  ["Dale nueva vida a tus libros: edición de bolsillo, audiolibro y traducciones a otros idiomas. Cada una se hace una vez por libro y vende durante meses.", "Give your books new life: paperback, audiobook and translations. Each can be done once per book and sells for months.", "Donne une nouvelle vie à tes livres : édition de poche, livre audio et traductions. Chacune se fait une fois par livre et se vend pendant des mois.", "Dê nova vida aos seus livros: edição de bolso, audiolivro e traduções. Cada uma se faz uma vez por livro e vende durante meses."],
+  ["Edición de bolsillo", "Paperback edition", "Édition de poche", "Edição de bolso"],
+  ["Audiolibro", "Audiobook", "Livre audio", "Audiolivro"],
+  ["Traducciones", "Translations", "Traductions", "Traduções"],
+  ["Compañías aliadas", "Allied companies", "Compagnies alliées", "Companhias aliadas"],
+  ["Compra automática de contenido", "Automatic content buying", "Achat automatique de contenu", "Compra automática de conteúdo"],
+  ["Reediciones", "Reissues", "Rééditions", "Reedições"],
+  ["En Obras → Teatro. Con el tiempo, compañías de teatro, ópera, ballet, títeres, zarzuela, circo, musicales, cabaret, improvisación y nuevo circo te piden firmar: buscan estabilidad. Firmar cuesta su apoyo de un año y después pagas ese apoyo poco a poco cada mes. A cambio, cada mes hacen temporada y te dan su parte de la taquilla (25 a 35 %), crecen en fans y a veces te proponen obras gratis. Puedes mandarlas de gira (más fans y más taquilla durante 8 semanas), hacer una obra nueva con ellas (suben crítica y público), renovarlas tres años o liberarlas. Dato: el circo moderno nació en Londres en 1768, cuando Philip Astley montó acrobacias a caballo dentro de una pista redonda.", "In Works → Theatre. Over time, theatre, opera, ballet, puppet, zarzuela, circus, musical, cabaret, improv and contemporary circus companies ask to sign with you: they want stability. Signing costs one year of support and then you pay that support little by little each month. In exchange, every month they run a season and give you their share of the box office (25 to 35 %), grow their fans and sometimes propose free works. You can send them on tour (more fans and box office for 8 weeks), make a new work with them (critics and audience go up), renew them for three years or release them. Fact: the modern circus was born in London in 1768, when Philip Astley staged horseback acrobatics inside a round ring.", "Dans Œuvres → Théâtre. Avec le temps, des compagnies de théâtre, d'opéra, de ballet, de marionnettes, de zarzuela, de cirque, de comédies musicales, de cabaret, d'improvisation et de nouveau cirque demandent à signer : elles cherchent la stabilité. Signer coûte un an de soutien, puis tu le paies petit à petit chaque mois. En échange, chaque mois elles font une saison et te donnent leur part de la billetterie (25 à 35 %), gagnent des fans et te proposent parfois des œuvres gratuites. Tu peux les envoyer en tournée (plus de fans et de billetterie pendant 8 semaines), faire une nouvelle œuvre avec elles (la critique et le public montent), les renouveler trois ans ou les libérer. Anecdote : le cirque moderne est né à Londres en 1768, quand Philip Astley a présenté des acrobaties à cheval sur une piste ronde.", "Em Obras → Teatro. Com o tempo, companhias de teatro, ópera, balé, bonecos, zarzuela, circo, musicais, cabaré, improviso e novo circo pedem para assinar: buscam estabilidade. Assinar custa um ano de apoio e depois você paga esse apoio aos poucos todo mês. Em troca, todo mês elas fazem temporada e lhe dão a parte delas da bilheteria (25 a 35 %), ganham fãs e às vezes propõem obras grátis. Você pode mandá-las em turnê (mais fãs e bilheteria por 8 semanas), fazer uma obra nova com elas (sobem crítica e público), renová-las por três anos ou liberá-las. Curiosidade: o circo moderno nasceu em Londres em 1768, quando Philip Astley montou acrobacias a cavalo dentro de um picadeiro redondo."],
+  ["En Negocio → Streaming y en Negocio → Canal de TV → Licencias. Actívala y elige qué parte de tu caja puede gastar cada mes (1, 3, 5 o 10 %) y la calidad mínima. Al empezar cada mes compra por ti: en la plataforma, licencias de rivales (regatea al 85 %, que siempre aceptan), paquetes cuando hay espacio libre o el catálogo envejece, y lotes de archivo si los marcas; en el canal, licencias por 2 años que también sirven para tu plataforma y, si quieres, las programa en las franjas vacías. «Comprar ahora» hace la compra del mes al instante. Los lotes y paquetes ahora suman títulos reales: arriba de «Crecer el catálogo» ves cuántos tienes, cuántos caben a la vista y cuántos quedaron en bodega. Dato: en 2007 Netflix lanzó su streaming con unas 1.000 películas, frente a más de 70.000 DVD que tenía para alquilar por correo.", "In Business → Streaming and Business → TV channel → Licenses. Turn it on and choose how much of your cash it may spend each month (1, 3, 5 or 10 %) and the minimum quality. At the start of each month it buys for you: on the platform, rival licenses (it haggles to 85 %, which they always accept), packages when there is free space or the catalog gets old, and archive lots if you tick them; on the channel, 2-year licenses that also work for your platform and, if you want, it schedules them in empty slots. «Buy now» makes this month's purchase instantly. Lots and packages now add real titles: above «Grow the catalog» you see how many you have, how many fit on show and how many went to storage. Fact: in 2007 Netflix launched streaming with about 1,000 films, against more than 70,000 DVDs it rented by mail.", "Dans Affaires → Streaming et Affaires → Chaîne TV → Licences. Active-le et choisis la part de ta trésorerie qu'il peut dépenser chaque mois (1, 3, 5 ou 10 %) et la qualité minimale. Au début de chaque mois, il achète pour toi : sur la plateforme, des licences des rivaux (il négocie à 85 %, ce qu'ils acceptent toujours), des paquets quand il y a de la place ou que le catalogue vieillit, et des lots d'archives si tu les coches ; sur la chaîne, des licences de 2 ans qui servent aussi à ta plateforme et, si tu veux, il les programme dans les cases vides. « Acheter maintenant » fait l'achat du mois tout de suite. Les lots et paquets ajoutent maintenant de vrais titres : au-dessus de « Agrandir le catalogue », tu vois combien tu en as, combien sont visibles et combien sont en réserve. Anecdote : en 2007, Netflix a lancé son streaming avec environ 1 000 films, contre plus de 70 000 DVD qu'il louait par courrier.", "Em Negócio → Streaming e Negócio → Canal de TV → Licenças. Ative e escolha quanto do seu caixa pode gastar por mês (1, 3, 5 ou 10 %) e a qualidade mínima. No início de cada mês compra por você: na plataforma, licenças dos rivais (pechincha a 85 %, que eles sempre aceitam), pacotes quando há espaço livre ou o catálogo envelhece, e lotes de arquivo se marcar; no canal, licenças de 2 anos que também servem para sua plataforma e, se quiser, as programa nas faixas vazias. «Comprar agora» faz a compra do mês na hora. Lotes e pacotes agora somam títulos reais: acima de «Crescer o catálogo» você vê quantos tem, quantos cabem à vista e quantos ficaram no depósito. Curiosidade: em 2007 a Netflix lançou o streaming com cerca de 1.000 filmes, contra mais de 70.000 DVDs que alugava pelo correio."],
+  ["En Obras → Libros. Cada libro estrenado puede tener una edición de bolsillo (desde 1935), un audiolibro (desde 1952) y traducciones. Pagas una vez una parte de lo que ya vendió y la reedición vende durante meses; cuanto más público tuvo el libro, más vende. Dato: en 1935 Penguin lanzó libros de bolsillo al precio de un paquete de cigarrillos y cambió para siempre quién podía comprar libros.", "In Works → Books. Each released book can get a paperback edition (from 1935), an audiobook (from 1952) and translations. You pay once a share of what it already sold and the reissue sells for months; the bigger the book's audience, the more it sells. Fact: in 1935 Penguin launched paperbacks at the price of a pack of cigarettes and changed forever who could buy books.", "Dans Œuvres → Livres. Chaque livre sorti peut avoir une édition de poche (dès 1935), un livre audio (dès 1952) et des traductions. Tu paies une fois une part de ce qu'il a déjà vendu et la réédition se vend pendant des mois ; plus le livre a eu de public, plus elle se vend. Anecdote : en 1935, Penguin a lancé des livres de poche au prix d'un paquet de cigarettes et a changé pour toujours qui pouvait acheter des livres.", "Em Obras → Livros. Cada livro lançado pode ter edição de bolso (desde 1935), audiolivro (desde 1952) e traduções. Você paga uma vez uma parte do que ele já vendeu e a reedição vende durante meses; quanto mais público o livro teve, mais vende. Curiosidade: em 1935 a Penguin lançou livros de bolso pelo preço de um maço de cigarros e mudou para sempre quem podia comprar livros."],
+  ["Código incorrecto o la sala se cerró. Revisa el código de 6 dígitos.", "Wrong code or the room closed. Check the 6-digit code.", "Code incorrect ou salle fermée. Vérifie le code à 6 chiffres.", "Código incorreto ou a sala foi fechada. Confira o código de 6 dígitos."],
+  ["Ninguno. El juego funciona sin conexión a internet, no pide cuenta ni registro y no recoge datos personales: ni tu nombre real, ni tu ubicación, ni tus contactos, ni identificadores de publicidad, ni datos de uso. Si usas el modo LAN, el nombre de tu estudio, tu logo y tus estadísticas de juego van directamente a los dispositivos de tus amigos en tu misma red, cifrados con el código de la sala; no pasan por ningún servidor y nosotros no podemos verlos.", "None. The game works offline, needs no account or sign-up and collects no personal data: not your real name, location, contacts, advertising identifiers or usage data. If you use LAN mode, your studio name, logo and game stats go directly to your friends' devices on the same network, encrypted with the room code; they don't go through any server and we can't see them.", "Aucune. Le jeu fonctionne sans internet, ne demande ni compte ni inscription et ne collecte aucune donnée personnelle : ni ton vrai nom, ni ta position, ni tes contacts, ni identifiants publicitaires, ni données d'utilisation. Si tu utilises le mode LAN, le nom de ton studio, ton logo et tes statistiques de jeu vont directement aux appareils de tes amis sur le même réseau, chiffrés avec le code de la salle ; ils ne passent par aucun serveur et nous ne pouvons pas les voir.", "Nenhum. O jogo funciona sem internet, não pede conta nem cadastro e não coleta dados pessoais: nem seu nome real, nem sua localização, nem seus contatos, nem identificadores de publicidade, nem dados de uso. Se você usar o modo LAN, o nome do seu estúdio, seu logo e suas estatísticas de jogo vão direto para os aparelhos dos seus amigos na mesma rede, criptografados com o código da sala; não passam por nenhum servidor e nós não podemos vê-los."],
+  ["La app usa solo permisos normales de red (internet y multidifusión Wi-Fi) para encontrar y abrir salas del modo LAN en tu red local. No pide permisos de ubicación, contactos, cámara ni micrófono. Si eliges una imagen para tu logo, se usa el selector de archivos de tu sistema y la imagen se queda en tu dispositivo.", "The app only uses normal network permissions (internet and Wi-Fi multicast) to find and open LAN rooms on your local network. It doesn't ask for location, contacts, camera or microphone. If you pick an image for your logo, your system's file picker is used and the image stays on your device.", "L'appli n'utilise que des autorisations réseau normales (internet et multidiffusion Wi-Fi) pour trouver et ouvrir des salles du mode LAN sur ton réseau local. Elle ne demande ni position, ni contacts, ni caméra, ni micro. Si tu choisis une image pour ton logo, le sélecteur de fichiers du système est utilisé et l'image reste sur ton appareil.", "O app usa só permissões normais de rede (internet e multicast Wi-Fi) para encontrar e abrir salas do modo LAN na sua rede local. Não pede localização, contatos, câmera nem microfone. Se você escolher uma imagem para o seu logo, é usado o seletor de arquivos do sistema e a imagem fica no seu aparelho."],
+  ["El juego está pensado para mayores de 13 años porque incluye un casino simulado, sin dinero real. No recoge datos de nadie, tampoco de menores de edad.", "The game is meant for ages 13 and up because it includes a simulated casino, with no real money. It collects no data from anyone, including minors.", "Le jeu est destiné aux 13 ans et plus car il comprend un casino simulé, sans argent réel. Il ne collecte de données sur personne, ni sur les mineurs.", "O jogo é pensado para maiores de 13 anos porque inclui um cassino simulado, sem dinheiro real. Não coleta dados de ninguém, nem de menores de idade."],
+  ["Como el juego no envía datos por internet, no hay datos tuyos en servidores que puedan filtrarse. En el modo LAN cada mensaje va cifrado (AES-GCM) con el código de 6 dígitos de la sala, y quien no lo tenga no puede entrar ni leer nada. Los archivos de partida llevan una suma de verificación para detectar daños. Te recomendamos exportar tus partidas de vez en cuando como copia de seguridad.", "Since the game sends no data over the internet, there is no data of yours on servers that could leak. In LAN mode every message is encrypted (AES-GCM) with the room's 6-digit code, and anyone without it can't join or read anything. Save files include a checksum to detect damage. We recommend exporting your saved games from time to time as a backup.", "Comme le jeu n'envoie aucune donnée sur internet, il n'y a pas de données à toi sur des serveurs qui pourraient fuiter. En mode LAN, chaque message est chiffré (AES-GCM) avec le code à 6 chiffres de la salle, et sans lui personne ne peut entrer ni rien lire. Les fichiers de sauvegarde ont une somme de contrôle pour détecter les dommages. Nous te conseillons d'exporter tes parties de temps en temps comme copie de sécurité.", "Como o jogo não envia dados pela internet, não há dados seus em servidores que possam vazar. No modo LAN cada mensagem vai criptografada (AES-GCM) com o código de 6 dígitos da sala, e quem não o tiver não pode entrar nem ler nada. Os arquivos de partida têm uma soma de verificação para detectar danos. Recomendamos exportar suas partidas de vez em quando como cópia de segurança."],
+  ["1 de noviembre de 2026", "November 1, 2026", "1er novembre 2026", "1º de novembro de 2026"],
+  ["Compra automática de contenido para tu plataforma y tu canal de TV. Los lotes del catálogo ahora suman títulos reales y ves cuántos tienes, cuántos están a la vista y cuántos en bodega.", "Automatic content buying for your platform and your TV channel. Catalog lots now add real titles and you can see how many you have, how many are on show and how many are in storage.", "Achat automatique de contenu pour ta plateforme et ta chaîne de TV. Les lots du catalogue ajoutent maintenant de vrais titres et tu vois combien tu en as, combien sont visibles et combien sont en réserve.", "Compra automática de conteúdo para sua plataforma e seu canal de TV. Os lotes do catálogo agora somam títulos reais e você vê quantos tem, quantos estão à vista e quantos no depósito."],
+  ["Las secuelas, precuelas y otras cronologías conservan al intérprete de cada personaje, también si la guardas en Ideas, cambias de medio o pides «Equipo recomendado».", "Sequels, prequels and other timelines keep each character's performer, even if you save it in Ideas, change the medium or ask for «Recommended crew».", "Les suites, préquelles et autres chronologies gardent l'interprète de chaque personnage, même si tu la gardes dans Idées, changes de média ou demandes « Équipe recommandée ».", "Sequências, prequelas e outras cronologias mantêm o intérprete de cada personagem, mesmo se você a guardar em Ideias, mudar de mídia ou pedir «Equipe recomendada»."],
+  ["Encomienda los proyectos que te proponen a una de tus filiales o a un rival: que se encarguen de todo o encomiéndalos y edítalos tú.", "Commission the projects you are offered to one of your subsidiaries or to a rival: let them handle everything, or commission and edit it yourself.", "Confie les projets qu'on te propose à l'une de tes filiales ou à un rival : qu'ils s'occupent de tout, ou confie-les et édite-les toi-même.", "Encomende os projetos que lhe propõem a uma de suas filiais ou a um rival: que cuidem de tudo, ou encomende e edite você mesmo."],
+  ["Compañías de teatro, ópera, ballet, circo y más quieren firmar contigo, y tus libros tienen reediciones: bolsillo, audiolibro y traducciones.", "Theatre, opera, ballet, circus companies and more want to sign with you, and your books get reissues: paperback, audiobook and translations.", "Des compagnies de théâtre, d'opéra, de ballet, de cirque et d'autres veulent signer avec toi, et tes livres ont des rééditions : poche, livre audio et traductions.", "Companhias de teatro, ópera, balé, circo e mais querem assinar com você, e seus livros ganham reedições: bolso, audiolivro e traduções."],
+  ["Los personajes de dominio público llegan con su personalidad original (Drácula sigue siendo villano), las franquicias vendidas salen de tu lista y puedes recomprarlas, y los festivales aceptan cualquier medio.", "Public-domain characters arrive with their original personality (Dracula is still a villain), sold franchises leave your list and you can buy them back, and festivals accept any medium.", "Les personnages du domaine public arrivent avec leur personnalité d'origine (Dracula reste un méchant), les franchises vendues quittent ta liste et tu peux les racheter, et les festivals acceptent tous les médias.", "Os personagens de domínio público chegam com sua personalidade original (Drácula continua vilão), as franquias vendidas saem da sua lista e você pode recomprá-las, e os festivais aceitam qualquer mídia."],
+  ["Más de 5 escritores en Editorial, equipo de apoyo de hasta 500 personas con su cifra a la vista y la pantalla ya no salta al tocar opciones.", "More than 5 writers in Publishing, support crews of up to 500 people with the number on show, and the screen no longer jumps when you tap options.", "Plus de 5 écrivains dans l'Édition, des équipes de soutien jusqu'à 500 personnes avec le chiffre visible, et l'écran ne saute plus quand tu touches les options.", "Mais de 5 escritores na Editorial, equipe de apoio de até 500 pessoas com o número à vista, e a tela não pula mais ao tocar nas opções."],
+  ["Campaña «Seis siglos», reto semanal, modo LAN con amigos, salida a bolsa, ofertas de compra, remodelaciones, rasgos de talento, radio del estudio y modo a una mano.", "«Six Centuries» campaign, weekly challenge, LAN mode with friends, IPO, buyout offers, remodeling, talent traits, studio radio and one-hand mode.", "Campagne « Six siècles », défi hebdomadaire, mode LAN entre amis, introduction en bourse, offres de rachat, rénovations, traits de talent, radio du studio et mode à une main.", "Campanha «Seis séculos», desafio semanal, modo LAN com amigos, abertura de capital, ofertas de compra, reformas, traços de talento, rádio do estúdio e modo de uma mão."],
+  ["Diseño de revista, estéticas por época, temas especiales y corrientes artísticas, con modo claro y oscuro.", "Magazine design, era aesthetics, special themes and art movements, with light and dark mode.", "Design de magazine, esthétiques d'époque, thèmes spéciaux et courants artistiques, avec mode clair et sombre.", "Design de revista, estéticas de época, temas especiais e correntes artísticas, com modo claro e escuro."],
+  ["Música por épocas: clásicos de dominio público con arreglos propios y piezas electrónicas originales.", "Music by era: public-domain classics in original arrangements and original electronic pieces.", "Musique par époque : classiques du domaine public dans des arrangements originaux et morceaux électroniques originaux.", "Música por épocas: clássicos de domínio público com arranjos próprios e peças eletrônicas originais."],
+  ["Obras de construcción, patentes, valor de la compañía, banderas históricas, símbolos para logos y app para Android.", "Construction works, patents, company value, historical flags, logo symbols and an Android app.", "Chantiers de construction, brevets, valeur de l'entreprise, drapeaux historiques, symboles pour logos et appli Android.", "Obras de construção, patentes, valor da empresa, bandeiras históricas, símbolos para logos e app para Android."],
+  ["Versión 1.1 · vigente desde el 1 de noviembre de 2026", "Version 1.1 · effective since November 1, 2026", "Version 1.1 · en vigueur depuis le 1er novembre 2026", "Versão 1.1 · em vigor desde 1º de novembro de 2026"],
+  ["Si esta política cambia, la nueva versión aparecerá en el juego con su fecha. Vigente desde el 1 de noviembre de 2026.", "If this policy changes, the new version will appear in the game with its date. Effective since November 1, 2026.", "Si cette politique change, la nouvelle version apparaîtra dans le jeu avec sa date. En vigueur depuis le 1er novembre 2026.", "Se esta política mudar, a nova versão aparecerá no jogo com sua data. Em vigor desde 1º de novembro de 2026."],
+  ["Versión 0.3", "Version 0.3", "Version 0.3", "Versão 0.3"],
+  ["Versión 0.2", "Version 0.2", "Version 0.2", "Versão 0.2"],
+  ["Versión 0.1", "Version 0.1", "Version 0.1", "Versão 0.1"],
+  ["Versión 1.1", "Version 1.1", "Version 1.1", "Versão 1.1"],
+  ["Versión 1.0", "Version 1.0", "Version 1.0", "Versão 1.0"],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -67628,7 +67700,7 @@ prodH = function () {
   const h = prodHAp.apply(this, arguments);
   return (
     h +
-    `<div class="c sub fx-blk">${wRng("ap1", 0, 200, W.ap1 | 0, dualReg("Equipo de apoyo de producción", "Production support crew"))}${wRng("ap2", 0, 200, W.ap2 | 0, dualReg("Equipo de apoyo de posproducción", "Post-production support crew"))}<div class="m" translate="no">${tx4(
+    `<div class="c sub fx-blk">${wRng("ap1", 0, 500, W.ap1 | 0, dualReg("Equipo de apoyo de producción", "Production support crew"))}${wRng("ap2", 0, 500, W.ap2 | 0, dualReg("Equipo de apoyo de posproducción", "Post-production support crew"))}<div class="m" translate="no">${tx4(
       "Gente que se suma al equipo base: asistentes, técnicos y auxiliares. En producción acortan el rodaje o la grabación y bajan los imprevistos; en posproducción acortan el montaje y pulen el resultado. Cada persona cuesta.",
       "People added to the core crew: assistants, technicians and helpers. In production they shorten the shoot or recording and reduce mishaps; in post-production they shorten editing and polish the result. Each person costs.",
       "Des renforts pour l'équipe de base : assistants, techniciens et auxiliaires. En production, ils raccourcissent le tournage ou l'enregistrement et réduisent les imprévus ; en postproduction, ils raccourcissent le montage et peaufinent le résultat. Chaque personne coûte.",
@@ -69592,7 +69664,7 @@ Object.assign(TX.es.ayuda, {
   oferta: ["Ofertas de compra", "Si estás entre los 3 estudios más valiosos, un rival rico o un conglomerado puede ofrecer comprarte, como mucho una vez cada 6 años. Ofrecen entre 1,25 y 1,6 veces tu valor y tienes 8 semanas para decidir en Negocio → Finanzas. Si vendes, recibes tu parte (descontando la de tu socio y la de la bolsa) y la partida termina con tu legado. Si rechazas, tu equipo lo celebra y ganas un poco de prestigio."],
   siglos: ["Seis siglos", "Capítulos de la historia del espectáculo, de 1737 a 2150. Cada uno empieza en un año y un país reales, con una meta y un plazo; la meta y tu avance se ven arriba en Estudio. Al cumplirla se abre el capítulo siguiente; si se acaba el plazo puedes reintentarlo. En ambos casos sigues jugando libre en ese mundo. «Jugar» empieza enseguida y «Personalizar» te deja elegir nombre, logo y avatar. Antes de empezar, tu partida en curso se guarda en una ranura libre."],
   reto: ["Reto de la semana", "Cada semana, de lunes a domingo, hay un mundo nuevo igual para todos: mismo año, misma sede y misma semilla. Juegas 10 años y al final se suman tus puntos: tu valor en millones de dólares de hoy, 25 por cada premio, 10 por cada hito y un poco por tus fans. Tus mejores intentos se guardan en este dispositivo. Con el modo LAN, tus amigos ven tus puntos en el marcador."],
-  lan: ["Modo LAN", "Para jugar con amigos en la misma red Wi-Fi, sin internet ni servidores. En la app de Android: uno toca «Crear sala» y ve un código de 6 dígitos; los demás tocan «Buscar salas», eligen la sala y escriben el código. Los mensajes van cifrados con ese código. En el navegador, o si la búsqueda no funciona en tu red, usen «Conectar con un código»: uno invita, el otro pega el código y devuelve el suyo. Ya conectados verán el marcador (año, valor, fans, premios y últimos estrenos), podrán mandar reacciones, llevar el estudio de un amigo a su mundo como rival y proponer un duelo: todos empiezan una partida nueva en el mismo mundo y gana quien tenga más puntos al final. Sin red, exporta tu estudio como archivo .iaestudio y tu amigo lo importa."],
+  lan: ["Modo LAN", "Para jugar con amigos en la misma red Wi-Fi, sin internet ni servidores. En la app de Android: uno toca «Crear sala» y ve un código de 6 dígitos; los demás tocan «Buscar salas», eligen la sala y escriben el código. Los mensajes van cifrados con ese código. En el navegador, o si la búsqueda no funciona en tu red, usen «Conectar con un código»: uno invita, el otro pega el código y devuelve el suyo. Ya conectados verán el marcador (año, valor, fans, premios y últimos estrenos), podrán mandar reacciones, llevar el estudio de un amigo a su mundo como rival y proponer un duelo: todos empiezan una partida nueva en el mismo mundo y gana quien tenga más puntos al final. Sin red, exporta tu estudio como archivo .iaestudio y tu amigo lo importa. Si alguien de la sala te molesta, toca «Bloquear» en su fila: dejas de ver su nombre, su logo, sus obras y sus mensajes, también en futuras salas."],
   rasgos: ["Rasgos", "Cada talento tiene cinco rasgos que salen de sus capacidades: Magnetismo (atrae público cuando protagoniza), Rango (se adapta a medios distintos), Estilo (la crítica reconoce su firma como director), Conceptos (ideas claras que gustan a todos, sobre todo en el guion) y Complejidad (más crítica, menos público masivo). Al terminar la producción, los rasgos del protagonista, el director y el guionista suben o bajan la crítica y el público hasta 4 puntos. Lo ves en la ficha de la obra y en la del talento."],
   tarjeta: ["Tarjetas para compartir", "En la ficha de una obra estrenada abre la «Ficha pop» y toca «Formato historia (9:16)»: crea una imagen vertical con el póster, la crítica, el público, la taquilla y los premios, con los colores y el símbolo de tu tema. Después guárdala o compártela como cualquier imagen."],
 });
@@ -70059,6 +70131,9 @@ pg = function () {
 };
 const LAN = { via: "", rol: "", pin: "", clave: null, sala: "", pares: {}, conx: {}, salas: {}, rtc: {}, cod: "", codG: "", yo: "", ult: 0, busca: 0, aviso: "", duelos: {} };
 LAN.yo = Math.random().toString(36).slice(2, 10);
+const lanBlqK = (c) => (c ? "b" + hs(String(c.n || "") + "|" + String(c.pais == null ? "" : c.pais)) : "");
+const lanBlq = () => lsJ("ia.lanbloq", []);
+const lanBloqueado = (c) => !!c && lanBlq().includes(lanBlqK(c));
 const lanNativo = () => {
   try {
     return !!(window.AndroidBridge && AndroidBridge.lanDisponible && AndroidBridge.lanDisponible());
@@ -70153,6 +70228,13 @@ function lanRecibe(o, desde) {
   if (!o || typeof o != "object" || o.de == LAN.yo) return;
   const P = (LAN.pares[o.de] = LAN.pares[o.de] || { de: o.de, n: "?", c: null, conx: desde });
   if (desde) P.conx = desde;
+  if (o.c && typeof o.c == "object" && lanBloqueado(o.c)) {
+    P.c = o.c;
+    P.n = String(o.c.n || "?").slice(0, 40);
+    P.bl = 1;
+    return;
+  }
+  if (P.bl && o.t != "chao") return;
   if (o.t == "hola" || o.t == "estado") {
     const nuevo = !P.c;
     if (o.c && typeof o.c == "object") {
@@ -70197,17 +70279,19 @@ window.lanEvento = async (tipo, a, b) => {
   } else if (tipo == "perdida") {
     delete LAN.salas[a];
   } else if (tipo == "conectado") {
-    LAN.conx[a] = { ip: b, ok: LAN.rol == "invitado" };
+    LAN.conx[a] = { ip: b, ok: false };
     if (LAN.rol == "invitado") lanEnviar({ t: "hola", c: lanTarjeta() || { n: dualReg("Jugador sin partida", "Player without a game") } }, a);
   } else if (tipo == "desconectado") {
+    const nunca = LAN.conx[a] && !LAN.conx[a].ok;
     delete LAN.conx[a];
+    if (LAN.rol == "invitado" && nunca) LAN.aviso = dualReg("Código incorrecto o la sala se cerró. Revisa el código de 6 dígitos.", "Wrong code or the room closed. Check the 6-digit code.");
     Object.values(LAN.pares).forEach((p) => {
       if (p.conx == a) {
         if (LAN.rol == "anfitrion") lanEnviar({ t: "chao", de2: p.de });
         delete LAN.pares[p.de];
       }
     });
-    if (LAN.rol == "invitado" && !lanActiva()) LAN.aviso = dualReg("Se cerró la conexión con la sala.", "The connection to the room closed.");
+    if (LAN.rol == "invitado" && !nunca && !lanActiva()) LAN.aviso = dualReg("Se cerró la conexión con la sala.", "The connection to the room closed.");
   } else if (tipo == "mensaje") {
     let o;
     try {
@@ -70480,6 +70564,7 @@ function dueloProponer() {
 function dueloEmpieza(id) {
   const d = LAN.duelos[id];
   if (!d) return;
+  d.resp = 1;
   const c = d.cfg;
   if (d.de != LAN.yo) lanEnviar({ t: "dueloSi", id });
   partidaPreset(
@@ -70528,9 +70613,11 @@ function lanParesH(det) {
   const P = Object.values(LAN.pares).filter((p) => p.c);
   if (!P.length) return "";
   const yo = lanTarjeta();
-  const fila = (c, n, tu) =>
-    `<div class="fila lan-par"><div style="flex:1;min-width:0"><b>${esc(n)}</b>${tu ? ` <span class="m">(${L4("tú", "you", "toi", "você")})</span>` : ""}<div class="m">${[c.y || "—", L4("valor", "value", "valeur", "valor") + " " + fm0(c.v || 0), nfc(c.fans || 0) + " fans", plural(c.win | 0, L4("premio", "award", "prix", "prêmio"), L4("premios", "awards", "prix", "prêmios"))].concat(c.duelo ? ["⚔︎ " + nf(c.duelo.p)] : [], c.reto ? [L4("reto", "challenge", "défi", "desafio") + " " + nf(c.reto.p)] : []).join(" · ")}</div>${det && c.ult && c.ult.length ? `<div class="m">${L4("Últimos estrenos", "Latest releases", "Dernières sorties", "Últimos lançamentos")}: ${c.ult.map((x) => "«" + esc(String(x.n).slice(0, 40)) + "»").join(", ")}</div>` : ""}</div>${det && !tu && S ? (S.rv.some((r) => r.amigo == c.id && !r.dead) ? bt("lnq", c.id, dualReg("Quitar de mi mundo", "Remove from my world")) : bt("lnr", c.id, dualReg("Llevar a mi mundo", "Bring to my world"))) : ""}</div>`;
-  return (yo ? fila(yo, S.sn, 1) : "") + P.map((p) => fila(p.c, p.n)).join("");
+  const fila = (c, n, tu, pd) =>
+    `<div class="fila lan-par"><div style="flex:1;min-width:0"><b>${esc(n)}</b>${tu ? ` <span class="m">(${L4("tú", "you", "toi", "você")})</span>` : ""}<div class="m">${[c.y || "—", L4("valor", "value", "valeur", "valor") + " " + fm0(c.v || 0), nfc(c.fans || 0) + " fans", plural(c.win | 0, L4("premio", "award", "prix", "prêmio"), L4("premios", "awards", "prix", "prêmios"))].concat(c.duelo ? ["⚔︎ " + nf(c.duelo.p)] : [], c.reto ? [L4("reto", "challenge", "défi", "desafio") + " " + nf(c.reto.p)] : []).join(" · ")}</div>${det && c.ult && c.ult.length ? `<div class="m">${L4("Últimos estrenos", "Latest releases", "Dernières sorties", "Últimos lançamentos")}: ${c.ult.map((x) => "«" + esc(String(x.n).slice(0, 40)) + "»").join(", ")}</div>` : ""}${det && !tu && S ? `<div class="bts" style="margin-top:6px">${S.rv.some((r) => r.amigo == c.id && !r.dead) ? bt("lnq", c.id, dualReg("Quitar de mi mundo", "Remove from my world")) : bt("lnr", c.id, dualReg("Llevar a mi mundo", "Bring to my world"))}${pd != null ? bt("lnbq", pd, L4("Bloquear", "Block", "Bloquer", "Bloquear")) : ""}</div>` : ""}</div></div>`;
+  const filaB = (p) =>
+    `<div class="fila lan-par"><div style="flex:1;min-width:0"><b>${L4("Estudio bloqueado", "Blocked studio", "Studio bloqué", "Estúdio bloqueado")}</b><div class="m">${L4("No ves su nombre, su logo, sus obras ni sus mensajes.", "You don't see its name, logo, works or messages.", "Tu ne vois ni son nom, ni son logo, ni ses œuvres, ni ses messages.", "Você não vê o nome, o logo, as obras nem as mensagens.")}</div></div>${det ? bt("lnbq", p.de, L4("Desbloquear", "Unblock", "Débloquer", "Desbloquear")) : ""}</div>`;
+  return (yo ? fila(yo, S.sn, 1) : "") + P.map((p) => (p.bl ? filaB(p) : fila(p.c, p.n, 0, p.de))).join("");
 }
 function lanH() {
   if (!lanActiva()) return "";
@@ -70553,6 +70640,12 @@ function lanM() {
     h += `<h3>${dualReg("Salas en tu red", "Rooms on your network")}</h3>${salas.length ? `<input id="lanpin" inputmode="numeric" maxlength="7" placeholder="${dualReg("Código de 6 dígitos", "6-digit code")}">${salas.map((n) => `<div class="fila"><b>${esc(n)}</b>${bt("lne", n, dualReg("Entrar", "Join"), "a")}</div>`).join("")}` : `<div class="m">${dualReg("Buscando… Asegúrate de estar en la misma red Wi-Fi que quien abrió la sala.", "Searching… Make sure you're on the same Wi-Fi as the room host.")}</div>`}`;
   if (LAN.cod) h += `<label class="m">${dualReg("Tu código de invitación", "Your invitation code")}</label><textarea readonly rows="3" onclick="this.select()">${LAN.cod}</textarea><div class="bts">${bt("lncp", "i", dualReg("Copiar", "Copy"))}</div><textarea id="lancod" rows="3" placeholder="${dualReg("Pega aquí la respuesta", "Paste the answer here")}"></textarea><div class="bts">${bt("lnru", "", dualReg("Conectar", "Connect"), "a")}</div>`;
   if (LAN.codG) h += `<label class="m">${dualReg("Tu código de respuesta", "Your answer code")}</label><textarea readonly rows="3" onclick="this.select()">${LAN.codG}</textarea><div class="bts">${bt("lncp", "g", dualReg("Copiar", "Copy"))}</div>`;
+  Object.keys(LAN.duelos)
+    .filter((id) => LAN.duelos[id].de != LAN.yo && !LAN.duelos[id].resp)
+    .forEach((id) => {
+      const d = LAN.duelos[id];
+      h += `<div class="c aviso"><b>⚔︎ ${dualReg("Te retan a un duelo", "You're challenged to a duel")}</b><p>${L4("<b>#</b> propone un duelo: empieza en <b>%</b> en &, durante @ años.", "<b>#</b> proposes a duel: it starts in <b>%</b> in &, for @ years.", "<b>#</b> propose un duel : départ en <b>%</b> à &, pendant @ ans.", "<b>#</b> propõe um duelo: começa em <b>%</b> em &, durante @ anos.").replace("#", esc(d.n)).replace("%", d.cfg.y).replace("&", esc(REGC[d.cfg.reg] ? REGC[d.cfg.reg][0] : "")).replace("@", d.cfg.anos)}</p><div class="bts">${bt("ldsi", id, dualReg("Aceptar el duelo", "Accept the duel"), "a")}${bt("ldno", id, dualReg("Ahora no", "Not now"))}</div></div>`;
+    });
   if (act2 || Object.keys(LAN.pares).length) {
     h += `<h3>${dualReg("Marcador", "Scoreboard")}</h3>${lanParesH(1) || `<div class="m">${dualReg("Esperando a los demás jugadores…", "Waiting for the other players…")}</div>`}`;
     h += `<h3>${dualReg("Reacciones", "Reactions")}</h3><div class="chips">${LAN_REAC.map((r, i) => `<button class="ch" data-a="lnx" data-v="${i}">${r[0]} ${LL([r[1], r[2]])}</button>`).join("")}</div>`;
@@ -70602,8 +70695,32 @@ ACT["lnq"] = (v) => {
   if (S) pg();
 };
 ACT["lnex"] = () => amigoExporta();
+ACT["lnbq"] = (v) => {
+  const P = LAN.pares[v];
+  if (!P || !P.c) return;
+  const k = lanBlqK(P.c),
+    L = lanBlq();
+  if (P.bl) {
+    lsSet("ia.lanbloq", L.filter((x) => x != k));
+    P.bl = 0;
+    toast(L4("Desbloqueado", "Unblocked", "Débloqué", "Desbloqueado"));
+  } else {
+    if (!L.includes(k)) L.push(k);
+    lsSet("ia.lanbloq", L.slice(-200));
+    P.bl = 1;
+    if (S && S.rv.some((r) => r.amigo == P.c.id && !r.dead)) amigoQuita(P.c.id);
+    toast(L4("Bloqueado: ya no verás su nombre, su logo ni sus mensajes", "Blocked: you won't see its name, logo or messages anymore", "Bloqué : tu ne verras plus son nom, son logo ni ses messages", "Bloqueado: você não verá mais o nome, o logo nem as mensagens"));
+  }
+  lanRefresca();
+  if (S) pg();
+};
 ACT["ldp"] = () => dueloProponer();
 ACT["ldsi"] = (v) => dueloEmpieza(v);
+ACT["ldno"] = (v) => {
+  if (LAN.duelos[v]) LAN.duelos[v].resp = 2;
+  lanRefresca();
+  if (!$("#lan-h")) cx();
+};
 const pgLan = pg;
 pg = function () {
   const r = pgLan.apply(this, arguments);
@@ -70923,6 +71040,727 @@ credits = function () {
 };
 if (typeof DIC_FR != "undefined") DIC_FR["Puesto"] = "Rang";
 if (typeof DIC_PT != "undefined") DIC_PT["Puesto"] = "Posição";
+WLB.ap1 = () => L4("# personas", "# people", "# personnes", "# pessoas").replace("#", W.ap1 | 0);
+WLB.ap2 = () => L4("# personas", "# people", "# personnes", "# pessoas").replace("#", W.ap2 | 0);
+let SCX = null;
+const SCX_NO = ["x", "salir", "new", "start", "rapida", "cargar", "campj", "campp", "retoj", "retop", "ldsi", "ofsi", "frp"];
+const scxBusca = (raiz, c) => {
+  if (!raiz || !c.a) return null;
+  try {
+    return raiz.querySelector('[data-a="' + CSS.escape(c.a) + '"]' + (c.v != null ? '[data-v="' + CSS.escape(c.v) + '"]' : ""));
+  } catch (e) {
+    return null;
+  }
+};
+document.addEventListener(
+  "click",
+  (e) => {
+    const b = e.target.closest && e.target.closest("[data-a]"),
+      hj = document.querySelector("#md.on .hoja");
+    SCX = b && !b.disabled ? { a: b.dataset.a, v: b.dataset.v, top: b.getBoundingClientRect().top, enHoja: !!b.closest("#md"), hs: hj ? hj.scrollTop : 0, ht: String(HOJAT).split("|")[0], ws: window.scrollY, tab, sub: SUB.join(","), hoja: !!hj } : null;
+  },
+  true,
+);
+document.addEventListener("click", () => {
+  const c = SCX;
+  SCX = null;
+  if (!c || SCX_NO.includes(c.a)) return;
+  const fija = () => {
+    const hj = document.querySelector("#md.on .hoja");
+    if (c.enHoja) {
+      if (!hj || String(HOJAT).split("|")[0] != c.ht) return;
+      const el = scxBusca(hj, c);
+      if (el) {
+        const d = el.getBoundingClientRect().top - c.top;
+        if (Math.abs(d) > 2) hj.scrollTop += d;
+      } else if (Math.abs(hj.scrollTop - c.hs) > 2) hj.scrollTop = c.hs;
+      return;
+    }
+    if ((hj && !c.hoja) || tab != c.tab || SUB.join(",") != c.sub) return;
+    const el = scxBusca(document.getElementById("app"), c);
+    if (el) {
+      const d = el.getBoundingClientRect().top - c.top;
+      if (Math.abs(d) > 2) window.scrollBy(0, d);
+    } else if (Math.abs(window.scrollY - c.ws) > 2) window.scrollTo(0, c.ws);
+  };
+  fija();
+  requestAnimationFrame(fija);
+});
+const PJ_CANON = {
+  "el conde Drácula": [2, 3], "Jonathan Harker": [0, 11], "Mina Harker": [0, 11], "Lucy Westenra": [10, 1], "Abraham Van Helsing": [1, 5], Renfield: [3, 3], "las novias de Drácula": [3, 3], "Arthur Holmwood": [4, 1], "John Seward": [4, 8], "Quincey Morris": [4, 11],
+  "Victor Frankenstein": [16, 8], "la criatura": [3, 2], "Robert Walton": [12, 7], "Henry Clerval": [4, 11],
+  "el doctor Jekyll": [19, 8], "Edward Hyde": [2, 4], "Gabriel Utterson": [6, 8],
+  "Peter Pan": [9, 4], "Wendy Darling": [18, 11], "el capitán Garfio": [2, 2], Campanita: [4, 1], Smee: [13, 6],
+  "Jim Hawkins": [0, 10], "Long John Silver": [5, 10], "el capitán Flint": [2, 10], "Ben Gunn": [13, 6], "el doctor Livesey": [1, 5], "el capitán Smollett": [6, 5], "Billy Bones": [3, 6],
+  "Oliver Twist": [14, 6], Fagin: [2, 10], "Bill Sikes": [2, 3], Nancy: [18, 11], "el Truhán": [5, 10], "el señor Brownlow": [1, 11], Monks: [3, 10],
+  "Jean Valjean": [0, 9], Javert: [6, 5], Fantine: [10, 11], Cosette: [14, 1], Marius: [9, 1], "Thénardier": [2, 10], "la señora Thénardier": [2, 10], "Éponine": [8, 1], Gavroche: [9, 4], "monseñor Myriel": [1, 9], Enjolras: [9, 5],
+  "D'Artagnan": [0, 7], Athos: [1, 9], Porthos: [4, 7], Aramis: [4, 1], "Milady de Winter": [2, 2], "el cardenal Richelieu": [15, 3], "el conde de Rochefort": [3, 3], "Constance Bonacieux": [8, 1],
+  "Edmundo Dantès": [19, 2], "Fernando Mondego": [2, 3], Danglars: [2, 10], "Gérard de Villefort": [2, 3], "el abate Faria": [11, 8], Mercedes: [8, 1], "Haydée": [10, 2],
+  "el capitán Ahab": [19, 2], Ismael: [12, 4], "Moby Dick": [3, 6], Queequeg: [4, 11], Starbuck: [6, 6],
+  "Dorian Gray": [19, 7], "lord Henry Wotton": [5, 4], "Basil Hallward": [16, 1], "Sibyl Vane": [10, 1],
+  "Sherlock Holmes": [11, 8], "John Watson": [4, 11], "el inspector Lestrade": [6, 5], "Jefferson Hope": [19, 2], Stapleton: [2, 10], "el sabueso": [3, 6], "Henry Baskerville": [10, 6],
+  Alicia: [12, 8], "la Reina de Corazones": [2, 3], "el gato de Cheshire": [5, 0], "el Sombrerero": [13, 0], "el Conejo Blanco": [7, 0],
+  Pinocho: [10, 9], Geppetto: [16, 11], "el Grillo Parlante": [1, 8], "el Hada Azul": [17, 11], "el Zorro": [5, 10], "el Gato": [5, 10], Comefuego: [2, 10],
+  Romeo: [8, 1], Julieta: [8, 1], Teobaldo: [2, 2], Mercucio: [13, 0], "Fray Lorenzo": [1, 11], "la nodriza": [18, 11],
+  Hamlet: [19, 2], Claudio: [2, 3], Ofelia: [10, 1], Polonio: [5, 3], "el fantasma del padre de Hamlet": [7, 2], Horacio: [4, 11], Gertrudis: [15, 1],
+  Macbeth: [19, 3], "Lady Macbeth": [2, 3], "las tres brujas": [17, 0], Banquo: [4, 5], Macduff: [0, 2], Duncan: [15, 5],
+  Otelo: [0, 1], Yago: [2, 2], "Desdémona": [10, 1], Casio: [4, 7],
+  "el rey Lear": [15, 1], Cordelia: [10, 1], Goneril: [2, 3], Regan: [2, 3], Edmund: [2, 3],
+  "Próspero": [17, 2], Ariel: [4, 4], "Calibán": [3, 4], Miranda: [10, 1], "Ricardo III": [2, 3],
+  "Don Quijote": [0, 5], "Sancho Panza": [4, 10], Dulcinea: [8, 0],
+  Fausto: [19, 8], "Mefistófeles": [2, 3], Margarita: [10, 1],
+  "Ebenezer Scrooge": [19, 9], "Jacob Marley": [7, 9], "Tiny Tim": [10, 6], "Bob Cratchit": [18, 11],
+  "Jo March": [9, 7], "Meg March": [18, 1], "Beth March": [10, 11], "Amy March": [16, 7], Laurie: [8, 1],
+  Robin: [0, 5], "el sheriff de Nottingham": [2, 3], "el príncipe Juan": [2, 3], "Guy de Gisborne": [3, 3], Marian: [8, 1], "Pequeño Juan": [4, 11], "Fray Tuck": [13, 11],
+  Cenicienta: [14, 1], "la madrastra": [2, 3], "el hada madrina": [17, 11], "las hermanastras": [3, 7],
+  Blancanieves: [10, 6], "la reina": [2, 3], "el cazador": [4, 11], "el espejo mágico": [7, 8], "los siete enanitos": [18, 11],
+  Caperucita: [10, 0], "el lobo": [2, 6], "el leñador": [6, 11], "la bruja": [2, 6], "la hechicera": [2, 3], Hansel: [14, 6], Gretel: [14, 11], Rapunzel: [10, 4],
+  "el hada malvada": [2, 2], Aurora: [10, 1], "la Bestia": [19, 9], Bella: [0, 11], "la sirenita": [8, 1], "la bruja del mar": [2, 3], "la Reina de las Nieves": [2, 3], Gerda: [0, 11], Kai: [10, 0],
+  Mowgli: [14, 6], "Shere Khan": [2, 2], Baloo: [1, 11], Bagheera: [6, 11], Kaa: [5, 6],
+  "Tarzán": [0, 11], "Jane Porter": [12, 8], Erik: [19, 1], "Christine Daaé": [10, 7], Raoul: [0, 1],
+  Quasimodo: [14, 1], Esmeralda: [10, 4], "Claude Frollo": [2, 3], "Jane Eyre": [0, 4], "Edward Rochester": [19, 1], "Bertha Mason": [3, 4], Heathcliff: [19, 2], "Catherine Earnshaw": [8, 1],
+  Carmen: [9, 4], "Don José": [19, 1], "Don Juan Tenorio": [19, 7], "Doña Inés": [10, 1], Sherezade: [11, 6], Shahriar: [2, 2], Aladino: [0, 10], "el genio de la lámpara": [17, 4], "el mago africano": [2, 3], "el hechicero africano": [2, 3], "Alí Babá": [0, 10], "el capitán de los ladrones": [2, 10], Morgiana: [6, 11],
+  "el capitán Nemo": [19, 4], "Pierre Aronnax": [12, 8], "Ned Land": [4, 4], "Phileas Fogg": [12, 7], Passepartout: [4, 11], Picaporte: [4, 11], "el inspector Fix": [6, 5],
+  "Tom Sawyer": [9, 4], "Huckleberry Finn": [9, 4], "el indio Joe": [2, 2], Griffin: [19, 3], "los marcianos": [2, 6], "el viajero en el tiempo": [12, 8], "los morlocks": [2, 6], Weena: [10, 0],
+  "Rodión Raskólnikov": [19, 9], "Porfiri Petróvich": [6, 8], "Sonia Marmeládova": [18, 9], "Arkadi Svidrigáilov": [3, 3], "Emma Bovary": [8, 1], Lheureux: [5, 10], "Brian de Bois-Guilbert": [2, 1], "Wilfred de Ivanhoe": [0, 5],
+  Cyrano: [19, 1], Roxana: [8, 1], "el conde de Guiche": [2, 3], "Sandokán": [19, 2], "el flautista": [5, 2], "la marquesa de Merteuil": [2, 3], "el vizconde de Valmont": [5, 3], "Don Giovanni": [19, 7],
+  "la Reina de la Noche": [2, 2], Sarastro: [11, 8], Tamino: [0, 1], Papageno: [13, 1], Monostatos: [3, 3], "Cándido": [10, 1], Pangloss: [1, 8], Magua: [2, 2], "Ojo de Halcón": [0, 11], "Julien Sorel": [19, 7], "el rey de los ratones": [2, 3], "el Cascanueces": [0, 11],
+};
+const PJ_MALO = /bruj|hechicer|malvad|villan|demonio|diablo|ogr[oa]\b|monstruo|vampir|asesin|tirano/i;
+function pjCanon(n, obra, k) {
+  const c = PJ_CANON[(obra || "") + "|" + n] || PJ_CANON[n];
+  if (c) return { a: c[0], mot: c[1] };
+  const h = hs(String(obra || "") + "|" + n);
+  if (PJ_MALO.test(n)) return { a: 2, mot: [3, 2, 10][h % 3] };
+  return k == 0 ? { a: [0, 9, 12, 19, 10][h % 5], mot: 0 } : { a: [1, 4, 8, 18, 13, 6][h % 6], mot: 0 };
+}
+const matAplicaCanon = matAplica;
+matAplica = function (m) {
+  const r = matAplicaCanon.apply(this, arguments);
+  if (W && W.cast)
+    W.cast.forEach((c, k) => {
+      if (!c.mat) return;
+      const x = pjCanon(c.n, m && m.n, k);
+      c.a = x.a;
+      if (x.mot) c.mot = x.mot;
+    });
+  return r;
+};
+const wprespCanon = ACT["wpresp"];
+ACT["wpresp"] = (v) => {
+  const [k, i, j] = String(v).split("|"),
+    o = presFuente(k).find((x) => String(x.i) == i),
+    p = o && o.pj[+j],
+    d = p && p[2],
+    n0 = W && W.cast ? W.cast.length : 0;
+  const r = wprespCanon(v);
+  if (p && W && W.cast && W.cast.length > n0 && !(d && d.a != null)) {
+    const c = W.cast.find((x) => x.n == p[0]);
+    if (c) {
+      const x = pjCanon(c.n, o.n, +j);
+      c.a = x.a;
+      if (x.mot) c.mot = x.mot;
+      if (typeof wz == "function" && document.querySelector("#md.on")) wz();
+    }
+  }
+  return r;
+};
+const frSellVenta = frSell;
+frSell = function (f, pr, who) {
+  const r = frSellVenta.apply(this, arguments),
+    F = frG(f);
+  F.vend = { r: who, y: yr(), p: pr };
+  return r;
+};
+const frVendida = (f) => {
+  const L = S.pj.filter((p) => p.fid == f);
+  return L.length > 0 && L.every((p) => p.sold);
+};
+const frRecompra = (f) => Math.round(Math.max(frV(f), (frG(f).vend || {}).p || 0) * 1.3);
+ACT["frrb"] = (v) => {
+  const f = +v,
+    F = frG(f);
+  if (!frVendida(f)) return;
+  const c = frRecompra(f);
+  if (S.cash < c) return toast("Fondos insuficientes");
+  capital(-c);
+  S.pj.forEach((p) => {
+    if (p.fid == f) delete p.sold;
+  });
+  F.cmp = { r: (F.vend && F.vend.r) || "", y: yr() };
+  F.vend = null;
+  nws(L4("Recompras la franquicia «#» por $.", "You buy back the «#» franchise for $.", "Tu rachètes la franchise «#» pour $.", "Você recompra a franquia «#» por $.").replace("#", F.n).replace("$", fm(c)));
+  sonar("ok");
+  cx();
+  return pg();
+};
+function frVendidasH() {
+  const L = uniq(S.pj.filter((p) => p.sold && p.fid != null).map((p) => p.fid)).filter(frVendida);
+  if (!L.length) return "";
+  return `<details class="c"><summary><b>${dualReg("Franquicias que vendiste", "Franchises you sold")}</b> <span class="m">· ${L.length}</span></summary>${L.slice(0, 30).map((f) => {
+    const F = frG(f),
+      c = frRecompra(f);
+    return `<div class="fila"><span><b>${esc(F.n)}</b><span class="m"> · ${F.vend ? L4("vendida a # en %", "sold to # in %", "vendue à # en %", "vendida a # em %").replace("#", esc(F.vend.r)).replace("%", F.vend.y) : dualReg("vendida", "sold")}</span></span>${bt("frrb", f, dualReg("Volver a comprar", "Buy it back") + " · " + fm(c), S.cash >= c ? "a" : "off")}</div>`;
+  }).join("")}</details>`;
+}
+const vFrVend = vFr;
+vFr = function () {
+  return frVendidasH() + vFrVend.apply(this, arguments);
+};
+const frMVend = frM;
+frM = function (f) {
+  const r = frMVend.apply(this, arguments),
+    h = document.querySelector("#md .hoja");
+  if (h && frVendida(+f) && !h.querySelector("[data-a=frrb]")) {
+    const c = frRecompra(+f);
+    h.insertAdjacentHTML("afterbegin", `<div class="c aviso"><div class="m">${dualReg("Vendiste esta franquicia. Puedes volver a comprarla a quien la tiene.", "You sold this franchise. You can buy it back from its owner.")}</div><div class="bts">${bt("frrb", +f, dualReg("Volver a comprar", "Buy it back") + " · " + fm(c), S.cash >= c ? "a" : "off")}</div></div>`);
+  }
+  return r;
+};
+const fichaVend = ganchos.ficha;
+ganchos.ficha = function (P) {
+  const h = fichaVend.apply(this, arguments);
+  if (!P || !P.sold || P.fid == null || !frVendida(P.fid)) return h;
+  const c = frRecompra(P.fid);
+  return h + `<div class="c"><div class="m">${dualReg("Vendiste los derechos de esta obra con su franquicia.", "You sold this work's rights with its franchise.")}</div><div class="bts">${bt("frrb", P.fid, dualReg("Volver a comprar", "Buy it back") + " · " + fm(c), S.cash >= c ? "a" : "off")}</div></div>`;
+};
+const misFiliales = () => rvVivos().filter((i) => S.rv[i].own);
+let ENCP = null;
+function encomiendaM(t, r) {
+  op(`<div class="c"><div class="k"><h2 style="margin:0">${ic("talento")} ${dualReg("Encomendar", "Commission")}</h2>${btx()}</div><p>${L4("¿Cómo quieres encomendarlo a <b>#</b>?", "How do you want to commission it to <b>#</b>?", "Comment veux-tu le confier à <b>#</b> ?", "Como você quer encomendar a <b>#</b>?").replace("#", esc(S.rv[r].n))}</p><div class="bts">${bt("encA", "", "✔︎ " + dualReg("Que se encarguen de todo", "Let them handle everything"), "a")}${bt("encE", "", "✎︎ " + dualReg("Encomendar y editar", "Commission and edit"))}</div><div class="m">${dualReg("«Que se encarguen de todo»: ellos eligen equipo, presupuesto y estilo según su manera de trabajar, y la obra entra a producción enseguida. «Encomendar y editar»: abre el creador con su propuesta para que la ajustes.", "«Let them handle everything»: they pick team, budget and style their way, and the work goes into production right away. «Commission and edit»: opens the creator with their proposal so you can adjust it.")}</div></div>`);
+  ENCP = Object.assign({}, t, { r });
+}
+function encomiendaHaz(auto) {
+  const e = ENCP;
+  ENCP = null;
+  if (!e) return;
+  e.abre();
+  if (!W) return;
+  W.md = "d";
+  W.etapa = 2;
+  W.enc = e.r;
+  if (!auto) {
+    W.tab = 3;
+    return wz();
+  }
+  const s = S.rv[e.r];
+  W.nm = W.nm || ttlR();
+  if (!W.crew || !Object.keys(W.crew).length) W.crew = eqRec(W.m, BD());
+  try {
+    repartoRec(W);
+  } catch (er) {}
+  const P = producir();
+  if (!P || typeof P == "string") {
+    toast(String(P || dualReg("Hace falta completar algo: revisa el creador", "Something needs completing: check the creator")));
+    W.tab = 3;
+    return wz();
+  }
+  cx();
+  W = null;
+  sonar("ok");
+  nws(L4("# se encarga de todo: «%» ya está en producción.", "# handles everything: «%» is already in production.", "# s'occupe de tout : «%» est déjà en production.", "# cuida de tudo: «%» já está em produção.").replace("#", s.n).replace("%", P.n));
+  toast(dualReg("Encargo hecho", "Commission placed"));
+  return pg();
+}
+ACT["encA"] = () => encomiendaHaz(1);
+ACT["encE"] = () => encomiendaHaz(0);
+const mtencBase = ACT["mtenc"];
+ACT["mtenc"] = (v) => {
+  const F = misFiliales(),
+    items = F.map((r) => ({ v: "r" + r, l: S.rv[r].n, nt: 1, s: dualReg("Tu filial: produce y te reparte utilidades", "Your subsidiary: produces and shares profits"), g: dualReg("Tus filiales", "Your subsidiaries") })).concat(
+      rivL(null).map((r) => ({ v: "r" + r, l: S.rv[r].n, nt: 1, s: dualReg("Produce y cobra un 15 %", "Produces and charges 15%"), g: dualReg("Rivales", "Rivals") })),
+    );
+  if (!items.length) return mtencBase(v);
+  return fxPick({
+    t: dualReg("Encomendar el material", "Commission the material"),
+    items: items.concat(artL().length ? [{ v: "art", l: dualReg("Tus artistas firmados…", "Your signed artists…"), nt: 1, s: dualReg("Grabar con una banda o solista de tu sello", "Record with a band or solo artist of your label"), g: dualReg("Música", "Music") }] : []),
+    orden: false,
+    ok: (s) => {
+      const k = String(s[0]);
+      if (k == "art") return mtencBase(v);
+      const r = +k.slice(1),
+        [t0, i0] = String(v).split("|"),
+        x = t0 == "o" ? S.mt[+i0] : null,
+        y = yr(),
+        ok = (j) => MD[j] && y >= MD[j][2],
+        fuerte = MD.map((d, j) => j).filter(ok).sort((a, b) => (S.rv[r].sp[b] | 0) - (S.rv[r].sp[a] | 0))[0],
+        md = x && x.m40 != null && ok(x.m40) ? x.m40 : fuerte != null ? fuerte : 0;
+      encomiendaM({ abre: () => ACT["mtg"](t0 + "|" + i0 + "|" + md) }, r);
+    },
+  });
+};
+const idHazEnc = idHaz;
+idHaz = function (it, r) {
+  if (IDK2 == "r") return encomiendaM({ abre: () => idAbre(it, 2) }, r);
+  return idHazEnc.apply(this, arguments);
+};
+const TROUPE = [
+  ["Compañía de teatro", "Theatre company", 1700, 1, "Compañía", "\u{1F3AD}"],
+  ["Compañía de ópera", "Opera company", 1700, 1.4, "Ópera", "\u{1F3BC}"],
+  ["Compañía de ballet", "Ballet company", 1700, 1.1, "Ballet", "\u{1FA70}"],
+  ["Teatro de títeres", "Puppet theatre", 1700, 0.6, "Títeres", "\u{1F9F8}"],
+  ["Compañía de zarzuela", "Zarzuela company", 1700, 0.9, "Zarzuela", "\u{1F3B6}"],
+  ["Circo", "Circus", 1768, 1.2, "Circo", "\u{1F3AA}"],
+  ["Musicales", "Musical theatre", 1866, 1.3, "Musicales", "\u{1F3A4}"],
+  ["Cabaret", "Cabaret", 1881, 0.8, "Cabaret", "\u{1F3A9}"],
+  ["Teatro de improvisación", "Improv troupe", 1955, 0.5, "Impro", "\u{1F4AC}"],
+  ["Nuevo circo", "Contemporary circus", 1984, 1.5, "Circo", "\u{1F938}"],
+];
+const TROUPE_NOM = ["Aurora", "Lumière", "del Alba", "Estrella", "Fénix", "Arlequín", "Luna Nueva", "Mascarada", "Bambalinas", "Telón Rojo", "La Farándula", "Gran Carpa", "Pegaso", "Saltimbanqui", "Cometa", "Los Cómicos de la Legua", "El Carro de Tespis", "Candilejas", "La Barraca", "Del Bosque", "Trapecio", "Media Luna", "Linterna Mágica", "Siete Velos"];
+const trp = () => (S.trp = S.trp || []);
+const trpOf = () => (S.trpOf = S.trpOf || []);
+const trpTipos = () => TROUPE.map((x, i) => i).filter((i) => yr() >= TROUPE[i][2]);
+const trpNom = (ti, h) => TROUPE[ti][4] + " " + TROUPE_NOM[h % TROUPE_NOM.length];
+const trpApoyo = (x) => Math.round(TB(3) * 0.03 * TROUPE[x.ti][3] * (0.5 + x.cal / 100));
+const trpTemp = (x) => Math.round(TB(3) * 0.012 * TROUPE[x.ti][3] * (0.5 + x.cal / 100) * (0.6 + Math.min(2, x.fama / 100000)) * (x.gira && x.gira > S.t ? 1.8 : 1));
+on("mes", () => {
+  if (!S || S.pre || S.taller || S.bot || yr() < MD[3][2]) return;
+  S.trpOf = trpOf().filter((o) => o.e > S.t);
+  if (trp().length < 8 && S.trpOf.length < 2 && R() < 0.1 + Math.min(0.1, (S.pop || 0) / 500)) {
+    const L = trpTipos(),
+      ti = L[Math.floor(R() * L.length)],
+      h = Math.floor(R() * 1e6),
+      cal = cl(Math.round(45 + R() * 40)),
+      x = { ti, n: trpNom(ti, h), cal, fama: Math.round(4000 + R() * 60000), pct: [25, 30, 35][h % 3], e: S.t + 10 };
+    x.apoyo = trpApoyo(x);
+    S.trpOf.push(x);
+    nws(L4("# (%) quiere firmar contigo para tener estabilidad. Míralo en Obras → Teatro.", "# (%) wants to sign with you for stability. See Works → Theatre.", "# (%) veut signer avec toi pour être plus stable. Va dans Œuvres → Théâtre.", "# (%) quer assinar com você para ter estabilidade. Veja em Obras → Teatro.").replace("#", x.n).replace("%", LL(TROUPE[ti]).toLowerCase()));
+  }
+  S.trp = trp().filter((x) => {
+    if (x.h <= S.t) {
+      nws(L4("Termina el contrato de # con tu estudio.", "#'s contract with your studio ends.", "Le contrat de # avec ton studio se termine.", "Termina o contrato de # com seu estúdio.").replace("#", x.n));
+      return false;
+    }
+    const g = trpTemp(x),
+      tuyo = Math.round((g * x.pct) / 100);
+    gana("eventos", tuyo);
+    x.tot = (x.tot || 0) + tuyo;
+    gasta("talento", Math.round(x.apoyo / 12));
+    x.din = cl((x.din || 40) + 2);
+    x.fama = Math.round(x.fama * (x.gira && x.gira > S.t ? 1.04 : 1.012));
+    x.cal = cl(x.cal + ri(-1, 2));
+    if (R() < 0.06) {
+      const p = proNueva(3, { free: 1, k: 0, n: null });
+      if (p) {
+        p.au = x.n;
+        (S.pro40 = S.pro40 || []).push(p);
+      }
+    }
+    return true;
+  });
+});
+ACT["trpsi"] = (v) => {
+  const o = trpOf()[+v];
+  if (!o) return;
+  const fir = o.apoyo;
+  if (S.cash < fir) return toast("Fondos insuficientes");
+  gasta("talento", fir);
+  trp().push(Object.assign({}, o, { id: (S.trpId = (S.trpId | 0) + 1), y: yr(), h: S.t + 156, din: 40, tot: 0 }));
+  S.trpOf.splice(+v, 1);
+  nws(L4("# firma con tu estudio.", "# signs with your studio.", "# signe avec ton studio.", "# assina com seu estúdio.").replace("#", o.n));
+  sonar("ok");
+  return pg();
+};
+ACT["trpno"] = (v) => {
+  trpOf().splice(+v, 1);
+  return pg();
+};
+const trpDe = (id) => trp().find((x) => x.id == +id);
+ACT["trpg"] = (v) => {
+  const x = trpDe(v),
+    c = Math.round(TB(3) * 0.02 * TROUPE[x.ti][3]);
+  if (!x || (x.gira && x.gira > S.t)) return;
+  if (S.cash < c) return toast("Fondos insuficientes");
+  gasta("eventos", c);
+  x.gira = S.t + 8;
+  nws(L4("# sale de gira.", "# goes on tour.", "# part en tournée.", "# sai em turnê.").replace("#", x.n));
+  return pg();
+};
+ACT["trpr"] = (v) => {
+  const x = trpDe(v),
+    c = x ? Math.round(x.apoyo * 0.5) : 0;
+  if (!x) return;
+  if (S.cash < c) return toast("Fondos insuficientes");
+  gasta("talento", c);
+  x.h = Math.max(x.h, S.t) + 156;
+  nws(L4("Renuevas a # por tres años.", "You renew # for three years.", "Tu renouvelles # pour trois ans.", "Você renova # por três anos.").replace("#", x.n));
+  return pg();
+};
+ACT["trpx"] = (v) => {
+  S.trp = trp().filter((x) => x.id != +v);
+  return pg();
+};
+ACT["trpo"] = (v) => {
+  const x = trpDe(v);
+  if (!x) return;
+  act("md4n", 3);
+  if (W && W.m == 3) {
+    W.trp = x.id;
+    toast(L4("Nueva obra con #", "New work with #", "Nouvelle œuvre avec #", "Nova obra com #").replace("#", x.n));
+  }
+};
+GANCHOS.prod.push((P, W2) => {
+  if (W2 && W2.trp != null && trpDe(W2.trp)) P.trp = W2.trp;
+});
+GANCHOS.mods.push((P, add) => {
+  const x = P.trp != null ? trpDe(P.trp) : null;
+  if (x) add(Math.round((x.cal - 40) / 15), Math.round(Math.min(3, x.fama / 60000)), L4("con #", "with #", "avec #", "com #").replace("#", x.n));
+});
+function troupeH() {
+  const L = trp(),
+    O = trpOf();
+  return `<div class="c"><div class="k"><h3 style="margin:0">\u{1F3AA}︎ ${dualReg("Compañías aliadas", "Allied companies")}</h3>${bi("companias")}</div><div class="m">${dualReg("Compañías de teatro, ópera, ballet, circo y más firman contigo: tú les das un apoyo anual y estabilidad; ellas hacen temporadas, te dan una parte de su taquilla y te proponen obras.", "Theatre, opera, ballet, circus companies and more sign with you: you give them yearly support and stability; they run seasons, give you a share of their box office and propose works.")}</div>${
+    O.map((o, i) => `<div class="c sub aviso"><div class="k"><b>${TROUPE[o.ti][5]} ${esc(o.n)}</b><span class="m">${esc(LL(TROUPE[o.ti]))}</span></div><div class="m">${L4("Calidad # · % fans · te dan el & % de su taquilla · apoyo anual $", "Quality # · % fans · you get & % of their box office · yearly support $", "Qualité # · % fans · tu touches & % de leur billetterie · soutien annuel $", "Qualidade # · % fãs · você recebe & % da bilheteria · apoio anual $").replace("#", o.cal).replace("%", nfc(o.fama)).replace("&", o.pct).replace("$", fm(o.apoyo))}</div><div class="bts">${bt("trpsi", i, dualReg("Firmar", "Sign") + " · " + fm(o.apoyo), S.cash >= o.apoyo ? "a" : "off")}${bt("trpno", i, dualReg("Rechazar", "Decline"), "r")}</div></div>`).join("") +
+    L.map((x) => `<div class="c sub"><div class="k"><b>${TROUPE[x.ti][5]} ${esc(x.n)}</b><span class="m">${esc(LL(TROUPE[x.ti]))}</span></div><div class="m">${L4("Calidad # · % fans · estabilidad & · te han dado $", "Quality # · % fans · stability & · they've given you $", "Qualité # · % fans · stabilité & · ils t'ont donné $", "Qualidade # · % fãs · estabilidade & · já lhe deram $").replace("#", x.cal).replace("%", nfc(x.fama)).replace("&", x.din | 0).replace("$", fm(x.tot || 0))}${x.gira && x.gira > S.t ? " · " + dualReg("de gira", "on tour") : ""} · ${L4("contrato hasta #", "contract until #", "contrat jusqu'en #", "contrato até #").replace("#", S.y0 + Math.floor(x.h / 52))}</div><div class="bts">${bt("trpo", x.id, dualReg("Nueva obra con ellos", "New work with them"), "a")}${x.gira && x.gira > S.t ? "" : bt("trpg", x.id, dualReg("Gira", "Tour") + " · " + fm(Math.round(TB(3) * 0.02 * TROUPE[x.ti][3])))}${bt("trpr", x.id, dualReg("Renovar", "Renew"))}${bt("trpx", x.id, dualReg("Liberar", "Release"), "r")}</div></div>`).join("") ||
+    (O.length ? "" : `<div class="m">${dualReg("Todavía ninguna compañía te propuso firmar: llegan con el tiempo, sobre todo si tu estudio tiene prestigio.", "No company has offered to sign yet: they come over time, especially if your studio has prestige.")}</div>`)
+  }</div>`;
+}
+const teatroTrp = teatroH;
+teatroH = function () {
+  return teatroTrp.apply(this, arguments) + troupeH();
+};
+const REED = [
+  ["bol", "Edición de bolsillo", "Paperback edition", 1935, 0.04, 0.25, 26],
+  ["aud", "Audiolibro", "Audiobook", 1952, 0.03, 0.12, 52],
+  ["tra", "Traducciones", "Translations", 1700, 0.06, 0.3, 52],
+];
+on("semana", () => {
+  if (!S || !S.reed || !S.reed.length) return;
+  S.reed = S.reed.filter((x) => {
+    if (x.h <= S.t) return false;
+    gana("ventas", x.g);
+    const P = pj(x.id);
+    if (P) P.gross = (P.gross || 0) + x.g;
+    return true;
+  });
+});
+ACT["reed"] = (v) => {
+  const [id, k] = String(v).split("|"),
+    P = pj(+id),
+    e = REED.find((x) => x[0] == k);
+  if (!P || !e || (P.reed && P.reed[k])) return;
+  const base = Math.max(TB(5) * 0.2, P.gross || 0),
+    c = Math.round(base * e[4]);
+  if (S.cash < c) return toast("Fondos insuficientes");
+  gasta("produccion", c);
+  P.reed = Object.assign({}, P.reed, { [k]: yr() });
+  const tot = base * e[5] * (0.5 + (P.a || 50) / 100);
+  S.reed = (S.reed || []).concat([{ id: P.id, k, h: S.t + e[6], g: Math.round(tot / e[6]) }]);
+  nws(L4("Lanzas # de «%».", "You release a % of «#».", "Tu lances # de «%».", "Você lança # de «%».").replace("#", LL([e[1], e[2]]).toLowerCase()).replace("%", P.n));
+  return pg();
+};
+function reediH() {
+  const y = yr(),
+    E = REED.filter((e) => y >= e[3]),
+    L = S.pj.filter((p) => p.m == 5 && p.st >= 3 && !p.sold && !p.rr).sort((a, b) => (b.gross || 0) - (a.gross || 0)).slice(0, 8);
+  if (!L.length || !E.length) return "";
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("libro")} ${dualReg("Reediciones", "Reissues")}</h3>${bi("reediciones")}</div><div class="m">${dualReg("Dale nueva vida a tus libros: edición de bolsillo, audiolibro y traducciones a otros idiomas. Cada una se hace una vez por libro y vende durante meses.", "Give your books new life: paperback, audiobook and translations. Each can be done once per book and sells for months.")}</div>${L.map((P) => `<div class="c sub"><b>«${esc(P.n)}»</b><div class="chips">${E.map((e) => (P.reed && P.reed[e[0]] ? `<span class="m">✓ ${esc(LL([e[1], e[2]]))}</span>` : chx("reed", P.id + "|" + e[0], LL([e[1], e[2]]) + " · " + fm(Math.round(Math.max(TB(5) * 0.2, P.gross || 0) * e[4]))))).join("")}</div></div>`).join("")}</div>`;
+}
+const editReed = editH;
+editH = function () {
+  const h = editReed.apply(this, arguments);
+  return h + reediH();
+};
+const crmAviso = ACT["crm"];
+ACT["crm"] = () => {
+  const r = crmAviso(),
+    h = document.querySelector("#md .hoja");
+  if (h && !h.querySelector(".aviso-ref"))
+    h.insertAdjacentHTML("beforeend", `<div class="c aviso-ref"><div class="m">${dualReg("Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales. INDUSTRY ART no está afiliado a ellos ni cuenta con su respaldo. La música incluida son arreglos propios de obras de dominio público y composiciones originales.", "The real works, awards, people, brands and places that appear in the game are historical and cultural references. INDUSTRY ART is not affiliated with them or endorsed by them. The included music is original arrangements of public-domain works and original compositions.")}</div></div>`);
+  return r;
+};
+const repartoVuelve = repartoRec;
+const pjVivo = (id) => id != null && S.tl[id] && !S.tl[id].ret && !S.tl[id].es && !S.tl[id].dead;
+const pjFijo = (c) => c && (c.ant || c.ta != null) && c.i != 2 && !c.vir;
+repartoRec = function (W2) {
+  const keep = (W2.cast || []).map((c) => (pjFijo(c) && pjVivo(c.t) ? c.t : null));
+  if (keep[0] != null && W2.crew && pjLider(W2)) W2.crew[7] = keep[0];
+  const r = repartoVuelve.apply(this, arguments);
+  const usados = new Set(Object.values(W2.crew || {}).filter((x) => x != null));
+  (W2.cast || []).forEach((c, k) => {
+    if (keep[k] == null) return;
+    c.t = keep[k];
+    usados.add(c.t);
+  });
+  (W2.cast || []).forEach((c, k) => {
+    if (keep[k] != null || c.t == null || c.i == 2 || c.vir || (k == 0 && pjLider(W2))) return;
+    if (usados.has(c.t)) {
+      const t = actorRec(c, W2, usados, BD() * 0.02);
+      c.t = t ? t.id : null;
+      if (t) pjSexo(c, W2);
+    }
+    if (c.t != null) usados.add(c.t);
+  });
+  return r;
+};
+const idPackVuelve = idPack;
+idPack = function () {
+  const o = idPackVuelve.apply(this, arguments);
+  (o.cast || []).forEach((c, k) => {
+    const w = (W.cast || [])[k];
+    delete c.ta;
+    if (w && w.t != null && w.i != 2 && !w.vir) c.ta = w.t;
+  });
+  if (pjLider(W) && W.crew && W.crew[7] != null && o.cast && o.cast[0]) o.cast[0].ta = W.crew[7];
+  return o;
+};
+const idAbreVuelve = idAbre;
+idAbre = function (it, etapa) {
+  const r = idAbreVuelve.apply(this, arguments);
+  (W.cast || []).forEach((c) => {
+    if (c.ta == null) return;
+    if (pjVivo(c.ta) && c.i != 2 && !c.vir) c.t = c.ta;
+    else delete c.ta;
+  });
+  if (etapa != 1 && pjLider(W) && W.cast[0].t != null) W.crew[7] = W.cast[0].t;
+  return r;
+};
+
+const svAgregarX = svAgregar;
+svAgregar = function () {
+  SVV++;
+  return svAgregarX.apply(this, arguments);
+};
+const svAbandonoX = svAbandono;
+svAbandono = function () {
+  const r = svAbandonoX.apply(this, arguments),
+    v = S.sv;
+  return v && v.arc5 && v.arc5.h > S.t ? r * 0.92 : r;
+};
+const SVLOTE = { a: 20, b: 8, c: 3 };
+function svLote(k) {
+  const n = SVLOTE[k];
+  for (let i = 0; i < n; i++) {
+    if (k == "a") svAgregar(null, "comprado", { n: titGen(), q: Math.round(cl(52 + gauss() * 7, 35, 75)), gn: [pk(GP)], ed: ri(8, 40), hasta: 0, lote: "a" });
+    else if (k == "b") svAgregar(null, "paquete", { n: titGen(), q: Math.round(cl(76 + gauss() * 5, 60, 92)), gn: [pk(GP)], ed: Math.round(R() * 15) / 10, hasta: S.t + 104, lote: "b" });
+    else svAgregar(null, "linea", { n: titGen(), q: 52 + ri(0, 14), gn: [pk(GP)], ed: 0.05, hasta: S.t + 52, lote: "c" });
+  }
+  const s = S.sv;
+  s.lt5 = s.lt5 || { a: 0, b: 0, c: 0 };
+  s.lt5[k] = (s.lt5[k] | 0) + n;
+  return n;
+}
+function svCatTxt() {
+  const C = svVisibles();
+  return L4(
+    `${C.tot} títulos en total · ${C.vis.length} de ${C.cap} a la vista${C.fuera.length ? ` · ${C.fuera.length} en bodega` : ""}`,
+    `${C.tot} titles in total · ${C.vis.length} of ${C.cap} on show${C.fuera.length ? ` · ${C.fuera.length} in storage` : ""}`,
+    `${C.tot} titres au total · ${C.vis.length} sur ${C.cap} visibles${C.fuera.length ? ` · ${C.fuera.length} en réserve` : ""}`,
+    `${C.tot} títulos no total · ${C.vis.length} de ${C.cap} à vista${C.fuera.length ? ` · ${C.fuera.length} no depósito` : ""}`,
+  );
+}
+const svLleno = () => {
+  const C = svVisibles();
+  return C.fuera.length
+    ? L4(
+        ". Catálogo lleno: compra una bóveda (+40) en la pestaña Catálogo",
+        ". Catalog full: buy a vault (+40) in the Catalog tab",
+        ". Catalogue plein : achète une chambre forte (+40) dans l'onglet Catalogue",
+        ". Catálogo cheio: compre um cofre (+40) na aba Catálogo",
+      )
+    : "";
+};
+ACT["svl"] = (v) => {
+  const s = S.sv;
+  if (!s || !s.on) return;
+  const lc = Math.round(TB(1) * 0.04),
+    ls = Math.round(TB(1) * 0.008);
+  if (v == "c") {
+    if (S.cash < ls || (s.ln5 && s.ln5.h > S.t)) return;
+    s.ln5 = { h: S.t + 52, c: ls };
+    gasta("streaming", ls);
+    svLote("c");
+    nws(L4(`${s.n} firma una línea de suministro de estrenos por un año.`, `${s.n} signs a one-year supply deal.`, `${s.n} signe un contrat d'approvisionnement d'un an.`, `${s.n} assina uma linha de fornecimento por um ano.`));
+    toast(L4("+3 títulos ahora y 3 más cada mes durante un año. ", "+3 titles now and 3 more every month for a year. ", "+3 titres maintenant et 3 de plus chaque mois pendant un an. ", "+3 títulos agora e mais 3 a cada mês durante um ano. ") + svCatTxt());
+    return pg();
+  }
+  const c = v == "a" ? lc : Math.round(lc * 2.4);
+  if (S.cash < c) return toast(dualReg("Fondos insuficientes", "Insufficient funds"));
+  gasta("streaming", c);
+  s.sb = Math.round(s.sb * (v == "a" ? 1.03 : 1.07));
+  if (v == "a") s.arc5 = { h: S.t + 8 };
+  const n = svLote(v);
+  nws(L4(`${s.n} suma ${n} títulos al catálogo.`, `${s.n} adds ${n} titles to its catalog.`, `${s.n} ajoute ${n} titres à son catalogue.`, `${s.n} soma ${n} títulos ao catálogo.`));
+  toast(L4(`+${n} títulos. `, `+${n} titles. `, `+${n} titres. `, `+${n} títulos. `) + svCatTxt() + svLleno());
+  return pg();
+};
+on("mes", () => {
+  const s = S && S.sv;
+  if (s && s.on && s.ln5 && s.ln5.h > S.t) svLote("c");
+});
+const svpaqX = ACT["svpaq"];
+ACT["svpaq"] = (v, el) => {
+  const C0 = svVisibles().tot,
+    r = svpaqX(v, el),
+    C = svVisibles();
+  if (C.tot > C0) toast(L4(`+${C.tot - C0} títulos. `, `+${C.tot - C0} titles. `, `+${C.tot - C0} titres. `, `+${C.tot - C0} títulos. `) + svCatTxt() + svLleno());
+  return r;
+};
+
+const AUTOP = [0.01, 0.03, 0.05, 0.1];
+const AUTOQ = [45, 55, 65, 75];
+const svAutoCfg = () => (S.sv.auto = S.sv.auto || { on: 0, p: 1, mo: 1, q: 55, lic: 1, paq: 1, arc: 0, ult: null });
+const tvAutoCfg = () => (S.cb.auto = S.cb.auto || { on: 0, p: 1, q: 55, prog: 1, ult: null });
+const autoPres = (a) => Math.round(Math.max(0, S.cash) * (AUTOP[a.p] || 0.03));
+function svAutoCompra(ya) {
+  const s = S.sv;
+  if (!s || !s.on) return null;
+  const a = svAutoCfg();
+  if (!a.on && !ya) return null;
+  const pres = autoPres(a),
+    m = SVMOD[a.mo] || SVMOD[1];
+  let g = 0,
+    n = 0;
+  const puede = (c) => c > 0 && g + c <= pres && S.cash >= c;
+  if (a.lic) {
+    const hechos = [];
+    (s.ofLic || [])
+      .filter((o) => (o.A || 0) >= a.q)
+      .map((o) => ({ o, c: Math.round(o.p * m[1] * 0.85) }))
+      .sort((x, y) => y.o.A / y.c - x.o.A / x.c)
+      .forEach(({ o, c }) => {
+        if (!puede(c)) return;
+        gasta("plataformas", c);
+        if (S.rv[o.o]) S.rv[o.o].cash += Math.round(c * 0.8);
+        svAgregar(null, m[2] ? "licencia" : "comprado", { n: o.n, rw: o.rw, q: o.A, gn: o.gn, ed: Math.max(0, yr() - o.y), ex: m[3], hasta: m[2] ? S.t + m[2] : 0, p: c });
+        hechos.push(o);
+        g += c;
+        n++;
+      });
+    s.ofLic = (s.ofLic || []).filter((o) => !hechos.includes(o));
+  }
+  const C = svVisibles(),
+    libre = C.cap - C.vis.length,
+    viejo = svNovedad(C.vis) < 0.08;
+  if (a.paq && (libre > 0 || viejo)) {
+    const L = SVPAQ.map((p, i) => ({ p, i, c: Math.round(TB(0) * 0.012 * p[3] * p[1] * m[1] * 0.6) }))
+      .filter((x) => x.p[2] >= a.q - 5)
+      .sort((x, y) => y.p[2] - x.p[2]);
+    const x = L.find((z) => puede(z.c));
+    if (x) {
+      gasta("plataformas", x.c);
+      for (let k = 0; k < x.p[1]; k++) svAgregar(null, "paquete", { n: titGen(), q: Math.round(cl(x.p[2] + gauss() * 4, 30, 95)), gn: [pk(GP)], ed: x.p[2] >= 84 ? 0.1 : 3, ex: m[3], hasta: m[2] ? S.t + m[2] : 0, p: Math.round(x.c / x.p[1]) });
+      g += x.c;
+      n += x.p[1];
+    }
+  }
+  const lc = Math.round(TB(1) * 0.04);
+  if (a.arc && svVisibles().cap - svVisibles().vis.length >= 20 && puede(lc)) {
+    gasta("streaming", lc);
+    s.sb = Math.round(s.sb * 1.03);
+    s.arc5 = { h: S.t + 8 };
+    n += svLote("a");
+    g += lc;
+  }
+  a.ult = { t: S.t, n, c: g };
+  if (n) nws(L4(`Compra automática: ${s.n} suma ${n} títulos por ${fm(g)}.`, `Auto-buy: ${s.n} adds ${n} titles for ${fm(g)}.`, `Achat automatique : ${s.n} ajoute ${n} titres pour ${fm(g)}.`, `Compra automática: ${s.n} soma ${n} títulos por ${fm(g)}.`));
+  return a.ult;
+}
+function tvAutoCompra(ya) {
+  const c = S.cb;
+  if (!c || !c.on) return null;
+  const a = tvAutoCfg();
+  if (!a.on && !ya) return null;
+  const pres = autoPres(a),
+    hechos = [];
+  let g = 0,
+    n = 0;
+  (c.ofLic || [])
+    .filter((o) => (o.A || 0) >= a.q)
+    .sort((x, y) => y.A / y.p - x.A / x.p)
+    .forEach((o) => {
+      if (g + o.p > pres || S.cash < o.p) return;
+      const e = (S.rw || []).find((x) => x.id == o.rw);
+      if (!e) return;
+      gasta("plataformas", o.p);
+      if (S.rv[o.o]) S.rv[o.o].cash += Math.round(o.p * 0.8);
+      catDeRw(e, "licencia", { exp: S.t + 104 });
+      hechos.push(o);
+      g += o.p;
+      n++;
+    });
+  c.ofLic = (c.ofLic || []).filter((o) => !hechos.includes(o));
+  if (n) {
+    SVV++;
+    if (a.prog) tvAuto(true);
+    nws(L4(`Compra automática: ${c.nom} licencia ${n} ${n == 1 ? "obra" : "obras"} por ${fm(g)}.`, `Auto-buy: ${c.nom} licenses ${n} ${n == 1 ? "work" : "works"} for ${fm(g)}.`, `Achat automatique : ${c.nom} acquiert ${n} ${n == 1 ? "œuvre" : "œuvres"} pour ${fm(g)}.`, `Compra automática: ${c.nom} licencia ${n} ${n == 1 ? "obra" : "obras"} por ${fm(g)}.`));
+  }
+  a.ult = { t: S.t, n, c: g };
+  return a.ult;
+}
+on("semana", () => {
+  if (!S || mesT(S.t) == mesT(S.t - 1)) return;
+  try {
+    if (S.sv && S.sv.on && S.sv.auto && S.sv.auto.on) svAutoCompra(false);
+    if (S.cb && S.cb.on && S.cb.auto && S.cb.auto.on) tvAutoCompra(false);
+  } catch (er) {}
+});
+function autoUlt(a) {
+  if (!a.ult) return L4("Todavía no ha comprado nada.", "Nothing bought yet.", "Rien acheté pour l'instant.", "Ainda não comprou nada.");
+  const u = a.ult;
+  return u.n
+    ? L4(`Última compra (semana ${(u.t % 52) + 1}): ${u.n} títulos por ${fm(u.c)}.`, `Last buy (week ${(u.t % 52) + 1}): ${u.n} titles for ${fm(u.c)}.`, `Dernier achat (semaine ${(u.t % 52) + 1}) : ${u.n} titres pour ${fm(u.c)}.`, `Última compra (semana ${(u.t % 52) + 1}): ${u.n} títulos por ${fm(u.c)}.`)
+    : L4("El último mes no encontró nada que valiera la pena con ese presupuesto.", "Last month it found nothing worth it within that budget.", "Le mois dernier, rien ne valait la peine avec ce budget.", "No último mês não achou nada que valesse a pena com esse orçamento.");
+}
+function autoComunH(k, a) {
+  const P = (i) => `${Math.round(AUTOP[i] * 100)} %`;
+  return `<div class="m">${L4("Presupuesto al mes (parte de tu caja)", "Monthly budget (share of your cash)", "Budget mensuel (part de ta trésorerie)", "Orçamento mensal (parte do seu caixa)")}: <b>${fm(autoPres(a))}</b></div><div class="chips">${AUTOP.map((_, i) => chx(k, "p|" + i, P(i), a.p == i)).join("")}</div><div class="m">${L4("Calidad mínima", "Minimum quality", "Qualité minimale", "Qualidade mínima")}</div><div class="chips">${AUTOQ.map((q) => chx(k, "q|" + q, String(q), a.q == q)).join("")}</div>`;
+}
+function svAutoH() {
+  const a = svAutoCfg();
+  return `<div class="c"><div class="k"><h3 style="margin:0">${L4("Compra automática", "Auto-buy", "Achat automatique", "Compra automática")}</h3>${bi("autocompra")}</div><div class="m">${L4(
+    "Cada mes tu equipo compra por ti dentro del presupuesto: licencias de rivales (regatea al 85 %), paquetes cuando hay espacio libre o el catálogo envejece, y lotes de archivo si quieres.",
+    "Every month your team buys for you within the budget: rival licenses (it haggles to 85%), packages when there is free space or the catalog gets old, and archive lots if you want.",
+    "Chaque mois, ton équipe achète pour toi dans le budget : licences des rivaux (elle négocie à 85 %), paquets quand il y a de la place ou que le catalogue vieillit, et lots d'archives si tu veux.",
+    "Todo mês sua equipe compra por você dentro do orçamento: licenças dos rivais (pechincha a 85 %), pacotes quando há espaço livre ou o catálogo envelhece, e lotes de arquivo se quiser.",
+  )}</div><div class="chips">${chx("sva", "on", a.on ? L4("Activada", "On", "Activé", "Ativada") : L4("Desactivada", "Off", "Désactivé", "Desativada"), a.on)}${chx("sva", "k|lic", L4("Licencias de rivales", "Rival licenses", "Licences des rivaux", "Licenças dos rivais"), a.lic)}${chx("sva", "k|paq", L4("Paquetes", "Packages", "Paquets", "Pacotes"), a.paq)}${chx("sva", "k|arc", L4("Lotes de archivo", "Archive lots", "Lots d'archives", "Lotes de arquivo"), a.arc)}</div>${autoComunH("sva", a)}<div class="m">${L4("Tipo de licencia", "License type", "Type de licence", "Tipo de licença")}</div><div class="chips">${SVMOD.map((x, i) => chx("sva", "m|" + i, x[0], a.mo == i)).join("")}</div><div class="k" style="margin-top:6px"><span class="m">${autoUlt(a)}</span>${bt("sva", "ya", L4("Comprar ahora", "Buy now", "Acheter maintenant", "Comprar agora"))}</div></div>`;
+}
+function tvAutoH() {
+  const a = tvAutoCfg();
+  return `<div class="c"><div class="k"><h3 style="margin:0">${L4("Compra automática", "Auto-buy", "Achat automatique", "Compra automática")}</h3>${bi("autocompra")}</div><div class="m">${L4(
+    "Cada mes licencia por 2 años las mejores obras de los rivales que caben en el presupuesto (sirven para tu canal y tu plataforma) y, si quieres, las programa en las franjas vacías.",
+    "Every month it licenses for 2 years the best rival works that fit the budget (they work for your channel and your platform) and, if you want, schedules them in empty slots.",
+    "Chaque mois, elle acquiert pour 2 ans les meilleures œuvres des rivaux qui entrent dans le budget (pour ta chaîne et ta plateforme) et, si tu veux, les programme dans les cases vides.",
+    "Todo mês licencia por 2 anos as melhores obras dos rivais que cabem no orçamento (servem para seu canal e sua plataforma) e, se quiser, as programa nas faixas vazias.",
+  )}</div><div class="chips">${chx("tva", "on", a.on ? L4("Activada", "On", "Activé", "Ativada") : L4("Desactivada", "Off", "Désactivé", "Desativada"), a.on)}${chx("tva", "prog", L4("Programar en franjas vacías", "Fill empty slots", "Remplir les cases vides", "Programar faixas vazias"), a.prog)}</div>${autoComunH("tva", a)}<div class="k" style="margin-top:6px"><span class="m">${autoUlt(a)}</span>${bt("tva", "ya", L4("Comprar ahora", "Buy now", "Acheter maintenant", "Comprar agora"))}</div></div>`;
+}
+function autoAct(a, v, ahora) {
+  const [k, x] = String(v).split("|");
+  if (k == "on") a.on = a.on ? 0 : 1;
+  else if (k == "prog") a.prog = a.prog ? 0 : 1;
+  else if (k == "p") a.p = cl(+x | 0, 0, AUTOP.length - 1);
+  else if (k == "q") a.q = +x | 0;
+  else if (k == "m") a.mo = cl(+x | 0, 0, SVMOD.length - 1);
+  else if (k == "k" && ["lic", "paq", "arc"].includes(x)) a[x] = a[x] ? 0 : 1;
+  else if (k == "ya") {
+    const u = ahora(true);
+    toast(u && u.n ? L4(`+${u.n} títulos por ${fm(u.c)}`, `+${u.n} titles for ${fm(u.c)}`, `+${u.n} titres pour ${fm(u.c)}`, `+${u.n} títulos por ${fm(u.c)}`) : L4("No hay nada que valga la pena con ese presupuesto", "Nothing worth buying with that budget", "Rien ne vaut la peine avec ce budget", "Nada que valha a pena com esse orçamento"));
+  }
+  if (k == "on") toast(a.on ? L4("Compra automática activada: compra al empezar cada mes", "Auto-buy on: it buys at the start of each month", "Achat automatique activé : il achète au début de chaque mois", "Compra automática ativada: compra no início de cada mês") : L4("Compra automática desactivada", "Auto-buy off", "Achat automatique désactivé", "Compra automática desativada"));
+  return pg();
+}
+ACT["sva"] = (v) => (S.sv && S.sv.on ? autoAct(svAutoCfg(), v, svAutoCompra) : null);
+ACT["tva"] = (v) => (S.cb && S.cb.on ? autoAct(tvAutoCfg(), v, tvAutoCompra) : null);
+const vSvAuto = vSv;
+vSv = function () {
+  let h = vSvAuto.apply(this, arguments);
+  const v = S.sv;
+  if (!v || !v.on) return h;
+  const t = dualReg("Crecer el catálogo", "Grow the catalog"),
+    lt = v.lt5 || {},
+    comp = [lt.a ? L4(`${lt.a} de archivo`, `${lt.a} archive`, `${lt.a} d'archives`, `${lt.a} de arquivo`) : "", lt.b ? L4(`${lt.b} éxitos`, `${lt.b} hits`, `${lt.b} succès`, `${lt.b} sucessos`) : "", lt.c ? L4(`${lt.c} de la línea`, `${lt.c} from the supply deal`, `${lt.c} du contrat`, `${lt.c} da linha`) : ""].filter(Boolean).join(" · ");
+  h = h.replace(`${t}</h3>`, `${t}</h3><div class="m">${L4("Tu catálogo", "Your catalog", "Ton catalogue", "Seu catálogo")}: <b>${svCatTxt()}</b>${comp ? `<br>${L4("Comprados en lotes", "Bought in lots", "Achetés en lots", "Comprados em lotes")}: ${comp}` : ""}</div>`);
+  return h + svAutoH();
+};
+const tvLicHAuto = tvLicH;
+tvLicH = function () {
+  return tvLicHAuto.apply(this, arguments) + tvAutoH();
+};
+Object.assign(TX.es.ayuda, {
+  companias: ["Compañías aliadas", "En Obras → Teatro. Con el tiempo, compañías de teatro, ópera, ballet, títeres, zarzuela, circo, musicales, cabaret, improvisación y nuevo circo te piden firmar: buscan estabilidad. Firmar cuesta su apoyo de un año y después pagas ese apoyo poco a poco cada mes. A cambio, cada mes hacen temporada y te dan su parte de la taquilla (25 a 35 %), crecen en fans y a veces te proponen obras gratis. Puedes mandarlas de gira (más fans y más taquilla durante 8 semanas), hacer una obra nueva con ellas (suben crítica y público), renovarlas tres años o liberarlas. Dato: el circo moderno nació en Londres en 1768, cuando Philip Astley montó acrobacias a caballo dentro de una pista redonda."],
+  autocompra: ["Compra automática de contenido", "En Negocio → Streaming y en Negocio → Canal de TV → Licencias. Actívala y elige qué parte de tu caja puede gastar cada mes (1, 3, 5 o 10 %) y la calidad mínima. Al empezar cada mes compra por ti: en la plataforma, licencias de rivales (regatea al 85 %, que siempre aceptan), paquetes cuando hay espacio libre o el catálogo envejece, y lotes de archivo si los marcas; en el canal, licencias por 2 años que también sirven para tu plataforma y, si quieres, las programa en las franjas vacías. «Comprar ahora» hace la compra del mes al instante. Los lotes y paquetes ahora suman títulos reales: arriba de «Crecer el catálogo» ves cuántos tienes, cuántos caben a la vista y cuántos quedaron en bodega. Dato: en 2007 Netflix lanzó su streaming con unas 1.000 películas, frente a más de 70.000 DVD que tenía para alquilar por correo."],
+  reediciones: ["Reediciones", "En Obras → Libros. Cada libro estrenado puede tener una edición de bolsillo (desde 1935), un audiolibro (desde 1952) y traducciones. Pagas una vez una parte de lo que ya vendió y la reedición vende durante meses; cuanto más público tuvo el libro, más vende. Dato: en 1935 Penguin lanzó libros de bolsillo al precio de un paquete de cigarrillos y cambió para siempre quién podía comprar libros."],
+});
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {
   const t = document.getElementById("top"),

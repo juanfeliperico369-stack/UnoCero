@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.0
+## INDUSTRY ART · versión 1.1
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -37,6 +37,18 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Obras**: cada construcción levanta una obra con grúa y andamios en tu edificio. Puede retrasarse por lluvia o huelga, encarecerse o adelantarse; al terminar la inauguras y ganas prensa y fans.
 - **Patentes**: si investigas un invento antes de su fecha real, lo patentas. Los rivales te pagan licencia cuando llega para todos y regalías cada año hasta que la patente vence a los 20 años. Puedes venderla.
 - **Valor de la compañía**: cuánto pagaría un comprador por tu estudio, con su historial y tu puesto frente a los rivales.
+- **Bolsa y ofertas de compra**: vende parte del estudio a inversionistas con dividendos y recompra, o recibe ofertas de grandes conglomerados.
+- **Remodelaciones** de las construcciones viejas cada 40 años, con su propia obra.
+- **Compañías aliadas**: grupos de teatro, ópera, ballet, títeres, circo y más piden firmar contigo; hacen temporadas, giras y obras nuevas, y te dan parte de la taquilla.
+- **Reediciones** de tus libros: bolsillo, audiolibro y traducciones.
+- **Encargos**: los proyectos que te proponen se pueden encomendar a una filial o a un rival para que lo hagan todo, o para editarlos tú.
+- **Streaming y TV**: los lotes del catálogo suman títulos reales y la compra automática licencia contenido cada mes con un presupuesto.
+
+### Modos de juego
+
+- **Seis siglos**: campaña de nueve capítulos de 1737 a 2150, cada uno con su reto.
+- **Reto semanal**: la misma semilla para todos durante la semana y récords en tu dispositivo.
+- **Modo LAN**: juega con amigos en la misma red Wi-Fi, sin servidores. Salas con código de 6 dígitos, mensajes cifrados, marcador, reacciones, duelos con la misma semilla y botón para bloquear a otro jugador. Los estudios de tus amigos pueden entrar a tu mundo como rivales, también por archivo.
 
 ### Android
 
@@ -46,7 +58,16 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.0 están en `entregables/`. Las sugerencias para el lanzamiento están en `docs/sugerencias-y-lanzamiento.md`.
+Los paquetes de la versión 1.1 están en `entregables/`.
+
+### Lanzamiento
+
+- `docs/plan-de-lanzamiento.md`: los pasos para publicar en Google Play.
+- `docs/politicas-google-play.md`: la revisión de políticas y las respuestas de los formularios.
+- `docs/ficha-tienda.md`: la ficha de la tienda en cuatro idiomas.
+- `docs/privacidad.html`: la política de privacidad pública, para GitHub Pages.
+- `android/play/`: ícono, gráfico destacado y capturas de 1080 × 1920 en español e inglés.
+- `docs/sugerencias-y-lanzamiento.md`: ideas hechas y pendientes.
 
 ### Capturas
 
