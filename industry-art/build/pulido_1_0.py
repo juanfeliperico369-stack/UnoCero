@@ -20,8 +20,20 @@ Aplica, con reemplazos exactos (cada uno comprueba cuántas veces aparece):
      viajan como JSON inerte (en <head>) que solo se lee si el idioma es francés
      o portugués. El contenido final de DIC_FR / DIC_PT se captura del propio
      build con Chromium, así que es idéntico al original.
+  7. Autoguardado: opción «Cada 3 meses»; el autoguardado espera a que se pinte la
+     semana nueva y, si guardar ya tarda (partidas muy largas), lo sugiere.
+  8. Bóveda: el catálogo avisa cuántos lugares libres quedan y pide confirmar si
+     se compra una bóveda teniendo 40 o más libres.
+  9. Informe de errores: los errores no capturados se anotan (solo en el
+     dispositivo) y en Ajustes se pueden copiar o borrar.
+ 10. Búsquedas por nombre sin distinguir tildes (Talento, Obras, Archivo, Buscar,
+     Taxonomía, dominio público).
+ 11. Web: favicon, íconos, Open Graph, manifiesto, service worker (sin conexión) y
+     almacenamiento persistente; nada de eso se activa dentro de la app Android.
+     Si se pasa una carpeta como tercer argumento, deja ahí la versión web lista
+     para subir (index.html, sw.js, manifest.webmanifest e imágenes).
 
-Requiere node + playwright (Chromium) para la captura del paso 5.
+Requiere node + playwright (Chromium) para la captura de los diccionarios y los íconos.
 """
 import json
 import os
@@ -31,6 +43,7 @@ import sys
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 BASE, OUT = sys.argv[1], sys.argv[2]
+WEB = sys.argv[3] if len(sys.argv) > 3 else None
 h = open(BASE, encoding='utf-8').read()
 
 
@@ -136,10 +149,39 @@ h = rep(h, '''${mias.map((x) => `<div class="fila"><span>${esc(x.n)}</span><span
 
 # ------------------------------------------------------------------ 5. guardado sin bloquear la pantalla
 h = rep(h, '''  const txt = JSON.stringify(x),
-    z = await comprimir(txt);''', '''  const txt = JSON.stringify(x),
-    w = await zipW9(txt),
+    z = await comprimir(txt);''', '''  const t9 = performance.now(),
+    txt = JSON.stringify(x),
+    w = await zipW9(txt, performance.now() - t9),
     z = w ? w.z : await comprimir(txt);''', 1, 'empaquetar')
 h = rep(h, '''      c: cyrb53(txt),''', '''      c: w ? w.c : cyrb53(txt),''', 1, 'empaquetar c')
+h = rep(h, '''    toast("No se pudo guardar: " + (e && e.message ? e.message : e));''',
+        '''    errGuarda9("guardado", e && e.message ? e.message : e, e && e.stack);
+    toast("No se pudo guardar: " + (e && e.message ? e.message : e));''', 1, 'guardar error')
+
+# ------------------------------------------------------------------ 7. autoguardado cada 3 meses
+h = rep(h, '''    ["mes", "Cada mes"],
+    ["anio", "Cada a\\u00F1o"],''', '''    ["mes", "Cada mes"],
+    ["trim", L4("Cada 3 meses", "Every 3 months", "Tous les 3 mois", "A cada 3 meses")],
+    ["anio", "Cada a\\u00F1o"],''', 1, 'cfga trim')
+h = rep(h, '''    (CFG.auto == "mes" && mi(S.t) != mi(Math.max(0, u))) ||''', '''    (CFG.auto == "mes" && mi(S.t) != mi(Math.max(0, u))) ||
+    (CFG.auto == "trim" && Math.floor(mi(S.t) / 3) != Math.floor(mi(Math.max(0, u)) / 3)) ||''', 1, 'auto trim')
+
+# ------------------------------------------------------------------ 8. bóveda
+h = rep(h, '''Lo más flojo queda en bodega si no cabe.</div>''', '''Lo más flojo queda en bodega si no cabe.</div>${svLibreH9(C0)}''', 1, 'svLibre')
+
+# ------------------------------------------------------------------ 10. búsquedas sin tildes
+for old, new, n in [
+    ('(!fil.pq || p.n.toLowerCase().includes(fil.pq))', '(!fil.pq || bq9(p.n, fil.pq))', 2),
+    ('(!f.q || t.n.toLowerCase().includes(f.q))', '(!f.q || bq9(t.n, f.q))', 1),
+    ('(!FIL2.q || p.n.toLowerCase().includes(FIL2.q))', '(!FIL2.q || bq9(p.n, FIL2.q))', 1),
+    ('S.tl.filter((t) => !t.dead && t.n.toLowerCase().includes(q))', 'S.tl.filter((t) => !t.dead && bq9(t.n, q))', 1),
+    ('(x.n + " " + rvNom(x.o) + " " + x.g + " " + (MD[x.m] ? MD[x.m][0] : "") + " " + x.y).toLowerCase().includes(t)',
+     'bq9(x.n + " " + rvNom(x.o) + " " + x.g + " " + (MD[x.m] ? MD[x.m][0] : "") + " " + x.y, t)', 1),
+    ('(m.n + " " + m.a).toLowerCase().includes(q)', 'bq9(m.n + " " + m.a, q)', 1),
+    ('(o.n + " " + o.a + " " + o.pj.map((p) => p[0]).join(" ")).toLowerCase().includes(q)', 'bq9(o.n + " " + o.a + " " + o.pj.map((p) => p[0]).join(" "), q)', 1),
+    ('!x.toLowerCase().includes(q)', '!bq9(x, q)', 1),
+]:
+    h = rep(h, old, new, n, 'busca ' + old[:30])
 
 # ------------------------------------------------------------------ edificio animado: datos calculados una vez por repintado, no en cada fotograma
 h = rep(h, '''  if (z) edif(z.c, z.w, z.h, t, edifDatos());''', '''  if (z) edif(z.c, z.w, z.h, t, edifD9());''', 1, 'edC')
@@ -231,7 +273,60 @@ for l in ('fr', 'pt'):
     print(f'{l}: final {len(FINAL[l])} claves, arranque {len(RESID[l])}, en el JSON {len(DELTA[l])}')
 h = con_datos(h, DELTA)
 
+# ------------------------------------------------------------------ 9 y 11. cabecera: registro de errores, íconos y datos para compartir
+import base64
+import hashlib
+import shutil
+import tempfile
+
+ICON = tempfile.mkdtemp(prefix='iconos-')
+r = subprocess.run(['node', os.path.join(AQUI, 'generar_iconos.js'), etapa_a, ICON], capture_output=True, text=True)
+print(r.stdout.strip(), r.stderr.strip())
+if r.returncode:
+    sys.exit('no se pudieron generar los íconos')
+dataurl = lambda n: 'data:image/png;base64,' + base64.b64encode(open(os.path.join(ICON, n), 'rb').read()).decode()
+
+# Se instala antes que el juego para anotar también los errores del arranque.
+REGISTRO = '''<script>(function(){var K="ia16.errores";function g(t,m,s){try{var c={};try{c=window.__ctx9?window.__ctx9():{}}catch(e){}m=String(m==null?"":m).slice(0,300);s=String(s==null?"":s).slice(0,600);var L=[];try{L=JSON.parse(localStorage.getItem(K)||"[]");if(!Array.isArray(L))L=[]}catch(e){}var u=L[L.length-1];if(u&&u.m===m&&u.s===s){u.n=(u.n||1)+1;u.f=Date.now()}else L.push({f:Date.now(),t:t,m:m,s:s,v:c.v,idi:c.idi,y:c.y,w:c.w,p:c.p});localStorage.setItem(K,JSON.stringify(L.slice(-30)))}catch(e){}}window.__err9=g;addEventListener("error",function(e){if(!e||!e.message)return;g("error",e.message,(e.filename?String(e.filename).split("/").pop():"")+":"+e.lineno+":"+e.colno+(e.error&&e.error.stack?"\\n"+String(e.error.stack).split("\\n").slice(1,5).join("\\n"):""))});addEventListener("unhandledrejection",function(e){var r=e&&e.reason;g("promesa",r&&r.message?r.message:r,r&&r.stack?String(r.stack).split("\\n").slice(1,5).join("\\n"):"")})})();</script>'''
+SITIO = os.environ.get('SITIO', '').strip()
+if SITIO and not SITIO.endswith('/'):
+    SITIO += '/'
+desc = re.search(r'<meta name="description" content="([^"]*)">', h).group(1)
+cab = (f'<link rel="icon" type="image/png" sizes="32x32" href="{dataurl("icono-32.png")}">'
+       f'<link rel="apple-touch-icon" href="{dataurl("apple-touch-icon.png")}">'
+       '<meta property="og:type" content="website"><meta property="og:title" content="INDUSTRY ART">'
+       f'<meta property="og:description" content="{desc}">'
+       f'<meta property="og:image" content="{SITIO}compartir.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
+       + (f'<meta property="og:url" content="{SITIO}">' if SITIO else '')
+       + '<meta name="twitter:card" content="summary_large_image">' + REGISTRO)
+h = rep(h, '<style id="fuente">', cab + '<style id="fuente">', 1, 'cabecera')
+
 open(OUT, 'w', encoding='utf-8').write(h)
+
+# ------------------------------------------------------------------ 11. carpeta web
+if WEB:
+    os.makedirs(WEB, exist_ok=True)
+    shutil.copyfile(OUT, os.path.join(WEB, 'index.html'))
+    imgs = ['icono-192.png', 'icono-512.png', 'icono-maskable-512.png', 'apple-touch-icon.png', 'compartir.png']
+    for n in imgs:
+        shutil.copyfile(os.path.join(ICON, n), os.path.join(WEB, n))
+    man = {
+        'name': 'INDUSTRY ART', 'short_name': 'Industry Art', 'description': desc, 'lang': 'es',
+        'start_url': './', 'scope': './', 'display': 'standalone',
+        'background_color': '#efe9d6', 'theme_color': '#efe9d6', 'categories': ['games', 'simulation'],
+        'icons': [
+            {'src': 'icono-192.png', 'sizes': '192x192', 'type': 'image/png', 'purpose': 'any'},
+            {'src': 'icono-512.png', 'sizes': '512x512', 'type': 'image/png', 'purpose': 'any'},
+            {'src': 'icono-maskable-512.png', 'sizes': '512x512', 'type': 'image/png', 'purpose': 'maskable'},
+        ],
+    }
+    open(os.path.join(WEB, 'manifest.webmanifest'), 'w', encoding='utf-8').write(json.dumps(man, ensure_ascii=False, indent=2) + '\n')
+    huella = hashlib.sha256(h.encode('utf-8')).hexdigest()[:10]
+    sw = open(os.path.join(AQUI, 'sw.js'), encoding='utf-8').read().replace('__CACHE__', f'industry-art-1.0-{huella}')
+    open(os.path.join(WEB, 'sw.js'), 'w', encoding='utf-8').write(sw)
+    print('carpeta web:', WEB, sorted(os.listdir(WEB)))
+shutil.rmtree(ICON, ignore_errors=True)
+
 if os.environ.get('PULIDO_KEEP') is None:
     os.remove(etapa_a)
     os.remove(etapa_b0)

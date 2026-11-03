@@ -24,11 +24,29 @@
   si el idioma es francés o portugués.
 - **Edificio animado de Inicio**: sus datos se calculan una vez por repintado en vez de en cada fotograma.
 - **Versión**: «Edición 1.0» en la portada (`VERN = "1.0"`). La versión interna de las partidas (`VER = 40`) no cambia.
+- **Autoguardado**: nueva opción «Cada 3 meses». El autoguardado espera a que se pinte la semana nueva, y si guardar
+  ya tarda más de 400 ms en ese dispositivo (partidas muy largas), lo avisa una vez y lo explica en Ajustes.
+- **Bóveda**: el catálogo dice cuántos lugares libres quedan (o cuántos títulos esperan en bodega) y, con 40 o más
+  libres, pide un segundo toque para comprarla.
+- **Informe de errores** (Ajustes, al final): los errores no capturados, también los del arranque, se anotan solo en
+  el dispositivo (los últimos 30, con versión, idioma, fecha del juego y pantalla). Se pueden copiar o borrar. En la
+  app, si no hay portapapeles, se guarda como `industry-art-errores.txt`.
+- **Búsquedas sin tildes**: «jose» encuentra «José» en Talento, Obras, Archivo, Buscar, Taxonomía y dominio público.
+- **Web**: favicon, ícono de Apple, Open Graph con imagen para compartir, manifiesto, service worker (abre sin
+  conexión y al instante) y almacenamiento persistente para las partidas. Nada de esto se activa dentro de la app.
+
+## Versión web
+
+`web/` es la carpeta lista para subir tal cual a cualquier hosting estático con HTTPS (GitHub Pages, Netlify,
+Cloudflare Pages…): `index.html`, `sw.js`, `manifest.webmanifest` y las imágenes. Chrome la reconoce como instalable.
+Para que la imagen al compartir el enlace salga en todas las redes, genera el build con la dirección final:
+`SITIO=https://tu-dominio/industry-art/ python3 build/pulido_1_0.py …` (pone `og:image` y `og:url` absolutos).
+Activa la compresión gzip o brotli del hosting: el HTML pasa de 6,7 MB a unos 2,4 MB en la descarga.
 
 ## Cómo se genera
 
 ```
-python3 build/pulido_1_0.py <index-1.6.6.html> index.html
+python3 build/pulido_1_0.py <index-1.6.6.html> index.html web
 ```
 
 `pulido_1_0.py` aplica reemplazos exactos sobre el build publicado de la 1.6.6 y comprueba cuántas veces aparece
@@ -47,6 +65,9 @@ node build/verificar_1_0.js <index-1.6.6.html> index.html <partida.json> [es,en,
 - La simulación da el mismo estado después de 26 y 52 semanas. Solo cambia `S.mig6`, el sello de versión.
 - El fuzz de QA (todas las pestañas y todos los botones) termina sin errores: 494 acciones.
 - Guardar y cargar devuelve la misma partida, con Worker, sin Worker, con un Worker roto y sin `CompressionStream`.
+- Cada función nueva tiene su prueba en el navegador (bóveda, autoguardado trimestral y diferido, aviso de guardado
+  lento, registro y copia de errores, búsqueda sin tildes). La web se probó servida por HTTP: service worker activo,
+  abre sin conexión y Chrome no reporta errores de instalabilidad.
 
 ## Android
 
