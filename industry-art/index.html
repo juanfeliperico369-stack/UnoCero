@@ -77135,6 +77135,73 @@ relH = function (t) {
   if (!t || !t.you || !parejaViva(t.id)) return h;
   return h + `<div class="bts" translate="no" style="margin-top:4px">${bt("rom16x", "", L4("Terminar la relación", "End the relationship", "Mettre fin à la relation", "Terminar o relacionamento"), "r")}</div>`;
 };
+
+let AUTOC = 0;
+function sinAvatar(W2) {
+  const me = yo();
+  if (!W2 || !me || !MD[W2.m]) return;
+  const e0 = me.e;
+  me.e = 0;
+  try {
+    let falta = false;
+    Object.keys(W2.crew || {}).forEach((r) => {
+      if (W2.crew[r] == S.me) {
+        delete W2.crew[r];
+        falta = true;
+      }
+    });
+    if (falta) {
+      const rec = eqRec(W2.m, BD());
+      MD[W2.m][1].forEach((r) => {
+        if (W2.crew[r] == null && rec[r] != null && rec[r] != S.me) W2.crew[r] = rec[r];
+      });
+    }
+    if ((W2.cast || []).some((c) => c && c.t == S.me)) {
+      W2.cast.forEach((c) => {
+        if (c && c.t == S.me) c.t = null;
+      });
+      try {
+        repartoRec(W2);
+      } catch (e) {}
+      W2.cast.forEach((c) => {
+        if (c && c.t == S.me) c.t = null;
+      });
+    }
+  } finally {
+    me.e = e0;
+  }
+}
+const producirExt = producir;
+producir = function () {
+  if (AUTOC && W) sinAvatar(W);
+  return producirExt.apply(this, arguments);
+};
+const enAuto = (f) =>
+  function () {
+    AUTOC++;
+    try {
+      return f.apply(this, arguments);
+    } finally {
+      AUTOC--;
+    }
+  };
+renueva = enAuto(renueva);
+talAuto5 = enAuto(talAuto5);
+autoProd5 = enAuto(autoProd5);
+ACT["pr4a"] = enAuto(ACT["pr4a"]);
+ACT["enca"] = enAuto(ACT["enca"]);
+const encHaz = encomiendaHaz;
+encomiendaHaz = function (auto) {
+  if (!auto) return encHaz.apply(this, arguments);
+  AUTOC++;
+  try {
+    return encHaz.apply(this, arguments);
+  } finally {
+    AUTOC--;
+  }
+};
+const fex = ACT["fe12"];
+ACT["fe12"] = (v) => (v == "a" ? enAuto(fex)(v) : fex(v));
 Object.assign(TX.es.ayuda, {
   pendientes16: ["Pendientes", "Todo lo que espera tu decisión, en un solo lugar: obras listas para estrenar (si son muchas, «Lanzar todas con el mejor plan»), propuestas de tus talentos por medio (con «Luz verde a todas»), pedidos de capital de tus filiales, rivales al borde de la quiebra, guiones listos para producir, series que se pueden renovar, obras que se pueden reestrenar, ofertas, colaboraciones, eventos, huelgas y avisos de caja. Está en Estudio → Inicio y en el menú; el número sobre el botón del menú dice cuántas cosas hay. Lo que pongas en automático deja de aparecer aquí. Dato: el método «Inbox Zero» de Merlin Mann (2007) no busca tener cero correos, sino no dejar que la bandeja decida por ti."],
   automatico16: ["Panel de automatización", "Todos los automáticos del estudio juntos. Por medio: si tus talentos firmados producen solos lo que aceptas, si sus propuestas reciben luz verde sola y el presupuesto anual (cada toque sube un nivel: 2, 5, 10, 20 % y vuelve a cero). Además: lanzamiento automático (manual, solo segundo plano o todas tus obras), renovar temporadas, reestrenos, venta de licencias a TV y streaming, compras para tu plataforma y tu canal, capital para filiales, puja automática por derechos, filiales que producen solas, gestión de parques y becas. «Activar todo» y «Apagar todo» cambian todos menos el presupuesto y las filiales. Cada opción sigue también en su pestaña de siempre. Dato: el primer piloto automático de avión, de Lawrence Sperry, se mostró en París en 1914: Sperry voló con las manos en alto mientras su mecánico caminaba por el ala."],
