@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
@@ -22,6 +23,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.pm.PackageInfoCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -125,7 +127,22 @@ public class MainActivity extends ComponentActivity {
             }
         });
 
-        if (estado != null) web.restoreState(estado);
+        // Tras instalar una versión nueva se borra la caché del WebView (no las partidas guardadas)
+        // y se carga el juego desde cero, para que todo lo nuevo se aplique.
+        boolean versionNueva = false;
+        try {
+            long codigo = PackageInfoCompat.getLongVersionCode(getPackageManager().getPackageInfo(getPackageName(), 0));
+            SharedPreferences preferencias = getSharedPreferences("industryart", MODE_PRIVATE);
+            if (preferencias.getLong("version", -1L) != codigo) {
+                web.clearCache(true);
+                preferencias.edit().putLong("version", codigo).apply();
+                versionNueva = true;
+            }
+        } catch (Exception e) {
+            versionNueva = false;
+        }
+
+        if (estado != null && !versionNueva) web.restoreState(estado);
         else web.loadUrl(INICIO);
     }
 

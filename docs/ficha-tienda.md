@@ -70,10 +70,10 @@ Idiomas: español, inglés, francés y portugués.
 Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales; el juego no está afiliado a ellos. El casino del juego usa dinero ficticio: no hay apuestas con dinero real.
 ```
 
-**Notas de la versión 1.3** (416/500)
+**Notas de la versión 1.4** (444/500)
 
 ```
-Versión 1.3: más historia hasta el año 2300 (hitos, inventos, estudios del espacio, negocios, atracciones, programas de TV, construcciones y momentos históricos); el periódico se lee bien en todos los temas; pantalla estable al tocar; fechas de cada obra; archivo en tres secciones; venta de negocios, cines y parques; encargos a tus talentos; menos interrupciones; becas automáticas, y paquetes de mundo (.iamundo).
+Versión 1.4: tus talentos firmados producen solos con tu infraestructura y tú decides el lanzamiento; línea y archivo divididos en lo tuyo y el segundo plano; plan automático de marketing y fecha; reparto que respeta la edad y el sexo de cada personaje; los talentos trabajan con rivales según su energía y los retirados vuelven por más dinero; consola con ventas y exclusivos; licencias automáticas; comediantes; títulos más variados y breves.
 ```
 
 ## English (en-US)
@@ -129,10 +129,10 @@ Languages: Spanish, English, French and Portuguese.
 The real works, awards, people, brands and places in the game are historical and cultural references; the game is not affiliated with them. The in-game casino uses fictional money: there is no real-money gambling.
 ```
 
-**Notas de la versión 1.3** (402/500)
+**Notas de la versión 1.4** (421/500)
 
 ```
-Version 1.3: more history up to the year 2300 (milestones, inventions, space studios, businesses, rides, TV shows, facilities and historic moments); the newspaper is readable in every theme; a steady screen when you tap; dates for every work; a three-part archive; sell businesses, cinemas and parks; commissions to your talents; fewer interruptions; automatic scholarships; and world packs (.iamundo).
+Version 1.4: your signed talents produce on their own with your facilities and you decide the launch; the line and archive split into your work and background; auto plan for marketing and date; casting that respects each character's age and sex; talents work with rivals based on energy and retired ones return for more money; console with sales and exclusives; automatic licenses; comedians; more varied, shorter titles.
 ```
 
 ## Français (fr-FR)
@@ -188,10 +188,10 @@ Langues : espagnol, anglais, français et portugais.
 Les œuvres, prix, personnes, marques et lieux réels présents dans le jeu sont des références historiques et culturelles ; le jeu n'y est pas affilié. Le casino du jeu utilise de l'argent fictif : il n'y a pas de jeu d'argent réel.
 ```
 
-**Notas de la versión 1.3** (435/500)
+**Notas de la versión 1.4** (465/500)
 
 ```
-Version 1.3 : plus d'histoire jusqu'en 2300 (étapes, inventions, studios de l'espace, entreprises, attractions, émissions de TV, installations et moments historiques) ; le journal se lit bien dans tous les thèmes ; écran stable au toucher ; dates de chaque œuvre ; archives en trois parties ; vente d'entreprises, cinémas et parcs ; commandes à tes talents ; moins d'interruptions ; bourses automatiques ; et packs de monde (.iamundo).
+Version 1.4 : tes talents sous contrat produisent seuls avec tes installations et tu décides la sortie ; ligne et archives séparées entre ton travail et l'arrière-plan ; plan automatique de marketing et de date ; distribution qui respecte l'âge et le sexe des personnages ; travail avec des rivaux selon l'énergie et retour des retraités contre plus d'argent ; console avec ventes et exclusivités ; licences automatiques ; humoristes ; titres plus variés et courts.
 ```
 
 ## Português (pt-BR)
@@ -247,8 +247,8 @@ Idiomas: espanhol, inglês, francês e português.
 As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais; o jogo não é afiliado a eles. O cassino do jogo usa dinheiro fictício: não há apostas com dinheiro real.
 ```
 
-**Notas de la versión 1.3** (400/500)
+**Notas de la versión 1.4** (452/500)
 
 ```
-Versão 1.3: mais história até o ano 2300 (marcos, invenções, estúdios do espaço, negócios, atrações, programas de TV, instalações e momentos históricos); o jornal fica legível em todos os temas; tela estável ao tocar; datas de cada obra; arquivo em três partes; venda de negócios, cinemas e parques; encomendas aos seus talentos; menos interrupções; bolsas automáticas; e pacotes de mundo (.iamundo).
+Versão 1.4: seus talentos contratados produzem sozinhos com sua infraestrutura e você decide o lançamento; linha e arquivo divididos entre o seu trabalho e o segundo plano; plano automático de marketing e data; elenco que respeita idade e sexo de cada personagem; talentos trabalham com rivais conforme a energia e aposentados voltam por mais dinheiro; console com vendas e exclusivos; licenças automáticas; comediantes; títulos mais variados e curtos.
 ```

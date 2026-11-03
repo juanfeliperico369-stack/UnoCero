@@ -58,6 +58,23 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Títulos, sinopsis y críticas más variados.
   - Paquetes de mundo (`.iamundo`).
 
+- **De las pruebas de juego (versión 1.4):**
+  - Energía en lugar de bloqueo: un talento trabaja con un rival y contigo mientras le quede energía.
+  - Línea de producción dividida en lo tuyo y el segundo plano.
+  - Tus talentos firmados producen solos lo que aceptas, según tu infraestructura de cada medio.
+  - Archivo con una cuarta sección: obras de tus talentos.
+  - Consola propia con cuota, ventas, exclusivos, campañas, rebajas y sucesora.
+  - Comediantes que firman contigo y artistas en la lista de éxitos.
+  - Lo que ya produjiste o encomendaste sale de la lista de material.
+  - Títulos revisados: sin palabras repetidas, sin redundancias y con concordancia correcta.
+  - Reparto recomendado y «Al mejor» con lógica de edad, sexo, tipo de papel y géneros.
+  - Retirados que vuelven por más dinero; el avatar ya no queda bloqueado al trabajar con rivales.
+  - Plan automático de lanzamiento, seleccionar todo el marketing y lanzamiento automático.
+  - Archivo de segundo plano, licencias automáticas y rivales que adaptan obras de dominio público.
+  - Personajes de otras obras resaltados en el reparto.
+  - Diccionario de títulos ampliado con palabras poco conocidas y de otros idiomas.
+  - Las partidas guardadas reciben las funciones nuevas al actualizar.
+
 ### Pendientes
 1. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.
 2. **Logros de Google Play Games.** El juego ya tiene logros propios. Conectarlos a Play Games da visibilidad en la tienda, pero exige iniciar sesión con Google y cambiar la política de privacidad y el formulario de datos.
