@@ -55,7 +55,8 @@ Lo pedido después de la 1.4, qué cambió, cómo comprobarlo y qué midieron la
   - La pantalla se ancla en el contenido que no se movió: lo que está arriba del botón tocado, sin contar la tarjeta que cambia de lugar.
   - Si un ancla tendría que mover la vista más de casi una pantalla, se descarta, porque significa que ese contenido cambió de sección.
   - Cuando actúas desde una ficha u hoja abierta, la página de fondo también queda en su lugar.
-- **Medido con toques reales:** al reestrenar desde la tarjeta o desde la ficha, las tarjetas de arriba quedan exactamente donde estaban (0 px) y las de abajo suben una tarjeta para ocupar el hueco. Antes la vista se iba 2.000 px o más hacia arriba.
+  - Si al tocar algo la página queda más corta (por ejemplo, un filtro sin obras), se deja un espacio provisional al final para que la vista no se corra; desaparece al cambiar de sección.
+- **Medido con toques reales:** al reestrenar desde la tarjeta o desde la ficha, las tarjetas de arriba quedan exactamente donde estaban (0 px) y las de abajo suben una tarjeta para ocupar el hueco. Antes la vista se iba 2.000 px o más hacia arriba. En 631 toques reales por todas las secciones, los saltos detectados bajaron de 16 a 6, y al revisarlos uno por uno lo que estaba arriba del botón quedó quieto (0 a 3 px); solo subió lo de abajo cuando se liberó espacio. El filtro del catálogo, que movía la vista 76 px, ahora la mueve 2 px.
 
 ## Pruebas de esta versión
 

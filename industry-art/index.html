@@ -71559,6 +71559,20 @@ function scxGuarda(b) {
   }
   return { a: b.dataset.a, A, M, enHoja, hs: hj ? hj.scrollTop : 0, ht: String(HOJAT).split("|")[0], ws: window.scrollY, tab, sub: SUB.join(","), hoja: !!hj, t0: performance.now() };
 }
+let SCXPAD = 0,
+  SCXPADK = "";
+function scxPadFuera() {
+  if (!SCXPAD) return;
+  const mn = document.getElementById("main");
+  if (mn) mn.style.paddingBottom = "";
+  SCXPAD = 0;
+  SCXPADK = "";
+}
+const irAPad = irA;
+irA = function () {
+  scxPadFuera();
+  return irAPad.apply(this, arguments);
+};
 function scxFijaM(c) {
   if (!c.M || !c.M.length || tab != c.tab || SUB.join(",") != c.sub) return;
   const rm = scxRaiz(false);
@@ -71598,7 +71612,19 @@ function scxFija(c) {
     if (Math.abs(d) > innerHeight * 0.9) continue;
     if (Math.abs(d) > 2) {
       if (c.enHoja) hj.scrollTop += d;
-      else window.scrollBy(0, d);
+      else {
+        window.scrollBy(0, d);
+        const r2 = el.getBoundingClientRect().top - k.top;
+        if (r2 > 2 && r2 < innerHeight) {
+          const mn = document.getElementById("main");
+          if (mn) {
+            SCXPAD += Math.ceil(r2);
+            mn.style.paddingBottom = SCXPAD + "px";
+            SCXPADK = tab + "|" + SUB.join(",");
+            window.scrollBy(0, r2);
+          }
+        }
+      }
     }
     return true;
   }
