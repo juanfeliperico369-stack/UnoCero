@@ -1,4 +1,4 @@
-# INDUSTRY ART · Informe de verificación de la versión 1.5
+# INDUSTRY ART · Informe de verificación de las versiones 1.5 y 1.5.1
 
 Lo pedido después de la 1.4, qué cambió, cómo comprobarlo y qué midieron las pruebas. El informe completo de la 1.4 sigue en `reporte-1.4.md`.
 
@@ -37,6 +37,16 @@ Lo pedido después de la 1.4, qué cambió, cómo comprobarlo y qué midieron la
 - **Energía negativa:** con muchos talentos produciendo a la vez, la energía podía quedar en −10 hasta el mes siguiente. Ahora nunca baja de 0.
 - **Títulos repetidos en obras automáticas:** si una obra que producen tus talentos sale con el título de otra tuya, recibe uno nuevo.
 - **Coproducciones:** los proyectos en conjunto que te proponen los rivales (desde «Propuestas para ti») cobraban dos veces: bajaban las ventas al 60 % y además el rival se llevaba su parte de las ganancias. Ahora solo se reparte la ganancia acordada.
+
+## 6. Versión 1.5.1: archivo, streaming y canal
+
+- **Divisiones en el archivo:** el archivo de la línea de producción tiene Propias, De tus talentos, Compradas, Con rivales y Todas, con el número de obras en cada una. En «Lo que haces tú» abre en Propias y en «Segundo plano», en De tus talentos.
+- **Tus obras siempre en tu plataforma y tu canal.** No aparecían por tres motivos:
+  - Las obras con licencia vendida salían de tu catálogo. Ahora vender licencias (por un año a la TV o por 3 años al streaming) ya no las saca; solo salen si vendes todos los derechos.
+  - Las obras compradas competían por el mismo espacio y podían dejar fuera las tuyas. Ahora tus obras y las de tus filiales no ocupan espacio del catálogo y siempre se ven.
+  - Las obras que tus filiales estrenaron antes de que las compraras nunca entraban. Ahora entran al cargar la partida y cada mes.
+- **Medido:** con el catálogo lleno de 400 títulos de calidad 95, se veían tus 209 obras, también las 5 con licencia vendida. Una filial con 27 obras estrenadas pasó de 0 a 27 en tu plataforma y en el catálogo del canal.
+- Tus obras llegan a la plataforma cuando pasan al archivo (las originales, desde su estreno); la plataforma lo explica en una nota.
 
 ## Pruebas de esta versión
 

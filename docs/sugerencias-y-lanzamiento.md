@@ -81,6 +81,11 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Presupuesto acordado y cofinanciación de rivales al encomendar.
   - Corregido el doble cobro en los proyectos en conjunto con rivales.
 
+- **De las pruebas de juego (versión 1.5.1):**
+  - El archivo de la línea de producción también tiene las cuatro divisiones.
+  - Tus obras y las de tus filiales siempre están en tu plataforma y tu canal, sin ocupar espacio del catálogo.
+  - Vender licencias ya no saca tus obras de tu propia plataforma ni de tu canal.
+
 ### Pendientes
 1. **Bandeja de pendientes, copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`).
 2. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.

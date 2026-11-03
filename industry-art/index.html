@@ -859,7 +859,7 @@ html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 
 .c.peri .peri-t::first-letter{color:#7a1f12!important}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.5";
+const VERN = "1.5.1";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -16593,11 +16593,11 @@ const pc = (P) => {
 };
 function vP() {
   const g = (t, f, k) => {
-    let l = S.pj.filter((p) => f(p) && bgP5(p) == !!fil.bg5 && (!fil.pq || p.n.toLowerCase().includes(fil.pq)));
+    let l = S.pj.filter((p) => f(p) && (p.st >= 4 || bgP5(p) == !!fil.bg5) && (!fil.pq || p.n.toLowerCase().includes(fil.pq)));
     const n = l.length;
     if (k) l = l.slice(-k).reverse();
     return n
-      ? `<h3 class="sec">${t}${k && n > k ? " \u00B7 " + k + " de " + n : ""}</h3>` +
+      ? (t === "" ? "" : `<h3 class="sec">${t}${k && n > k ? " \u00B7 " + k + " de " + n : ""}</h3>`) +
           l.map(pcBg5).join("") +
           (k && n > k ? `<div class="c">${bt("arv", k + 20, "Ver 20 m\u00E1s")}</div>` : "")
       : "";
@@ -16612,12 +16612,12 @@ function vP() {
             g("En producci\u00F3n", (p) => p.st == 0) +
             g("En marketing", (p) => p.st == 2) +
             g("En cartelera", (p) => p.st == 3) +
-            g(L4("Archivo de segundo plano", "Background archive", "Archives de l'arrière-plan", "Arquivo do segundo plano"), (p) => p.st == 4, fil.ar || 20)
+            arcH6(1) + g("", (p) => p.st == 4 && arcOk6(p, 1), fil.ar || 20)
           : g("En producci\u00F3n", (p) => p.st == 0) +
             g("Listas para estrenar", (p) => p.st == 1) +
             g("En marketing", (p) => p.st == 2) +
             g("En cartelera", (p) => p.st == 3) +
-            g("Archivo", (p) => p.st == 4, fil.ar || 20))
+            arcH6(0) + g("", (p) => p.st == 4 && arcOk6(p, 0), fil.ar || 20))
       : '<div class="c m">A\u00FAn no tienes obras. Crea una, elige equipo y presupuesto, y avanza el tiempo.</div>')
   );
 }
@@ -34134,7 +34134,7 @@ function catAdd(o) {
 const catOk = (x) => !!x && (!x.exp || x.exp > S.t) && (x.src != "filial" || (S.rv[x.o] && S.rv[x.o].own && !S.rv[x.o].dead));
 const catL = () => (S.cat || []).filter(catOk);
 const obTV = (id) => (typeof id == "string" && id[0] == "c" ? (S.cat || []).find((x) => x.id == id) || null : pj(id));
-const tvAv = (p) => !!p && (p.src ? catOk(p) : av(p) && p.st == 4);
+const tvAv = (p) => !!p && (p.src ? catOk(p) : !p.sold && p.st == 4);
 const CATN = { filial: "Filial", franquicia: "Franquicia comprada", licencia: "Licencia" };
 const catDeRw = (e, src, extra) =>
   catAdd(
@@ -45354,7 +45354,7 @@ function tvPron(d, j, v) {
 }
 function tvConts() {
   const y = yr(),
-    own = S.pj.filter((p) => (p.st == 4 && av(p)) || (p.m == 1 && p.emi == 1 && p.st >= 2)),
+    own = S.pj.filter((p) => (p.st == 4 && !p.sold) || (p.m == 1 && p.emi == 1 && p.st >= 2)),
     cat = catL(),
     gen = TVG.filter((g) => y >= g[2]);
   return { own, cat, gen };
@@ -45912,7 +45912,7 @@ ACT["lic"] = (v) => {
   if (!P) return;
   const g = licV(P);
   op(
-    `<div class="c"><div class="k"><h2 style="margin:0">Licenciar «${esc(P.n)}»</h2>${btx()}</div>${notaV("Vende derechos a canales y plataformas ajenas. Las obras con buena etiqueta valen más; las viejas, menos.")}<div class="fila" style="margin-top:8px"><span>No exclusiva (1 por año, sigue en tu catálogo)</span>${bt("ls", P.id + "|0", fm(g * 0.06))}</div><div class="fila"><span>Exclusiva 3 años (sale de tu catálogo y tu canal)</span>${bt("ls", P.id + "|1", fm(g * 0.16))}</div><div class="fila"><span>Todos los derechos (venta definitiva)</span>${bt("ls", P.id + "|2", fm(g * 0.3), "r")}</div></div>`,
+    `<div class="c"><div class="k"><h2 style="margin:0">Licenciar «${esc(P.n)}»</h2>${btx()}</div>${notaV("Vende derechos a canales y plataformas ajenas. Las obras con buena etiqueta valen más; las viejas, menos.")}<div class="fila" style="margin-top:8px"><span>No exclusiva (1 por año, sigue en tu catálogo)</span>${bt("ls", P.id + "|0", fm(g * 0.06))}</div><div class="fila"><span>Licencia de 3 años a una plataforma ajena (sigue en tu catálogo y tu canal)</span>${bt("ls", P.id + "|1", fm(g * 0.16))}</div><div class="fila"><span>Todos los derechos (venta definitiva)</span>${bt("ls", P.id + "|2", fm(g * 0.3), "r")}</div></div>`,
   );
 };
 ACT["ls"] = (v) => {
@@ -46137,7 +46137,7 @@ function svTitulos() {
     L = [];
   S.pj.forEach((p) => {
     const ori = p.emi == 3 || p.dv == 2;
-    if (((p.st == 4 && av(p)) || (ori && p.st >= 3)) && !v.ret[p.id]) L.push({ id: p.id, n: p.n, tipo: ori ? "original" : "propio", q: (p.a + p.c) / 2, ed: (S.t - (p.r0 == null ? p.rt || S.t : p.r0)) / 52, ser: p.m == 1, orig: ori, p });
+    if (((p.st == 4 && !p.sold) || (ori && p.st >= 3)) && !v.ret[p.id]) L.push({ id: p.id, n: p.n, tipo: ori ? "original" : "propio", q: (p.a + p.c) / 2, ed: (S.t - (p.r0 == null ? p.rt || S.t : p.r0)) / 52, ser: p.m == 1, orig: ori, p });
   });
   catL().forEach((x) => {
     if (!v.ret[x.id]) L.push({ id: x.id, n: x.n, tipo: x.src, q: (x.a + x.c) / 2, ed: (S.t - (x.t0 == null ? S.t - 104 : x.t0)) / 52, ser: x.m == 1, x });
@@ -63069,7 +63069,7 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Plan automático", "Auto plan", "Plan automatique", "Plano automático"],
   ["Cada talento tiene una energía de 0 a 100. Cada papel o puesto en una obra le quita 10, sea tuya o de un rival, y cada mes recupera 10 (más con el Centro de bienestar). Un talento puede estar en varios proyectos y oficios a la vez: solo queda fuera cuando gastó toda su energía o si falleció. Los retirados todavía pueden volver si les pagas un 60 % más: aparecen en las listas con esa nota. Lo mismo vale para tu avatar cuando acepta trabajos de otros estudios. Dato: en el Hollywood de los años treinta, los actores de contrato llegaban a rodar cuatro o cinco películas al año.", "Every talent has energy from 0 to 100. Each role or post in a work costs 10, whether it's yours or a rival's, and every month they recover 10 (more with the wellness center). A talent can be in several projects and trades at once: they're only out when all their energy is spent or if they passed away. Retired talents can still come back if you pay them 60% more: they show up in the lists with that note. The same goes for your avatar when they take jobs from other studios. Fact: in 1930s Hollywood, contract actors could shoot four or five films a year.", "Chaque talent a une énergie de 0 à 100. Chaque rôle ou poste dans une œuvre coûte 10, qu'elle soit à toi ou à un rival, et chaque mois il récupère 10 (plus avec le centre de bien-être). Un talent peut être sur plusieurs projets et métiers à la fois : il n'est exclu que s'il a dépensé toute son énergie ou s'il est décédé. Les retraités peuvent encore revenir si tu les paies 60 % de plus : ils apparaissent dans les listes avec cette note. C'est pareil pour ton avatar quand il accepte des travaux d'autres studios. Anecdote : dans le Hollywood des années trente, les acteurs sous contrat tournaient jusqu'à quatre ou cinq films par an.", "Cada talento tem uma energia de 0 a 100. Cada papel ou cargo numa obra custa 10, seja sua ou de um rival, e todo mês recupera 10 (mais com o centro de bem-estar). Um talento pode estar em vários projetos e ofícios ao mesmo tempo: só fica de fora quando gastou toda a energia ou se faleceu. Os aposentados ainda podem voltar se você pagar 60 % a mais: aparecem nas listas com essa nota. O mesmo vale para o seu avatar quando aceita trabalhos de outros estúdios. Curiosidade: na Hollywood dos anos trinta, os atores de contrato chegavam a filmar quatro ou cinco filmes por ano."],
   ["«Reparto recomendado» y «Al mejor» buscan primero intérpretes del mismo sexo que el personaje y de una edad creíble para él (más estricta con niños y jóvenes), y después miran su nivel, su tipo de papel (acción, romance, villano, mentor, comedia, joven o dramático) frente al arquetipo del personaje y los géneros de la obra, y su costo. Ya no cambian el sexo ni el nombre del personaje para acomodar a un actor. Si nadie libre encaja, te lo dice para que ajustes la edad o busques en Ver talentos, que ahora se ordena por encaje. Las estrellas de «Encaje» usan la misma regla.", "«Recommended cast» and «Best fit» first look for performers of the character's sex and a believable age (stricter with children and teens), then weigh their level, their type of role (action, romance, villain, mentor, comedy, young or dramatic) against the character's archetype and the work's genres, and their cost. They no longer change the character's sex or name to suit an actor. If no free performer fits, you're told so you can adjust the age or search in View talents, which is now sorted by fit. The «Fit» stars use the same rule.", "« Distribution recommandée » et « Le meilleur » cherchent d'abord des interprètes du même sexe que le personnage et d'un âge crédible pour lui (plus strict avec les enfants et les jeunes), puis regardent leur niveau, leur type de rôle (action, romance, méchant, mentor, comédie, jeune ou dramatique) face à l'archétype du personnage et aux genres de l'œuvre, et leur coût. Ils ne changent plus le sexe ni le nom du personnage pour s'adapter à un acteur. Si personne de libre ne correspond, on te le dit pour que tu ajustes l'âge ou cherches dans Voir les talents, désormais trié par ajustement. Les étoiles d'« Ajustement » suivent la même règle.", "«Elenco recomendado» e «O melhor» procuram primeiro intérpretes do mesmo sexo do personagem e de uma idade crível para ele (mais rigoroso com crianças e jovens), e depois olham o nível, o tipo de papel (ação, romance, vilão, mentor, comédia, jovem ou dramático) frente ao arquétipo do personagem e aos gêneros da obra, e o custo. Já não mudam o sexo nem o nome do personagem para acomodar um ator. Se ninguém livre combinar, você é avisado para ajustar a idade ou procurar em Ver talentos, que agora se ordena por encaixe. As estrelas de «Encaixe» usam a mesma regra."],
-  ["En Negocio → Streaming y en Negocio → Canal de TV → Licencias. Cada mes vende licencias de tus obras archivadas: a la TV, no exclusivas (una vez al año por obra, pagan el 6 % de su valor y siguen en tu catálogo); al streaming, exclusivas por 3 años (pagan el 16 %, pero mientras duran salen de tu catálogo y de tu canal). Eliges cuántos años deben haber pasado desde el estreno (1, 2 o 5). Las obras con buena etiqueta (Clásico, Culto, Hit) valen más; las viejas y olvidadas, menos. Dato: las reposiciones en TV mantuvieron vivas series como Star Trek, que fracasó en su primera emisión y triunfó en reestrenos.", "In Business → Streaming and Business → TV channel → Licenses. Every month it sells licenses for your archived works: to TV, non-exclusive (once a year per work, they pay 6 % of its value and it stays in your catalog); to streaming, exclusive for 3 years (they pay 16 %, but while they last the work leaves your catalog and your channel). You choose how many years must have passed since release (1, 2 or 5). Works with a good label (Classic, Cult, Hit) are worth more; old and forgotten ones, less. Fact: TV reruns kept shows like Star Trek alive; it flopped in its first run and triumphed in syndication.", "Dans Affaires → Streaming et Affaires → Chaîne TV → Licences. Chaque mois, elle vend des licences de tes œuvres archivées : à la TV, non exclusives (une fois par an par œuvre, elles paient 6 % de sa valeur et l'œuvre reste dans ton catalogue) ; au streaming, exclusives pour 3 ans (elles paient 16 %, mais pendant ce temps l'œuvre quitte ton catalogue et ta chaîne). Tu choisis combien d'années doivent être passées depuis la sortie (1, 2 ou 5). Les œuvres avec une bonne étiquette (Classique, Culte, Hit) valent plus ; les vieilles et oubliées, moins. Anecdote : les rediffusions ont sauvé des séries comme Star Trek, un échec à sa première diffusion devenu un triomphe en syndication.", "Em Negócio → Streaming e Negócio → Canal de TV → Licenças. Todo mês vende licenças das suas obras arquivadas: para a TV, não exclusivas (uma vez por ano por obra, pagam 6 % do valor e continuam no seu catálogo); para o streaming, exclusivas por 3 anos (pagam 16 %, mas enquanto duram saem do seu catálogo e do seu canal). Você escolhe quantos anos devem ter passado desde a estreia (1, 2 ou 5). Obras com boa etiqueta (Clássico, Cult, Hit) valem mais; as velhas e esquecidas, menos. Curiosidade: as reprises na TV mantiveram vivas séries como Star Trek, que fracassou na primeira exibição e triunfou nas reprises."],
+  ["En Negocio → Streaming y en Negocio → Canal de TV → Licencias. Cada mes vende licencias de tus obras archivadas: a la TV, una vez al año por obra (pagan el 6 % de su valor); al streaming, por 3 años (pagan el 16 %). En ambos casos tus obras siguen en tu propia plataforma y en tu canal; solo salen si vendes todos los derechos. Eliges cuántos años deben haber pasado desde el estreno (1, 2 o 5). Las obras con buena etiqueta (Clásico, Culto, Hit) valen más; las viejas y olvidadas, menos. Dato: las reposiciones en TV mantuvieron vivas series como Star Trek, que fracasó en su primera emisión y triunfó en reestrenos.", "In Business → Streaming and Business → TV channel → Licenses. Every month it sells licenses for your archived works: to TV, once a year per work (they pay 6 % of its value); to streaming, for 3 years (they pay 16 %). Either way your works stay on your own platform and your channel; they only leave if you sell all the rights. You choose how many years must have passed since release (1, 2 or 5). Works with a good label (Classic, Cult, Hit) are worth more; old and forgotten ones, less. Fact: TV reruns kept shows like Star Trek alive; it flopped in its first run and triumphed in syndication.", "Dans Affaires → Streaming et Affaires → Chaîne TV → Licences. Chaque mois, elle vend des licences de tes œuvres archivées : à la TV, une fois par an par œuvre (elles paient 6 % de sa valeur) ; au streaming, pour 3 ans (elles paient 16 %). Dans les deux cas, tes œuvres restent sur ta propre plateforme et ta chaîne ; elles ne partent que si tu vends tous les droits. Tu choisis combien d'années doivent être passées depuis la sortie (1, 2 ou 5). Les œuvres avec une bonne étiquette (Classique, Culte, Hit) valent plus ; les vieilles et oubliées, moins. Anecdote : les rediffusions ont sauvé des séries comme Star Trek, un échec à sa première diffusion devenu un triomphe en syndication.", "Em Negócio → Streaming e Negócio → Canal de TV → Licenças. Todo mês vende licenças das suas obras arquivadas: para a TV, uma vez por ano por obra (pagam 6 % do valor); para o streaming, por 3 anos (pagam 16 %). Nos dois casos suas obras continuam na sua própria plataforma e no seu canal; só saem se você vender todos os direitos. Você escolhe quantos anos devem ter passado desde a estreia (1, 2 ou 5). Obras com boa etiqueta (Clássico, Cult, Hit) valem mais; as velhas e esquecidas, menos. Curiosidade: as reprises na TV mantiveram vivas séries como Star Trek, que fracassou na primeira exibição e triunfou nas reprises."],
   ["En cada obra lista para estrenar y dentro del plan de lanzamiento. Parte del marketing recomendado del asistente y suma los canales que más público dan por cada peso, hasta una cuarta parte del costo de producción y sin pasar del 30 % de tu caja, y elige la mejor semana del asistente (temporada, competencia y fechas especiales de los próximos 4 meses). Desde la obra lo aplica de una vez; dentro del plan te lo propone para que lo revises. En el plan también puedes «Seleccionar todo» el marketing o «Quitar todo». Con «Lanzamiento automático» (Manual, Solo segundo plano o Todas mis obras) las obras terminadas salen solas con ese plan. Dato: los grandes estrenos de cine suelen gastar en marketing entre la mitad y el total de su costo de producción; el plan automático es más prudente.", "On every work ready for release and inside the launch plan. It starts from the assistant's recommended marketing and adds the channels that reach the most people per dollar, up to a quarter of the production cost and never more than 30 % of your cash, and picks the assistant's best week (season, competition and special dates in the next 4 months). From the work it applies it at once; inside the plan it proposes it so you can review it. In the plan you can also «Select all» marketing or «Clear all». With «Automatic launch» (Manual, Background only or All my works) finished works go out on their own with that plan. Fact: big film releases often spend between half and all of their production cost on marketing; the auto plan is more cautious.", "Sur chaque œuvre prête à sortir et dans le plan de sortie. Il part du marketing recommandé par l'assistant et ajoute les canaux qui touchent le plus de monde par dollar, jusqu'au quart du coût de production et jamais plus de 30 % de ta trésorerie, puis choisit la meilleure semaine de l'assistant (saison, concurrence et dates spéciales des 4 prochains mois). Depuis l'œuvre, il l'applique d'un coup ; dans le plan, il te le propose pour que tu le vérifies. Dans le plan, tu peux aussi « Tout sélectionner » ou « Tout retirer ». Avec « Sortie automatique » (Manuel, Arrière-plan seulement ou Toutes mes œuvres), les œuvres terminées sortent seules avec ce plan. Anecdote : les grandes sorties de cinéma dépensent souvent en marketing entre la moitié et la totalité de leur coût de production ; le plan automatique est plus prudent.", "Em cada obra pronta para estrear e dentro do plano de lançamento. Parte do marketing recomendado pelo assistente e soma os canais que alcançam mais gente por dólar, até um quarto do custo de produção e nunca mais de 30 % do seu caixa, e escolhe a melhor semana do assistente (temporada, concorrência e datas especiais dos próximos 4 meses). Na obra aplica de uma vez; dentro do plano propõe para você revisar. No plano você também pode «Selecionar tudo» ou «Limpar tudo». Com «Lançamento automático» (Manual, Só segundo plano ou Todas as minhas obras) as obras prontas saem sozinhas com esse plano. Curiosidade: os grandes lançamentos de cinema costumam gastar em marketing entre metade e o total do custo de produção; o plano automático é mais prudente."],
   ["Salones arcade", "Arcade halls", "Salles d'arcade", "Fliperamas"],
   ["Consolas de cartuchos", "Cartridge consoles", "Consoles à cartouches", "Consoles de cartucho"],
@@ -63091,6 +63091,8 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Catálogo de obras", "Works catalog", "Catalogue des œuvres", "Catálogo de obras"],
   ["Catálogo y panel", "Catalog and panel", "Catalogue et tableau de bord", "Catálogo e painel"],
   ["Versión 1.5", "Version 1.5", "Version 1.5", "Versão 1.5"],
+  ["Licencia de 3 años a una plataforma ajena (sigue en tu catálogo y tu canal)", "3-year license to another platform (stays in your catalog and your channel)", "Licence de 3 ans à une autre plateforme (reste dans ton catalogue et ta chaîne)", "Licença de 3 anos para outra plataforma (continua no seu catálogo e no seu canal)"],
+  ["Versión 1.5.1", "Version 1.5.1", "Version 1.5.1", "Versão 1.5.1"],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -74363,10 +74365,10 @@ ACT["lic6"] = (v) => {
 function licAutoH6() {
   const a = licCfg6();
   return `<div class="c"><div class="k"><h3 style="margin:0">${L4("Venta automática de licencias", "Automatic license sales", "Vente automatique de licences", "Venda automática de licenças")}</h3>${bi("licauto")}</div><div class="m">${L4(
-    "Cada mes vende licencias de tus obras del archivo a canales y plataformas ajenas: a la TV, no exclusivas (una vez al año y siguen en tu catálogo); al streaming, exclusivas por 3 años (pagan más, pero salen de tu catálogo mientras duran).",
-    "Every month it sells licenses for your archived works to other channels and platforms: to TV, non-exclusive (once a year, they stay in your catalog); to streaming, exclusive for 3 years (they pay more, but leave your catalog while they last).",
-    "Chaque mois, elle vend des licences de tes œuvres archivées à d'autres chaînes et plateformes : à la TV, non exclusives (une fois par an, elles restent dans ton catalogue) ; au streaming, exclusives pour 3 ans (elles paient plus, mais quittent ton catalogue pendant ce temps).",
-    "Todo mês vende licenças das suas obras do arquivo a canais e plataformas alheios: para a TV, não exclusivas (uma vez por ano e continuam no seu catálogo); para o streaming, exclusivas por 3 anos (pagam mais, mas saem do seu catálogo enquanto durarem).",
+    "Cada mes vende licencias de tus obras del archivo a canales y plataformas ajenas: a la TV, una vez al año; al streaming, por 3 años (pagan más). En ambos casos tus obras siguen en tu propia plataforma y en tu canal.",
+    "Every month it sells licenses for your archived works to other channels and platforms: to TV, once a year; to streaming, for 3 years (they pay more). Either way your works stay on your own platform and your channel.",
+    "Chaque mois, elle vend des licences de tes œuvres archivées à d'autres chaînes et plateformes : à la TV, une fois par an ; au streaming, pour 3 ans (elles paient plus). Dans les deux cas, tes œuvres restent sur ta propre plateforme et ta chaîne.",
+    "Todo mês vende licenças das suas obras do arquivo a canais e plataformas alheios: para a TV, uma vez por ano; para o streaming, por 3 anos (pagam mais). Nos dois casos suas obras continuam na sua própria plataforma e no seu canal.",
   )}</div><div class="chips">${chx("lic6", "tv", L4("A la TV", "To TV", "À la TV", "Para a TV"), !!a.tv)}${chx("lic6", "sv", L4("Al streaming", "To streaming", "Au streaming", "Para o streaming"), !!a.sv)}</div><div class="m">${L4("Solo obras estrenadas hace al menos", "Only works released at least", "Seulement les œuvres sorties il y a au moins", "Só obras lançadas há pelo menos")}</div><div class="chips">${LICA6.map((y, i) => chx("lic6", "a|" + i, y + " " + (y == 1 ? L4("año", "year", "an", "ano") : L4("años", "years", "ans", "anos")), a.a == i)).join("")}</div></div>`;
 }
 const svAutoH6 = svAutoH;
@@ -74579,7 +74581,7 @@ if (typeof SCX_NO != "undefined" && !SCX_NO.includes("pjir6")) SCX_NO.push("pjir
 Object.assign(TX.es.ayuda, {
   energia: ["Energía, retiro y trabajos con rivales", "Cada talento tiene una energía de 0 a 100. Cada papel o puesto en una obra le quita 10, sea tuya o de un rival, y cada mes recupera 10 (más con el Centro de bienestar). Un talento puede estar en varios proyectos y oficios a la vez: solo queda fuera cuando gastó toda su energía o si falleció. Los retirados todavía pueden volver si les pagas un 60 % más: aparecen en las listas con esa nota. Lo mismo vale para tu avatar cuando acepta trabajos de otros estudios. Dato: en el Hollywood de los años treinta, los actores de contrato llegaban a rodar cuatro o cinco películas al año."],
   reparto6: ["Reparto con lógica", "«Reparto recomendado» y «Al mejor» buscan primero intérpretes del mismo sexo que el personaje y de una edad creíble para él (más estricta con niños y jóvenes), y después miran su nivel, su tipo de papel (acción, romance, villano, mentor, comedia, joven o dramático) frente al arquetipo del personaje y los géneros de la obra, y su costo. Ya no cambian el sexo ni el nombre del personaje para acomodar a un actor. Si nadie libre encaja, te lo dice para que ajustes la edad o busques en Ver talentos, que ahora se ordena por encaje. Las estrellas de «Encaje» usan la misma regla."],
-  licauto: ["Venta automática de licencias", "En Negocio → Streaming y en Negocio → Canal de TV → Licencias. Cada mes vende licencias de tus obras archivadas: a la TV, no exclusivas (una vez al año por obra, pagan el 6 % de su valor y siguen en tu catálogo); al streaming, exclusivas por 3 años (pagan el 16 %, pero mientras duran salen de tu catálogo y de tu canal). Eliges cuántos años deben haber pasado desde el estreno (1, 2 o 5). Las obras con buena etiqueta (Clásico, Culto, Hit) valen más; las viejas y olvidadas, menos. Dato: las reposiciones en TV mantuvieron vivas series como Star Trek, que fracasó en su primera emisión y triunfó en reestrenos."],
+  licauto: ["Venta automática de licencias", "En Negocio → Streaming y en Negocio → Canal de TV → Licencias. Cada mes vende licencias de tus obras archivadas: a la TV, una vez al año por obra (pagan el 6 % de su valor); al streaming, por 3 años (pagan el 16 %). En ambos casos tus obras siguen en tu propia plataforma y en tu canal; solo salen si vendes todos los derechos. Eliges cuántos años deben haber pasado desde el estreno (1, 2 o 5). Las obras con buena etiqueta (Clásico, Culto, Hit) valen más; las viejas y olvidadas, menos. Dato: las reposiciones en TV mantuvieron vivas series como Star Trek, que fracasó en su primera emisión y triunfó en reestrenos."],
   planauto: ["Plan automático", "En cada obra lista para estrenar y dentro del plan de lanzamiento. Parte del marketing recomendado del asistente y suma los canales que más público dan por cada peso, hasta una cuarta parte del costo de producción y sin pasar del 30 % de tu caja, y elige la mejor semana del asistente (temporada, competencia y fechas especiales de los próximos 4 meses). Desde la obra lo aplica de una vez; dentro del plan te lo propone para que lo revises. En el plan también puedes «Seleccionar todo» el marketing o «Quitar todo». Con «Lanzamiento automático» (Manual, Solo segundo plano o Todas mis obras) las obras terminadas salen solas con ese plan. Dato: los grandes estrenos de cine suelen gastar en marketing entre la mitad y el total de su costo de producción; el plan automático es más prudente."],
 });
 let FRF6 = "t";
@@ -74847,6 +74849,75 @@ Object.assign(TX.es.ayuda, {
   cofin6: ["Presupuesto acordado y cofinanciación", "Al encomendar una obra a un rival, a una filial, a un talento firmado o a un subproductor ejecutivo, eliges el presupuesto que acuerdan: Ajustado (×0,6), Normal, Amplio (×1,5) o Superproducción (×2,5). Más presupuesto da más calidad, pero no el doble. Con un rival también puedes pedir que ponga de su dinero: el 25, 40 o 50 % del costo. Tú pagas menos y, cuando la obra pasa al archivo, el rival se queda con esa misma parte de lo que ganaste. Solo acepta si tiene la caja para hacerlo. Las obras cofinanciadas aparecen en «Con rivales». Dato: muchas películas se financian así entre varios estudios para repartir el riesgo; Titanic la pagaron a medias Fox y Paramount."],
   talsolos: ["Tus talentos producen solos", "Tus talentos con contrato exclusivo y tus subproductores ejecutivos te proponen proyectos cada pocos meses (salen en las propuestas de su medio como «de tu contrato» y no te cobran los derechos). También proponen tus autores de la casa, tus showrunners, tus bandas y tus compañías aliadas. Cuando les das luz verde, ellos desarrollan y producen la obra sin que armes el equipo: tú solo decides el lanzamiento y el marketing. Para eso cada medio pide su infraestructura: en editorial, la Imprenta propia, el Taller literario, la Cadena de librerías o una Revista propia; en música, el Estudio de grabación, la Sala de conciertos, el Sello discográfico independiente o la Editorial de partituras; en teatro, el Teatro propio, la Sala de ensayos, la Sala de teatro propia o el Teatro de ópera; en cine y series, los Sets de rodaje, Stages y lotes, Soundstages o Estudios de alquiler; en videojuegos, el Estudio de gráficos, el Laboratorio de testing, el Estudio de juegos para móviles o la Empresa de efectos visuales. Sin ninguna, lo aceptado espera en la cola. Cada nivel suma obras a la vez, rapidez, calidad y ahorro. Con «Luz verde automática» aceptas solo las propuestas de tu contrato, y con «Dar luz verde» aceptas todas las pendientes de una vez. Dato: Penguin, Motown y la Royal Shakespeare Company crecieron así, con talento de la casa y talleres propios."],
 });
+const ARC6 = { 0: "p", 1: "f" };
+const arcSel6 = (b) => ARC6[b ? 1 : 0];
+const arcOk6 = (p, b) => arcSel6(b) == "t" || filOrigen5(p) == arcSel6(b);
+ACT["arc6"] = (v) => {
+  const [b, k] = String(v).split("|");
+  ARC6[+b ? 1 : 0] = ["p", "f", "c", "r", "t"].includes(k) ? k : "t";
+  fil.ar = 20;
+  return pg();
+};
+function arcH6(b) {
+  const L = S.pj.filter((p) => p.st == 4 && (!fil.pq || p.n.toLowerCase().includes(fil.pq)));
+  if (!L.length) return "";
+  const n = { p: 0, f: 0, c: 0, r: 0, t: L.length };
+  L.forEach((p) => n[filOrigen5(p)]++);
+  const lab = { p: L4("Propias", "Own", "Propres", "Próprias"), f: L4("De tus talentos", "By your talents", "De tes talents", "Dos seus talentos"), c: L4("Compradas", "Bought", "Achetées", "Compradas"), r: L4("Con rivales", "With rivals", "Avec des rivaux", "Com rivais"), t: L4("Todas", "All", "Toutes", "Todas") },
+    k = arcSel6(b),
+    vis = k == "t" ? n.t : n[k],
+    mx = fil.ar || 20;
+  return `<h3 class="sec">${L4("Archivo", "Archive", "Archives", "Arquivo")}${vis > mx ? " · " + mx + " " + L4("de", "of", "sur", "de") + " " + vis : ""}</h3><div class="c"><div class="chips">${["p", "f", "c", "r", "t"].map((x) => chx("arc6", (b ? 1 : 0) + "|" + x, `${lab[x]} <span class="m">${n[x]}</span>`, k == x)).join("")}</div>${vis ? "" : `<div class="m">${L4("No hay obras archivadas en esta división.", "No archived works in this division.", "Aucune œuvre archivée dans cette division.", "Não há obras arquivadas nesta divisão.")}</div>`}</div>`;
+}
+
+const svPropio8 = (t) => t && (t.tipo == "propio" || t.tipo == "original" || t.tipo == "filial");
+svVisibles0 = function () {
+  const L = svTitulos()
+      .map((t) => Object.assign(t, { v: svValorT(t) * svRealce(t) }))
+      .sort((a, b) => b.v - a.v),
+    cap = svCap(),
+    P = L.filter(svPropio8),
+    O = L.filter((t) => !svPropio8(t));
+  return { vis: P.concat(O.slice(0, cap)).sort((a, b) => b.v - a.v), fuera: O.slice(cap), tot: L.length, cap: cap + P.length, propias: P.length };
+};
+function filSync8() {
+  if (!S || !S.rw || !S.rv) return 0;
+  let n = 0;
+  S.rw.forEach((e) => {
+    const r = e && S.rv[e.o];
+    if (!r || !r.own || r.dead) return;
+    if (catDeRw(Object.assign({}, e), "filial")) n++;
+  });
+  if (n) SVV++;
+  return n;
+}
+on("mes", () => {
+  if (!S || S.pre) return;
+  filSync8();
+});
+const cargarS8 = cargarS;
+cargarS = function () {
+  const r = cargarS8.apply(this, arguments);
+  try {
+    filSync8();
+  } catch (e) {}
+  return r;
+};
+const vSv8 = vSv;
+vSv = function () {
+  const h = vSv8.apply(this, arguments);
+  if (!S.sv || !S.sv.on) return h;
+  const C = svVisibles();
+  return (
+    h +
+    `<div class="c"><div class="m">${L4(
+      "Tus obras están en tu plataforma desde que pasan al archivo (las originales, desde su estreno) y las de tus filiales desde que terminan su estreno. No ocupan espacio del catálogo y siguen aquí aunque vendas licencias a otros: solo salen si vendes todos los derechos.",
+      "Your works are on your platform once they go to the archive (originals, from release) and your subsidiaries' works once their release run ends. They don't take catalog space and stay here even if you sell licenses to others: they only leave if you sell all the rights.",
+      "Tes œuvres sont sur ta plateforme dès qu'elles passent aux archives (les originales, dès leur sortie) et celles de tes filiales dès la fin de leur exploitation. Elles ne prennent pas de place au catalogue et restent même si tu vends des licences : elles ne partent que si tu vends tous les droits.",
+      "Suas obras ficam na sua plataforma quando vão para o arquivo (as originais, desde a estreia) e as das suas filiais quando termina a exibição. Não ocupam espaço do catálogo e continuam aqui mesmo se você vender licenças: só saem se você vender todos os direitos.",
+    )} ${L4("Ahora: # tuyas y de tus filiales.", "Now: # yours and your subsidiaries'.", "Maintenant : # à toi et à tes filiales.", "Agora: # suas e das suas filiais.").replace("#", C.propias || 0)}</div></div>`
+  );
+};
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {
   const t = document.getElementById("top"),

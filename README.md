@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.5
+## INDUSTRY ART · versión 1.5.1
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -58,8 +58,9 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Retirados que vuelven**: un talento retirado puede regresar si le pagas un 60 % más; los retirados también envejecen y mueren.
 - **Personajes de otras obras** resaltados en el reparto, con un índice para llegar a ellos.
 - **Plan automático**: elige el marketing y la mejor fecha; en el plan puedes seleccionar o quitar todo el marketing, y el lanzamiento automático saca solas las obras terminadas.
-- **Archivo de segundo plano**: las obras de fondo tienen su propio archivo.
-- **Venta automática de licencias** a la TV (no exclusiva) y al streaming (exclusiva por 3 años).
+- **Archivo con divisiones**: el archivo de la línea de producción también se divide en propias, de tus talentos, compradas y con rivales (en «Segundo plano» abre en «De tus talentos»).
+- **Venta automática de licencias** a la TV (cada año) y al streaming (por 3 años). Vender licencias ya no saca tus obras de tu propia plataforma ni de tu canal.
+- **Tu plataforma y tu canal muestran siempre tus obras y las de tus filiales** (también las que tus filiales estrenaron antes de que las compraras), sin ocupar espacio del catálogo.
 - **Rivales que adaptan obras de dominio público**.
 - **Títulos**: diccionario más grande, con palabras poco conocidas y de otros idiomas, títulos más breves y sin repetirse.
 - **Tus talentos proponen**: los talentos con contrato exclusivo y los subproductores ejecutivos te proponen proyectos cada pocos meses; con «Dar luz verde» o la luz verde automática, los producen ellos mismos.
@@ -93,7 +94,7 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.5 están en `entregables/`.
+Los paquetes de la versión 1.5.1 están en `entregables/`.
 
 ### Lanzamiento
 
