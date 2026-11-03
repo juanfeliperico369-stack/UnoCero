@@ -859,7 +859,7 @@ html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 
 .c.peri .peri-t::first-letter{color:#7a1f12!important}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.5.2";
+const VERN = "1.5.3";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -16335,7 +16335,7 @@ function cuotas() {
     if (k == "Major" && S.ymaj == null) S.ymaj = yr();
   }
   const mm = s.findIndex((x, m) => x > 0.35 && t[m] > 20000000);
-  if (mm >= 0 && !S.atr) {
+  if (mm >= 0 && !S.atr && (S.atY == null || yr() - S.atY >= 5)) {
     S.atr = { m: mm, s: s[mm], y: yr(), seen: 0 };
     S.atrN = (S.atrN | 0) + 1;
     pausa("antimonopolio");
@@ -16370,8 +16370,8 @@ function atrRes(v) {
     S.atp = yr() + 1;
     nws("Antimonopolio: pagas una multa y tu prestigio cae.");
   }
-  if (S.atY != null && yr() - S.atY <= 5) {
-    S.atD = { m: a.m, h: S.t + 156, k: S.atD && S.atD.m == a.m && S.t < S.atD.h ? 1.1 : 0.7 };
+  if (S.atY != null && yr() - S.atY <= 5 && R() < 0.35) {
+    S.atD = { m: a.m, h: S.t + 104, k: 0.4 };
     S.ow.forEach((x, i) => {
       if (x) {
         capital(thc(i) * 0.5);
@@ -16379,8 +16379,8 @@ function atrRes(v) {
         S.ag[i] = 1;
       }
     });
-    nws("Antimonopolio: decreto de 3 a\u00F1os; tus estrenos de " + MD[a.m][0].toLowerCase() + " llegan a menos p\u00FAblico.");
-    bit("Decreto antimonopolio en " + MD[a.m][0].toLowerCase() + " por 3 a\u00F1os.");
+    nws(L4("Antimonopolio: decreto de 2 años; tus estrenos de # llegan a menos público.", "Antitrust: a 2-year decree; your # releases reach a smaller audience.", "Antitrust : décret de 2 ans ; tes sorties de # touchent moins de public.", "Antitruste: decreto de 2 anos; seus lançamentos de # chegam a menos público.").replace("#", MD[a.m][0].toLowerCase()));
+    bit("Decreto antimonopolio en " + MD[a.m][0].toLowerCase() + " por 2 a\u00F1os.");
   }
   S.atY = yr();
   S.atr = null;
@@ -33674,7 +33674,6 @@ ACT["buy"] = (v) => {
   const p = precioR(r),
     h = S.sh[S.sh.length - 1],
     mi = h ? h.c : 0;
-  if (cuotaR(i) + mi > 0.35) return toast("La autoridad antimonopolio no aprueba la compra");
   if (S.cash < p) return toast("Fondos insuficientes");
   capital(-p);
   r.own = 1;
@@ -34070,7 +34069,7 @@ ${r.dead ? `<div class="c sub aviso">${r.fus != null && S.rv[r.fus] ? "Fusionado
 <h3>Franquicias</h3><div class="m">${(r.hits || []).map(esc).join(" \u00B7 ") || "Ninguna por ahora."}</div>
 <h3>Próximos estrenos</h3>${q.map((x) => `<div class="fila"><span>«${esc(x.n)}» · ${MD[x.m][0]}</span><span class="m">${fD(semIni(x.t))}</span></div>`).join("") || '<div class="m">Nada anunciado.</div>'}
 <h3>Talentos trabajando con ellos</h3>${tl.map((t) => `<button class="fila lista" data-a="tp" data-v="${t.id}"><span>${esc(t.n)} · ${RO[t.r]}</span><span class="m">${t.s[t.r]}</span></button>`).join("") || '<div class="m">Nadie ahora mismo.</div>'}
-${r.dead || r.ind ? "" : `<div class="bts" style="margin-top:8px">${r.own ? '<span class="m">Es tu filial.</span>' : bt("buy", i, bloq ? "Comprar (bloqueado por antimonopolio)" : "Comprar \u00B7 " + fm(p), !bloq && S.cash >= p ? "a" : "off")}${bt("ivb", i, "Invertir 10 %")}</div>`}</div>`);
+${r.dead || r.ind ? "" : `<div class="bts" style="margin-top:8px">${r.own ? '<span class="m">Es tu filial.</span>' : bt("buy", i, "Comprar \u00B7 " + fm(p) + (bloq ? " \u00B7 " + L4("con riesgo antimonopolio", "antitrust risk", "risque antitrust", "risco antitruste") : ""), S.cash >= p ? "a" : "off")}${bt("ivb", i, "Invertir 10 %")}</div>`}</div>`);
 }
 ACT["rvp"] = (v) => rvP(+v);
 const filCosto = (r) => Math.round((valR(r) * 0.02) / 12);
@@ -54557,9 +54556,9 @@ function vMerc() {
   const fila = ([i, r]) => {
     const pr = precioR(r),
       bloq = cuotaR(i) + (S.sh.length ? S.sh[S.sh.length - 1].c : 0) > 0.35;
-    return `<div class="fila"><span><button class="lnk" data-a="rvp" data-v="${i}">${esc(r.n)}</button><br><span class="m">${dual("bolsa", "stock")} ${Math.round(r.px * 100)} · ${dual("cuota", "share")} ${pct(cuotaR(i), 1)}${r.own ? " · " + dual("tu filial", "your subsidiary") : ""}</span></span><span class="bts">${r.own ? "" : bt("buy", i, (bloq ? dual("Antimonopolio", "Antitrust") : dual("Comprar", "Buy")) + " · " + fm(pr), !bloq && S.cash >= pr ? "a" : "off")}${bt("ivb", i, dual("Invertir 10 %", "Invest 10%"))}</span></div>`;
+    return `<div class="fila"><span><button class="lnk" data-a="rvp" data-v="${i}">${esc(r.n)}</button><br><span class="m">${dual("bolsa", "stock")} ${Math.round(r.px * 100)} · ${dual("cuota", "share")} ${pct(cuotaR(i), 1)}${r.own ? " · " + dual("tu filial", "your subsidiary") : ""}</span></span><span class="bts">${r.own ? "" : bt("buy", i, dual("Comprar", "Buy") + " · " + fm(pr) + (bloq ? " ⚠" : ""), S.cash >= pr ? "a" : "off")}${bt("ivb", i, dual("Invertir 10 %", "Invest 10%"))}</span></div>`;
   };
-  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("dinero")} ${regEN("Mercado", "Market")}</h3></div><div class="m">${dual("Aquí se compra todo: estudios rivales, cadenas de cines, canales, plataformas, negocios y bancos. Pasar del 35 % de un mercado abre una investigación antimonopolio y multas.", "Everything is for sale here: rival studios, cinema chains, channels, platforms, businesses and banks. Going over 35% of a market opens an antitrust investigation and fines.")}</div><div class="g" style="margin-top:6px"><div><div class="m">${dual("Tu patrimonio", "Your net worth")}</div><b>${fm(p)}</b></div><div><div class="m">${dual("Tu cuota", "Your share")}</div><b>${pct(q.s, 1)}</b></div><div><div class="m">${dual("Filiales", "Subsidiaries")}</div><b>${dueno}</b></div><div><div class="m">${dual("Cines propios", "Own cinemas")}</div><b>${pct(totCin, 1)}</b></div></div></div>
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("dinero")} ${regEN("Mercado", "Market")}</h3>${bi("monopolio")}</div><div class="m">${L4("Aquí se compra todo, sin límites: estudios rivales, cadenas de cines, canales, plataformas, negocios y bancos. Con más del 35 % de un mercado puede llegar una investigación antimonopolio con multa, como mucho una cada 5 años. ⚠ = esa compra te pasaría del 35 %.", "Everything is for sale here, with no limits: rival studios, cinema chains, channels, platforms, businesses and banks. With more than 35% of a market an antitrust investigation with a fine may come, at most once every 5 years. ⚠ = that purchase would take you over 35%.", "Ici tout s'achète, sans limite : studios rivaux, chaînes de cinéma, chaînes, plateformes, entreprises et banques. Avec plus de 35 % d'un marché, une enquête antitrust avec amende peut arriver, au plus une fois tous les 5 ans. ⚠ = cet achat te ferait dépasser 35 %.", "Aqui se compra tudo, sem limites: estúdios rivais, redes de cinema, canais, plataformas, negócios e bancos. Com mais de 35 % de um mercado pode chegar uma investigação antitruste com multa, no máximo uma a cada 5 anos. ⚠ = essa compra levaria você acima de 35 %.")}</div><div class="g" style="margin-top:6px"><div><div class="m">${dual("Tu patrimonio", "Your net worth")}</div><b>${fm(p)}</b></div><div><div class="m">${dual("Tu cuota", "Your share")}</div><b>${pct(q.s, 1)}</b></div><div><div class="m">${dual("Filiales", "Subsidiaries")}</div><b>${dueno}</b></div><div><div class="m">${dual("Cines propios", "Own cinemas")}</div><b>${pct(totCin, 1)}</b></div></div></div>
 <div class="c"><h3 style="margin:0 0 6px">${dual("Estudios en la bolsa", "Listed studios")}</h3>${rv.sort((a, b) => valR(b[1]) - valR(a[1])).map(fila).join("")}</div>
 <div class="c"><h3 style="margin:0 0 6px">${dual("Otros mercados", "Other markets")}</h3><div class="bts">${bt("sec", "4|2", ic("cine") + " " + dual("Cadenas de cines", "Cinema chains"))}${bt("sec", "4|4", ic("edificio") + " " + dual("Imperio", "Empire"))}${bt("sec", "4|8", ic("negocio") + " " + dual("Negocios", "Businesses"))}${bt("sec", "4|9", ic("grafica") + " " + dual("Inversiones", "Investments"))}${bt("sec", "4|1", ic("dinero") + " " + dual("Bancos", "Banks"))}${bt("sec", "4|3", ic("cine") + " " + dual("Canales de TV", "TV channels"))}${bt("sec", "4|7", ic("cine") + " Streaming")}</div></div>`;
 }
@@ -55562,10 +55561,7 @@ ACT["ban"] = (v) => {
   const p = banP(i);
   if (S.cash < p) return toast(dual("Fondos insuficientes", "Insufficient funds"));
   const nb = Object.keys(S.ban40).length;
-  if (nb >= 3 && !S.banOk) {
-    S.banOk = 1;
-    return toast(dual("Antimonopolio: con más de 3 bancos pagarás multas. Toca otra vez para comprar igual.", "Antitrust: with more than 3 banks you'll pay fines. Tap again to buy anyway."));
-  }
+  if (nb >= 3) toast(L4("Con más de 3 bancos pagarás una multa antimonopolio al año.", "With more than 3 banks you'll pay an antitrust fine once a year.", "Avec plus de 3 banques, tu paieras une amende antitrust par an.", "Com mais de 3 bancos você pagará uma multa antitruste por ano."));
   S.banOk = 0;
   capital(-p);
   S.ban40[i] = S.t;
@@ -55578,10 +55574,11 @@ on("mes", () => {
   const L = Object.keys(S.ban40).map(Number);
   if (!L.length) return;
   gana("finanzas", Math.round(L.reduce((s, i) => s + banP(i) * 0.004, 0)));
-  if (L.length > 3) {
-    const multa = Math.round(banP(0) * 0.05 * (L.length - 3) * (1 - 0.3 * dirN("leg")));
+  if (L.length > 3 && S.t - (S.banM9 == null ? -999 : S.banM9) >= 52) {
+    S.banM9 = S.t;
+    const multa = Math.round(banP(0) * 0.3 * (L.length - 3) * (1 - 0.3 * dirN("leg")));
     gasta("legal", multa);
-    if (R() < 0.25) nws(dual(`Multa antimonopolio a ${S.sn} por concentrar bancos: ${fm(multa)}.`, `Antitrust fine for ${S.sn} for owning too many banks: ${fm(multa)}.`));
+    nws(dual(`Multa antimonopolio a ${S.sn} por concentrar bancos: ${fm(multa)}.`, `Antitrust fine for ${S.sn} for owning too many banks: ${fm(multa)}.`));
   }
 });
 const EXC = [
@@ -55731,7 +55728,7 @@ vMerc = function () {
     ? `<div class="c"><h3 style="margin:0 0 6px">${ic("cine")} ${regEN("Tus redes de videojuegos", "Your game networks")}</h3><div class="m">${dual("Con tu propia consola, tienda móvil o nube, tus juegos venden 5 % más cada una y su vida en plataformas rinde mucho más.", "With your own console, mobile store or cloud, your games sell 5% more each and their platform life earns much more.")}</div>${gn.map((g) => `<div class="fila"><span>${esc(dual(g[1], g[2]))}<span class="m"> · ${dual("desde", "since")} ${g[3]}</span></span>${S.gnet && S.gnet[g[0]] ? `<b style="color:var(--a)">${dual("tuya", "yours")}</b>` : bt("gnet", g[0], dual("Lanzar", "Launch") + " · " + fm(gnetC(g)), S.cash >= gnetC(g) ? "a" : "off")}</div>`).join("")}</div>`
     : "";
   const dir = dirCardH();
-  const ban = `<div class="c"><h3 style="margin:0 0 6px">${ic("dinero")} ${regEN("Bancos", "Banks")}</h3><div class="m">${dual("Cada banco paga dividendos cada mes. Más de 3 bancos activan multas antimonopolio.", "Each bank pays monthly dividends. More than 3 banks trigger antitrust fines.")}</div>${BANCOS.map((n, i) => `<div class="fila"><span>${esc(n)}</span>${S.ban40 && S.ban40[i] ? `<b style="color:var(--a)">${dual("tuyo", "yours")}</b>` : bt("ban", i, dual("Comprar", "Buy") + " · " + fm(banP(i)), S.cash >= banP(i) ? "" : "off")}</div>`).join("")}</div>`;
+  const ban = `<div class="c"><h3 style="margin:0 0 6px">${ic("dinero")} ${regEN("Bancos", "Banks")}</h3><div class="m">${L4("Cada banco paga dividendos cada mes. Puedes comprarlos todos; con más de 3 pagas una multa antimonopolio al año.", "Each bank pays monthly dividends. You can buy them all; with more than 3 you pay an antitrust fine once a year.", "Chaque banque verse des dividendes chaque mois. Tu peux toutes les acheter ; avec plus de 3, tu paies une amende antitrust par an.", "Cada banco paga dividendos todo mês. Você pode comprar todos; com mais de 3 paga uma multa antitruste por ano.")}</div>${BANCOS.map((n, i) => `<div class="fila"><span>${esc(n)}</span>${S.ban40 && S.ban40[i] ? `<b style="color:var(--a)">${dual("tuyo", "yours")}</b>` : bt("ban", i, dual("Comprar", "Buy") + " · " + fm(banP(i)), S.cash >= banP(i) ? "" : "off")}</div>`).join("")}</div>`;
   return vMercBase.apply(this, arguments) + red + dir + ban;
 };
 regENL([
@@ -63094,6 +63091,27 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Licencia de 3 años a una plataforma ajena (sigue en tu catálogo y tu canal)", "3-year license to another platform (stays in your catalog and your channel)", "Licence de 3 ans à une autre plateforme (reste dans ton catalogue et ta chaîne)", "Licença de 3 anos para outra plataforma (continua no seu catálogo e no seu canal)"],
   ["Versión 1.5.1", "Version 1.5.1", "Version 1.5.1", "Versão 1.5.1"],
   ["Versión 1.5.2", "Version 1.5.2", "Version 1.5.2", "Versão 1.5.2"],
+  ["Reestrenos", "Re-releases", "Ressorties", "Relançamentos"],
+  ["En Obras → Proyectos, sobre el archivo. Una obra se puede reestrenar cuando pasaron 5 años desde su último estreno; cuesta la mitad de un marketing básico y rinde más si tiene buena fama («Invaluable», «Clásico», «Culto» o «Hit»). «Reestrenar las que conviene» elige las mejores: deja fuera las que guardas en la bóveda (ganan +8 al salir después de 5 años guardadas) y las de mala fama («Podrida», u «Olvidado» si no está remasterizada). Reestrena las 2 mejores de cada medio y deja en cola las 2 siguientes, que salen de a una por medio cada mes, para que no compitan entre sí. Con «Reestreno automático» encendido, reestrena la mejor disponible de cada medio como máximo una vez cada 3 meses. Nunca gasta más del 20 % de tu caja en un reestreno. Dato: Disney guardaba sus clásicos en una «bóveda» y los volvía a estrenar cada siete años para una nueva generación de niños; Blancanieves volvió a los cines varias veces entre 1944 y 1993.", "In Works → Projects, above the archive. A work can be re-released 5 years after its last release; it costs half of a basic marketing push and earns more if it has a good reputation («Priceless», «Classic», «Cult» or «Hit»). «Re-release the ones worth it» picks the best: it leaves out the ones you keep in the vault (they gain +8 when they come out after 5 years stored) and the ones with a bad reputation («Rotten», or «Forgotten» unless remastered). It re-releases the 2 best of each medium and queues the next 2, which go out one per medium each month so they don't compete with each other. With «Automatic re-release» on, it re-releases the best available work in each medium at most once every 3 months. It never spends more than 20 % of your cash on one re-release. Fact: Disney kept its classics in a «vault» and re-released them every seven years for a new generation of children; Snow White returned to theaters several times between 1944 and 1993.", "Dans Œuvres → Projets, au-dessus des archives. Une œuvre peut ressortir 5 ans après sa dernière sortie ; cela coûte la moitié d'un marketing de base et rapporte plus si elle a bonne réputation (« Inestimable », « Classique », « Culte » ou « Hit »). « Ressortir celles qui valent la peine » choisit les meilleures : elle laisse de côté celles que tu gardes dans le coffre (elles gagnent +8 en sortant après 5 ans) et celles de mauvaise réputation (« Pourri », ou « Oublié » si elle n'est pas remastérisée). Elle ressort les 2 meilleures de chaque média et met les 2 suivantes en file, qui sortent une par média chaque mois pour éviter qu'elles se fassent concurrence. Avec « Ressortie automatique », elle ressort la meilleure œuvre disponible de chaque média au plus une fois tous les 3 mois. Elle ne dépense jamais plus de 20 % de ta trésorerie pour une ressortie. Anecdote : Disney gardait ses classiques dans un « coffre » et les ressortait tous les sept ans pour une nouvelle génération d'enfants ; Blanche-Neige est revenue au cinéma plusieurs fois entre 1944 et 1993.", "Em Obras → Projetos, acima do arquivo. Uma obra pode ser relançada 5 anos depois do último lançamento; custa metade de um marketing básico e rende mais se tiver boa fama («Inestimável», «Clássico», «Cult» ou «Hit»). «Relançar as que valem a pena» escolhe as melhores: deixa de fora as que você guarda no cofre (ganham +8 ao sair depois de 5 anos guardadas) e as de má fama («Podre», ou «Esquecido» se não estiver remasterizada). Relança as 2 melhores de cada meio e põe as 2 seguintes na fila, que saem uma por meio a cada mês, para que não concorram entre si. Com «Relançamento automático» ligado, relança a melhor disponível de cada meio no máximo uma vez a cada 3 meses. Nunca gasta mais de 20 % do seu caixa num relançamento. Curiosidade: a Disney guardava seus clássicos num «cofre» e os relançava a cada sete anos para uma nova geração de crianças; Branca de Neve voltou aos cinemas várias vezes entre 1944 e 1993."],
+  ["Versión 1.5.3", "Version 1.5.3", "Version 1.5.3", "Versão 1.5.3"],
+  ["Invaluable", "Priceless", "Inestimable", "Inestimável"],
+  ["Culto", "Cult", "Culte", "Cult"],
+  ["Olvidado", "Forgotten", "Oublié", "Esquecido"],
+  ["Podrida", "Rotten", "Pourri", "Podre"],
+  ["Monopolio", "Monopoly", "Monopole", "Monopólio"],
+  ["Controla más del 60 % de un mercado", "Control more than 60% of a market", "Contrôle plus de 60 % d'un marché", "Controle mais de 60 % de um mercado"],
+  ["Dueño de la banca", "Owner of the bank", "Maître de la banque", "Dono da banca"],
+  ["Compra todos los bancos", "Buy every bank", "Achète toutes les banques", "Compre todos os bancos"],
+  ["El monopolio más grande", "The biggest monopoly", "Le plus grand monopole", "O maior monopólio"],
+  ["Compra a todos los estudios rivales que siguen abiertos", "Buy every rival studio still open", "Achète tous les studios rivaux encore ouverts", "Compre todos os estúdios rivais ainda abertos"],
+  ["Comprarlo todo y el antimonopolio", "Buying everything and antitrust", "Tout acheter et l'antitrust", "Comprar tudo e o antitruste"],
+  ["En Negocio → Imperio puedes comprar a todos los estudios rivales, todas las cadenas de cines, canales, plataformas, negocios y todos los bancos: no hay compras bloqueadas. Si una compra te pasaría del 35 % de un mercado, el botón lo avisa. Con más del 35 % puede llegar una investigación antimonopolio, como mucho una cada 5 años: eliges entre vender tus cines o pagar una multa (el 10 % de tu caja y prestigio). Si te investigan de nuevo, a veces llega además un decreto de 2 años que reduce el público de tus estrenos en ese medio. Con más de 3 bancos pagas una multa al año. Hay logros por controlar más del 60 % de un mercado, por tener todos los bancos y por comprar a todos los rivales: el monopolio más grande. Dato: en 1948 el fallo «Paramount» de la Corte Suprema de EE. UU. obligó a los grandes estudios a vender sus cines; esa regla se levantó en 2020.", "In Business → Empire you can buy every rival studio, every cinema chain, channel, platform, business and every bank: no purchase is blocked. If a purchase would take you over 35% of a market, the button warns you. With more than 35% an antitrust investigation may come, at most once every 5 years: you choose between selling your cinemas or paying a fine (10% of your cash and prestige). If you're investigated again, sometimes a 2-year decree also comes and shrinks the audience of your releases in that medium. With more than 3 banks you pay a fine once a year. There are achievements for controlling more than 60% of a market, for owning every bank and for buying every rival: the biggest monopoly. Fact: in 1948 the US Supreme Court's «Paramount» ruling forced the big studios to sell their cinemas; that rule was lifted in 2020.", "Dans Affaires → Empire, tu peux acheter tous les studios rivaux, toutes les chaînes de cinéma, chaînes, plateformes, entreprises et toutes les banques : aucun achat n'est bloqué. Si un achat te ferait dépasser 35 % d'un marché, le bouton te prévient. Au-delà de 35 %, une enquête antitrust peut arriver, au plus une fois tous les 5 ans : tu choisis entre vendre tes cinémas ou payer une amende (10 % de ta trésorerie et du prestige). Si tu es à nouveau visé, il arrive parfois en plus un décret de 2 ans qui réduit le public de tes sorties dans ce média. Avec plus de 3 banques, tu paies une amende par an. Des succès récompensent le contrôle de plus de 60 % d'un marché, la possession de toutes les banques et l'achat de tous les rivaux : le plus grand monopole. Anecdote : en 1948, l'arrêt « Paramount » de la Cour suprême des États-Unis a obligé les grands studios à vendre leurs cinémas ; cette règle a été levée en 2020.", "Em Negócio → Império você pode comprar todos os estúdios rivais, todas as redes de cinema, canais, plataformas, negócios e todos os bancos: nenhuma compra é bloqueada. Se uma compra levaria você acima de 35 % de um mercado, o botão avisa. Com mais de 35 % pode chegar uma investigação antitruste, no máximo uma a cada 5 anos: você escolhe entre vender seus cinemas ou pagar uma multa (10 % do seu caixa e prestígio). Se for investigado de novo, às vezes chega também um decreto de 2 anos que reduz o público dos seus lançamentos nesse meio. Com mais de 3 bancos você paga uma multa por ano. Há conquistas por controlar mais de 60 % de um mercado, por ter todos os bancos e por comprar todos os rivais: o maior monopólio. Curiosidade: em 1948 a decisão «Paramount» da Suprema Corte dos EUA obrigou os grandes estúdios a vender seus cinemas; essa regra foi revogada em 2020."],
+  ["Japonés", "Japanese", "Japonais", "Japonês"],
+  ["Chino", "Chinese", "Chinois", "Chinês"],
+  ["Coreano", "Korean", "Coréen", "Coreano"],
+  ["Hindi", "Hindi", "Hindi", "Hindi"],
+  ["Árabe", "Arabic", "Arabe", "Árabe"],
+  ["Ruso", "Russian", "Russe", "Russo"],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -71530,7 +71548,10 @@ function scxGuarda(b) {
   if (!raiz) return null;
   const A = [],
     a0 = scxAncla(b, raiz);
-  if (a0) A.push(a0);
+  if (a0) {
+    a0.tap = 1;
+    A.push(a0);
+  }
   const r0 = b.getBoundingClientRect().top,
     vh = innerHeight;
   const tarjeta = b.closest && b.closest(".c");
@@ -71609,7 +71630,7 @@ function scxFija(c) {
     }
     if (!el || !el.getClientRects().length) continue;
     const d = el.getBoundingClientRect().top - k.top;
-    if (Math.abs(d) > innerHeight * 0.9) continue;
+    if (!k.tap && Math.abs(d) > innerHeight * 0.9) continue;
     if (Math.abs(d) > 2) {
       if (c.enHoja) hj.scrollTop += d;
       else {
@@ -74983,6 +75004,236 @@ vSv = function () {
       "Suas obras ficam na sua plataforma quando vão para o arquivo (as originais, desde a estreia) e as das suas filiais quando termina a exibição. Não ocupam espaço do catálogo e continuam aqui mesmo se você vender licenças: só saem se você vender todos os direitos.",
     )} ${L4("Ahora: # tuyas y de tus filiales.", "Now: # yours and your subsidiaries'.", "Maintenant : # à toi et à tes filiales.", "Agora: # suas e das suas filiais.").replace("#", C.propias || 0)}</div></div>`
   );
+};
+const rrMk9 = (P) => (P.m == 0 ? [1, 4] : [1]);
+const rrCosto9 = (P) => Math.round(mkTot(rrMk9(P), P) * 0.5);
+const rrDisp9 = () => S.pj.filter((P) => P.st == 4 && !P.sold && P.rt != null && S.t - P.rt >= 260);
+const RRB9 = { Invaluable: 15, Clásico: 12, Culto: 10, Hit: 6, Pop: 4, Fresco: 2, Olvidado: 0, Podrida: -8 };
+const rrConv9 = (P) => {
+  const k = lab(P);
+  return P.bov == null && k != "Podrida" && (k != "Olvidado" || P.rem);
+};
+const rrValor9 = (P) => (RRB9[lab(P)] || 0) + (P.rem ? 4 : 0) + Math.log10(1 + (P.gR || P.gross || 0)) * 0.5;
+const rrCfg9 = () => (S.rr9 = Object.assign({ on: 0, q: [] }, S.rr9 || {}));
+function rrHaz9(P) {
+  if (!P || P.st != 4 || P.sold) return false;
+  const c = rrCosto9(P);
+  if (c > Math.max(0, S.cash) * 0.2) return false;
+  const pg0 = pg;
+  pg = () => null;
+  try {
+    ACT["rr"](P.id);
+  } finally {
+    pg = pg0;
+  }
+  if (P.st == 3) P.rr9 = 1;
+  return P.st == 3;
+}
+function rrLote9(L, porMedio) {
+  const usados = {};
+  let n = 0;
+  const resto = [];
+  L.forEach((P) => {
+    if ((usados[P.m] | 0) >= porMedio || !rrHaz9(P)) {
+      if (P.st == 4) resto.push(P.id);
+      return;
+    }
+    usados[P.m] = (usados[P.m] | 0) + 1;
+    n++;
+  });
+  return { n, resto };
+}
+ACT["rrtodo9"] = () => {
+  const a = rrCfg9(),
+    L = rrDisp9()
+      .filter(rrConv9)
+      .sort((x, y) => rrValor9(y) - rrValor9(x));
+  if (!L.length) return toast(L4("No hay obras que convenga reestrenar ahora", "No works worth re-releasing right now", "Aucune œuvre à ressortir pour l'instant", "Não há obras que valha a pena relançar agora"));
+  const r = rrLote9(L, 2),
+    porM = {},
+    sig = r.resto.filter((id) => {
+      const P = pj(id);
+      if (!P || (porM[P.m] | 0) >= 2) return false;
+      porM[P.m] = (porM[P.m] | 0) + 1;
+      return true;
+    });
+  r.resto = sig;
+  a.q = uniq((a.q || []).concat(sig));
+  toast(
+    (r.n == 1 ? L4("1 obra se reestrena", "1 work is re-released", "1 œuvre ressort", "1 obra é relançada") : L4("# obras se reestrenan", "# works are re-released", "# œuvres ressortent", "# obras são relançadas").replace("#", r.n)) +
+      (r.resto.length ? L4(" · # en cola para los próximos meses", " · # queued for the coming months", " · # en file pour les prochains mois", " · # na fila para os próximos meses").replace("#", r.resto.length) : ""),
+  );
+  return pg();
+};
+ACT["rrauto9"] = () => {
+  const a = rrCfg9();
+  a.on = a.on ? 0 : 1;
+  return pg();
+};
+ACT["rrcola9"] = () => {
+  rrCfg9().q = [];
+  return pg();
+};
+on("mes", () => {
+  if (!S || S.pre || S.taller || !S.rr9) return;
+  const a = rrCfg9(),
+    cola = (a.q || []).map((id) => pj(id)).filter((P) => P && P.st == 4 && !P.sold && rrConv9(P));
+  a.u = a.u || {};
+  let L = cola;
+  if (a.on) L = uniq(cola.concat(rrDisp9().filter((P) => rrConv9(P) && S.t - (a.u[P.m] == null ? -999 : a.u[P.m]) >= 13).sort((x, y) => rrValor9(y) - rrValor9(x))));
+  if (!L.length) {
+    a.q = [];
+    return;
+  }
+  const r = rrLote9(L, 1);
+  L.forEach((P) => {
+    if (P.st == 3 && P.rr9 && P.rt == S.t) a.u[P.m] = S.t;
+  });
+  a.q = r.resto.filter((id) => (a.q || []).includes(id));
+});
+function rrH9() {
+  const D = rrDisp9(),
+    a = rrCfg9();
+  if (!D.length && !a.on && !(a.q || []).length) return "";
+  const C = D.filter(rrConv9),
+    bov = D.filter((P) => P.bov != null).length,
+    mal = D.length - C.length - bov,
+    q = (a.q || []).filter((id) => {
+      const P = pj(id);
+      return P && P.st == 4;
+    }).length;
+  const det = [L4("# disponibles", "# available", "# disponibles", "# disponíveis").replace("#", D.length), L4("# conviene", "# worth it", "# valent la peine", "# valem a pena").replace("#", C.length)];
+  if (bov) det.push(L4("# en la bóveda", "# in the vault", "# dans le coffre", "# no cofre").replace("#", bov));
+  if (mal) det.push(L4("# con mala fama", "# with a bad reputation", "# avec une mauvaise réputation", "# com má fama").replace("#", mal));
+  if (q) det.push(L4("# en cola", "# queued", "# en file", "# na fila").replace("#", q));
+  return `<div class="c"><div class="k"><b>${L4("Reestrenos", "Re-releases", "Ressorties", "Relançamentos")}</b>${bi("reestreno9")}</div><div class="m">${det.join(" · ")}</div><div class="bts">${C.length ? bt("rrtodo9", "", L4("Reestrenar las que conviene", "Re-release the ones worth it", "Ressortir celles qui valent la peine", "Relançar as que valem a pena"), "a") : ""}${q ? bt("rrcola9", "", L4("Vaciar la cola", "Clear the queue", "Vider la file", "Esvaziar a fila")) : ""}</div><div class="chips">${chx("rrauto9", "", L4("Reestreno automático", "Automatic re-release", "Ressortie automatique", "Relançamento automático"), !!a.on)}</div></div>`;
+}
+const arcH9 = arcH6;
+arcH6 = function (b) {
+  const h = arcH9.apply(this, arguments);
+  return h ? h + rrH9() : h;
+};
+function filTv9() {
+  const c = S.cb;
+  if (!c || !c.on || !c.par) return 0;
+  const F = catL().filter((x) => x.src == "filial");
+  if (!F.length) return 0;
+  try {
+    tvAuto(true);
+  } catch (e) {}
+  const ctx = tvCtx(),
+    uso = {};
+  c.par.forEach((dd) => dd.forEach((v) => v != null && (uso[v] = (uso[v] || 0) + 1)));
+  let n = 0;
+  for (let d = 0; d < c.par.length; d++)
+    for (let j = 0; j < c.par[d].length; j++) {
+      const v0 = c.par[d][j];
+      if (v0 == null || String(v0).slice(0, 2) != "g:") continue;
+      const r0 = tvEval(c, d, j, v0, ctx, false),
+        b0 = r0 ? r0.ing - r0.gas * 0.9 : -1e18;
+      let best = null,
+        bv = b0;
+      F.forEach((x) => {
+        const r = tvEval(c, d, j, x.id, ctx, false);
+        if (!r) return;
+        const v = (r.ing - r.multa * 1.5) * Math.pow(0.7, uso[x.id] || 0);
+        if (v > bv) {
+          bv = v;
+          best = x.id;
+        }
+      });
+      if (best != null) {
+        c.par[d][j] = best;
+        uso[best] = (uso[best] || 0) + 1;
+        n++;
+      }
+    }
+  return n;
+}
+const buy9 = ACT["buy"];
+ACT["buy"] = (v) => {
+  const r0 = S.rv[+v],
+    antes = !!(r0 && r0.own);
+  const res = buy9(v);
+  const r = S.rv[+v];
+  if (r && r.own && !antes) {
+    filSync8();
+    SVV++;
+    const k = catL().filter((x) => x.src == "filial" && x.o == +v).length,
+      tv = filTv9();
+    nws(
+      L4("El catálogo de # (% obras) pasa a tu plataforma y a tu canal", "#'s catalog (% works) moves to your platform and your channel", "Le catalogue de # (% œuvres) passe sur ta plateforme et ta chaîne", "O catálogo de # (% obras) passa para sua plataforma e seu canal")
+        .replace("#", r.n)
+        .replace("%", k) + (tv ? L4(": & franjas de tu canal ya lo emiten.", ": & slots on your channel already air it.", " : & cases de ta chaîne le diffusent déjà.", ": & faixas do seu canal já o exibem.").replace("&", tv) : "."),
+    );
+    return pg();
+  }
+  return res;
+};
+on("mes", () => {
+  if (!S || S.pre || !S.cb || !S.cb.on || S.filTv9 === 0) return;
+  if (!rvVivos().some((i) => S.rv[i] && S.rv[i].own)) return;
+  filTv9();
+});
+Object.assign(TX.es.ayuda, {
+  reestreno9: ["Reestrenos", "En Obras → Proyectos, sobre el archivo. Una obra se puede reestrenar cuando pasaron 5 años desde su último estreno; cuesta la mitad de un marketing básico y rinde más si tiene buena fama («Invaluable», «Clásico», «Culto» o «Hit»). «Reestrenar las que conviene» elige las mejores: deja fuera las que guardas en la bóveda (ganan +8 al salir después de 5 años guardadas) y las de mala fama («Podrida», u «Olvidado» si no está remasterizada). Reestrena las 2 mejores de cada medio y deja en cola las 2 siguientes, que salen de a una por medio cada mes, para que no compitan entre sí. Con «Reestreno automático» encendido, reestrena la mejor disponible de cada medio como máximo una vez cada 3 meses. Nunca gasta más del 20 % de tu caja en un reestreno. Dato: Disney guardaba sus clásicos en una «bóveda» y los volvía a estrenar cada siete años para una nueva generación de niños; Blancanieves volvió a los cines varias veces entre 1944 y 1993."],
+});
+LOGR.push(
+  ["Monopolio", "Controla más del 60 % de un mercado", () => (S.sh || []).some((h) => (h.s || []).some((x) => x > 0.6))],
+  ["Dueño de la banca", "Compra todos los bancos", () => !!S.ban40 && BANCOS.every((n, i) => S.ban40[i] != null)],
+  ["El monopolio más grande", "Compra a todos los estudios rivales que siguen abiertos", () => {
+    const L = rvVivos().filter((i) => S.rv[i] && !S.rv[i].ind);
+    return L.length >= 3 && L.every((i) => S.rv[i].own);
+  }],
+);
+Object.assign(TX.es.ayuda, {
+  monopolio: ["Comprarlo todo y el antimonopolio", "En Negocio → Imperio puedes comprar a todos los estudios rivales, todas las cadenas de cines, canales, plataformas, negocios y todos los bancos: no hay compras bloqueadas. Si una compra te pasaría del 35 % de un mercado, el botón lo avisa. Con más del 35 % puede llegar una investigación antimonopolio, como mucho una cada 5 años: eliges entre vender tus cines o pagar una multa (el 10 % de tu caja y prestigio). Si te investigan de nuevo, a veces llega además un decreto de 2 años que reduce el público de tus estrenos en ese medio. Con más de 3 bancos pagas una multa al año. Hay logros por controlar más del 60 % de un mercado, por tener todos los bancos y por comprar a todos los rivales: el monopolio más grande. Dato: en 1948 el fallo «Paramount» de la Corte Suprema de EE. UU. obligó a los grandes estudios a vender sus cines; esa regla se levantó en 2020."],
+});
+const IDIExt = [["Inglés", 6], ["Español", 3], ["Francés", 3], ["Alemán", 2], ["Italiano", 2], ["Portugués", 2], ["Japonés", 1], ["Chino", 1], ["Ruso", 1], ["Árabe", 1], ["Hindi", 1], ["Coreano", 1]];
+on("anual", () => {
+  if (!S || !S.tl || S.pre) return;
+  S.tl.forEach((t) => {
+    if (!t || t.dead || t.ret || !t.li || (t.age | 0) < 12 || (t.age | 0) > 75) return;
+    const p = 0.05 + (t.ex || t.you ? 0.05 : 0) + (t.li.length >= 4 ? -0.04 : 0);
+    if (R() > p) return;
+    const L = IDIExt.filter((x) => !t.li.includes(x[0]));
+    if (!L.length) return;
+    const tot = L.reduce((a, x) => a + x[1], 0);
+    let r = R() * tot,
+      k = L[0][0];
+    for (const x of L) if ((r -= x[1]) < 0) {
+        k = x[0];
+        break;
+      }
+    t.li = t.li.concat([k]);
+    if (t.ex || t.you) nws(L4("# aprende un idioma nuevo: %.", "# learns a new language: %.", "# apprend une nouvelle langue : %.", "# aprende um novo idioma: %.").replace("#", t.n).replace("%", k));
+  });
+});
+const vAvatarPlus = vAvatar;
+vAvatar = function () {
+  const h = vAvatarPlus.apply(this, arguments);
+  return `<div class="c"><div class="bts">${bt("tp", S.me, ic("talento") + " " + L4("Ver mi ficha personal", "View my personal profile", "Voir ma fiche personnelle", "Ver minha ficha pessoal"), "a")}</div></div>` + h;
+};
+let TPV = null;
+const tpExt = ACT["tp"];
+ACT["tp"] = (v) => {
+  const r = tpExt(v);
+  TPV = +v;
+  return r;
+};
+const detExt = ACT["det"];
+ACT["det"] = (v) => {
+  const h0 = document.querySelector("#md.on .hoja"),
+    desde = h0 && h0.querySelector(".vida5") && TPV != null && S.tl[TPV] ? TPV : null;
+  const r = detExt(v),
+    h = document.querySelector("#md.on .hoja");
+  if (desde != null && h && !h.querySelector(".volver11")) {
+    const d = document.createElement("div");
+    d.className = "c volver11";
+    d.innerHTML = bt("tp", desde, ic("atras") + " " + L4("Volver a la ficha de #", "Back to #'s profile", "Retour à la fiche de #", "Voltar à ficha de #").replace("#", esc(S.tl[desde].n)), "a");
+    h.insertBefore(d, h.firstChild);
+  }
+  return r;
 };
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {

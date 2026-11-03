@@ -1,13 +1,13 @@
 # INDUSTRY ART · Plan de lanzamiento en Google Play
 
-Paso a paso para publicar la versión 1.5.2. Cuenta con unas 3 a 4 semanas en total: unos días para verificar la cuenta, 14 días de prueba cerrada obligatoria y hasta una semana de revisión.
+Paso a paso para publicar la versión 1.5.3. Cuenta con unas 3 a 4 semanas en total: unos días para verificar la cuenta, 14 días de prueba cerrada obligatoria y hasta una semana de revisión.
 
 Costo: **25 dólares**, un solo pago, para crear la cuenta de desarrollador. Publicar y actualizar después no cuesta nada.
 
 ## Paso 0 · Antes de empezar
 
 1. **Guarda la llave de firma.** El archivo `industryart-subida.jks` y su contraseña se entregaron aparte y no están en el repositorio. Guárdalos en dos lugares seguros, por ejemplo una memoria USB y un gestor de contraseñas. Sin esa llave no podrás publicar actualizaciones.
-2. **Prueba el APK en tu teléfono.** Instala `entregables/industry-art-1.5.2.apk` encima de la versión que ya tienes: usa el mismo paquete y la misma llave, así que tus partidas se conservan. Revisa:
+2. **Prueba el APK en tu teléfono.** Instala `entregables/industry-art-1.5.3.apk` encima de la versión que ya tienes: usa el mismo paquete y la misma llave, así que tus partidas se conservan. Revisa:
    - Guardar y cargar.
    - Exportar e importar `.iasave`.
    - El botón atrás.
@@ -74,7 +74,7 @@ En **Hacer crecer → Presencia en la tienda → Ficha principal de la tienda**:
 3. En **Testers**, crea una lista de correos (deben ser cuentas de Google) o usa un Grupo de Google.
 4. **Crear versión**:
    1. Acepta **Firma de apps de Google Play**. Google guarda la llave final y tu `.jks` queda como llave de subida.
-   2. Sube `entregables/industry-art-1.5.2.aab`.
+   2. Sube `entregables/industry-art-1.5.3.aab`.
    3. Pega las notas de la versión de `ficha-tienda.md`.
 5. Elige los países (puedes empezar con todos) y envía a revisión. La primera revisión puede tardar unos días.
 6. Cuando se apruebe, comparte el **enlace de inscripción** con tus testers: cada uno abre el enlace, acepta ser tester e instala desde Play.
@@ -96,7 +96,7 @@ Al cumplir los 14 días, en el **Panel** aparece **Solicitar acceso a producció
 - Revisa **Android vitals** (cierres y bloqueos) y las reseñas cada semana.
 - Responde las reseñas: ayuda a la puntuación.
 - Para cada actualización:
-  1. Sube `versionCode` en `android/app/build.gradle`. La 1.5.2 es el 8, así que la siguiente sería el 9.
+  1. Sube `versionCode` en `android/app/build.gradle`. La 1.5.3 es el 9, así que la siguiente sería el 10.
   2. Ajusta `versionName`.
   3. Compila con `gradle assembleRelease bundleRelease` desde `android/`.
   4. Firma con la misma llave de subida y sube el `.aab`.

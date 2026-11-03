@@ -1,4 +1,4 @@
-# INDUSTRY ART · Informe de verificación de las versiones 1.5, 1.5.1 y 1.5.2
+# INDUSTRY ART · Informe de verificación de las versiones 1.5 a 1.5.3
 
 Lo pedido después de la 1.4, qué cambió, cómo comprobarlo y qué midieron las pruebas. El informe completo de la 1.4 sigue en `reporte-1.4.md`.
 
@@ -57,6 +57,39 @@ Lo pedido después de la 1.4, qué cambió, cómo comprobarlo y qué midieron la
   - Cuando actúas desde una ficha u hoja abierta, la página de fondo también queda en su lugar.
   - Si al tocar algo la página queda más corta (por ejemplo, un filtro sin obras), se deja un espacio provisional al final para que la vista no se corra; desaparece al cambiar de sección.
 - **Medido con toques reales:** al reestrenar desde la tarjeta o desde la ficha, las tarjetas de arriba quedan exactamente donde estaban (0 px) y las de abajo suben una tarjeta para ocupar el hueco. Antes la vista se iba 2.000 px o más hacia arriba. En 631 toques reales por todas las secciones, los saltos detectados bajaron de 16 a 6, y al revisarlos uno por uno lo que estaba arriba del botón quedó quieto (0 a 3 px); solo subió lo de abajo cuando se liberó espacio. El filtro del catálogo, que movía la vista 76 px, ahora la mueve 2 px.
+
+## 8. Versión 1.5.3: reestrenos automáticos
+
+- **Dónde:** en Obras → Proyectos, debajo del título del archivo, hay una tarjeta «Reestrenos». Muestra cuántas obras se pueden reestrenar (pasaron 5 años desde su último estreno), cuántas conviene, cuántas están en la bóveda, cuántas tienen mala fama y cuántas esperan en cola.
+- **«Reestrenar las que conviene»:**
+  - Reestrena de inmediato las 2 mejores de cada medio y deja en cola las 2 siguientes, que salen de a una por medio cada mes para no competir entre sí.
+  - Deja fuera las que guardas en la bóveda, porque ganan +8 si esperan 5 años guardadas, y las de mala fama: «Podrida», y «Olvidado» si no está remasterizada.
+- **«Reestreno automático»:** reestrena la mejor obra disponible de cada medio, como máximo una vez cada 3 meses por medio.
+- Ningún reestreno gasta más del 20 % de tu caja.
+- **Etiquetas de fama traducidas:** «Invaluable», «Culto», «Olvidado» y «Podrida» salían en español en otros idiomas; ahora se ven como Priceless/Inestimable/Inestimável, Cult/Culte, Forgotten/Oublié/Esquecido y Rotten/Pourri/Podre.
+- **Medido:**
+  - Con 390 obras disponibles, el botón reestrenó 12 (2 por medio) por $14,3 M y dejó 12 en cola, que se vació en dos meses.
+  - En un año, el modo automático hizo 24 reestrenos (uno por medio cada 3 meses).
+  - Las 3 obras de la bóveda siguieron guardadas, y con la caja casi vacía no reestrenó nada.
+  - Al tocar el botón, la pantalla no se movió (0 px), aunque 12 obras subieron a «En cartelera».
+
+## 9. Versión 1.5.3: el catálogo de una filial pasa al instante
+
+- **Qué pasaba:** al comprar un rival, su catálogo pasaba a tu plataforma recién en el siguiente mes. En tu canal, sus obras quedaban disponibles, pero nadie las ponía en la parrilla si no la reprogramabas tú.
+- **Ahora:**
+  - En el momento de la compra, todas las obras ya estrenadas del estudio pasan a tu plataforma y a tu canal, y una noticia te dice cuántas son.
+  - Tu canal llena las franjas vacías y cambia la programación genérica por obras de tus filiales cuando dejan más. Tus propias obras ya programadas no se tocan. Lo repite cada mes mientras tengas filiales.
+- **Medido:** al comprar Tigre Media, sus 46 obras aparecieron en tu plataforma en el mismo instante (antes, 0 hasta el mes siguiente) y 12 franjas de tu canal pasaron a emitirlas.
+
+## 10. Versión 1.5.3: comprarlo todo, idiomas y navegación
+
+- **Sin compras bloqueadas:** puedes comprar todos los estudios rivales y todos los bancos. Si una compra te pasaría del 35 % de un mercado, el botón avisa («con riesgo antimonopolio» o ⚠).
+- **Antimonopolio menos seguido:** la investigación llega como mucho una vez cada 5 años. El decreto, que dura 2 años y es más suave, solo aparece a veces si te investigan de nuevo. La multa por tener más de 3 bancos es una vez al año.
+- **Logros nuevos:** «Monopolio» (más del 60 % de un mercado), «Dueño de la banca» (todos los bancos) y «El monopolio más grande» (todos los rivales abiertos).
+- **Idiomas:** los talentos aprenden idiomas con los años, más rápido si son tuyos.
+- **Tu ficha personal** se abre desde la pestaña del avatar.
+- **Volver al talento:** si abres una obra desde la ficha de un talento, arriba aparece «Volver a la ficha de…».
+- **Medido:** compraste los 17 rivales y los 6 bancos sin bloqueos, y hubo 1 investigación en 10 años. Los talentos aprendieron 114 idiomas en 3 años.
 
 ## Pruebas de esta versión
 

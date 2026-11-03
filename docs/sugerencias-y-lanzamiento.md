@@ -89,6 +89,11 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
 - **De las pruebas de juego (versión 1.5.2):**
   - La pantalla no se mueve al reestrenar ni al hacer acciones que cambian una obra de sección, tampoco desde fichas abiertas.
 
+- **De las pruebas de juego (versión 1.5.3):**
+  - Botón «Reestrenar las que conviene» y reestreno automático, que respetan la bóveda y dejan fuera las obras de mala fama.
+  - Etiquetas de fama traducidas en todos los idiomas.
+  - Al comprar un rival, su catálogo pasa al instante a tu plataforma y tu canal lo programa.
+
 ### Pendientes
 1. **Bandeja de pendientes, copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`).
 2. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.

@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.5.2
+## INDUSTRY ART · versión 1.5.3
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -41,6 +41,7 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Remodelaciones** de las construcciones viejas cada 40 años, con su propia obra.
 - **Compañías aliadas**: grupos de teatro, ópera, ballet, títeres, circo y más, y también humoristas, dúos cómicos y comediantes de stand-up, piden firmar contigo; hacen temporadas, giras y obras nuevas, y te dan parte de la taquilla.
 - **Reediciones** de tus libros: bolsillo, audiolibro y traducciones.
+- **Reestrenos automáticos**: «Reestrenar las que conviene» reestrena las mejores obras disponibles de cada medio y deja algunas en cola; con «Reestreno automático» lo hace solo cada pocos meses. Respeta las obras guardadas en la bóveda y deja fuera las de mala fama.
 - **Encargos**: los proyectos que te proponen se pueden encomendar a una filial o a un rival para que lo hagan todo, o para editarlos tú.
 - **Streaming y TV**: los lotes del catálogo suman títulos reales y la compra automática licencia contenido cada mes con un presupuesto.
 - **Consola propia**: tiene cuota de mercado, ventas mensuales, ganancia o pérdida por unidad y regalías de los juegos de otros. Los exclusivos solo salen en ella y la hacen crecer; puedes hacer campañas, bajar el precio y preparar una sucesora compatible.
@@ -60,7 +61,7 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Plan automático**: elige el marketing y la mejor fecha; en el plan puedes seleccionar o quitar todo el marketing, y el lanzamiento automático saca solas las obras terminadas.
 - **Archivo con divisiones**: el archivo de la línea de producción también se divide en propias, de tus talentos, compradas y con rivales (en «Segundo plano» abre en «De tus talentos»).
 - **Venta automática de licencias** a la TV (cada año) y al streaming (por 3 años). Vender licencias ya no saca tus obras de tu propia plataforma ni de tu canal.
-- **Tu plataforma y tu canal muestran siempre tus obras y las de tus filiales** (también las que tus filiales estrenaron antes de que las compraras), sin ocupar espacio del catálogo.
+- **Tu plataforma y tu canal muestran siempre tus obras y las de tus filiales** (también las que tus filiales estrenaron antes de que las compraras), sin ocupar espacio del catálogo. Al comprar un rival, su catálogo pasa al instante y tu canal empieza a emitirlo.
 - **Rivales que adaptan obras de dominio público**.
 - **Títulos**: diccionario más grande, con palabras poco conocidas y de otros idiomas, títulos más breves y sin repetirse.
 - **Tus talentos proponen**: los talentos con contrato exclusivo y los subproductores ejecutivos te proponen proyectos cada pocos meses; con «Dar luz verde» o la luz verde automática, los producen ellos mismos.
@@ -94,7 +95,7 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.5.2 están en `entregables/`.
+Los paquetes de la versión 1.5.3 están en `entregables/`.
 
 ### Lanzamiento
 
