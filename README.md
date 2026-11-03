@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.4
+## INDUSTRY ART · versión 1.5
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -48,7 +48,7 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 ### Gestión del estudio
 
 - **Fechas de cada obra**: la idea, el inicio del proyecto, el estreno y el tiempo total.
-- **Archivo en cuatro secciones**: obras propias, de tus talentos, compradas y hechas con rivales.
+- **Catálogo y franquicias en cuatro divisiones**: propias, de tus talentos, compradas y con rivales. La antigua «Filmografía» ahora se llama «Catálogo», porque reúne todos los medios.
 - **Segundo plano**: la línea de producción se divide en lo que haces tú y lo que avanza solo (obras de tus talentos firmados y encargos). Cuando terminan, tú decides el lanzamiento y el marketing, o usas un plan estándar.
 - **Tus talentos producen solos**: al aceptar una propuesta de tus talentos firmados, bandas, autores, showrunners o compañías, ellos la desarrollan y la producen. Para eso cada medio pide su infraestructura (Imprenta propia, Sello discográfico independiente, Teatro propio, Sets de rodaje…), y cada nivel suma capacidad, rapidez, calidad y ahorro.
 - **Energía**: un talento puede trabajar con un rival y contigo a la vez; cada papel o puesto le quita 10 de energía y recupera 10 al mes. Solo queda fuera cuando la gasta toda.
@@ -62,6 +62,8 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Venta automática de licencias** a la TV (no exclusiva) y al streaming (exclusiva por 3 años).
 - **Rivales que adaptan obras de dominio público**.
 - **Títulos**: diccionario más grande, con palabras poco conocidas y de otros idiomas, títulos más breves y sin repetirse.
+- **Tus talentos proponen**: los talentos con contrato exclusivo y los subproductores ejecutivos te proponen proyectos cada pocos meses; con «Dar luz verde» o la luz verde automática, los producen ellos mismos.
+- **Presupuesto acordado y cofinanciación**: al encomendar eliges el presupuesto (ajustado, normal, amplio o superproducción) y un rival puede poner el 25, 40 o 50 % del costo a cambio de esa parte de las ganancias.
 - **Actualizar sin perder nada**: al instalar la versión nueva, tus partidas se conservan y las funciones nuevas se aplican también a ellas.
 - **Encargos a tus talentos firmados**: entrégale un material a un talento firmado para que se encargue de todo o para editarlo tú.
 - **Venta de negocios, cadenas de cines y parques temáticos**. Los parques ampliados ya pueden mantenerse solos y tienen gestión automática de precio y mantenimiento.
@@ -91,7 +93,7 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.4 están en `entregables/`.
+Los paquetes de la versión 1.5 están en `entregables/`.
 
 ### Lanzamiento
 

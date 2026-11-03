@@ -859,7 +859,7 @@ html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 
 .c.peri .peri-t::first-letter{color:#7a1f12!important}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.4";
+const VERN = "1.5";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -1414,7 +1414,7 @@ const TX = {
     secIco: ["estudio", "obras", "talento", "mundo", "negocio", "trofeo"],
     subs: [
       ["Inicio", "Metas", "Editor", "Estadísticas", "Buscar"],
-      ["Proyectos", "Filmograf\u00EDa", "Franquicias", "Material", "Guiones", "Taxonom\u00EDa"],
+      ["Proyectos", "Cat\u00E1logo", "Franquicias", "Material", "Guiones", "Taxonom\u00EDa"],
       ["Cat\u00E1logo", "Oficina", "Academia", "Tu avatar"],
       ["Cartelera", "Rivales", "Premios", "Calendario", "Prensa", "Revista", "Noticias", "Tendencias", "Poblaci\u00F3n", "Historia"],
       ["Finanzas", "Banco y cuentas", "Distribuci\u00F3n", "Canal de TV", "Imperio", "Construcciones", "Inventos", "Streaming", "Negocios", "Inversiones", "Colaboraciones", "Casino", "Pirater\u00EDa"],
@@ -1492,7 +1492,7 @@ const TX = {
         "Tus premios principales: los que ganaste brillan y los que faltan se ven como siluetas. Cada premiaci\u00F3n mira los estrenos del a\u00F1o anterior. Actor y actriz se premian por separado y desde 2001 hay premio a la mejor obra animada. Las campa\u00F1as suman en todas las premiaciones del a\u00F1o.",
       ],
       filmo: [
-        "Filmograf\u00EDa y panel",
+        "Cat\u00E1logo y panel",
         "Tu taquilla de toda la vida, tus franquicias, fans y premios; la biograf\u00EDa que la prensa escribe de tu estudio; la cronolog\u00EDa de tu prestigio y la tabla de todas tus obras, con b\u00FAsqueda y orden.",
       ],
       taxonomia: [
@@ -17308,7 +17308,7 @@ function producir() {
   uniq(Object.values(P.crew)).forEach((i) => {
     const t = S.tl[i];
     if (!t) return;
-    t.e -= 10 * m[1].filter((r) => P.crew[r] == i).length;
+    t.e = Math.max(0, (t.e == null ? 100 : t.e) - 10 * m[1].filter((r) => P.crew[r] == i).length);
     t.pj++;
     t.uj = S.t;
     t.pjS = 1;
@@ -17317,7 +17317,7 @@ function producir() {
   P.cast.forEach((c, k) => {
     const t = S.tl[c.t];
     if (t && !(k == 0 && c.t == P.crew[7])) {
-      t.e -= 10;
+      t.e = Math.max(0, (t.e == null ? 100 : t.e) - 10);
       t.pj++;
       t.uj = S.t;
     }
@@ -22368,7 +22368,7 @@ function vFilmo() {
   return (
     bioH() +
     `<div class="c"><div class="k"><h3 style="margin:0">Panel del estudio</h3>${bi("filmo")}</div><div class="g"><div><div class="m">Taquilla de toda la vida (hoy)</div><b>${fm0(life)}</b></div><div><div class="m">Obras estrenadas</div><b>${L0.length}</b></div><div><div class="m">Franquicias</div><b>${fr}</b></div><div><div class="m">Fans</div><b>${nfc(S.fans || 0)}</b></div><div><div class="m">Premios</div><b>${S.win}</b></div><div><div class="m">Prestigio</div><b>${Math.round(S.pop)}</b></div></div><canvas id="yh" style="height:140px;margin-top:6px"></canvas></div>${cronH()}
-<div class="c"><h3 style="margin:0 0 6px">Filmografía</h3>${filOrigenH(L0)}<input type="text" placeholder="Buscar" value="${esc(FIL2.q)}" onchange="FIL2.q=this.value.toLowerCase().trim();pg()"><select onchange="FIL2.s=this.value;pg()">${[
+<div class="c"><h3 style="margin:0 0 6px">Catálogo de obras</h3>${filOrigenH(L0)}<input type="text" placeholder="Buscar" value="${esc(FIL2.q)}" onchange="FIL2.q=this.value.toLowerCase().trim();pg()"><select onchange="FIL2.s=this.value;pg()">${[
       ["y", "M\u00E1s recientes"],
       ["c", "Mejor cr\u00EDtica"],
       ["a", "Mejor p\u00FAblico"],
@@ -23193,11 +23193,12 @@ function frCard(f) {
   return `<div class="c" style="display:flex;gap:10px"><canvas class="pt" data-id="${p.id}" style="width:48px;height:72px;border-radius:6px;flex:none"></canvas><div style="flex:1;min-width:0"><div class="k"><b>${esc(F.n)}</b><span class="m">${frH(f)}% popularidad</span></div><div class="m">${T.n} ${T.n == 1 ? "obra" : "obras"} · costo ${fm(T.c)} · bruto ${fm(T.g)} · ganancias ${fm(T.e)} · ${T.w} premios</div><div class="m">${F.org == "a" ? ic("libro") + " Adaptaci\u00F3n" : ic("idea") + " Original"}${F.x != null ? " \u00B7 crossover con \u00AB" + esc(frG(F.x).n) + "\u00BB" : ""}${frSold(f) ? " \u00B7 vendida" : ""}${o ? " \u00B7 oferta de compra" : ""}</div><div style="margin-top:6px">${bt("fro", f, "Abrir franquicia", "a")}</div></div></div>`;
 }
 function vFr() {
-  const L = frList(),
+  const L = frList().filter((f) => FRF6 == "t" || frOrig6(f) == FRF6),
     n = Math.max(1, Math.ceil(L.length / 5)),
     p = Math.min(fil.fp | 0, n - 1);
   return (
     frVentaH() +
+    frOrigFH6() +
     `<div class="c m">Cada obra nace como franquicia. Ábrela para ver su canon y su origen, crear continuaciones, hacer crossovers o venderla.</div>` +
     (L.length
       ? L.slice(p * 5, p * 5 + 5)
@@ -62831,7 +62832,7 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Propuestas para ti", "Proposals for you", "Propositions pour toi", "Propostas para você"],
   ["Becas automáticas", "Automatic scholarships", "Bourses automatiques", "Bolsas automáticas"],
   ["Paquete de mundo", "World pack", "Pack de monde", "Pacote de mundo"],
-  ["En la ficha de cada obra ves cuándo nació la idea, cuándo empezó el proyecto, cuándo se estrenó y cuánto tardó en total. Sirve para comparar cuánto te toma cada medio. En Obras → Filmografía el archivo se divide en tres: Propias (hechas por tu compañía y tus filiales), Compradas (proyectos, guiones y franquicias que compraste) y Con rivales (coproducciones y encargos). Dato: «Avatar» pasó más de diez años en un cajón, esperando a que la tecnología de efectos pudiera hacerla.", "In each work's profile you see when the idea was born, when the project started, when it was released and how long it took in total. It helps you compare how long each medium takes. In Works → Filmography the archive is split in three: Own (made by your company and subsidiaries), Bought (projects, scripts and franchises you bought) and With rivals (co-productions and commissions). Fact: «Avatar» spent more than ten years in a drawer, waiting for effects technology to catch up.", "Dans la fiche de chaque œuvre, tu vois quand l'idée est née, quand le projet a commencé, quand il est sorti et combien de temps il a pris au total. Cela permet de comparer la durée de chaque média. Dans Œuvres → Filmographie, les archives se divisent en trois : Propres (faites par ta compagnie et tes filiales), Achetées (projets, scénarios et franchises achetés) et Avec des rivaux (coproductions et commandes). Anecdote : « Avatar » est resté plus de dix ans dans un tiroir, en attendant que la technologie des effets permette de le faire.", "Na ficha de cada obra você vê quando nasceu a ideia, quando o projeto começou, quando estreou e quanto tempo levou no total. Serve para comparar quanto cada mídia demora. Em Obras → Filmografia o arquivo se divide em três: Próprias (feitas pela sua empresa e filiais), Compradas (projetos, roteiros e franquias que você comprou) e Com rivais (coproduções e encomendas). Curiosidade: «Avatar» passou mais de dez anos na gaveta, esperando a tecnologia de efeitos permitir fazê-lo."],
+  ["En la ficha de cada obra ves cuándo nació la idea, cuándo empezó el proyecto, cuándo se estrenó y cuánto tardó en total. Sirve para comparar cuánto te toma cada medio. En Obras → Catálogo las obras se dividen en cuatro: Propias (hechas por tu compañía y tus filiales), De tus talentos (hechas por tus talentos firmados por su cuenta), Compradas (proyectos, guiones y franquicias que compraste) y Con rivales (coproducciones, cofinanciaciones y encargos). Obras → Franquicias usa las mismas cuatro divisiones. Dato: «Avatar» pasó más de diez años en un cajón, esperando a que la tecnología de efectos pudiera hacerla.", "In each work's profile you see when the idea was born, when the project started, when it was released and how long it took in total. It helps you compare how long each medium takes. In Works → Catalog the works are split in four: Own (made by your company and subsidiaries), By your talents (made by your signed talents on their own), Bought (projects, scripts and franchises you bought) and With rivals (co-productions, co-financing and commissions). Works → Franchises uses the same four divisions. Fact: «Avatar» spent more than ten years in a drawer, waiting for effects technology to catch up.", "Dans la fiche de chaque œuvre, tu vois quand l'idée est née, quand le projet a commencé, quand il est sorti et combien de temps il a pris au total. Cela permet de comparer la durée de chaque média. Dans Œuvres → Catalogue, les œuvres se divisent en quatre : Propres (faites par ta compagnie et tes filiales), De tes talents (faites par tes talents sous contrat, seuls), Achetées (projets, scénarios et franchises achetés) et Avec des rivaux (coproductions, cofinancements et commandes). Œuvres → Franchises utilise les mêmes quatre divisions. Anecdote : « Avatar » est resté plus de dix ans dans un tiroir, en attendant que la technologie des effets permette de le faire.", "Na ficha de cada obra você vê quando nasceu a ideia, quando o projeto começou, quando estreou e quanto tempo levou no total. Serve para comparar quanto cada mídia demora. Em Obras → Catálogo as obras se dividem em quatro: Próprias (feitas pela sua empresa e filiais), Dos seus talentos (feitas pelos seus talentos contratados por conta própria), Compradas (projetos, roteiros e franquias que você comprou) e Com rivais (coproduções, cofinanciamentos e encomendas). Obras → Franquias usa as mesmas quatro divisões. Curiosidade: «Avatar» passou mais de dez anos na gaveta, esperando a tecnologia de efeitos permitir fazê-lo."],
   ["Elige cuántas veces el juego se detiene para pedirte una decisión: Muchas (como antes), Normal (al menos 5 semanas entre una y otra y nada en los primeros 6 meses), Pocas (al menos 12 semanas) o Solo importantes (premios, deudas, la junta, ofertas y momentos históricos). Las propuestas para tu avatar nunca se pierden: esperan en Talento → Tu avatar. Lo cambias en Ajustes.", "Choose how often the game stops to ask you for a decision: Many (as before), Normal (at least 5 weeks between them and nothing in the first 6 months), Few (at least 12 weeks) or Only important (awards, debts, the board, offers and historic moments). Proposals for your avatar are never lost: they wait in Talent → Your avatar. Change it in Settings.", "Choisis à quelle fréquence le jeu s'arrête pour te demander une décision : Beaucoup (comme avant), Normal (au moins 5 semaines entre deux et rien les 6 premiers mois), Peu (au moins 12 semaines) ou Seulement importantes (prix, dettes, le conseil, offres et moments historiques). Les propositions pour ton avatar ne se perdent jamais : elles attendent dans Talent → Ton avatar. Tu le changes dans Paramètres.", "Escolha quantas vezes o jogo para e pede uma decisão: Muitas (como antes), Normal (pelo menos 5 semanas entre uma e outra e nada nos primeiros 6 meses), Poucas (pelo menos 12 semanas) ou Só importantes (prêmios, dívidas, diretoria, ofertas e momentos históricos). As propostas para seu avatar nunca se perdem: esperam em Talento → Seu avatar. Você muda isso em Configurações."],
   ["Según las especialidades de tu avatar, otros estudios te proponen dirigir, actuar, escribir, componer, producir o diseñar una de sus obras, o hacer un proyecto en conjunto. Si aceptas, cobras, ganas experiencia en esa especialidad y fama para tu estudio, pero tu avatar queda ocupado unas semanas. Puedes pedir más dinero (a veces aceptan y a veces se retiran). Un proyecto en conjunto hace que ese estudio pague parte de tu próxima obra y se quede con esa parte de lo que gane. Dato: Orson Welles financiaba sus propias películas actuando en las de otros.", "Based on your avatar's specialties, other studios ask you to direct, act, write, compose, produce or design one of their works, or to do a joint project. If you accept, you get paid, gain experience in that specialty and fame for your studio, but your avatar is busy for a few weeks. You can ask for more money (sometimes they agree, sometimes they walk away). A joint project makes that studio pay part of your next work and keep that share of what it earns. Fact: Orson Welles funded his own films by acting in other people's.", "Selon les spécialités de ton avatar, d'autres studios te proposent de réaliser, jouer, écrire, composer, produire ou concevoir une de leurs œuvres, ou de faire un projet commun. Si tu acceptes, tu es payé, tu gagnes de l'expérience dans cette spécialité et de la renommée pour ton studio, mais ton avatar est occupé quelques semaines. Tu peux demander plus d'argent (parfois ils acceptent, parfois ils renoncent). Un projet commun fait payer à ce studio une partie de ta prochaine œuvre en échange de cette part des gains. Anecdote : Orson Welles finançait ses propres films en jouant dans ceux des autres.", "Segundo as especialidades do seu avatar, outros estúdios propõem que você dirija, atue, escreva, componha, produza ou crie uma das obras deles, ou faça um projeto conjunto. Se aceitar, você recebe, ganha experiência nessa especialidade e fama para seu estúdio, mas seu avatar fica ocupado algumas semanas. Você pode pedir mais dinheiro (às vezes aceitam, às vezes desistem). Um projeto conjunto faz esse estúdio pagar parte da sua próxima obra e ficar com essa parte do que ela ganhar. Curiosidade: Orson Welles financiava seus filmes atuando nos dos outros."],
   ["Actívalas en Talento → Academia. Cada mes, hasta el número que elijas de tus talentos firmados (con contrato exclusivo) empiezan el mejor curso de su oficio que puedan tomar, y tú pagas el curso. Mientras estudian pueden seguir trabajando en tus obras. Si alguien ya domina su oficio o no tiene energía, espera al mes siguiente.", "Turn them on in Talent → Academy. Every month, up to the number you choose of your signed talents (with an exclusive contract) start the best course in their trade they can take, and you pay for it. While studying they can keep working on your works. If someone already masters their trade or has no energy, they wait until next month.", "Active-les dans Talent → Académie. Chaque mois, jusqu'au nombre choisi de tes talents sous contrat exclusif commencent le meilleur cours de leur métier qu'ils peuvent suivre, et tu paies le cours. Pendant leurs études, ils peuvent continuer à travailler sur tes œuvres. Si quelqu'un maîtrise déjà son métier ou manque d'énergie, il attend le mois suivant.", "Ative em Talento → Academia. Todo mês, até o número que você escolher dos seus talentos contratados (com contrato exclusivo) começam o melhor curso do ofício que puderem fazer, e você paga o curso. Enquanto estudam podem continuar trabalhando nas suas obras. Se alguém já domina o ofício ou está sem energia, espera o mês seguinte."],
@@ -63052,7 +63053,7 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Compañías aliadas", "Allied companies", "Compagnies alliées", "Companhias aliadas"],
   ["Propuestas para ti", "Proposals for you", "Propositions pour toi", "Propostas para você"],
   ["Cada talento tiene una energía de 0 a 100. Cada papel o puesto en una obra le quita 10, sea tuya o de un rival, y cada mes recupera 10 (más con el Centro de bienestar). Por eso un talento que ya trabaja con un rival puede entrar a tu obra si le queda energía: solo queda fuera cuando la gastó toda. Lo mismo vale para tu avatar cuando acepta trabajos de otros estudios. Dato: en el Hollywood de los años treinta, los actores de contrato llegaban a rodar cuatro o cinco películas al año.", "Every talent has energy from 0 to 100. Each role or post in a work costs 10, whether it's yours or a rival's, and every month they recover 10 (more with the wellness center). So a talent already working with a rival can join your work if they have energy left: they're only out when it's all used up. The same goes for your avatar when they take jobs from other studios. Fact: in 1930s Hollywood, contract actors could shoot four or five films a year.", "Chaque talent a une énergie de 0 à 100. Chaque rôle ou poste dans une œuvre coûte 10, qu'elle soit à toi ou à un rival, et chaque mois il récupère 10 (plus avec le centre de bien-être). Un talent qui travaille déjà avec un rival peut donc rejoindre ton œuvre s'il lui reste de l'énergie : il n'est exclu que quand il l'a toute dépensée. C'est pareil pour ton avatar quand il accepte des travaux d'autres studios. Anecdote : dans le Hollywood des années trente, les acteurs sous contrat tournaient jusqu'à quatre ou cinq films par an.", "Cada talento tem uma energia de 0 a 100. Cada papel ou cargo numa obra custa 10, seja sua ou de um rival, e todo mês recupera 10 (mais com o centro de bem-estar). Por isso um talento que já trabalha com um rival pode entrar na sua obra se ainda tiver energia: só fica de fora quando a gastou toda. O mesmo vale para o seu avatar quando aceita trabalhos de outros estúdios. Curiosidade: na Hollywood dos anos trinta, os atores de contrato chegavam a filmar quatro ou cinco filmes por ano."],
-  ["En Obras, la línea de producción tiene dos divisiones. «Lo que haces tú» guarda las obras que armas tú. «Segundo plano» guarda las que hacen por su cuenta tus talentos firmados, tus bandas y tus compañías, y tus encargos a otros estudios y artistas: no ocupan lugar en tu sede y avanzan solas. Cuando una termina, te avisa y aparece en «Listas para lanzar»: tú decides el plan de lanzamiento y el marketing, o usas el plan estándar. En Franquicias, la filmografía separa estas obras en «De tus talentos».", "In Works, the production line has two divisions. «What you make» keeps the works you put together. «Background» keeps those your signed talents, bands and companies make on their own, and your commissions to other studios and artists: they don't take room at your headquarters and move forward on their own. When one is finished, you get a notice and it shows up in «Ready to launch»: you decide the launch plan and the marketing, or use the standard plan. In Franchises, the filmography lists these works under «By your talents».", "Dans Œuvres, la ligne de production a deux divisions. « Ce que tu fais » garde les œuvres que tu montes toi-même. « Arrière-plan » garde celles que tes talents sous contrat, tes groupes et tes compagnies font seuls, et tes commandes à d'autres studios et artistes : elles ne prennent pas de place à ton siège et avancent seules. Quand l'une est terminée, tu es prévenu et elle apparaît dans « Prêtes à sortir » : tu décides le plan de sortie et le marketing, ou tu utilises le plan standard. Dans Franchises, la filmographie range ces œuvres sous « De tes talents ».", "Em Obras, a linha de produção tem duas divisões. «O que você faz» guarda as obras que você monta. «Segundo plano» guarda as que seus talentos contratados, bandas e companhias fazem por conta própria, e suas encomendas a outros estúdios e artistas: não ocupam lugar na sua sede e avançam sozinhas. Quando uma termina, você recebe um aviso e ela aparece em «Prontas para lançar»: você decide o plano de lançamento e o marketing, ou usa o plano padrão. Em Franquias, a filmografia separa essas obras em «Dos seus talentos»."],
+  ["En Obras, la línea de producción tiene dos divisiones. «Lo que haces tú» guarda las obras que armas tú. «Segundo plano» guarda las que hacen por su cuenta tus talentos firmados, tus bandas y tus compañías, y tus encargos a otros estudios y artistas: no ocupan lugar en tu sede y avanzan solas. Cuando una termina, te avisa y aparece en «Listas para lanzar»: tú decides el plan de lanzamiento y el marketing, o usas el plan estándar. En Obras → Catálogo y en Obras → Franquicias estas obras aparecen en «De tus talentos».", "In Works, the production line has two divisions. «What you make» keeps the works you put together. «Background» keeps those your signed talents, bands and companies make on their own, and your commissions to other studios and artists: they don't take room at your headquarters and move forward on their own. When one is finished, you get a notice and it shows up in «Ready to launch»: you decide the launch plan and the marketing, or use the standard plan. In Works → Catalog and Works → Franchises these works appear under «By your talents».", "Dans Œuvres, la ligne de production a deux divisions. « Ce que tu fais » garde les œuvres que tu montes toi-même. « Arrière-plan » garde celles que tes talents sous contrat, tes groupes et tes compagnies font seuls, et tes commandes à d'autres studios et artistes : elles ne prennent pas de place à ton siège et avancent seules. Quand l'une est terminée, tu es prévenu et elle apparaît dans « Prêtes à sortir » : tu décides le plan de sortie et le marketing, ou tu utilises le plan standard. Dans Œuvres → Catalogue et Œuvres → Franchises, ces œuvres apparaissent sous « De tes talents ».", "Em Obras, a linha de produção tem duas divisões. «O que você faz» guarda as obras que você monta. «Segundo plano» guarda as que seus talentos contratados, bandas e companhias fazem por conta própria, e suas encomendas a outros estúdios e artistas: não ocupam lugar na sua sede e avançam sozinhas. Quando uma termina, você recebe um aviso e ela aparece em «Prontas para lançar»: você decide o plano de lançamento e o marketing, ou usa o plano padrão. Em Obras → Catálogo e Obras → Franquias essas obras aparecem em «Dos seus talentos»."],
   ["Al aceptar una propuesta de tus talentos firmados, tus bandas, tus autores de la casa, tus showrunners o tus compañías aliadas, ellos la desarrollan y la producen sin que armes el equipo: tú solo decides el lanzamiento y el marketing. Para eso cada medio pide su infraestructura: en editorial, la Imprenta propia, el Taller literario, la Cadena de librerías o una Revista propia; en música, el Estudio de grabación, la Sala de conciertos, el Sello discográfico independiente o la Editorial de partituras; en teatro, el Teatro propio, la Sala de ensayos, la Sala de teatro propia o el Teatro de ópera; en cine y series, los Sets de rodaje, Stages y lotes, Soundstages o Estudios de alquiler; en videojuegos, el Estudio de gráficos, el Laboratorio de testing, el Estudio de juegos para móviles o la Empresa de efectos visuales. Sin ninguna, lo aceptado se queda en tu material. Cada nivel cuenta: suma obras a la vez (1 más cada 2 niveles), rapidez (6 % por nivel, hasta la mitad del tiempo), calidad (hasta +4) y ahorro (3 % por nivel, hasta 25 %). Puedes apagar la producción automática en cada medio. Dato: Penguin, Motown y la Royal Shakespeare Company crecieron así, con talento de la casa y talleres propios.", "When you accept a proposal from your signed talents, bands, in-house authors, showrunners or allied companies, they develop and produce it without you putting the team together: you only decide the launch and marketing. For that each medium asks for its facilities: in publishing, the Own printing press, the Writing workshop, the Bookstore chain or an Own magazine; in music, the Recording studio, the Concert hall, the Independent record label or the Sheet music publisher; in theatre, the Own playhouse, the Rehearsal hall, the Own theatre hall or the Opera house; in film and series, Shooting sets, Stages and lots, Soundstages or Rental studios; in video games, the Graphics studio, the Testing lab, the Mobile games studio or the Visual effects company. Without any, what you accept stays in your material. Every level counts: more works at once (1 more every 2 levels), speed (6 % per level, down to half the time), quality (up to +4) and savings (3 % per level, up to 25 %). You can turn automatic production off for each medium. Fact: Penguin, Motown and the Royal Shakespeare Company grew this way, with in-house talent and their own workshops.", "Quand tu acceptes une proposition de tes talents sous contrat, de tes groupes, de tes auteurs maison, de tes showrunners ou de tes compagnies alliées, ils la développent et la produisent sans que tu montes l'équipe : tu décides seulement la sortie et le marketing. Pour cela, chaque média demande ses installations : en édition, l'Imprimerie maison, l'Atelier d'écriture, la Chaîne de librairies ou une Revue maison ; en musique, le Studio d'enregistrement, la Salle de concert, le Label indépendant ou l'Éditeur de partitions ; au théâtre, le Théâtre maison, la Salle de répétition, la Salle de théâtre ou l'Opéra ; au cinéma et en séries, les Décors de tournage, Plateaux et terrains, Soundstages ou Studios de location ; en jeux vidéo, le Studio graphique, le Laboratoire de test, le Studio de jeux mobiles ou la Société d'effets visuels. Sans aucune, ce que tu acceptes reste dans ton matériel. Chaque niveau compte : plus d'œuvres à la fois (1 de plus tous les 2 niveaux), rapidité (6 % par niveau, jusqu'à la moitié du temps), qualité (jusqu'à +4) et économies (3 % par niveau, jusqu'à 25 %). Tu peux couper la production automatique pour chaque média. Anecdote : Penguin, Motown et la Royal Shakespeare Company ont grandi ainsi, avec des talents maison et leurs propres ateliers.", "Ao aceitar uma proposta dos seus talentos contratados, bandas, autores da casa, showrunners ou companhias aliadas, eles a desenvolvem e produzem sem você montar a equipe: você só decide o lançamento e o marketing. Para isso cada meio pede sua infraestrutura: no editorial, a Gráfica própria, a Oficina literária, a Rede de livrarias ou uma Revista própria; na música, o Estúdio de gravação, a Sala de concertos, o Selo independente ou a Editora de partituras; no teatro, o Teatro próprio, a Sala de ensaios, a Sala de teatro própria ou o Teatro de ópera; no cinema e nas séries, os Sets de filmagem, Stages e lotes, Soundstages ou Estúdios de aluguel; nos videogames, o Estúdio de gráficos, o Laboratório de testes, o Estúdio de jogos para celular ou a Empresa de efeitos visuais. Sem nenhuma, o que você aceitar fica no seu material. Cada nível conta: mais obras ao mesmo tempo (1 a mais a cada 2 níveis), rapidez (6 % por nível, até metade do tempo), qualidade (até +4) e economia (3 % por nível, até 25 %). Você pode desligar a produção automática em cada meio. Curiosidade: Penguin, Motown e a Royal Shakespeare Company cresceram assim, com talento da casa e oficinas próprias."],
   ["En Obras → Videojuegos → Consola propia. Tu consola tiene una cuota de mercado que sube con su potencia, con tus juegos recientes, con tus exclusivos (y más si son éxitos), con campañas de 3 meses, con rebajas de precio y si es compatible con tu consola anterior; baja con un precio alto y cuando envejece después de 4 años. Cada mes ves cuántas unidades vendió, cuánto ganaste o perdiste con el hardware (una consola barata pierde dinero por unidad) y cuánto cobraste en regalías por los juegos de otros. Tus juegos normales venden más mientras exista; los exclusivos solo salen en ella y venden según su cuota. Puedes bajar el precio hasta dos veces (una por año) y, después de 3 años, retirarla para preparar una sucesora que hereda su comunidad. Dato: muchas consolas se vendieron a pérdida; el negocio estaba en las regalías de cada juego.", "In Works → Video games → Own console. Your console has a market share that rises with its power, your recent games, your exclusives (more so if they're hits), 3-month campaigns, price cuts and if it plays your previous console's games; it falls with a high price and as it ages after 4 years. Every month you see how many units it sold, how much you made or lost on hardware (a cheap console loses money per unit) and how much you earned in royalties from other studios' games. Your regular games sell more while it exists; exclusives only come out on it and sell according to its share. You can cut the price up to twice (once a year) and, after 3 years, retire it to prepare a successor that inherits its community. Fact: many consoles were sold at a loss; the business was in the royalties on every game.", "Dans Œuvres → Jeux vidéo → Console maison. Ta console a une part de marché qui monte avec sa puissance, tes jeux récents, tes exclusivités (surtout les succès), les campagnes de 3 mois, les baisses de prix et si elle lit les jeux de ta console précédente ; elle baisse avec un prix élevé et quand elle vieillit après 4 ans. Chaque mois tu vois combien d'unités elle a vendues, combien tu as gagné ou perdu sur le matériel (une console bon marché perd de l'argent à l'unité) et combien tu as touché en redevances sur les jeux des autres. Tes jeux normaux se vendent mieux tant qu'elle existe ; les exclusivités ne sortent que sur elle et se vendent selon sa part. Tu peux baisser le prix jusqu'à deux fois (une par an) et, après 3 ans, la retirer pour préparer une suivante qui hérite de sa communauté. Anecdote : beaucoup de consoles se vendaient à perte ; l'affaire était dans les redevances de chaque jeu.", "Em Obras → Videogames → Console próprio. Seu console tem uma fatia de mercado que sobe com a potência, seus jogos recentes, seus exclusivos (ainda mais se forem sucessos), campanhas de 3 meses, reduções de preço e se roda os jogos do seu console anterior; cai com preço alto e quando envelhece depois de 4 anos. Todo mês você vê quantas unidades vendeu, quanto ganhou ou perdeu com o hardware (um console barato perde dinheiro por unidade) e quanto recebeu em royalties pelos jogos dos outros. Seus jogos normais vendem mais enquanto ele existir; os exclusivos só saem nele e vendem conforme a fatia. Você pode baixar o preço até duas vezes (uma por ano) e, depois de 3 anos, retirá-lo para preparar um sucessor que herda a comunidade. Curiosidade: muitos consoles foram vendidos com prejuízo; o negócio estava nos royalties de cada jogo."],
   ["En Obras → Teatro. Con el tiempo, compañías de teatro, ópera, ballet, títeres, zarzuela, circo, musicales, cabaret, improvisación y nuevo circo, y también humoristas, dúos cómicos y comediantes de stand-up, te piden firmar: buscan estabilidad. Firmar cuesta su apoyo de un año y después pagas ese apoyo poco a poco cada mes. A cambio, cada mes hacen temporada y te dan su parte de la taquilla (25 a 35 %), crecen en fans y a veces te proponen obras gratis, que con infraestructura de teatro producen por su cuenta. Puedes mandarlas de gira (más fans y más taquilla durante 8 semanas), hacer una obra nueva con ellas (con los comediantes arranca como comedia y, desde 1950, como stand up), renovar su contrato por tres años o liberarlas. Dato: el humor en solitario viene del vodevil y del music hall; el stand-up moderno nació en los clubes de los años cincuenta.", "In Works → Theatre. Over time, theatre, opera, ballet, puppet, zarzuela, circus, musical, cabaret, improv and contemporary circus companies, and also comedians, comedy duos and stand-up comedians, ask to sign with you: they want stability. Signing costs one year of support and then you pay that support little by little each month. In exchange, every month they run a season and give you their share of the box office (25 to 35 %), grow their fans and sometimes propose free works, which they produce on their own if you have theatre facilities. You can send them on tour (more fans and box office for 8 weeks), make a new work with them (with comedians it starts as a comedy and, from 1950, as stand-up), renew their contract for three years or release them. Fact: solo comedy comes from vaudeville and music hall; modern stand-up was born in 1950s clubs.", "Dans Œuvres → Théâtre. Avec le temps, des compagnies de théâtre, d'opéra, de ballet, de marionnettes, de zarzuela, de cirque, de comédies musicales, de cabaret, d'improvisation et de nouveau cirque, et aussi des humoristes, des duos comiques et des humoristes de stand-up, demandent à signer : ils cherchent la stabilité. Signer coûte un an de soutien, puis tu le paies petit à petit chaque mois. En échange, chaque mois ils font une saison et te donnent leur part de la billetterie (25 à 35 %), gagnent des fans et te proposent parfois des œuvres gratuites, qu'ils produisent seuls si tu as des installations de théâtre. Tu peux les envoyer en tournée (plus de fans et de billetterie pendant 8 semaines), faire une nouvelle œuvre avec eux (avec les humoristes, elle commence en comédie et, dès 1950, en stand-up), renouveler leur contrat pour trois ans ou les libérer. Anecdote : l'humour en solo vient du vaudeville et du music-hall ; le stand-up moderne est né dans les clubs des années cinquante.", "Em Obras → Teatro. Com o tempo, companhias de teatro, ópera, balé, bonecos, zarzuela, circo, musicais, cabaré, improviso e novo circo, e também humoristas, duplas cômicas e comediantes de stand-up, pedem para assinar: buscam estabilidade. Assinar custa um ano de apoio e depois você paga esse apoio aos poucos todo mês. Em troca, todo mês fazem temporada e lhe dão a parte delas da bilheteria (25 a 35 %), ganham fãs e às vezes propõem obras grátis, que produzem por conta própria se você tiver infraestrutura de teatro. Você pode mandá-las em turnê (mais fãs e bilheteria por 8 semanas), fazer uma obra nova com elas (com os comediantes começa como comédia e, desde 1950, como stand-up), renovar o contrato por três anos ou liberá-las. Curiosidade: o humor solo vem do vaudeville e do music hall; o stand-up moderno nasceu nos clubes dos anos cinquenta."],
@@ -63082,6 +63083,14 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Visores de realidad virtual", "VR headsets", "Casques de réalité virtuelle", "Óculos de realidade virtual"],
   ["Juego en la nube", "Cloud gaming", "Jeu dans le cloud", "Jogo na nuvem"],
   ["Enlace neuronal", "Neural link", "Lien neuronal", "Conexão neural"],
+  ["Presupuesto acordado y cofinanciación", "Agreed budget and co-financing", "Budget convenu et cofinancement", "Orçamento acordado e cofinanciamento"],
+  ["Tus talentos producen solos", "Your talents produce on their own", "Tes talents produisent seuls", "Seus talentos produzem sozinhos"],
+  ["Al encomendar una obra a un rival, a una filial, a un talento firmado o a un subproductor ejecutivo, eliges el presupuesto que acuerdan: Ajustado (×0,6), Normal, Amplio (×1,5) o Superproducción (×2,5). Más presupuesto da más calidad, pero no el doble. Con un rival también puedes pedir que ponga de su dinero: el 25, 40 o 50 % del costo. Tú pagas menos y, cuando la obra pasa al archivo, el rival se queda con esa misma parte de lo que ganaste. Solo acepta si tiene la caja para hacerlo. Las obras cofinanciadas aparecen en «Con rivales». Dato: muchas películas se financian así entre varios estudios para repartir el riesgo; Titanic la pagaron a medias Fox y Paramount.", "When you commission a work from a rival, a subsidiary, a signed talent or a co-executive producer, you choose the budget you agree on: Tight (×0.6), Normal, Generous (×1.5) or Blockbuster (×2.5). More budget gives more quality, but not double. With a rival you can also ask them to put in money: 25, 40 or 50 % of the cost. You pay less and, when the work goes to the archive, the rival keeps that same share of what you earned. They only agree if they have the cash. Co-financed works appear under «With rivals». Fact: many films are financed like this between studios to share the risk; Fox and Paramount split the cost of Titanic.", "Quand tu confies une œuvre à un rival, une filiale, un talent sous contrat ou un coproducteur exécutif, tu choisis le budget convenu : Serré (×0,6), Normal, Large (×1,5) ou Superproduction (×2,5). Plus de budget donne plus de qualité, mais pas le double. Avec un rival, tu peux aussi lui demander de mettre de son argent : 25, 40 ou 50 % du coût. Tu paies moins et, quand l'œuvre passe aux archives, le rival garde la même part de ce que tu as gagné. Il n'accepte que s'il a la trésorerie. Les œuvres cofinancées apparaissent dans « Avec des rivaux ». Anecdote : beaucoup de films se financent ainsi entre studios pour partager le risque ; Fox et Paramount ont payé Titanic à moitié.", "Ao encomendar uma obra a um rival, a uma filial, a um talento contratado ou a um coprodutor executivo, você escolhe o orçamento acordado: Enxuto (×0,6), Normal, Amplo (×1,5) ou Superprodução (×2,5). Mais orçamento dá mais qualidade, mas não o dobro. Com um rival você também pode pedir que ele ponha dinheiro: 25, 40 ou 50 % do custo. Você paga menos e, quando a obra vai para o arquivo, o rival fica com essa mesma parte do que você ganhou. Ele só aceita se tiver caixa. As obras cofinanciadas aparecem em «Com rivais». Curiosidade: muitos filmes se financiam assim entre estúdios para dividir o risco; a Fox e a Paramount pagaram Titanic pela metade."],
+  ["Tus talentos con contrato exclusivo y tus subproductores ejecutivos te proponen proyectos cada pocos meses (salen en las propuestas de su medio como «de tu contrato» y no te cobran los derechos). También proponen tus autores de la casa, tus showrunners, tus bandas y tus compañías aliadas. Cuando les das luz verde, ellos desarrollan y producen la obra sin que armes el equipo: tú solo decides el lanzamiento y el marketing. Para eso cada medio pide su infraestructura: en editorial, la Imprenta propia, el Taller literario, la Cadena de librerías o una Revista propia; en música, el Estudio de grabación, la Sala de conciertos, el Sello discográfico independiente o la Editorial de partituras; en teatro, el Teatro propio, la Sala de ensayos, la Sala de teatro propia o el Teatro de ópera; en cine y series, los Sets de rodaje, Stages y lotes, Soundstages o Estudios de alquiler; en videojuegos, el Estudio de gráficos, el Laboratorio de testing, el Estudio de juegos para móviles o la Empresa de efectos visuales. Sin ninguna, lo aceptado espera en la cola. Cada nivel suma obras a la vez, rapidez, calidad y ahorro. Con «Luz verde automática» aceptas solo las propuestas de tu contrato, y con «Dar luz verde» aceptas todas las pendientes de una vez. Dato: Penguin, Motown y la Royal Shakespeare Company crecieron así, con talento de la casa y talleres propios.", "Your talents on exclusive contracts and your co-executive producers propose projects every few months (they show up in their medium's proposals as «from your contract» and don't charge for the rights). Your in-house authors, showrunners, bands and allied companies propose too. When you give them the green light, they develop and produce the work without you putting the team together: you only decide the launch and marketing. For that each medium asks for its facilities: in publishing, the Own printing press, the Writing workshop, the Bookstore chain or an Own magazine; in music, the Recording studio, the Concert hall, the Independent record label or the Sheet music publisher; in theatre, the Own playhouse, the Rehearsal hall, the Own theatre hall or the Opera house; in film and series, Shooting sets, Stages and lots, Soundstages or Rental studios; in video games, the Graphics studio, the Testing lab, the Mobile games studio or the Visual effects company. Without any, what you accept waits in the queue. Every level adds works at once, speed, quality and savings. With «Automatic green light» you accept your contract's proposals on their own, and «Green-light» accepts all pending ones at once. Fact: Penguin, Motown and the Royal Shakespeare Company grew this way, with in-house talent and their own workshops.", "Tes talents sous contrat exclusif et tes coproducteurs exécutifs te proposent des projets tous les quelques mois (ils apparaissent dans les propositions de leur média comme « de ton contrat » et ne te font pas payer les droits). Tes auteurs maison, tes showrunners, tes groupes et tes compagnies alliées proposent aussi. Quand tu leur donnes le feu vert, ils développent et produisent l'œuvre sans que tu montes l'équipe : tu décides seulement la sortie et le marketing. Pour cela, chaque média demande ses installations : en édition, l'Imprimerie maison, l'Atelier d'écriture, la Chaîne de librairies ou une Revue maison ; en musique, le Studio d'enregistrement, la Salle de concert, le Label indépendant ou l'Éditeur de partitions ; au théâtre, le Théâtre maison, la Salle de répétition, la Salle de théâtre ou l'Opéra ; au cinéma et en séries, les Décors de tournage, Plateaux et terrains, Soundstages ou Studios de location ; en jeux vidéo, le Studio graphique, le Laboratoire de test, le Studio de jeux mobiles ou la Société d'effets visuels. Sans aucune, ce que tu acceptes attend dans la file. Chaque niveau ajoute des œuvres à la fois, de la rapidité, de la qualité et des économies. Avec « Feu vert automatique », tu acceptes seul les propositions de ton contrat, et « Donner le feu vert » accepte toutes celles en attente d'un coup. Anecdote : Penguin, Motown et la Royal Shakespeare Company ont grandi ainsi, avec des talents maison et leurs propres ateliers.", "Seus talentos com contrato exclusivo e seus coprodutores executivos propõem projetos a cada poucos meses (aparecem nas propostas do seu meio como «do seu contrato» e não cobram os direitos). Seus autores da casa, showrunners, bandas e companhias aliadas também propõem. Quando você dá sinal verde, eles desenvolvem e produzem a obra sem você montar a equipe: você só decide o lançamento e o marketing. Para isso cada meio pede sua infraestrutura: no editorial, a Gráfica própria, a Oficina literária, a Rede de livrarias ou uma Revista própria; na música, o Estúdio de gravação, a Sala de concertos, o Selo independente ou a Editora de partituras; no teatro, o Teatro próprio, a Sala de ensaios, a Sala de teatro própria ou o Teatro de ópera; no cinema e nas séries, os Sets de filmagem, Stages e lotes, Soundstages ou Estúdios de aluguel; nos videogames, o Estúdio de gráficos, o Laboratório de testes, o Estúdio de jogos para celular ou a Empresa de efeitos visuais. Sem nenhuma, o que você aceitar espera na fila. Cada nível soma obras ao mesmo tempo, rapidez, qualidade e economia. Com «Sinal verde automático» você aceita sozinho as propostas do seu contrato, e «Dar sinal verde» aceita todas as pendentes de uma vez. Curiosidade: Penguin, Motown e a Royal Shakespeare Company cresceram assim, com talento da casa e oficinas próprias."],
+  ["Catálogo", "Catalog", "Catalogue", "Catálogo"],
+  ["Catálogo de obras", "Works catalog", "Catalogue des œuvres", "Catálogo de obras"],
+  ["Catálogo y panel", "Catalog and panel", "Catalogue et tableau de bord", "Catálogo e painel"],
+  ["Versión 1.5", "Version 1.5", "Version 1.5", "Versão 1.5"],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -67716,9 +67725,9 @@ function idArt(it, bid) {
   return pg();
 }
 GANCHOS.costo.push((W2) => (W2.cop != null ? 0.6 : 1));
-GANCHOS.ventas.push((P) => (P && P.cop != null ? 0.6 : 1));
+GANCHOS.ventas.push((P) => (P && typeof P.cop == "number" ? 0.6 : 1));
 GANCHOS.ficha.push((P) => {
-  const L = [P.cop != null ? tx4("Coproducción con ", "Co-production with ", "Coproduction avec ", "Coprodução com ") + rivN(P.cop) : "", P.colab ? tx4("Por encargo a ", "Commissioned to ", "Commandée à ", "Por encomenda a ") + P.colab : "", P.adq ? tx4(`Comprada a ${P.adq.r} en ${P.adq.y}`, `Bought from ${P.adq.r} in ${P.adq.y}`, `Achetée à ${P.adq.r} en ${P.adq.y}`, `Comprada de ${P.adq.r} em ${P.adq.y}`) : ""].filter(Boolean);
+  const L = [P.cop != null ? tx4("Coproducción con ", "Co-production with ", "Coproduction avec ", "Coprodução com ") + rivN(typeof P.cop == "object" ? P.cop.o : P.cop) : "", P.colab ? tx4("Por encargo a ", "Commissioned to ", "Commandée à ", "Por encomenda a ") + P.colab : "", P.adq ? tx4(`Comprada a ${P.adq.r} en ${P.adq.y}`, `Bought from ${P.adq.r} in ${P.adq.y}`, `Achetée à ${P.adq.r} en ${P.adq.y}`, `Comprada de ${P.adq.r} em ${P.adq.y}`) : ""].filter(Boolean);
   return L.length ? `<div class="c sub" translate="no">${L.map((x) => `<div class="m">${esc(x)}</div>`).join("")}</div>` : "";
 });
 const wdocbId = ACT["wdocb"];
@@ -72343,7 +72352,7 @@ function obraFechasH(P) {
   return `<div class="c"><div class="k"><h3 style="margin:0">${ic("calendario")} ${L4("Fechas de la obra", "Work dates", "Dates de l'œuvre", "Datas da obra")}</h3>${bi("fechas")}</div>${F.join("")}</div>`;
 }
 GANCHOS.ficha.push((P) => obraFechasH(P));
-const filOrigen5 = (p) => (p.tal5 != null ? "f" : p.cop != null || p.enc != null ? "r" : p.rwk != null || p.rvo != null || p.cmp5 || p.id < 0 ? "c" : "p");
+const filOrigen5 = (p) => (p.tal5 != null ? "f" : p.cop != null || p.enc != null || p.cof6 ? "r" : p.rwk != null || p.rvo != null || p.cmp5 || p.id < 0 ? "c" : "p");
 let FILO5 = "p";
 ACT["filo5"] = (v) => {
   FILO5 = ["p", "f", "c", "r", "t"].includes(v) ? v : "p";
@@ -72515,7 +72524,8 @@ negH = function () {
   return h;
 };
 
-const misFirmados = () => (S.tl || []).filter((t) => t && t.ex && !t.ret && !t.dead && !t.you && !ocupado(t));
+const esSubprod6 = (t) => !!(t && S.cre40 && (S.cre40.sp || []).includes(t.id));
+const misFirmados = () => (S.tl || []).filter((t) => t && (t.ex || esSubprod6(t)) && !t.ret && !t.dead && !t.you && !ocupado(t));
 function talMedio5(t, x) {
   const y = yr(),
     ok = (j) => MD[j] && y >= MD[j][2] && MD[j][1].includes(t.r);
@@ -72527,16 +72537,17 @@ function talMedio5(t, x) {
 let TALENC5 = null;
 function talEncargo5(v) {
   const L = misFirmados().sort((a, b) => b.s[b.r] - a.s[a.r]);
-  if (!L.length) return toast(L4("Todavía no tienes talentos firmados libres: dales un contrato exclusivo desde su ficha en Talento", "You have no free signed talents yet: give them an exclusive contract from their profile in Talent", "Tu n'as pas encore de talents sous contrat disponibles : donne-leur un contrat exclusif depuis leur fiche dans Talent", "Você ainda não tem talentos contratados livres: dê um contrato exclusivo pela ficha deles em Talento"));
+  if (!L.length) return toast(L4("Todavía no tienes talentos firmados ni subproductores ejecutivos libres: dales un contrato exclusivo desde su ficha en Talento", "You have no free signed talents or co-executive producers yet: give them an exclusive contract from their profile in Talent", "Tu n'as pas encore de talents sous contrat ni de coproducteurs exécutifs disponibles : donne-leur un contrat exclusif depuis leur fiche dans Talent", "Você ainda não tem talentos contratados nem coprodutores executivos livres: dê um contrato exclusivo pela ficha deles em Talento"));
   return fxPick({
     t: L4("Encomendar a un talento firmado", "Commission a signed talent", "Confier à un talent sous contrat", "Encomendar a um talento contratado"),
-    items: L.slice(0, 80).map((t) => ({ v: t.id, l: t.n, nt: 1, s: `${RO[t.r]} ${t.s[t.r]}${t.age ? " · " + t.age + " " + L4("años", "yrs", "ans", "anos") : ""}`, g: RO[t.r] })),
+    items: L.slice(0, 80).map((t) => ({ v: t.id, l: t.n, nt: 1, s: `${RO[t.r]} ${t.s[t.r]}${t.age ? " · " + t.age + " " + L4("años", "yrs", "ans", "anos") : ""}`, g: esSubprod6(t) ? L4("Subproductores ejecutivos", "Co-executive producers", "Coproducteurs exécutifs", "Coprodutores executivos") : RO[t.r] })),
     orden: false,
     ok: (s) => {
       const t = S.tl[+s[0]];
       if (!t) return;
       TALENC5 = { id: t.id, v };
-      op(`<div class="c"><div class="k"><h2 style="margin:0">${ic("talento")} ${dualReg("Encomendar", "Commission")}</h2>${btx()}</div><p>${L4("¿Cómo quieres encomendarlo a <b>#</b>?", "How do you want to commission it to <b>#</b>?", "Comment veux-tu le confier à <b>#</b> ?", "Como você quer encomendar a <b>#</b>?").replace("#", esc(t.n))}</p><div class="bts">${bt("talA5", "", "✔︎ " + L4("Que se encargue de todo", "Let them handle everything", "Qu'il s'occupe de tout", "Que cuide de tudo"), "a")}${bt("talE5", "", "✎︎ " + dualReg("Encomendar y editar", "Commission and edit"))}</div><div class="m">${L4(
+      ENCO6 = { b: 1, k: 0 };
+      op(`<div class="c"><div class="k"><h2 style="margin:0">${ic("talento")} ${dualReg("Encomendar", "Commission")}</h2>${btx()}</div><p>${L4("¿Cómo quieres encomendarlo a <b>#</b>?", "How do you want to commission it to <b>#</b>?", "Comment veux-tu le confier à <b>#</b> ?", "Como você quer encomendar a <b>#</b>?").replace("#", esc(t.n))}</p><div class="enc6" data-rival="0">${encOpH6(false)}</div><div class="bts">${bt("talA5", "", "✔︎ " + L4("Que se encargue de todo", "Let them handle everything", "Qu'il s'occupe de tout", "Que cuide de tudo"), "a")}${bt("talE5", "", "✎︎ " + dualReg("Encomendar y editar", "Commission and edit"))}</div><div class="m">${L4(
         "Tu talento lidera el proyecto en su especialidad y elige al resto del equipo con tu presupuesto. Cuenta como una idea suya: sube su moral y la obra gana un poco de calidad.",
         "Your talent leads the project in their specialty and picks the rest of the team with your budget. It counts as their idea: their morale goes up and the work gains some quality.",
         "Ton talent dirige le projet dans sa spécialité et choisit le reste de l'équipe avec ton budget. Cela compte comme son idée : son moral monte et l'œuvre gagne un peu de qualité.",
@@ -73232,7 +73243,7 @@ FRB["mus@5"] = (FRB["mus@5"] || []).concat(["Un ritmo que atrapa desde la primer
 FRM["mus@5"] = (FRM["mus@5"] || []).concat(["El segundo tercio se hace cuesta arriba.", "Capítulos que no aportan nada."]);
 }
 Object.assign(TX.es.ayuda, {
-  fechas: ["Fechas de la obra", "En la ficha de cada obra ves cuándo nació la idea, cuándo empezó el proyecto, cuándo se estrenó y cuánto tardó en total. Sirve para comparar cuánto te toma cada medio. En Obras → Filmografía el archivo se divide en tres: Propias (hechas por tu compañía y tus filiales), Compradas (proyectos, guiones y franquicias que compraste) y Con rivales (coproducciones y encargos). Dato: «Avatar» pasó más de diez años en un cajón, esperando a que la tecnología de efectos pudiera hacerla."],
+  fechas: ["Fechas de la obra", "En la ficha de cada obra ves cuándo nació la idea, cuándo empezó el proyecto, cuándo se estrenó y cuánto tardó en total. Sirve para comparar cuánto te toma cada medio. En Obras → Catálogo las obras se dividen en cuatro: Propias (hechas por tu compañía y tus filiales), De tus talentos (hechas por tus talentos firmados por su cuenta), Compradas (proyectos, guiones y franquicias que compraste) y Con rivales (coproducciones, cofinanciaciones y encargos). Obras → Franquicias usa las mismas cuatro divisiones. Dato: «Avatar» pasó más de diez años en un cajón, esperando a que la tecnología de efectos pudiera hacerla."],
   decisiones: ["Decisiones al avanzar", "Elige cuántas veces el juego se detiene para pedirte una decisión: Muchas (como antes), Normal (al menos 5 semanas entre una y otra y nada en los primeros 6 meses), Pocas (al menos 12 semanas) o Solo importantes (premios, deudas, la junta, ofertas y momentos históricos). Las propuestas para tu avatar nunca se pierden: esperan en Talento → Tu avatar. Lo cambias en Ajustes."],
   propuestas: ["Propuestas para ti", "Según las especialidades de tu avatar, otros estudios te proponen dirigir, actuar, escribir, componer, producir o diseñar una de sus obras, o hacer un proyecto en conjunto. Si aceptas, cobras, ganas experiencia en esa especialidad y fama para tu estudio, pero tu avatar queda ocupado unas semanas. Puedes pedir más dinero (a veces aceptan y a veces se retiran). Un proyecto en conjunto hace que ese estudio pague parte de tu próxima obra y se quede con esa parte de lo que gane. Dato: Orson Welles financiaba sus propias películas actuando en las de otros."],
   becas: ["Becas automáticas", "Actívalas en Talento → Academia. Cada mes, hasta el número que elijas de tus talentos firmados (con contrato exclusivo) empiezan el mejor curso de su oficio que puedan tomar, y tú pagas el curso. Mientras estudian pueden seguir trabajando en tus obras. Si alguien ya domina su oficio o no tiene energía, espera al mes siguiente."],
@@ -74029,7 +74040,7 @@ matH = function (m) {
 };
 Object.assign(TX.es.ayuda, {
   energia: ["Energía y trabajos con rivales", "Cada talento tiene una energía de 0 a 100. Cada papel o puesto en una obra le quita 10, sea tuya o de un rival, y cada mes recupera 10 (más con el Centro de bienestar). Por eso un talento que ya trabaja con un rival puede entrar a tu obra si le queda energía: solo queda fuera cuando la gastó toda. Lo mismo vale para tu avatar cuando acepta trabajos de otros estudios. Dato: en el Hollywood de los años treinta, los actores de contrato llegaban a rodar cuatro o cinco películas al año."],
-  segundoplano: ["Segundo plano", "En Obras, la línea de producción tiene dos divisiones. «Lo que haces tú» guarda las obras que armas tú. «Segundo plano» guarda las que hacen por su cuenta tus talentos firmados, tus bandas y tus compañías, y tus encargos a otros estudios y artistas: no ocupan lugar en tu sede y avanzan solas. Cuando una termina, te avisa y aparece en «Listas para lanzar»: tú decides el plan de lanzamiento y el marketing, o usas el plan estándar. En Franquicias, la filmografía separa estas obras en «De tus talentos»."],
+  segundoplano: ["Segundo plano", "En Obras, la línea de producción tiene dos divisiones. «Lo que haces tú» guarda las obras que armas tú. «Segundo plano» guarda las que hacen por su cuenta tus talentos firmados, tus bandas y tus compañías, y tus encargos a otros estudios y artistas: no ocupan lugar en tu sede y avanzan solas. Cuando una termina, te avisa y aparece en «Listas para lanzar»: tú decides el plan de lanzamiento y el marketing, o usas el plan estándar. En Obras → Catálogo y en Obras → Franquicias estas obras aparecen en «De tus talentos»."],
   talsolos: ["Tus talentos producen solos", "Al aceptar una propuesta de tus talentos firmados, tus bandas, tus autores de la casa, tus showrunners o tus compañías aliadas, ellos la desarrollan y la producen sin que armes el equipo: tú solo decides el lanzamiento y el marketing. Para eso cada medio pide su infraestructura: en editorial, la Imprenta propia, el Taller literario, la Cadena de librerías o una Revista propia; en música, el Estudio de grabación, la Sala de conciertos, el Sello discográfico independiente o la Editorial de partituras; en teatro, el Teatro propio, la Sala de ensayos, la Sala de teatro propia o el Teatro de ópera; en cine y series, los Sets de rodaje, Stages y lotes, Soundstages o Estudios de alquiler; en videojuegos, el Estudio de gráficos, el Laboratorio de testing, el Estudio de juegos para móviles o la Empresa de efectos visuales. Sin ninguna, lo aceptado se queda en tu material. Cada nivel cuenta: suma obras a la vez (1 más cada 2 niveles), rapidez (6 % por nivel, hasta la mitad del tiempo), calidad (hasta +4) y ahorro (3 % por nivel, hasta 25 %). Puedes apagar la producción automática en cada medio. Dato: Penguin, Motown y la Royal Shakespeare Company crecieron así, con talento de la casa y talleres propios."],
   consola5: ["Tu consola", "En Obras → Videojuegos → Consola propia. Tu consola tiene una cuota de mercado que sube con su potencia, con tus juegos recientes, con tus exclusivos (y más si son éxitos), con campañas de 3 meses, con rebajas de precio y si es compatible con tu consola anterior; baja con un precio alto y cuando envejece después de 4 años. Cada mes ves cuántas unidades vendió, cuánto ganaste o perdiste con el hardware (una consola barata pierde dinero por unidad) y cuánto cobraste en regalías por los juegos de otros. Tus juegos normales venden más mientras exista; los exclusivos solo salen en ella y venden según su cuota. Puedes bajar el precio hasta dos veces (una por año) y, después de 3 años, retirarla para preparar una sucesora que hereda su comunidad. Dato: muchas consolas se vendieron a pérdida; el negocio estaba en las regalías de cada juego."],
   companias: ["Compañías aliadas", "En Obras → Teatro. Con el tiempo, compañías de teatro, ópera, ballet, títeres, zarzuela, circo, musicales, cabaret, improvisación y nuevo circo, y también humoristas, dúos cómicos y comediantes de stand-up, te piden firmar: buscan estabilidad. Firmar cuesta su apoyo de un año y después pagas ese apoyo poco a poco cada mes. A cambio, cada mes hacen temporada y te dan su parte de la taquilla (25 a 35 %), crecen en fans y a veces te proponen obras gratis, que con infraestructura de teatro producen por su cuenta. Puedes mandarlas de gira (más fans y más taquilla durante 8 semanas), hacer una obra nueva con ellas (con los comediantes arranca como comedia y, desde 1950, como stand up), renovar su contrato por tres años o liberarlas. Dato: el humor en solitario viene del vodevil y del music hall; el stand-up moderno nació en los clubes de los años cincuenta."],
@@ -74570,6 +74581,271 @@ Object.assign(TX.es.ayuda, {
   reparto6: ["Reparto con lógica", "«Reparto recomendado» y «Al mejor» buscan primero intérpretes del mismo sexo que el personaje y de una edad creíble para él (más estricta con niños y jóvenes), y después miran su nivel, su tipo de papel (acción, romance, villano, mentor, comedia, joven o dramático) frente al arquetipo del personaje y los géneros de la obra, y su costo. Ya no cambian el sexo ni el nombre del personaje para acomodar a un actor. Si nadie libre encaja, te lo dice para que ajustes la edad o busques en Ver talentos, que ahora se ordena por encaje. Las estrellas de «Encaje» usan la misma regla."],
   licauto: ["Venta automática de licencias", "En Negocio → Streaming y en Negocio → Canal de TV → Licencias. Cada mes vende licencias de tus obras archivadas: a la TV, no exclusivas (una vez al año por obra, pagan el 6 % de su valor y siguen en tu catálogo); al streaming, exclusivas por 3 años (pagan el 16 %, pero mientras duran salen de tu catálogo y de tu canal). Eliges cuántos años deben haber pasado desde el estreno (1, 2 o 5). Las obras con buena etiqueta (Clásico, Culto, Hit) valen más; las viejas y olvidadas, menos. Dato: las reposiciones en TV mantuvieron vivas series como Star Trek, que fracasó en su primera emisión y triunfó en reestrenos."],
   planauto: ["Plan automático", "En cada obra lista para estrenar y dentro del plan de lanzamiento. Parte del marketing recomendado del asistente y suma los canales que más público dan por cada peso, hasta una cuarta parte del costo de producción y sin pasar del 30 % de tu caja, y elige la mejor semana del asistente (temporada, competencia y fechas especiales de los próximos 4 meses). Desde la obra lo aplica de una vez; dentro del plan te lo propone para que lo revises. En el plan también puedes «Seleccionar todo» el marketing o «Quitar todo». Con «Lanzamiento automático» (Manual, Solo segundo plano o Todas mis obras) las obras terminadas salen solas con ese plan. Dato: los grandes estrenos de cine suelen gastar en marketing entre la mitad y el total de su costo de producción; el plan automático es más prudente."],
+});
+let FRF6 = "t";
+function frOrig6(f) {
+  const F = frG(f);
+  if (F && F.cmp) return "c";
+  const L = S.pj.filter((p) => p.fid == f).sort((a, b) => a.id - b.id);
+  return L.length ? filOrigen5(L[0]) : "p";
+}
+ACT["frf6"] = (v) => {
+  FRF6 = ["p", "f", "c", "r", "t"].includes(v) ? v : "t";
+  fil.fp = 0;
+  return pg();
+};
+function frOrigFH6() {
+  const L = frList(),
+    n = { p: 0, f: 0, c: 0, r: 0, t: L.length };
+  L.forEach((f) => n[frOrig6(f)]++);
+  const lab = { p: L4("Propias", "Own", "Propres", "Próprias"), f: L4("De tus talentos", "By your talents", "De tes talents", "Dos seus talentos"), c: L4("Compradas", "Bought", "Achetées", "Compradas"), r: L4("Con rivales", "With rivals", "Avec des rivaux", "Com rivais"), t: L4("Todas", "All", "Toutes", "Todas") };
+  return `<div class="c"><div class="chips">${["p", "f", "c", "r", "t"].map((k) => chx("frf6", k, `${lab[k]} <span class="m">${n[k]}</span>`, FRF6 == k)).join("")}</div></div>`;
+}
+
+const medio6 = (t) => {
+  const y = yr(),
+    ok = (j) => MD[j] && y >= MD[j][2],
+    pref = ({ 0: [5, 0, 3, 1], 1: [0, 1, 3], 2: [0, 1, 2, 3], 3: [2, 0, 3], 4: [0, 1], 5: [4, 3, 0], 6: [5, 0, 1], 7: [0, 3, 1] }[t.r] || [0, 3]).filter(ok);
+  return pref.length ? pref[Math.floor(R() * pref.length * 0.999)] : talMedio5(t, null);
+};
+const luzOn6 = (m) => !!(S.luz6 && S.luz6[m]);
+ACT["luz6"] = (v) => {
+  const m = +v;
+  S.luz6 = S.luz6 || {};
+  S.luz6[m] = luzOn6(m) ? 0 : 1;
+  if (luzOn6(m)) aceptaContrato6(m, 1);
+  return pg();
+};
+function aceptaContrato6(m, silencio) {
+  const L = (S.pro40 || []).filter((p) => p.m == m && p.e > S.t && proFirm5(p));
+  let n = 0;
+  L.forEach((p) => {
+    if (S.cash < Math.round(p.pr || 0)) return;
+    const n0 = (S.pro40 || []).length;
+    ACT["pr4a"](p.id + "|1");
+    if ((S.pro40 || []).length < n0) n++;
+  });
+  if (n && !silencio) toast(L4("Luz verde a # propuestas de tu contrato", "Green light to # proposals from your contract", "Feu vert à # propositions de ton contrat", "Sinal verde para # propostas do seu contrato").replace("#", n));
+  return n;
+}
+ACT["luzya6"] = (v) => {
+  aceptaContrato6(+v);
+  return pg();
+};
+on("mes", () => {
+  if (!S || S.pre || S.taller || !S.tl) return;
+  const y = yr();
+  S.pro40 = S.pro40 || [];
+  S.tl.forEach((t) => {
+    if (!t || !(t.ex || esSubprod6(t)) || t.you || t.ret || t.dead || (t.e != null && t.e < 10)) return;
+    if (S.pro40.some((p) => p.tid == t.id && p.e > S.t) || (S.dev40 || []).some((p) => p.tid == t.id)) return;
+    if (R() > 0.14) return;
+    const m = medio6(t);
+    if (!MD[m] || y < MD[m][2] || S.pro40.filter((p) => p.m == m && p.e > S.t && proFirm5(p)).length >= 3) return;
+    const p = proNueva(m, { tid: t.id, free: 1, k: R() < 0.55 ? 0 : 1 });
+    if (!p) return;
+    p.au = t.n;
+    p.e = S.t + 16;
+    p.sf6 = 1;
+    S.pro40.push(p);
+    if (luzOn6(m)) aceptaContrato6(m, 1);
+    else nws(L4("#, tu talento firmado, te propone «%»: dale luz verde en Obras → &.", "#, your signed talent, proposes «%»: give it the green light in Works → &.", "#, ton talent sous contrat, te propose « % » : donne-lui le feu vert dans Œuvres → &.", "#, seu talento contratado, propõe «%»: dê sinal verde em Obras → &.").replace("#", t.n).replace("%", p.n).replace("&", MD[m][0]));
+  });
+});
+const facH6 = facH5;
+facH5 = function (m) {
+  let h = facH6.apply(this, arguments);
+  const P = (S.pro40 || []).filter((p) => p.m == m && p.e > S.t && proFirm5(p)),
+    F = (S.tl || []).filter((t) => t && t.ex && !t.you && !t.ret && !t.dead).length,
+    extra = `<div class="m" style="margin-top:6px">${L4("Talentos con contrato exclusivo: # · te proponen proyectos cada pocos meses.", "Talents on exclusive contracts: # · they propose projects every few months.", "Talents sous contrat exclusif : # · ils te proposent des projets tous les quelques mois.", "Talentos com contrato exclusivo: # · propõem projetos a cada poucos meses.").replace("#", F)}</div><div class="chips">${chx("luz6", m, L4("Luz verde automática", "Automatic green light", "Feu vert automatique", "Sinal verde automático"), luzOn6(m))}</div>${P.length ? `<div class="bts">${bt("luzya6", m, L4("Dar luz verde a las # de tu contrato", "Green-light the # from your contract", "Donner le feu vert aux # de ton contrat", "Dar sinal verde às # do seu contrato").replace("#", P.length), "a")}</div>` : ""}`;
+  return h.replace(/<\/details>$/, extra + "</details>").replace(/^<details class="c"(?! open)/, P.length ? '<details class="c" open' : '<details class="c"');
+};
+const ctBase6 = ACT["ct"];
+ACT["ct"] = (v) => {
+  const t = S.tl[+v],
+    a = t && t.ex;
+  const r = ctBase6(v);
+  if (t && !a && t.ex && !t.you) {
+    const m = medio6(t);
+    nws(
+      (facNivel5(m)
+        ? L4("# firmó contigo en exclusiva: te propondrá proyectos y, con tu infraestructura de %, los producirá por su cuenta.", "# signed with you exclusively: they'll propose projects and, with your % facilities, produce them on their own.", "# a signé avec toi en exclusivité : il te proposera des projets et, avec tes installations de %, les produira lui-même.", "# assinou com você em exclusividade: vai propor projetos e, com sua infraestrutura de %, produzi-los por conta própria.")
+        : L4("# firmó contigo en exclusiva: te propondrá proyectos. Para que los produzca por su cuenta necesitas &.", "# signed with you exclusively: they'll propose projects. For them to produce on their own you need &.", "# a signé avec toi en exclusivité : il te proposera des projets. Pour qu'il les produise seul, il te faut &.", "# assinou com você em exclusividade: vai propor projetos. Para produzi-los por conta própria você precisa de &.")
+      )
+        .replace("#", t.n)
+        .replace("%", MEDN5()[m])
+        .replace("&", facFalta5(m)),
+    );
+  }
+  return r;
+};
+
+const ENCB6 = [
+  [0.6, () => L4("Ajustado", "Tight", "Serré", "Enxuto")],
+  [1, () => L4("Normal", "Normal", "Normal", "Normal")],
+  [1.5, () => L4("Amplio", "Generous", "Large", "Amplo")],
+  [2.5, () => L4("Superproducción", "Blockbuster", "Superproduction", "Superprodução")],
+];
+const ENCK6 = [0, 0.25, 0.4, 0.5];
+let ENCO6 = { b: 1, k: 0 };
+function encOpH6(rival) {
+  return `<div class="k" style="margin-top:8px"><b>${L4("Presupuesto acordado", "Agreed budget", "Budget convenu", "Orçamento acordado")}</b>${bi("cofin6")}</div><div class="chips">${ENCB6.map((x, i) => chx("enco6", "b|" + i, x[1]() + " · ×" + dec1(x[0], 1), ENCO6.b == i)).join("")}</div>${
+    rival
+      ? `<div class="m" style="margin-top:6px"><b>${L4("Que el rival ponga de su dinero", "Have the rival put in money", "Que le rival mette de son argent", "Que o rival ponha dinheiro")}</b> · ${L4("paga esa parte del costo y se queda con esa parte de lo que gane la obra", "they pay that share of the cost and keep that share of what the work earns", "il paie cette part du coût et garde cette part des gains", "paga essa parte do custo e fica com essa parte do que a obra ganhar")}</div><div class="chips">${ENCK6.map((k, i) => chx("enco6", "k|" + i, k ? Math.round(k * 100) + " %" : L4("Nada", "None", "Rien", "Nada"), ENCO6.k == i)).join("")}</div>`
+      : ""
+  }`;
+}
+ACT["enco6"] = (v) => {
+  const [k, i] = String(v).split("|");
+  if (k == "b") ENCO6.b = cl(+i | 0, 0, ENCB6.length - 1);
+  else ENCO6.k = cl(+i | 0, 0, ENCK6.length - 1);
+  const h = document.querySelector("#md.on .enc6");
+  if (h) {
+    h.innerHTML = encOpH6(h.dataset.rival == "1");
+    return;
+  }
+  return pg();
+};
+function encAplica6(W2, r) {
+  if (!W2) return;
+  const f = ENCB6[ENCO6.b] ? ENCB6[ENCO6.b][0] : 1;
+  if (f != 1 && W2.bv != null) {
+    const r0 = 0.02 * Math.pow(400, (W2.bv | 0) / 1000);
+    W2.bv = BVk(r0 * f);
+    try {
+      W2.crew = eqRec(W2.m, BD());
+      repartoRec(W2);
+    } catch (e) {}
+  }
+  const k = ENCK6[ENCO6.k] || 0,
+    rv = r != null ? S.rv[r] : null;
+  if (k > 0 && rv && !rv.own) {
+    let est = 0;
+    try {
+      est = wCosto(wP()).tot;
+    } catch (e) {}
+    if ((rv.cash || 0) >= est * k) W2.cof6 = { o: r, k };
+    else toast(L4("# no tiene caja para poner el %: va sin cofinanciación", "# can't afford %: it goes without co-financing", "# n'a pas de quoi mettre % : sans cofinancement", "# não tem caixa para pôr %: vai sem cofinanciamento").replace("#", rv.n).replace("%", Math.round(k * 100) + " %"));
+  }
+}
+GANCHOS.costo.push((W2) => (W2 && W2.cof6 ? 1 - W2.cof6.k : 1));
+GANCHOS.prod.push((P, W2) => {
+  if (!W2 || !W2.cof6) return;
+  P.cof6 = Object.assign({}, W2.cof6);
+  const rv = S.rv[P.cof6.o];
+  if (rv) {
+    const puso = Math.round(((P.paid || 0) * P.cof6.k) / (1 - P.cof6.k));
+    rv.cash = (rv.cash || 0) - puso;
+    P.cof6.puso = puso;
+    nws(L4("# pone % para «&» y se quedará con el @ de lo que gane.", "# puts in % for «&» and will keep @ of what it earns.", "# met % pour « & » et gardera @ de ses gains.", "# põe % em «&» e ficará com @ do que ganhar.").replace("#", rv.n).replace("%", fm(puso)).replace("&", P.n).replace("@", Math.round(P.cof6.k * 100) + " %"));
+  }
+});
+on("mes", () => {
+  if (!S || !S.pj) return;
+  S.pj.forEach((P) => {
+    if (!P.cof6 || P.cof6.pag || P.st != 4) return;
+    P.cof6.pag = 1;
+    const x = Math.round(Math.max(0, P.earn || 0) * P.cof6.k);
+    if (x > 0) {
+      gasta("coproduccion", x);
+      if (S.rv[P.cof6.o]) S.rv[P.cof6.o].cash = (S.rv[P.cof6.o].cash || 0) + x;
+    }
+  });
+});
+GANCHOS.ficha.push((P) => {
+  if (!P.cof6) return "";
+  const rv = S.rv[P.cof6.o];
+  return `<div class="c"><div class="m">${ic("dinero")} ${L4("Cofinanciada por #: puso % (el & del costo) y se queda con el & de lo que gane.", "Co-financed by #: they put in % (& of the cost) and keep & of what it earns.", "Cofinancée par # : il a mis % (& du coût) et garde & de ses gains.", "Cofinanciada por #: pôs % (& do custo) e fica com & do que ganhar.")
+    .replace("#", esc(rv ? rv.n : "?"))
+    .replace("%", fm(P.cof6.puso || 0))
+    .split("&")
+    .join(Math.round(P.cof6.k * 100) + " %")}${P.cof6.pag ? " " + L4("Reparto pagado.", "Share paid.", "Part payée.", "Parte paga.") : ""}</div></div>`;
+});
+const encM6 = encomiendaM;
+encomiendaM = function (t, r) {
+  ENCO6 = { b: 1, k: 0 };
+  const res = encM6.apply(this, arguments),
+    h = document.querySelector("#md.on .hoja .c .bts");
+  if (h) h.insertAdjacentHTML("beforebegin", `<div class="enc6" data-rival="${S.rv[r] && !S.rv[r].own ? 1 : 0}">${encOpH6(S.rv[r] && !S.rv[r].own)}</div>`);
+  return res;
+};
+const encHaz6 = encomiendaHaz;
+encomiendaHaz = function (auto) {
+  const e = ENCP;
+  if (!e) return encHaz6.apply(this, arguments);
+  const abre = e.abre;
+  e.abre = function () {
+    const r = abre.apply(this, arguments);
+    encAplica6(W, e.r);
+    return r;
+  };
+  return encHaz6.apply(this, arguments);
+};
+const encargoH6 = encargoH;
+encargoH = function () {
+  const h = encargoH6.apply(this, arguments);
+  if (!h || ENCS == null) return h;
+  return h.replace(/(<div class="bts" style="margin-top:8px">)/, `<div class="enc6x">${encOpH6(!S.rv[ENCS].own)}</div>$1`);
+};
+const enc6 = ACT["enc"];
+ACT["enc"] = (v) => {
+  const r = enc6(v);
+  if (W) encAplica6(W, +String(v).split("|")[0]);
+  return r;
+};
+const talEnc6 = talEncargo5;
+talEncargo5 = function (v) {
+  ENCO6 = { b: 1, k: 0 };
+  const r = talEnc6.apply(this, arguments);
+  return r;
+};
+const talHaz6 = talEncHaz5;
+talEncHaz5 = function (auto) {
+  const mtg0 = ACT["mtg"];
+  ACT["mtg"] = (x) => {
+    const r = mtg0(x);
+    encAplica6(W, null);
+    return r;
+  };
+  try {
+    return talHaz6.apply(this, arguments);
+  } finally {
+    ACT["mtg"] = mtg0;
+  }
+};
+
+function migra7() {
+  if (!S || S.mig7) return;
+  (S.mt || []).forEach((x) => {
+    if (!x || !x.own40 || x.us5 != null || x.auto5) return;
+    const t = x.tid40 != null ? S.tl[x.tid40] : null;
+    if (t && (t.ex || esSubprod6(t)) && !t.dead && !t.you) x.auto5 = { k: "t", tid: t.id, n: t.n };
+  });
+  S.mig7 = 1;
+}
+const cargarS7 = cargarS;
+cargarS = function () {
+  const r = cargarS7.apply(this, arguments);
+  try {
+    migra7();
+    autoProd5();
+  } catch (e) {}
+  return r;
+};
+const bgAplica7 = bgAplica5;
+bgAplica5 = function (P) {
+  const r = bgAplica7.apply(this, arguments);
+  const k = String(P.n || "").toLowerCase();
+  if (S.pj.some((q) => q !== P && q.fid != P.fid && String(q.n).toLowerCase() == k)) {
+    const n0 = P.n;
+    P.n = titMedio5(P.m);
+    if (frG(P.fid) && frG(P.fid).n == n0) frG(P.fid).n = P.n;
+  }
+  return r;
+};
+Object.assign(TX.es.ayuda, {
+  cofin6: ["Presupuesto acordado y cofinanciación", "Al encomendar una obra a un rival, a una filial, a un talento firmado o a un subproductor ejecutivo, eliges el presupuesto que acuerdan: Ajustado (×0,6), Normal, Amplio (×1,5) o Superproducción (×2,5). Más presupuesto da más calidad, pero no el doble. Con un rival también puedes pedir que ponga de su dinero: el 25, 40 o 50 % del costo. Tú pagas menos y, cuando la obra pasa al archivo, el rival se queda con esa misma parte de lo que ganaste. Solo acepta si tiene la caja para hacerlo. Las obras cofinanciadas aparecen en «Con rivales». Dato: muchas películas se financian así entre varios estudios para repartir el riesgo; Titanic la pagaron a medias Fox y Paramount."],
+  talsolos: ["Tus talentos producen solos", "Tus talentos con contrato exclusivo y tus subproductores ejecutivos te proponen proyectos cada pocos meses (salen en las propuestas de su medio como «de tu contrato» y no te cobran los derechos). También proponen tus autores de la casa, tus showrunners, tus bandas y tus compañías aliadas. Cuando les das luz verde, ellos desarrollan y producen la obra sin que armes el equipo: tú solo decides el lanzamiento y el marketing. Para eso cada medio pide su infraestructura: en editorial, la Imprenta propia, el Taller literario, la Cadena de librerías o una Revista propia; en música, el Estudio de grabación, la Sala de conciertos, el Sello discográfico independiente o la Editorial de partituras; en teatro, el Teatro propio, la Sala de ensayos, la Sala de teatro propia o el Teatro de ópera; en cine y series, los Sets de rodaje, Stages y lotes, Soundstages o Estudios de alquiler; en videojuegos, el Estudio de gráficos, el Laboratorio de testing, el Estudio de juegos para móviles o la Empresa de efectos visuales. Sin ninguna, lo aceptado espera en la cola. Cada nivel suma obras a la vez, rapidez, calidad y ahorro. Con «Luz verde automática» aceptas solo las propuestas de tu contrato, y con «Dar luz verde» aceptas todas las pendientes de una vez. Dato: Penguin, Motown y la Royal Shakespeare Company crecieron así, con talento de la casa y talleres propios."],
 });
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {

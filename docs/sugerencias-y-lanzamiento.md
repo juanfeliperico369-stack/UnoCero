@@ -75,12 +75,19 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Diccionario de títulos ampliado con palabras poco conocidas y de otros idiomas.
   - Las partidas guardadas reciben las funciones nuevas al actualizar.
 
+- **De las pruebas de juego (versión 1.5):**
+  - Franquicias con las cuatro divisiones y «Catálogo» en lugar de «Filmografía».
+  - Los talentos con contrato exclusivo y los subproductores ejecutivos proponen proyectos; luz verde de una vez o automática.
+  - Presupuesto acordado y cofinanciación de rivales al encomendar.
+  - Corregido el doble cobro en los proyectos en conjunto con rivales.
+
 ### Pendientes
-1. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.
-2. **Logros de Google Play Games.** El juego ya tiene logros propios. Conectarlos a Play Games da visibilidad en la tienda, pero exige iniciar sesión con Google y cambiar la política de privacidad y el formulario de datos.
-3. **Galería de la comunidad.** Una página en GitHub Pages con paquetes `.iapack` y estudios `.iaestudio` compartidos por los jugadores.
-4. **Accesibilidad.** Probar el juego con TalkBack, el lector de pantalla de Android.
-5. **Técnica para la versión 2:**
+1. **Bandeja de pendientes, copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`).
+2. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.
+3. **Logros de Google Play Games.** El juego ya tiene logros propios. Conectarlos a Play Games da visibilidad en la tienda, pero exige iniciar sesión con Google y cambiar la política de privacidad y el formulario de datos.
+4. **Galería de la comunidad.** Una página en GitHub Pages con paquetes `.iapack` y estudios `.iaestudio` compartidos por los jugadores.
+5. **Accesibilidad.** Probar el juego con TalkBack, el lector de pantalla de Android.
+6. **Técnica para la versión 2:**
    - Separar el código en módulos.
    - Cargar los diccionarios de traducción por idioma para bajar el tamaño del HTML.
 

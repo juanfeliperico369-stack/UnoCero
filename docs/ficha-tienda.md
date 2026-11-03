@@ -70,10 +70,10 @@ Idiomas: español, inglés, francés y portugués.
 Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales; el juego no está afiliado a ellos. El casino del juego usa dinero ficticio: no hay apuestas con dinero real.
 ```
 
-**Notas de la versión 1.4** (444/500)
+**Notas de la versión 1.5** (456/500)
 
 ```
-Versión 1.4: tus talentos firmados producen solos con tu infraestructura y tú decides el lanzamiento; línea y archivo divididos en lo tuyo y el segundo plano; plan automático de marketing y fecha; reparto que respeta la edad y el sexo de cada personaje; los talentos trabajan con rivales según su energía y los retirados vuelven por más dinero; consola con ventas y exclusivos; licencias automáticas; comediantes; títulos más variados y breves.
+Versión 1.5: tus talentos firmados te proponen proyectos y los producen con tu infraestructura; luz verde automática; presupuesto acordado y cofinanciación con rivales al encomendar; catálogo y franquicias en cuatro divisiones; línea y archivo de segundo plano; plan automático de marketing y fecha; reparto que respeta edad y sexo; talentos con energía y retirados que vuelven; consola con ventas y exclusivos; licencias automáticas; títulos más variados.
 ```
 
 ## English (en-US)
@@ -129,10 +129,10 @@ Languages: Spanish, English, French and Portuguese.
 The real works, awards, people, brands and places in the game are historical and cultural references; the game is not affiliated with them. The in-game casino uses fictional money: there is no real-money gambling.
 ```
 
-**Notas de la versión 1.4** (421/500)
+**Notas de la versión 1.5** (436/500)
 
 ```
-Version 1.4: your signed talents produce on their own with your facilities and you decide the launch; the line and archive split into your work and background; auto plan for marketing and date; casting that respects each character's age and sex; talents work with rivals based on energy and retired ones return for more money; console with sales and exclusives; automatic licenses; comedians; more varied, shorter titles.
+Version 1.5: your signed talents propose projects and produce them with your facilities; automatic green light; agreed budget and co-financing with rivals when you commission; catalog and franchises in four divisions; background line and archive; auto plan for marketing and date; casting that respects age and sex; energy-based talents and retirees who return; console with sales and exclusives; automatic licenses; more varied titles.
 ```
 
 ## Français (fr-FR)
@@ -188,10 +188,10 @@ Langues : espagnol, anglais, français et portugais.
 Les œuvres, prix, personnes, marques et lieux réels présents dans le jeu sont des références historiques et culturelles ; le jeu n'y est pas affilié. Le casino du jeu utilise de l'argent fictif : il n'y a pas de jeu d'argent réel.
 ```
 
-**Notas de la versión 1.4** (465/500)
+**Notas de la versión 1.5** (468/500)
 
 ```
-Version 1.4 : tes talents sous contrat produisent seuls avec tes installations et tu décides la sortie ; ligne et archives séparées entre ton travail et l'arrière-plan ; plan automatique de marketing et de date ; distribution qui respecte l'âge et le sexe des personnages ; travail avec des rivaux selon l'énergie et retour des retraités contre plus d'argent ; console avec ventes et exclusivités ; licences automatiques ; humoristes ; titres plus variés et courts.
+Version 1.5 : tes talents sous contrat proposent des projets et les produisent avec tes installations ; feu vert automatique ; budget convenu et cofinancement avec des rivaux ; catalogue et franchises en quatre divisions ; ligne et archives d'arrière-plan ; plan automatique de marketing et de date ; distribution qui respecte l'âge et le sexe ; énergie des talents et retour des retraités ; console avec ventes et exclusivités ; licences automatiques ; titres variés.
 ```
 
 ## Português (pt-BR)
@@ -247,8 +247,8 @@ Idiomas: espanhol, inglês, francês e português.
 As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais; o jogo não é afiliado a eles. O cassino do jogo usa dinheiro fictício: não há apostas com dinheiro real.
 ```
 
-**Notas de la versión 1.4** (452/500)
+**Notas de la versión 1.5** (446/500)
 
 ```
-Versão 1.4: seus talentos contratados produzem sozinhos com sua infraestrutura e você decide o lançamento; linha e arquivo divididos entre o seu trabalho e o segundo plano; plano automático de marketing e data; elenco que respeita idade e sexo de cada personagem; talentos trabalham com rivais conforme a energia e aposentados voltam por mais dinheiro; console com vendas e exclusivos; licenças automáticas; comediantes; títulos mais variados e curtos.
+Versão 1.5: seus talentos contratados propõem projetos e os produzem com sua infraestrutura; sinal verde automático; orçamento acordado e cofinanciamento com rivais ao encomendar; catálogo e franquias em quatro divisões; linha e arquivo de segundo plano; plano automático de marketing e data; elenco que respeita idade e sexo; energia dos talentos e aposentados que voltam; console com vendas e exclusivos; licenças automáticas; títulos variados.
 ```

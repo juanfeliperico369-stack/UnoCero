@@ -40,7 +40,7 @@ Cada pedido, qué cambió, cómo comprobarlo en el juego y qué midieron las pru
 
 ## 5. Archivo con cuatro secciones
 
-- En Franquicias → Filmografía: Propias, De tus talentos, Compradas y Con rivales.
+- En Obras → Catálogo (antes «Filmografía») y, desde la 1.5, también en Obras → Franquicias: Propias, De tus talentos, Compradas y Con rivales.
 
 ## 6. Consola propia con economía real
 
