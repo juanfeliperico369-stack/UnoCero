@@ -119,8 +119,14 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Elegir el tipo de obra al encomendar.
   - Ceremonias solo para tus obras.
 
+- **De las pruebas de juego (versión 1.6.2):**
+  - Bandeja de pendientes.
+  - Panel de automatización.
+  - Parejas del avatar como decisión propia.
+  - En general, parejas de distinto sexo.
+
 ### Pendientes
-1. **Bandeja de pendientes, copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`).
+1. **Copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`). La bandeja de pendientes ya está hecha (1.6.2).
 2. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.
 3. **Logros de Google Play Games.** El juego ya tiene logros propios. Conectarlos a Play Games da visibilidad en la tienda, pero exige iniciar sesión con Google y cambiar la política de privacidad y el formulario de datos.
 4. **Galería de la comunidad.** Una página en GitHub Pages con paquetes `.iapack` y estudios `.iaestudio` compartidos por los jugadores.

@@ -70,10 +70,10 @@ Idiomas: español, inglés, francés y portugués.
 Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales; el juego no está afiliado a ellos. El casino del juego usa dinero ficticio: no hay apuestas con dinero real.
 ```
 
-**Notas de la versión 1.6.1** (400/500)
+**Notas de la versión 1.6.2** (434/500)
 
 ```
-Versión 1.6.1: rescata rivales al borde de la quiebra o reabre los que cerraron; nacen estudios nuevos cada año; renovación automática de temporadas; ficha completa de tu avatar; obras para festivales; presupuesto anual por medio; tu propia prensa; redes de distribución para todos los medios; sedes que dan dinero; premios y relaciones en cada ficha; estatura, forma física y minijuegos de práctica.
+Versión 1.6.2: bandeja de pendientes con todo lo que espera tu decisión y panel de automatización con todos los automáticos juntos; las parejas de tu avatar se deciden en situaciones; rescata rivales y reabre los que cerraron; nacen estudios nuevos cada año; renovación automática de temporadas; ficha completa de tu avatar; obras para festivales; presupuesto por medio; tu propia prensa; redes de distribución y sedes que dan dinero.
 ```
 
 ## English (en-US)
@@ -129,10 +129,10 @@ Languages: Spanish, English, French and Portuguese.
 The real works, awards, people, brands and places in the game are historical and cultural references; the game is not affiliated with them. The in-game casino uses fictional money: there is no real-money gambling.
 ```
 
-**Notas de la versión 1.6.1** (378/500)
+**Notas de la versión 1.6.2** (407/500)
 
 ```
-Version 1.6.1: rescue rivals on the brink of bankruptcy or reopen closed ones; new studios are born every year; automatic season renewal; full profile for your avatar; works for festivals; annual budget per medium; your own press; distribution networks for every medium; offices that earn money; awards and relationships on every profile; height, fitness and practice minigames.
+Version 1.6.2: an inbox with everything waiting for your decision and an automation panel with every automatic option together; your avatar's relationships are decided in situations; rescue rivals and reopen closed ones; new studios every year; automatic season renewal; full profile for your avatar; works for festivals; budget per medium; your own press; distribution networks and offices that earn money.
 ```
 
 ## Français (fr-FR)
@@ -188,10 +188,10 @@ Langues : espagnol, anglais, français et portugais.
 Les œuvres, prix, personnes, marques et lieux réels présents dans le jeu sont des références historiques et culturelles ; le jeu n'y est pas affilié. Le casino du jeu utilise de l'argent fictif : il n'y a pas de jeu d'argent réel.
 ```
 
-**Notas de la versión 1.6.1** (382/500)
+**Notas de la versión 1.6.2** (396/500)
 
 ```
-Version 1.6.1 : sauve des rivaux au bord de la faillite ou rouvre ceux qui ont fermé ; de nouveaux studios naissent chaque année ; renouvellement automatique des saisons ; fiche complète de ton avatar ; œuvres pour festivals ; budget annuel par média ; ta propre presse ; réseaux de distribution ; bureaux rentables ; prix et relations sur chaque fiche ; taille, forme et mini-jeux.
+Version 1.6.2 : une boîte des décisions en attente et un panneau qui réunit toutes les automatisations ; les relations de ton avatar se décident en situations ; sauve des rivaux et rouvre ceux qui ont fermé ; nouveaux studios chaque année ; saisons renouvelées automatiquement ; fiche complète de ton avatar ; œuvres pour festivals ; budget par média ; ta propre presse ; réseaux de distribution.
 ```
 
 ## Português (pt-BR)
@@ -247,8 +247,8 @@ Idiomas: espanhol, inglês, francês e português.
 As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais; o jogo não é afiliado a eles. O cassino do jogo usa dinheiro fictício: não há apostas com dinheiro real.
 ```
 
-**Notas de la versión 1.6.1** (378/500)
+**Notas de la versión 1.6.2** (402/500)
 
 ```
-Versão 1.6.1: resgate rivais à beira da falência ou reabra os que fecharam; estúdios novos nascem todo ano; renovação automática de temporadas; ficha completa do seu avatar; obras para festivais; orçamento anual por meio; sua própria imprensa; redes de distribuição para todos os meios; sedes que dão dinheiro; prêmios e relações em cada ficha; altura, forma física e minijogos.
+Versão 1.6.2: caixa de pendências com tudo o que espera sua decisão e painel de automação com todas as opções automáticas juntas; os relacionamentos do seu avatar se decidem em situações; resgate rivais e reabra os que fecharam; estúdios novos todo ano; renovação automática de temporadas; ficha completa do avatar; obras para festivais; orçamento por meio; sua própria imprensa; redes de distribuição.
 ```

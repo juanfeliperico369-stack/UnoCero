@@ -8,17 +8,17 @@ Hay **una sola versión**, la definitiva, y sobre ella se sigue trabajando. No h
 
 | Versión | versionCode | Dónde |
 |---|---|---|
-| 1.6.1 | 12 | `industry-art/index.html` y `entregables/industry-art-1.6.1.apk/.aab` |
+| 1.6.2 | 13 | `industry-art/index.html` y `entregables/industry-art-1.6.2.apk/.aab` |
 
 - **Edición real retirada:** la «edición real 1.0» de prueba (versionCode 10) que existió antes queda retirada. Lo real que el autor quiere se agregará más adelante dentro de esta misma versión.
 
 - **Firma:** el APK y el AAB se firman con la llave de subida `industryart-subida.jks`, que guarda el autor y nunca va al repositorio (huella SHA-256 `5f:f5:8e:ce:46:49:95:d1:…:26:f6`).
-- **Número de versión:** la 1.6.1 usa el versionCode 12. La próxima versión debe usar el **13 o más**; si no, el teléfono no la instala encima.
+- **Número de versión:** la 1.6.2 usa el versionCode 13. La próxima versión debe usar el **14 o más**; si no, el teléfono no la instala encima.
 
 ## 2. Cómo está hecho
 
 - **Un solo archivo:** todo el juego es `industry-art/index.html`, de unas 74.000 líneas legibles (no minificado). La app de Android lo copia a sus assets en cada compilación (`android/app/build.gradle`).
-- **Generación del HTML:** el archivo se genera con un build en Python (`build.py`). El paquete `fuentes-build-industry-art.zip` del autor trae `game.js` (base), los módulos (`mejoras.js`, `ronda5.js` a `ronda15.js`, etc.), los parches (`ronda4.py` a `ronda15.py`, `j_modes.py`; `ronda12.py` inyecta `ronda12.js` y `ronda13.js`) y las pruebas.
+- **Generación del HTML:** el archivo se genera con un build en Python (`build.py`). El paquete `fuentes-build-industry-art.zip` del autor trae `game.js` (base), los módulos (`mejoras.js`, `ronda5.js` a `ronda16.js`, etc.), los parches (`ronda4.py` a `ronda16.py`, `j_modes.py`; `ronda12.py` inyecta `ronda12.js` y `ronda13.js`) y las pruebas.
 - **Rutas:** `build.py` espera las fuentes en `/tmp/ia` y escribe en `/home/user/UnoCero/industry-art/index.html`; ajusta `SRC` y la ruta de salida si cambias de carpeta. Se ejecuta con `python3 -I build.py`.
 - **Parches J:** son reemplazos exactos `(texto viejo, texto nuevo, cantidad)` sobre `game.js`. Si el texto no aparece las veces indicadas, el build se detiene con error.
 - **Módulos nuevos:** se inyectan antes de la línea `let ORD0 = { t: null, n: null, ro: null };`.
@@ -53,6 +53,8 @@ Hay **una sola versión**, la definitiva, y sobre ella se sigue trabajando. No h
   - `t37`: guiones comprados.
   - `t38`: proyección para la prensa.
   - `t40`: archivo, Material, encargo con medio y ceremonias.
+  - `t41`: bandeja y panel.
+  - `t42`: parejas.
   - Para probar el botón de volver hay que hacer clic de verdad en el elemento (`el.click()`), porque la pila de fichas se arma con el botón tocado.
 - **Android:** desde `android/`, `gradle assembleRelease bundleRelease`. Necesita `android/keystore.properties` (ruta y contraseña de la llave) y `android/local.properties` (`sdk.dir`), que no están en el repositorio. Después verifica la firma con `apksigner verify --print-certs` y que `assets/index.html` del APK sea igual al HTML.
 - **Contenido real:** existe un importador (`mundoImporta`) y un paquete de mundo con 92 estudios, 281 talentos y 188 obras, guardado aparte por el autor. Cuando se agregue lo real, debe ir dentro de esta misma versión: incluido en el juego o como paquete `.iamundo` que se importa en Estudio → Editor, nunca como una aplicación distinta.
@@ -86,6 +88,11 @@ Hecho en la 1.6 y la 1.6.1 (detalle en `docs/reporte-1.6.md`):
   - Material en subpestañas (`MTTAB`; el HTML de `mtV` se separa por cada `<h3 class="sec">`);
   - elegir el medio al encomendar un material (`mtenc`);
   - ceremonias solo con obras propias (`awards` filtra `S.cer`; cada nominado propio guarda `p`).
+- **1.6.2** (`ronda16.js`):
+  - bandeja de pendientes (`pend16`, que reemplaza a `tareas`; contador `data-n16` en el botón del menú);
+  - panel de automatización (`auto16M`, acción `au16`);
+  - parejas del avatar como situación (evento `ROM16`, estado `S.rom16`, rechazos en `S.rom16no`);
+  - regla de parejas (`relHet13` en `relLibre13`) y migración `rom16Mig`.
 
 Pendiente, en orden sugerido:
 
@@ -100,7 +107,6 @@ Pendiente, en orden sugerido:
    - El contenido real va como paquete `.iamundo` aparte.
    - Las marcas comerciales (nombres de estudios, consolas y tiendas) son el riesgo mayor en una tienda.
 3. **Ideas que quedan de antes:**
-   - bandeja de pendientes;
    - copia de seguridad automática;
    - rentabilidad por división;
    - balance de música antes de 1900 y de videojuegos después de 2150.

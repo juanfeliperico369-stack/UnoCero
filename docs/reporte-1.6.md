@@ -1,4 +1,4 @@
-# INDUSTRY ART · Informe de las versiones 1.6 y 1.6.1
+# INDUSTRY ART · Informe de las versiones 1.6, 1.6.1 y 1.6.2
 
 Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo funciona y cómo se verificó.
 
@@ -185,6 +185,35 @@ Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo 
 - **Encomendar con tipo de obra:** al encomendar un material, después de elegir el estudio eliges si será cine, serie, videojuego, teatro, música o libro, con la especialidad del estudio en cada medio y el recomendado marcado.
 - **Ceremonias:** la ventana de una ceremonia solo aparece si hay nominada una obra hecha enteramente por ti. Los premios de las demás se registran igual en las noticias, en el palmarés y en las fichas.
 - **Dato:** en 1997, Apple estaba a semanas de quedarse sin caja y Microsoft, su gran rival, invirtió 150 millones de dólares en ella. Es uno de los rescates entre rivales más citados.
+
+## 11. Versión 1.6.2: bandeja de pendientes, panel de automatización y vida sentimental
+
+- **Bandeja de pendientes:**
+  - **Dónde:** en Estudio → Inicio reemplaza a «Esta semana». También está en el menú, con un número sobre el botón que dice cuántas cosas esperan tu decisión.
+  - **Qué junta:**
+    - obras listas para estrenar (si son más de 3, «Lanzar todas con el mejor plan»);
+    - propuestas de tus talentos por medio (con «Luz verde a todas»);
+    - pedidos de capital de tus filiales (dar, negar o pasar a automático);
+    - rivales al borde de la quiebra;
+    - guiones listos para producir;
+    - series que se pueden renovar y obras que se pueden reestrenar (con su botón de automático);
+    - ofertas, colaboraciones, eventos, huelgas, cuentas vencidas y caja en rojo.
+  - **Botones:** los que resuelven algo dejan la bandeja abierta y la actualizan; los que llevan a una sección la cierran y te llevan allí.
+  - **Prueba:** en una partida de 2008 junta 6 pendientes reales. Con «Activar todo» quedan 2, porque lo automático deja de aparecer.
+- **Panel de automatización:** todos los interruptores juntos.
+  - **Por medio:** «Producen solos», «Luz verde» y «Presupuesto», que sube un nivel con cada toque (2, 5, 10, 20 % y vuelve a cero).
+  - **Lanzamientos y catálogo:** lanzamiento automático (manual, solo segundo plano o todas tus obras), renovar temporadas, reestrenos, venta de licencias a TV y streaming, y compras para tu plataforma y tu canal.
+  - **Negocio y talento:** capital para filiales, puja automática por derechos, filiales que producen solas, gestión de parques y becas.
+  - **Atajos:** «Activar todo» y «Apagar todo» cambian todos menos el presupuesto y las filiales. Cada opción sigue también en su pestaña.
+- **Parejas del avatar:**
+  - **Situación:** ahora llegan como una situación, «Algo más que amistad», en la que eliges empezar una relación o seguir como amigos.
+  - **Si dices que no:** no se repite con esa persona durante 5 años.
+  - **Terminar:** desde tu ficha puedes terminar la relación.
+  - **Partidas guardadas:** las parejas que el juego le había puesto solo a tu avatar pasan a amistades, para que empieces de cero.
+- **Parejas en general:** las nuevas son entre personas de distinto sexo, salvo una de cada 20. Al actualizar, las parejas del mismo sexo pasan a amistades salvo esa misma proporción.
+- **Datos:**
+  - El primer piloto automático de avión, de Lawrence Sperry, se mostró en París en 1914: voló con las manos en alto mientras su mecánico caminaba por el ala.
+  - El método «Inbox Zero» de Merlin Mann (2007) no busca tener cero correos, sino no dejar que la bandeja decida por ti.
 
 ## Pruebas de esta versión
 
