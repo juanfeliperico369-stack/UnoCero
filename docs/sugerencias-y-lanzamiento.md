@@ -138,6 +138,10 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Encomendar el lanzamiento a un rival o filial.
   - Ediciones físicas para cine, series, videojuegos, música y libros.
 
+- **De las pruebas de juego (versión 1.6.5):**
+  - Grabaciones de funciones de teatro.
+  - Cerrar una filial absorbiendo todo lo suyo.
+
 ### Pendientes
 1. **Copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`). La bandeja de pendientes ya está hecha (1.6.2).
 2. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.

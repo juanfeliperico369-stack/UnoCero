@@ -8,12 +8,12 @@ Hay **una sola versión**, la definitiva, y sobre ella se sigue trabajando. No h
 
 | Versión | versionCode | Dónde |
 |---|---|---|
-| 1.6.4 | 15 | `industry-art/index.html` y `entregables/industry-art-1.6.4.apk/.aab` |
+| 1.6.5 | 16 | `industry-art/index.html` y `entregables/industry-art-1.6.5.apk/.aab` |
 
 - **Edición real retirada:** la «edición real 1.0» de prueba (versionCode 10) que existió antes queda retirada. Lo real que el autor quiere se agregará más adelante dentro de esta misma versión.
 
 - **Firma:** el APK y el AAB se firman con la llave de subida `industryart-subida.jks`, que guarda el autor y nunca va al repositorio (huella SHA-256 `5f:f5:8e:ce:46:49:95:d1:…:26:f6`).
-- **Número de versión:** la 1.6.4 usa el versionCode 15. La próxima versión debe usar el **16 o más**; si no, el teléfono no la instala encima.
+- **Número de versión:** la 1.6.5 usa el versionCode 16. La próxima versión debe usar el **17 o más**; si no, el teléfono no la instala encima.
 
 ## 2. Cómo está hecho
 
@@ -58,6 +58,7 @@ Hay **una sola versión**, la definitiva, y sobre ella se sigue trabajando. No h
   - `t43`: energía del avatar.
   - `t44`: novedades de la 1.6.3.
   - `t45`: lanzamiento encomendado y ediciones físicas.
+  - `t46`: teatro y absorción de filiales.
   - Para probar el botón de volver hay que hacer clic de verdad en el elemento (`el.click()`), porque la pila de fichas se arma con el botón tocado.
 - **Android:** desde `android/`, `gradle assembleRelease bundleRelease`. Necesita `android/keystore.properties` (ruta y contraseña de la llave) y `android/local.properties` (`sdk.dir`), que no están en el repositorio. Después verifica la firma con `apksigner verify --print-certs` y que `assets/index.html` del APK sea igual al HTML.
 - **Contenido real:** existe un importador (`mundoImporta`) y un paquete de mundo con 92 estudios, 281 talentos y 188 obras, guardado aparte por el autor. Cuando se agregue lo real, debe ir dentro de esta misma versión: incluido en el juego o como paquete `.iamundo` que se importa en Estudio → Editor, nunca como una aplicación distinta.
@@ -105,6 +106,7 @@ Hecho en la 1.6 y la 1.6.1 (detalle en `docs/reporte-1.6.md`):
   - ofertas por franquicia en la bandeja e interruptor `F.noOf16`;
   - proponer una relación (`rom16p`).
 - **1.6.4** (`ronda16.js`): lanzamiento encomendado (`dlzM16`, `P.dl16`) y ediciones físicas (`FIS16`, `S.fis16`, `fisH16` en `facH5`).
+- **1.6.5** (`ronda16.js`): grabaciones de teatro (medio 3 en `FIS16`) y cierre con absorción de filiales (`absRes16`, `fab16` y `fab16y`; la filial queda con `r.abs16`).
 
 Pendiente, en orden sugerido:
 

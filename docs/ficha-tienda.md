@@ -70,10 +70,10 @@ Idiomas: español, inglés, francés y portugués.
 Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales; el juego no está afiliado a ellos. El casino del juego usa dinero ficticio: no hay apuestas con dinero real.
 ```
 
-**Notas de la versión 1.6.4** (369/500)
+**Notas de la versión 1.6.5** (390/500)
 
 ```
-Versión 1.6.4: encomienda el lanzamiento de cualquier obra a un rival o filial, que pone la mitad del marketing y la distribuye con su red; plantas de ediciones físicas para cine, series, videojuegos, música y libros, con colecciones de tu catálogo; además, series con final natural, postulación automática a festivales, bandeja de pendientes y panel de automatización.
+Versión 1.6.5: cierra una filial y absorbe su caja, instalaciones, sede, proyectos y franquicias; grabaciones de funciones para el teatro; encomienda el lanzamiento de cualquier obra a un rival o filial; ediciones físicas para cine, series, videojuegos, teatro, música y libros; series con final natural; postulación automática a festivales; bandeja de pendientes y panel de automatización.
 ```
 
 ## English (en-US)
@@ -129,10 +129,10 @@ Languages: Spanish, English, French and Portuguese.
 The real works, awards, people, brands and places in the game are historical and cultural references; the game is not affiliated with them. The in-game casino uses fictional money: there is no real-money gambling.
 ```
 
-**Notas de la versión 1.6.4** (342/500)
+**Notas de la versión 1.6.5** (349/500)
 
 ```
-Version 1.6.4: hand the release of any work to a rival or subsidiary, who pays half the marketing and distributes it through their network; physical edition plants for film, series, games, music and books, with collections from your catalog; plus series with a natural ending, automatic festival submissions, an inbox and an automation panel.
+Version 1.6.5: close a subsidiary and absorb its cash, facilities, office, projects and franchises; stage recordings for theater; hand the release of any work to a rival or subsidiary; physical editions for film, series, games, theater, music and books; series with a natural ending; automatic festival submissions; an inbox and an automation panel.
 ```
 
 ## Français (fr-FR)
@@ -188,10 +188,10 @@ Langues : espagnol, anglais, français et portugais.
 Les œuvres, prix, personnes, marques et lieux réels présents dans le jeu sont des références historiques et culturelles ; le jeu n'y est pas affilié. Le casino du jeu utilise de l'argent fictif : il n'y a pas de jeu d'argent réel.
 ```
 
-**Notas de la versión 1.6.4** (365/500)
+**Notas de la versión 1.6.5** (376/500)
 
 ```
-Version 1.6.4 : confie la sortie de n'importe quelle œuvre à un rival ou une filiale, qui paie la moitié du marketing et la distribue avec son réseau ; usines d'éditions physiques pour le cinéma, les séries, les jeux, la musique et les livres ; séries avec une fin naturelle, candidatures automatiques aux festivals, boîte des décisions et panneau d'automatisation.
+Version 1.6.5 : ferme une filiale et absorbe sa trésorerie, ses installations, son bureau, ses projets et ses franchises ; captations de spectacles pour le théâtre ; confie une sortie à un rival ou une filiale ; éditions physiques pour tous les médias ; séries avec une fin naturelle ; candidatures automatiques aux festivals ; boîte des décisions et panneau d'automatisation.
 ```
 
 ## Português (pt-BR)
@@ -247,8 +247,8 @@ Idiomas: espanhol, inglês, francês e português.
 As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais; o jogo não é afiliado a eles. O cassino do jogo usa dinheiro fictício: não há apostas com dinheiro real.
 ```
 
-**Notas de la versión 1.6.4** (352/500)
+**Notas de la versión 1.6.5** (344/500)
 
 ```
-Versão 1.6.4: encomende o lançamento de qualquer obra a um rival ou filial, que paga metade do marketing e distribui com a rede dele; fábricas de edições físicas para cinema, séries, games, música e livros, com coleções do seu catálogo; além disso, séries com final natural, inscrição automática em festivais, caixa de pendências e painel de automação.
+Versão 1.6.5: feche uma filial e absorva o caixa, as instalações, a sede, os projetos e as franquias; gravações de espetáculos para o teatro; encomende o lançamento de qualquer obra a um rival ou filial; edições físicas para todos os meios; séries com final natural; inscrição automática em festivais; caixa de pendências e painel de automação.
 ```

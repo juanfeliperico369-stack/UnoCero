@@ -1,4 +1,4 @@
-# INDUSTRY ART · Informe de las versiones 1.6 a 1.6.4
+# INDUSTRY ART · Informe de las versiones 1.6 a 1.6.5
 
 Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo funciona y cómo se verificó.
 
@@ -272,6 +272,24 @@ Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo 
   - El mantenimiento es el 0,4 % de su valor al mes.
   - Al venderla recuperas el 60 %.
 - **Dato:** en 2020, en EE. UU., los vinilos volvieron a facturar más que los CD por primera vez desde 1986.
+
+## 14. Versión 1.6.5: grabaciones de teatro y absorber filiales
+
+- **Grabaciones de funciones:** el teatro también tiene planta de ediciones físicas, con 3 niveles.
+  - **Época:** desde 1929 pesa el 30 % (funciones filmadas y transmitidas), desde 1976 el 60 % (video casero) y desde 2009 el 100 % (funciones en vivo en cines y streaming).
+  - **Efecto:** suma hasta un 18 % a las ventas de tus obras de teatro y vende colecciones de tu catálogo cada mes.
+- **Cerrar y absorber una filial:**
+  - **Dónde:** botón junto a «Vender la filial».
+  - **Antes de confirmar** muestra un resumen de lo que recibes:
+    - su caja (y sus deudas, si tiene);
+    - sus instalaciones, que suben de nivel las tuyas en los medios donde es fuerte;
+    - su sede en otro país, si no tenías una allí;
+    - sus proyectos anunciados, que pasan a tu material;
+    - sus franquicias más exitosas, que pasan a ser tuyas.
+  - **Costo:** el cierre cuesta un 5 % de su valor.
+  - **Después:** sus obras ya estrenadas siguen en tu plataforma y tu canal, y en la lista de estudios cerrados figura como «absorbido por ti», sin opción de rescate.
+  - **Límite:** si tiene encargos tuyos en curso, hay que esperar a que los termine.
+  - **Prueba:** en 2005 una filial dejó $13,8 B netos, 2 instalaciones, 9 proyectos y 4 franquicias.
 
 ## Pruebas de esta versión
 

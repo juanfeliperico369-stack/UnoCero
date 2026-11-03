@@ -859,7 +859,7 @@ html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 
 .c.peri .peri-t::first-letter{color:#7a1f12!important}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.6.4";
+const VERN = "1.6.5";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -34250,7 +34250,7 @@ ${
     : ""
 }
 ${enc.length ? `<div class="m">Encargos en curso: ${enc.map((q) => "\u00AB" + esc(q.n) + "\u00BB (estrena en " + Math.max(0, q.t + 10 - S.t) + " sem)").join(", ")}</div>` : ""}${obras.length ? `<div class="m">Últimas obras: ${obras.map((x) => "\u00AB" + esc(x.n) + "\u00BB " + Math.round((x.A + x.C) / 2) + " \u00B7 " + FCN[x.ch].toLowerCase()).join(", ")}</div>` : ""}
-${r.pide ? `<div class="m" style="color:var(--g)">Pide ${fm(r.pide)} de capital.</div><div class="bts">${bt("fpa", i, "D\u00E1rselo", S.cash >= r.pide ? "a" : "off")}${bt("fpr", i, "Negarlo")}${bt("fpauto", "", S.fpAuto ? L4("Automático: sí", "Automatic: on", "Automatique : oui", "Automático: sim") : L4("Automático", "Automatic", "Automatique", "Automático"), S.fpAuto ? "a" : "")}</div>` : ""}<div class="bts">${bt("fen", i, ic("mas") + " Encargar una obra", "a")}${bt("fve", i, "Vender la filial \u00B7 " + fm(valR(r)), "r")}</div></div>`;
+${r.pide ? `<div class="m" style="color:var(--g)">Pide ${fm(r.pide)} de capital.</div><div class="bts">${bt("fpa", i, "D\u00E1rselo", S.cash >= r.pide ? "a" : "off")}${bt("fpr", i, "Negarlo")}${bt("fpauto", "", S.fpAuto ? L4("Automático: sí", "Automatic: on", "Automatique : oui", "Automático: sim") : L4("Automático", "Automatic", "Automatique", "Automático"), S.fpAuto ? "a" : "")}</div>` : ""}<div class="bts">${bt("fen", i, ic("mas") + " Encargar una obra", "a")}${bt("fab16", i, L4("Cerrar y absorber", "Close and absorb", "Fermer et absorber", "Fechar e absorver"), "r")}${bt("fve", i, "Vender la filial \u00B7 " + fm(valR(r)), "r")}</div></div>`;
   };
   return (
     modH("fil") +
@@ -63143,11 +63143,11 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Panel de automatización", "Automation panel", "Panneau d'automatisation", "Painel de automação"],
   ["Todo lo que espera tu decisión, en un solo lugar: obras listas para estrenar (si son muchas, «Lanzar todas con el mejor plan»), propuestas de tus talentos por medio (con «Luz verde a todas»), pedidos de capital de tus filiales, rivales al borde de la quiebra, guiones listos para producir, series que se pueden renovar, obras que se pueden reestrenar, ofertas, colaboraciones, eventos, huelgas y avisos de caja. Está en Estudio → Inicio y en el menú; el número sobre el botón del menú dice cuántas cosas hay. Lo que pongas en automático deja de aparecer aquí. Dato: el método «Inbox Zero» de Merlin Mann (2007) no busca tener cero correos, sino no dejar que la bandeja decida por ti.", "Everything waiting for your decision, in one place: works ready to release (if there are many, «Launch all with the best plan»), proposals from your talents by medium (with «Green-light all»), capital requests from your subsidiaries, rivals on the brink of bankruptcy, scripts ready to produce, series that can be renewed, works that can be re-released, offers, collaborations, events, strikes and cash warnings. It's in Studio → Home and in the menu; the number on the menu button tells you how many there are. Whatever you set to automatic stops showing up here. Fact: Merlin Mann's «Inbox Zero» method (2007) isn't about having zero emails, but about not letting the inbox decide for you.", "Tout ce qui attend ta décision, au même endroit : œuvres prêtes à sortir (s'il y en a beaucoup, « Tout sortir avec le meilleur plan »), propositions de tes talents par média (avec « Feu vert à toutes »), demandes de capital de tes filiales, rivaux au bord de la faillite, scénarios prêts à produire, séries à renouveler, œuvres à ressortir, offres, collaborations, événements, grèves et alertes de trésorerie. C'est dans Studio → Accueil et dans le menu ; le chiffre sur le bouton du menu indique combien il y en a. Ce que tu mets en automatique n'apparaît plus ici. Anecdote : la méthode « Inbox Zero » de Merlin Mann (2007) ne vise pas zéro courriel, mais à ne pas laisser la boîte décider pour toi.", "Tudo o que espera sua decisão, num só lugar: obras prontas para estrear (se forem muitas, «Lançar todas com o melhor plano»), propostas dos seus talentos por meio (com «Sinal verde para todas»), pedidos de capital das suas filiais, rivais à beira da falência, roteiros prontos para produzir, séries que podem ser renovadas, obras que podem ser relançadas, ofertas, colaborações, eventos, greves e avisos de caixa. Fica em Estúdio → Início e no menu; o número no botão do menu diz quantas coisas há. O que você colocar no automático deixa de aparecer aqui. Curiosidade: o método «Inbox Zero» de Merlin Mann (2007) não busca ter zero e-mails, e sim não deixar a caixa decidir por você."],
   ["Todos los automáticos del estudio juntos. Por medio: si tus talentos firmados producen solos lo que aceptas, si sus propuestas reciben luz verde sola y el presupuesto anual (cada toque sube un nivel: 2, 5, 10, 20 % y vuelve a cero). Además: lanzamiento automático (manual, solo segundo plano o todas tus obras), renovar temporadas, reestrenos, venta de licencias a TV y streaming, compras para tu plataforma y tu canal, capital para filiales, puja automática por derechos, filiales que producen solas, gestión de parques y becas. «Activar todo» y «Apagar todo» cambian todos menos el presupuesto y las filiales. Cada opción sigue también en su pestaña de siempre. Dato: el primer piloto automático de avión, de Lawrence Sperry, se mostró en París en 1914: Sperry voló con las manos en alto mientras su mecánico caminaba por el ala.", "Every studio automation together. By medium: whether your signed talents produce on their own what you accept, whether their proposals get an automatic green light, and the annual budget (each tap raises a level: 2, 5, 10, 20% and back to zero). Also: automatic release (manual, background only or all your works), season renewals, re-releases, license sales to TV and streaming, buying for your platform and your channel, capital for subsidiaries, automatic bidding for rights, subsidiaries producing on their own, park management and scholarships. «Turn everything on» and «Turn everything off» change all of them except the budget and the subsidiaries. Each option also stays in its usual tab. Fact: Lawrence Sperry's first aircraft autopilot was shown in Paris in 1914: Sperry flew with his hands up while his mechanic walked out on the wing.", "Toutes les automatisations du studio réunies. Par média : si tes talents sous contrat produisent seuls ce que tu acceptes, si leurs propositions reçoivent un feu vert automatique et le budget annuel (chaque toucher monte d'un niveau : 2, 5, 10, 20 % puis zéro). En plus : sortie automatique (manuelle, arrière-plan seulement ou toutes tes œuvres), renouvellement des saisons, ressorties, vente de licences à la TV et au streaming, achats pour ta plateforme et ta chaîne, capital pour les filiales, enchères automatiques sur les droits, filiales qui produisent seules, gestion des parcs et bourses. « Tout activer » et « Tout désactiver » changent tout sauf le budget et les filiales. Chaque option reste aussi dans son onglet habituel. Anecdote : le premier pilote automatique d'avion, de Lawrence Sperry, a été présenté à Paris en 1914 : Sperry volait les mains en l'air pendant que son mécanicien marchait sur l'aile.", "Todas as automações do estúdio juntas. Por meio: se seus talentos contratados produzem sozinhos o que você aceita, se as propostas recebem sinal verde automático e o orçamento anual (cada toque sobe um nível: 2, 5, 10, 20 % e volta a zero). Além disso: lançamento automático (manual, só segundo plano ou todas as suas obras), renovação de temporadas, relançamentos, venda de licenças para TV e streaming, compras para sua plataforma e seu canal, capital para filiais, lance automático por direitos, filiais que produzem sozinhas, gestão de parques e bolsas. «Ativar tudo» e «Desligar tudo» mudam tudo menos o orçamento e as filiais. Cada opção continua também na sua aba de sempre. Curiosidade: o primeiro piloto automático de avião, de Lawrence Sperry, foi mostrado em Paris em 1914: Sperry voou com as mãos para cima enquanto seu mecânico caminhava pela asa."],
-  ["Versión 1.6.4", "Version 1.6.4", "Version 1.6.4", "Versão 1.6.4"],
+  ["Versión 1.6.5", "Version 1.6.5", "Version 1.6.5", "Versão 1.6.5"],
   ["Encomendar el lanzamiento", "Handing over a release", "Confier une sortie", "Encomendar o lançamento"],
   ["Ediciones físicas", "Physical editions", "Éditions physiques", "Edições físicas"],
   ["En el plan de lanzamiento de una obra lista, o desde Pendientes. Eliges un rival o una de tus filiales que trabaje ese medio: lanza la obra con el mejor plan, paga la mitad del marketing y la distribuye con su propia red. Su cobertura depende de su tamaño y de su especialidad en el medio, y si es mayor que la tuya, la obra vende más. A cambio se queda con el 30 % de lo que recaude (el 15 % si es tu filial). Conviene cuando tu distribución es pequeña o te falta caja para el marketing. Dato: durante décadas, muchos estudios pequeños de Hollywood estrenaron sus películas a través de las grandes distribuidoras, que cobraban entre un 30 y un 40 % de la taquilla.", "In the launch plan of a finished work, or from Pending. You choose a rival or one of your subsidiaries that works in that medium: it releases the work with the best plan, pays half the marketing and distributes it through its own network. Its coverage depends on its size and its specialty in the medium, and if it's bigger than yours, the work sells more. In exchange it keeps 30% of the gross (15% if it's your subsidiary). It pays off when your distribution is small or you lack cash for marketing. Fact: for decades many small Hollywood studios released their films through the big distributors, which charged 30 to 40% of the box office.", "Dans le plan de sortie d'une œuvre terminée, ou depuis En attente. Tu choisis un rival ou une de tes filiales qui travaille ce média : il sort l'œuvre avec le meilleur plan, paie la moitié du marketing et la distribue avec son propre réseau. Sa couverture dépend de sa taille et de sa spécialité dans le média, et si elle dépasse la tienne, l'œuvre vend plus. En échange, il garde 30 % des recettes (15 % si c'est ta filiale). C'est utile quand ta distribution est petite ou que tu manques de trésorerie. Anecdote : pendant des décennies, beaucoup de petits studios d'Hollywood ont sorti leurs films via les grands distributeurs, qui prenaient 30 à 40 % du box-office.", "No plano de lançamento de uma obra pronta, ou em Pendentes. Você escolhe um rival ou uma das suas filiais que trabalhe esse meio: lança a obra com o melhor plano, paga metade do marketing e distribui com a própria rede. A cobertura depende do tamanho e da especialidade no meio, e se for maior que a sua, a obra vende mais. Em troca fica com 30 % da arrecadação (15 % se for sua filial). Vale a pena quando sua distribuição é pequena ou falta caixa para o marketing. Curiosidade: durante décadas, muitos estúdios pequenos de Hollywood lançaram seus filmes pelas grandes distribuidoras, que cobravam de 30 a 40 % da bilheteria."],
-  ["En la pestaña de cada medio, bajo su infraestructura: películas en disco, series en temporadas en caja, videojuegos en ediciones físicas y de colección, música en discos, vinilos y cajas, y libros en estuches y colecciones. Cada planta tiene 3 niveles. En cine y series sube la venta en disco hasta un 75 %; en videojuegos, música y libros, las ventas hasta un 18 %. Además, cada mes vende colecciones de tu catálogo con más de un año. Su peso sigue la época: el disco llega con el video casero en 1976 y baja con el streaming, pero nunca desaparece por los coleccionistas. Cuesta un mantenimiento del 0,4 % de su valor al mes y al venderla recuperas el 60 %. Dato: en 2020, en EE. UU. los vinilos volvieron a facturar más que los CD por primera vez desde 1986.", "In each medium's tab, under its facilities: films on disc, series as season box sets, games in physical and collector's editions, music on records, vinyl and box sets, and books in box sets and collections. Each plant has 3 levels. In film and series it raises disc sales by up to 75%; in games, music and books, sales by up to 18%. On top of that, every month it sells collections of your catalog older than a year. Its weight follows the era: disc arrives with home video in 1976 and falls with streaming, but never disappears thanks to collectors. Upkeep costs 0.4% of its value a month and selling it gets you 60% back. Fact: in 2020, vinyl out-earned CDs in the US for the first time since 1986.", "Dans l'onglet de chaque média, sous ses installations : films en disque, séries en coffrets de saisons, jeux en éditions physiques et collector, musique en disques, vinyles et coffrets, livres en coffrets et collections. Chaque usine a 3 niveaux. Pour le cinéma et les séries, elle augmente les ventes en disque jusqu'à 75 % ; pour les jeux, la musique et les livres, les ventes jusqu'à 18 %. En plus, chaque mois elle vend des collections de ton catalogue de plus d'un an. Son poids suit l'époque : le disque arrive avec la vidéo domestique en 1976 et recule avec le streaming, sans jamais disparaître grâce aux collectionneurs. L'entretien coûte 0,4 % de sa valeur par mois et la revente rapporte 60 %. Anecdote : en 2020, aux États-Unis, les vinyles ont rapporté plus que les CD pour la première fois depuis 1986.", "Na aba de cada meio, abaixo da infraestrutura: filmes em disco, séries em temporadas em caixa, games em edições físicas e de colecionador, música em discos, vinis e caixas, e livros em estojos e coleções. Cada fábrica tem 3 níveis. Em cinema e séries aumenta a venda em disco em até 75 %; em games, música e livros, as vendas em até 18 %. Além disso, todo mês vende coleções do seu catálogo com mais de um ano. O peso acompanha a época: o disco chega com o vídeo doméstico em 1976 e cai com o streaming, mas nunca some graças aos colecionadores. A manutenção custa 0,4 % do valor por mês e ao vender você recupera 60 %. Curiosidade: em 2020, nos EUA, os vinis voltaram a faturar mais que os CDs pela primeira vez desde 1986."],
+  ["En la pestaña de cada medio, bajo su infraestructura: películas en disco, series en temporadas en caja, videojuegos en ediciones físicas y de colección, teatro en grabaciones de funciones (desde 1929), música en discos, vinilos y cajas, y libros en estuches y colecciones. Cada planta tiene 3 niveles. En cine y series sube la venta en disco hasta un 75 %; en videojuegos, teatro, música y libros, las ventas hasta un 18 %. Además, cada mes vende colecciones de tu catálogo con más de un año. Su peso sigue la época: el disco llega con el video casero en 1976 y baja con el streaming, pero nunca desaparece por los coleccionistas. Cuesta un mantenimiento del 0,4 % de su valor al mes y al venderla recuperas el 60 %. Dato: en 2020, en EE. UU. los vinilos volvieron a facturar más que los CD por primera vez desde 1986.", "In each medium's tab, under its facilities: films on disc, series as season box sets, games in physical and collector's editions, theater as stage recordings (from 1929), music on records, vinyl and box sets, and books in box sets and collections. Each plant has 3 levels. In film and series it raises disc sales by up to 75%; in games, theater, music and books, sales by up to 18%. On top of that, every month it sells collections of your catalog older than a year. Its weight follows the era: disc arrives with home video in 1976 and falls with streaming, but never disappears thanks to collectors. Upkeep costs 0.4% of its value a month and selling it gets you 60% back. Fact: in 2020, vinyl out-earned CDs in the US for the first time since 1986.", "Dans l'onglet de chaque média, sous ses installations : films en disque, séries en coffrets de saisons, jeux en éditions physiques et collector, théâtre en captations de spectacles (depuis 1929), musique en disques, vinyles et coffrets, livres en coffrets et collections. Chaque usine a 3 niveaux. Pour le cinéma et les séries, elle augmente les ventes en disque jusqu'à 75 % ; pour les jeux, le théâtre, la musique et les livres, les ventes jusqu'à 18 %. En plus, chaque mois elle vend des collections de ton catalogue de plus d'un an. Son poids suit l'époque : le disque arrive avec la vidéo domestique en 1976 et recule avec le streaming, sans jamais disparaître grâce aux collectionneurs. L'entretien coûte 0,4 % de sa valeur par mois et la revente rapporte 60 %. Anecdote : en 2020, aux États-Unis, les vinyles ont rapporté plus que les CD pour la première fois depuis 1986.", "Na aba de cada meio, abaixo da infraestrutura: filmes em disco, séries em temporadas em caixa, games em edições físicas e de colecionador, teatro em gravações de espetáculos (desde 1929), música em discos, vinis e caixas, e livros em estojos e coleções. Cada fábrica tem 3 níveis. Em cinema e séries aumenta a venda em disco em até 75 %; em games, teatro, música e livros, as vendas em até 18 %. Além disso, todo mês vende coleções do seu catálogo com mais de um ano. O peso acompanha a época: o disco chega com o vídeo doméstico em 1976 e cai com o streaming, mas nunca some graças aos colecionadores. A manutenção custa 0,4 % do valor por mês e ao vender você recupera 60 %. Curiosidade: em 2020, nos EUA, os vinis voltaram a faturar mais que os CDs pela primeira vez desde 1986."],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -76408,7 +76408,7 @@ function rscRevive(i) {
 ACT["rscf"] = (v) => {
   const i = +v,
     r = S.rv[i];
-  if (!r || r.own || r.ind || (r.dead && r.fus != null) || (!r.dead && !rscApuro(r))) return;
+  if (!r || r.own || r.ind || r.abs16 || (r.dead && r.fus != null) || (!r.dead && !rscApuro(r))) return;
   const p = rscFilial(i);
   if (S.cash < p) return toast(L4("Fondos insuficientes", "Insufficient funds", "Fonds insuffisants", "Fundos insuficientes"));
   capital(-p);
@@ -76428,7 +76428,7 @@ ACT["rscf"] = (v) => {
 ACT["rsci"] = (v) => {
   const i = +v,
     r = S.rv[i];
-  if (!r || r.own || r.ind || (r.dead && r.fus != null) || (!r.dead && !rscApuro(r))) return;
+  if (!r || r.own || r.ind || r.abs16 || (r.dead && r.fus != null) || (!r.dead && !rscApuro(r))) return;
   const p = rscInv(i);
   if (S.cash < p) return toast(L4("Fondos insuficientes", "Insufficient funds", "Fonds insuffisants", "Fundos insuficientes"));
   capital(-p);
@@ -76448,7 +76448,7 @@ function rscH(i) {
   const f = r.fund15 != null ? S.tl[r.fund15] : null;
   if (f) h += `<div class="m" translate="no">${L4("Fundado por", "Founded by", "Fondé par", "Fundado por")} <button class="lnk" data-a="tp" data-v="${f.id}">${esc(f.n)}</button></div>`;
   if (r.res15) h += `<div class="m" translate="no">${L4("Rescatado por ti en #", "Rescued by you in #", "Sauvé par toi en #", "Resgatado por você em #").replace("#", r.res15)}</div>`;
-  const quebro = r.dead && r.fus == null;
+  const quebro = r.dead && r.fus == null && !r.abs16;
   if (!quebro && !rscApuro(r)) return h;
   const pf = rscFilial(i),
     pi = rscInv(i);
@@ -76463,8 +76463,8 @@ function rscH(i) {
 }
 function rscFila(r) {
   const i = S.rv.indexOf(r),
-    quebro = r.fus == null;
-  return `<div class="fila" translate="no"><span><button class="lnk" data-a="rvp" data-v="${i}">${esc(r.n)}</button><span class="m"> · ${r.fus != null && S.rv[r.fus] ? L4("comprado por", "bought by", "racheté par", "comprado por") + " " + esc(S.rv[r.fus].n) : L4("quebró", "went bankrupt", "a fait faillite", "faliu")} ${L4("en", "in", "en", "em")} ${r.dead}</span></span>${quebro ? `<span class="bts">${bt("rscf", i, L4("Rescatar", "Rescue", "Sauver", "Resgatar") + " · " + fm(rscFilial(i)), S.cash >= rscFilial(i) ? "" : "off")}</span>` : ""}</div>`;
+    quebro = r.fus == null && !r.abs16;
+  return `<div class="fila" translate="no"><span><button class="lnk" data-a="rvp" data-v="${i}">${esc(r.n)}</button><span class="m"> · ${r.abs16 ? L4("absorbido por ti", "absorbed by you", "absorbé par toi", "absorvido por você") : r.fus != null && S.rv[r.fus] ? L4("comprado por", "bought by", "racheté par", "comprado por") + " " + esc(S.rv[r.fus].n) : L4("quebró", "went bankrupt", "a fait faillite", "faliu")} ${L4("en", "in", "en", "em")} ${r.dead}</span></span>${quebro ? `<span class="bts">${bt("rscf", i, L4("Rescatar", "Rescue", "Sauver", "Resgatar") + " · " + fm(rscFilial(i)), S.cash >= rscFilial(i) ? "" : "off")}</span>` : ""}</div>`;
 }
 function fundador(r) {
   if (!r) return;
@@ -77435,6 +77435,7 @@ const FIS = [
   [0, ["Ediciones en disco y de colección", "Disc and collector's editions", "Éditions disque et collector", "Edições em disco e de colecionador"]],
   [1, ["Temporadas en caja", "Season box sets", "Coffrets de saisons", "Temporadas em caixa"]],
   [2, ["Ediciones físicas y de colección", "Physical and collector's editions", "Éditions physiques et collector", "Edições físicas e de colecionador"]],
+  [3, ["Grabaciones de funciones", "Stage recordings", "Captations de spectacles", "Gravações de espetáculos"]],
   [4, ["Discos, vinilos y cajas recopilatorias", "Records, vinyl and box sets", "Disques, vinyles et coffrets", "Discos, vinis e caixas"]],
   [5, ["Estuches y colecciones de libros", "Book box sets and collections", "Coffrets et collections de livres", "Estojos e coleções de livros"]],
 ];
@@ -77444,6 +77445,7 @@ const fisW = (m, y) => {
   if (m == 2) return y < 1977 ? 0 : y < 2012 ? r(1977, 1985) : Math.max(0.35, 1 - (y - 2012) / 30);
   if (m == 4) return y < 1890 ? 0.3 : y < 2000 ? Math.max(0.3, r(1890, 1920)) : y < 2015 ? Math.max(0.3, 1 - (y - 2000) / 20) : 0.4;
   if (m == 5) return y < 2010 ? 1 : 0.85;
+  if (m == 3) return y < 1929 ? 0 : y < 1976 ? 0.3 : y < 2009 ? 0.6 : 1;
   return 0;
 };
 const fis = () => (S.fis16 = S.fis16 || {});
@@ -77476,7 +77478,7 @@ venAbre = function (P) {
   if (P && (P.m == 0 || P.m == 1) && fisNv(P.m) && P.vn) P.vn.forEach((v) => v.k == 0 && (v.tot = Math.round(v.tot * (1 + 0.25 * fisNv(P.m) * fisW(P.m, yr())))));
   return r;
 };
-GANCHOS.ventas.push((P) => (P && [2, 4, 5].includes(P.m) && fisNv(P.m) ? 1 + 0.06 * fisNv(P.m) * fisW(P.m, yr()) : 1));
+GANCHOS.ventas.push((P) => (P && [2, 3, 4, 5].includes(P.m) && fisNv(P.m) ? 1 + 0.06 * fisNv(P.m) * fisW(P.m, yr()) : 1));
 const fisCat = (m) => {
   const l = fisNv(m);
   if (!l) return 0;
@@ -77515,13 +77517,92 @@ facH5 = function (m) {
   }
   return facHExt.apply(this, arguments) + x;
 };
+
+function absRes(i) {
+  const r = S.rv[i],
+    y = yr(),
+    inf = [];
+  MD.forEach((d, m) => {
+    if (y < d[2] || (r.sp[m] | 0) < 2 || !FAC5[m]) return;
+    FAC5[m].ix.forEach((n) => {
+      const k = IX.findIndex((x) => x[0] == n);
+      if (k < 0 || IX[k][3] > y) return;
+      const l = cnv(k),
+        nl = Math.min(3, (r.sp[m] | 0) >= 3 ? l + 1 : Math.max(l, 1));
+      if (nl > l && !inf.some((z) => z[0] == k)) inf.push([k, nl]);
+    });
+  });
+  const sede = r.pais != null && r.pais >= 0 && r.pais != S.sede && !(S.sds && S.sds[r.pais]) ? r.pais : null,
+    pro = S.mq.filter((q) => q.o == i),
+    fr = (S.rw || []).filter((e) => e.o == i && (r.hits || []).some((h) => e.n == h || String(e.n).startsWith(h))).slice(0, 6),
+    caja = Math.round(r.cash || 0),
+    costo = Math.round(valR(r) * 0.05),
+    enc = (S.fenc || []).filter((q) => q.k == i).length;
+  return { inf, sede, pro, fr, caja, costo, enc };
+}
+ACT["fab16"] = (v) => {
+  const i = +v,
+    r = S.rv[i];
+  if (!r || !r.own || r.dead) return;
+  const x = absRes(i),
+    li = (t) => `<div class="fila"><span>${t}</span></div>`;
+  op(
+    `<div class="c" translate="no"><div class="k"><h2 style="margin:0">${ic("edificio")} ${L4("Cerrar y absorber «#»", "Close and absorb «#»", "Fermer et absorber « # »", "Fechar e absorver «#»").replace("#", esc(r.n))}</h2>${btx()}</div><div class="m">${L4("La filial deja de existir como estudio y todo lo suyo pasa a tu compañía. Dejas de recibir su parte de utilidades y sus obras ya estrenadas siguen en tu plataforma y tu canal.", "The subsidiary stops existing as a studio and everything it has passes to your company. You stop receiving its profit share, and its released works stay on your platform and channel.", "La filiale cesse d'exister et tout ce qu'elle possède passe à ta compagnie. Tu ne touches plus sa part de bénéfices et ses œuvres sorties restent sur ta plateforme et ta chaîne.", "A filial deixa de existir como estúdio e tudo dela passa para sua empresa. Você deixa de receber a parte dos lucros e as obras lançadas continuam na sua plataforma e no seu canal.")}</div>${
+      li(L4("Caja: #", "Cash: #", "Trésorerie : #", "Caixa: #").replace("#", fm(x.caja))) +
+      li(L4("Costos de cierre: #", "Closing costs: #", "Frais de fermeture : #", "Custos de fechamento: #").replace("#", fm(x.costo))) +
+      (x.inf.length ? li(L4("Instalaciones: #", "Facilities: #", "Installations : #", "Instalações: #").replace("#", x.inf.map(([k, l]) => esc(IX[k][0]) + " " + L4("nivel", "level", "niveau", "nível") + " " + l).join(", "))) : "") +
+      (x.sede != null ? li(L4("Sede en #", "Office in #", "Bureau à #", "Sede em #").replace("#", esc(CY[x.sede][0]))) : "") +
+      (x.pro.length ? li(L4("# proyectos pasan a tu material", "# projects move to your material", "# projets passent dans ton matériel", "# projetos passam para seu material").replace("#", x.pro.length)) : "") +
+      (x.fr.length ? li(L4("Franquicias: #", "Franchises: #", "Franchises : #", "Franquias: #").replace("#", x.fr.map((e) => "«" + esc(e.n) + "»").join(", "))) : "")
+    }${x.enc ? `<div class="m" style="color:var(--r)">${L4("Tiene # encargos tuyos en curso: espera a que los termine.", "It has # of your commissions in progress: wait until they're done.", "Elle a # commandes en cours pour toi : attends qu'elle les termine.", "Tem # encomendas suas em andamento: espere terminar.").replace("#", x.enc)}</div>` : ""}<div class="bts" style="margin-top:8px">${bt("fab16y", i, L4("Cerrar y absorber", "Close and absorb", "Fermer et absorber", "Fechar e absorver"), x.enc ? "off" : "r")}${bt("x", "", L4("Cancelar", "Cancel", "Annuler", "Cancelar"))}</div></div>`,
+  );
+};
+ACT["fab16y"] = (v) => {
+  const i = +v,
+    r = S.rv[i];
+  if (!r || !r.own || r.dead) return;
+  const x = absRes(i);
+  if (x.enc) return;
+  if (x.caja > 0) capital(x.caja);
+  else if (x.caja < 0) gasta("fijos", -x.caja);
+  gasta("fijos", x.costo);
+  x.inf.forEach(([k, l]) => {
+    S.inf = S.inf || [];
+    S.inf[k] = l;
+  });
+  if (x.sede != null) {
+    S.sds = S.sds || {};
+    S.sds[x.sede] = (r.sz || 0) >= 1.2 ? 2 : 1;
+  }
+  x.pro.forEach((q, k) => {
+    S.mt.push({ i: "a" + i + "_" + S.t + "_" + k, n: q.n, a: r.n, y: yr(), k: L4("Proyecto de #", "Project by #", "Projet de #", "Projeto de #").replace("#", r.n), g: [q.g0 || (q.gn || [])[0]].filter(Boolean), f: 55, pd: 0, pr: 0, u: 0, m40: q.m });
+  });
+  S.mq = S.mq.filter((q) => q.o != i);
+  x.fr.forEach((e) => {
+    S.rwb = (S.rwb || []).concat([e.id]);
+    try {
+      frImporta(e);
+    } catch (er) {}
+  });
+  r.cash = 0;
+  r.own = 0;
+  r.dead = yr();
+  r.abs16 = 1;
+  S.tl.forEach((t) => {
+    if (t.rv == i && t.ocu > S.t) t.ocu = 0;
+  });
+  nws(L4("Cierras «#» y absorbes su caja, sus instalaciones y sus proyectos.", "You close «#» and absorb its cash, facilities and projects.", "Tu fermes « # » et absorbes sa trésorerie, ses installations et ses projets.", "Você fecha «#» e absorve o caixa, as instalações e os projetos.").replace("#", r.n));
+  bit(L4("Absorbes tu filial #.", "You absorb your subsidiary #.", "Tu absorbes ta filiale #.", "Você absorve sua filial #.").replace("#", r.n));
+  cx();
+  return pg();
+};
 Object.assign(TX.es.ayuda, {
   pendientes16: ["Pendientes", "Todo lo que espera tu decisión, en un solo lugar: obras listas para estrenar (si son muchas, «Lanzar todas con el mejor plan»), propuestas de tus talentos por medio (con «Luz verde a todas»), pedidos de capital de tus filiales, rivales al borde de la quiebra, guiones listos para producir, series que se pueden renovar, obras que se pueden reestrenar, ofertas, colaboraciones, eventos, huelgas y avisos de caja. Está en Estudio → Inicio y en el menú; el número sobre el botón del menú dice cuántas cosas hay. Lo que pongas en automático deja de aparecer aquí. Dato: el método «Inbox Zero» de Merlin Mann (2007) no busca tener cero correos, sino no dejar que la bandeja decida por ti."],
   automatico16: ["Panel de automatización", "Todos los automáticos del estudio juntos. Por medio: si tus talentos firmados producen solos lo que aceptas, si sus propuestas reciben luz verde sola y el presupuesto anual (cada toque sube un nivel: 2, 5, 10, 20 % y vuelve a cero). Además: lanzamiento automático (manual, solo segundo plano o todas tus obras), renovar temporadas, reestrenos, venta de licencias a TV y streaming, compras para tu plataforma y tu canal, capital para filiales, puja automática por derechos, filiales que producen solas, gestión de parques y becas. «Activar todo» y «Apagar todo» cambian todos menos el presupuesto y las filiales. Cada opción sigue también en su pestaña de siempre. Dato: el primer piloto automático de avión, de Lawrence Sperry, se mostró en París en 1914: Sperry voló con las manos en alto mientras su mecánico caminaba por el ala."],
 });
 Object.assign(TX.es.ayuda, {
   lanzamiento16: ["Encomendar el lanzamiento", "En el plan de lanzamiento de una obra lista, o desde Pendientes. Eliges un rival o una de tus filiales que trabaje ese medio: lanza la obra con el mejor plan, paga la mitad del marketing y la distribuye con su propia red. Su cobertura depende de su tamaño y de su especialidad en el medio, y si es mayor que la tuya, la obra vende más. A cambio se queda con el 30 % de lo que recaude (el 15 % si es tu filial). Conviene cuando tu distribución es pequeña o te falta caja para el marketing. Dato: durante décadas, muchos estudios pequeños de Hollywood estrenaron sus películas a través de las grandes distribuidoras, que cobraban entre un 30 y un 40 % de la taquilla."],
-  fisico16: ["Ediciones físicas", "En la pestaña de cada medio, bajo su infraestructura: películas en disco, series en temporadas en caja, videojuegos en ediciones físicas y de colección, música en discos, vinilos y cajas, y libros en estuches y colecciones. Cada planta tiene 3 niveles. En cine y series sube la venta en disco hasta un 75 %; en videojuegos, música y libros, las ventas hasta un 18 %. Además, cada mes vende colecciones de tu catálogo con más de un año. Su peso sigue la época: el disco llega con el video casero en 1976 y baja con el streaming, pero nunca desaparece por los coleccionistas. Cuesta un mantenimiento del 0,4 % de su valor al mes y al venderla recuperas el 60 %. Dato: en 2020, en EE. UU. los vinilos volvieron a facturar más que los CD por primera vez desde 1986."],
+  fisico16: ["Ediciones físicas", "En la pestaña de cada medio, bajo su infraestructura: películas en disco, series en temporadas en caja, videojuegos en ediciones físicas y de colección, teatro en grabaciones de funciones (desde 1929), música en discos, vinilos y cajas, y libros en estuches y colecciones. Cada planta tiene 3 niveles. En cine y series sube la venta en disco hasta un 75 %; en videojuegos, teatro, música y libros, las ventas hasta un 18 %. Además, cada mes vende colecciones de tu catálogo con más de un año. Su peso sigue la época: el disco llega con el video casero en 1976 y baja con el streaming, pero nunca desaparece por los coleccionistas. Cuesta un mantenimiento del 0,4 % de su valor al mes y al venderla recuperas el 60 %. Dato: en 2020, en EE. UU. los vinilos volvieron a facturar más que los CD por primera vez desde 1986."],
 });
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {
