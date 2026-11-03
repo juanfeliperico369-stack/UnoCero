@@ -49,6 +49,9 @@ Hay **una sola versión**, la definitiva, y sobre ella se sigue trabajando. No h
   - `t31`: rescate de rivales, estudios nuevos y ficha del avatar.
   - `t32` y `t33`: renovación de temporadas.
   - `t34` y `t35`: buscador y personajes de franquicias.
+  - `t36`: encomendar desde el creador.
+  - `t37`: guiones comprados.
+  - `t38`: proyección para la prensa.
   - Para probar el botón de volver hay que hacer clic de verdad en el elemento (`el.click()`), porque la pila de fichas se arma con el botón tocado.
 - **Android:** desde `android/`, `gradle assembleRelease bundleRelease`. Necesita `android/keystore.properties` (ruta y contraseña de la llave) y `android/local.properties` (`sdk.dir`), que no están en el repositorio. Después verifica la firma con `apksigner verify --print-certs` y que `assets/index.html` del APK sea igual al HTML.
 - **Contenido real:** existe un importador (`mundoImporta`) y un paquete de mundo con 92 estudios, 281 talentos y 188 obras, guardado aparte por el autor. Cuando se agregue lo real, debe ir dentro de esta misma versión: incluido en el juego o como paquete `.iamundo` que se importa en Estudio → Editor, nunca como una aplicación distinta.
@@ -76,6 +79,8 @@ Hecho en la 1.6 y la 1.6.1 (detalle en `docs/reporte-1.6.md`):
   - ficha completa del avatar en su pestaña y una tarjeta del avatar en el catálogo de talentos.
   - renovación automática de temporadas (`S.ren16`, `renLote`).
   - todos los personajes en la franquicia (`frPjs` incluye obras en producción) y buscador de franquicias (`FRBUSCA`).
+  - botón «Encomendar» al final del creador (`wzenc`, reutiliza `encomiendaM`) y guardado automático de guiones comprados (`gmb` llama a `idGuarda`).
+  - la ventana de prensa solo sale para obras propias (`obraMia`, filtra la cola `S.prj`); la proyección (`P.rev`) se ve en la ficha de cada obra.
 
 Pendiente, en orden sugerido:
 

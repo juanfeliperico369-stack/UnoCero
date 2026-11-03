@@ -171,6 +171,15 @@ Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo 
   - **Antes:** solo se contaban los de obras ya estrenadas y la lista se cortaba en 12.
   - **Ahora:** salen todos, también los nuevos de secuelas y temporadas en producción («aún sin estrenar»). Los primeros 12 se ven completos y el resto está en «Ver N personajes más», con sus licencias de cómic, manga, juguetes y videojuego.
 - **Buscador de franquicias:** busca por nombre de franquicia, de obra o de personaje, sin importar tildes, y respeta la división elegida (propias, de tus talentos, compradas o con rivales).
+- **Encomendar desde el creador:**
+  - Al final del creador, junto a «Guardar idea en Proyectos», está «Encomendar a una filial o un rival».
+  - Usa el mismo encargo de siempre: que se encarguen de todo, o encomendar y editar, con presupuesto acordado y cofinanciación.
+- **Guiones comprados:**
+  - **Antes:** solo abrían el creador, y si lo cerrabas el guion se perdía.
+  - **Ahora:** se guardan solos en Proyectos («Ideas en proceso») como guion ya escrito, con su nota, listos para producir, encomendar, coproducir o vender cuando quieras. Al producirlos salen de la lista.
+- **Proyección para la prensa:**
+  - **Cuándo sale la ventana:** solo con las obras que creaste tú directamente. No sale con las de tus talentos firmados, encargos, coproducciones, compras, reestrenos, temporadas renovadas solas ni festivales en modo automático.
+  - **En la ficha:** todas las obras con crítica muestran su proyección en una sección plegable, con cada crítico, su medio, su frase, su nota y el promedio.
 - **Dato:** en 1997, Apple estaba a semanas de quedarse sin caja y Microsoft, su gran rival, invirtió 150 millones de dólares en ella. Es uno de los rescates entre rivales más citados.
 
 ## Pruebas de esta versión

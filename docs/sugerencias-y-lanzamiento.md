@@ -112,6 +112,9 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Renovación automática de temporadas.
   - Ficha completa del avatar en su pestaña.
   - Todos los personajes en la franquicia y un buscador de franquicias.
+  - Encomendar desde el creador.
+  - Guiones comprados que se guardan solos.
+  - Proyección de prensa solo para tus obras y visible en la ficha de cada obra.
 
 ### Pendientes
 1. **Bandeja de pendientes, copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`).

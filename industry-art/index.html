@@ -75302,7 +75302,10 @@ ACT["fe12"] = (v) => {
       W.crew = eqRec(W.m, BD());
       repartoRec(W);
       const r = producir();
-      if (r && typeof r == "object") P = r;
+      if (r && typeof r == "object") {
+        P = r;
+        P.autoF12 = 1;
+      }
       else err = String(r || "");
     }
   } catch (e) {
@@ -76533,6 +76536,7 @@ function renueva(P) {
       r = producir();
     }
     res = r;
+    if (r && typeof r == "object") r.ren16 = 1;
   } catch (e) {
     res = String((e && e.message) || e);
   }
@@ -76602,6 +76606,69 @@ ACT["frbx"] = () => {
   fil.fp = 0;
   return pg();
 };
+
+ACT["wzenc"] = () => {
+  if (!W || W.enc != null) return;
+  const m = W.m,
+    items = misFiliales()
+      .map((r) => ({ v: "r" + r, l: S.rv[r].n, nt: 1, s: L4("Tu filial: produce y te reparte utilidades", "Your subsidiary: produces and shares profits", "Ta filiale : produit et partage ses bénéfices", "Sua filial: produz e divide os lucros"), g: L4("Tus filiales", "Your subsidiaries", "Tes filiales", "Suas filiais") }))
+      .concat(rivL(m).map((r) => ({ v: "r" + r, l: S.rv[r].n, nt: 1, s: L4("Produce con su equipo y cobra un 15 %", "Produces with its team and charges 15%", "Produit avec son équipe et prend 15 %", "Produz com a equipe e cobra 15 %"), g: L4("Rivales", "Rivals", "Rivaux", "Rivais") })));
+  if (!items.length) return toast(L4("No hay estudios que puedan encargarse de este medio", "No studio can take on this medium", "Aucun studio ne peut prendre ce média", "Nenhum estúdio pode cuidar deste meio"));
+  return fxPick({
+    t: L4("Encomendar esta obra", "Commission this work", "Confier cette œuvre", "Encomendar esta obra"),
+    items,
+    orden: false,
+    ok: (s) => {
+      const r = +String(s[0]).slice(1);
+      if (!S.rv[r] || !W) return;
+      encomiendaM({ abre: () => null }, r);
+    },
+  });
+};
+const wzBot = wzBotones;
+wzBotones = function () {
+  const h = wzBot.apply(this, arguments);
+  if (!S || S.taller || !W || W.enc != null || (!misFiliales().length && !rivL(W.m).length)) return h;
+  return h + `<div class="bts" style="margin-top:6px" translate="no">${bt("wzenc", "", ic("obras") + " " + L4("Encomendar a una filial o un rival", "Commission to a subsidiary or a rival", "Confier à une filiale ou un rival", "Encomendar a uma filial ou um rival"))}</div>`;
+};
+
+const gmb = ACT["gmb"];
+ACT["gmb"] = (v) => {
+  const g = (S.gm || [])[+v],
+    r = gmb(v);
+  if (g && W && W.gs && W.gs.n == g.n && !W.idI) {
+    try {
+      const it = idGuarda();
+      it.gs = cl(Math.round(g.q), 0, 100);
+      const t = S.tl.find((x) => x && x.n == g.au);
+      if (t) it.esc = t.id;
+      if (it.w) delete it.w.gq;
+      toast(L4("Guion guardado en Proyectos: puedes producirlo ahora o después", "Script saved to Projects: you can produce it now or later", "Scénario gardé dans Projets : tu peux le produire maintenant ou plus tard", "Roteiro guardado em Projetos: você pode produzi-lo agora ou depois"));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  return r;
+};
+
+const obraMia = (P) => !!P && filOrigen5(P) == "p" && !P.rr && !P.ren16 && !P.autoF12 && P.tal5 == null;
+const prensaBExt = prensaB;
+prensaB = function () {
+  while (S.prj && S.prj.length) {
+    const P = pj(S.prj[0]);
+    if (P && P.rev && obraMia(P)) return prensaBExt.apply(this, arguments);
+    S.prj.shift();
+  }
+  return siguienteAviso();
+};
+GANCHOS.ficha.push((P) => {
+  if (!P || !P.rev || !P.rev.length) return "";
+  const y = dy(P),
+    m = Math.round(sum(P.rev, (r) => r[1]) / P.rev.length);
+  return `<details class="c prj16"><summary><b>${ic("cine")} ${L4("Proyección para la prensa", "Press screening", "Projection de presse", "Sessão para a imprensa")}</b> <span class="m">· ${L4("promedio de la crítica", "critics' average", "moyenne de la critique", "média da crítica")} ${m}</span></summary>${P.rt != null ? `<div class="m">${fD(semIni(P.rt) + diaEst(P.m, y))}</div>` : ""}${P.rev
+    .map((r) => (CRI[r[0]] ? `<div class="fila"><span><b>${esc(CRI[r[0]][0])}</b> <span class="m">· ${esc(CRI[r[0]][1])} (${medioC(y)})</span><br><i class="m">«${esc(frR(r))}»</i></span><b style="color:${r[1] >= 60 ? "var(--a)" : "var(--r)"}">${r[1]}</b></div>` : ""))
+    .join("")}</details>`;
+});
 Object.assign(TX.es.ayuda, {
   rescate15: ["Rescatar estudios", "Cuando un rival lleva años perdiendo dinero o público, primero llega un aviso: está al borde de la quiebra. Desde ese momento tienes un año para salvarlo desde su ficha. «Rescatar como filial» paga sus deudas y lo compra con descuento (el 60 % de su precio): pasa a ser tuyo y su catálogo llega a tu plataforma y tu canal. «Rescatar e invertir» le da capital para que siga como estudio independiente; ese dinero queda como inversión tuya en él y sube o baja con su bolsa. Los estudios que ya quebraron también se pueden reabrir desde Mundo → Rivales, en «Estudios que cerraron o se fusionaron»; los que fueron comprados por otro rival no. Cada rescate suma 1 de prestigio. Además, cada año pueden nacer estudios nuevos, a veces fundados por talentos veteranos; nacen más cuando quedan pocos rivales independientes. Dato: en 1997, Apple estaba a semanas de quedarse sin caja y Microsoft invirtió 150 millones de dólares en ella; fue uno de los rescates más famosos entre rivales."],
 });
