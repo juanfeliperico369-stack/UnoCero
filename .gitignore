@@ -1,0 +1,5 @@
+# Claves de firma: nunca al repositorio
+*.jks
+*.keystore
+*.p12
+LEEME-CLAVE.txt

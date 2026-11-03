@@ -71,7 +71,26 @@ node build/verificar_1_0.js <index-1.6.6.html> index.html <partida.json> [es,en,
 
 ## Android
 
-1. Copia `index.html` a `app/src/main/assets/index.html`.
-2. En `app/build.gradle(.kts)`: `versionCode = 18` y `versionName = "1.0"`. La 1.6.6 publicada tiene `versionCode 17`;
-   Play solo exige que el código suba, el nombre puede bajar a 1.0.
-3. Genera el AAB firmado con tu clave de subida, como siempre.
+La 1.0 se firma con una clave nueva (`industry-art-subida.jks`, alias `industryart`, certificado
+`CN=OneZero, OU=Industry Art`, SHA-256 `FC:F2:B8:2F:…:25:6E`). Es la clave de subida para todas las
+actualizaciones. **No está en el repositorio** (`.gitignore` bloquea `*.jks`): guárdala tú, con su contraseña,
+en al menos dos sitios.
+
+- `versionCode 18`, `versionName "1.0"`. Cada actualización necesita un `versionCode` mayor.
+- Para publicar en Play Store se sube el AAB. Con la firma de apps de Play, Google firma lo que reciben los usuarios.
+  Si algún día pierdes la clave de subida, se puede pedir que la restablezcan desde Play Console.
+
+### Empaquetar una actualización
+
+```
+CLAVE_PW='…' python3 android/empaquetar.py --html index.html --codigo 19 --nombre 1.0.1 \
+    --clave /ruta/industry-art-subida.jks --salida /ruta/salida
+```
+
+Parte de `android/plantilla/industry-art-base.aab`, que es el bundle de la app sin firma y sin el juego. Le mete el
+`index.html`, cambia la versión del manifiesto (`android/ParcheManifiesto.java`), firma el AAB y saca del mismo AAB
+el APK universal con bundletool, firmado con la misma clave. Si faltan bundletool o las build-tools, las descarga.
+Necesita Java (con `javac` y `jarsigner`) y Python 3.
+
+Si cambias el código nativo de la app (la Activity, los permisos o el ícono), genera la plantilla de nuevo desde
+Android Studio. Es el AAB de release sin firmar, con `base/assets/index.html` quitado.
