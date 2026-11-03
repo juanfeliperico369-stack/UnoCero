@@ -70,10 +70,10 @@ Idiomas: español, inglés, francés y portugués.
 Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales; el juego no está afiliado a ellos. El casino del juego usa dinero ficticio: no hay apuestas con dinero real.
 ```
 
-**Notas de la versión 1.6.3** (412/500)
+**Notas de la versión 1.6.4** (369/500)
 
 ```
-Versión 1.6.3: las series tienen un final natural y se dejan de renovar en su mejor momento; postulación automática a festivales, donde brillan las obras modestas y locales; ofertas por cada franquicia con interruptor; encargos a tus talentos desde el creador; tu avatar ya no pierde energía por los automáticos; propón una relación desde cualquier ficha; además, bandeja de pendientes y panel de automatización.
+Versión 1.6.4: encomienda el lanzamiento de cualquier obra a un rival o filial, que pone la mitad del marketing y la distribuye con su red; plantas de ediciones físicas para cine, series, videojuegos, música y libros, con colecciones de tu catálogo; además, series con final natural, postulación automática a festivales, bandeja de pendientes y panel de automatización.
 ```
 
 ## English (en-US)
@@ -129,10 +129,10 @@ Languages: Spanish, English, French and Portuguese.
 The real works, awards, people, brands and places in the game are historical and cultural references; the game is not affiliated with them. The in-game casino uses fictional money: there is no real-money gambling.
 ```
 
-**Notas de la versión 1.6.3** (364/500)
+**Notas de la versión 1.6.4** (342/500)
 
 ```
-Version 1.6.3: series have a natural ending and stop being renewed at their peak; automatic festival submissions, where modest and local works shine; offers for each franchise with an on/off switch; commission your talents from the creator; your avatar no longer loses energy to automations; ask someone out from any profile; plus an inbox and an automation panel.
+Version 1.6.4: hand the release of any work to a rival or subsidiary, who pays half the marketing and distributes it through their network; physical edition plants for film, series, games, music and books, with collections from your catalog; plus series with a natural ending, automatic festival submissions, an inbox and an automation panel.
 ```
 
 ## Français (fr-FR)
@@ -188,10 +188,10 @@ Langues : espagnol, anglais, français et portugais.
 Les œuvres, prix, personnes, marques et lieux réels présents dans le jeu sont des références historiques et culturelles ; le jeu n'y est pas affilié. Le casino du jeu utilise de l'argent fictif : il n'y a pas de jeu d'argent réel.
 ```
 
-**Notas de la versión 1.6.3** (396/500)
+**Notas de la versión 1.6.4** (365/500)
 
 ```
-Version 1.6.3 : les séries ont une fin naturelle et s'arrêtent au sommet ; candidatures automatiques aux festivals, où brillent les œuvres modestes et locales ; offres par franchise avec interrupteur ; commandes à tes talents depuis le créateur ; ton avatar ne perd plus d'énergie à cause des automatismes ; propose une relation depuis une fiche ; boîte des décisions et panneau d'automatisation.
+Version 1.6.4 : confie la sortie de n'importe quelle œuvre à un rival ou une filiale, qui paie la moitié du marketing et la distribue avec son réseau ; usines d'éditions physiques pour le cinéma, les séries, les jeux, la musique et les livres ; séries avec une fin naturelle, candidatures automatiques aux festivals, boîte des décisions et panneau d'automatisation.
 ```
 
 ## Português (pt-BR)
@@ -247,8 +247,8 @@ Idiomas: espanhol, inglês, francês e português.
 As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais; o jogo não é afiliado a eles. O cassino do jogo usa dinheiro fictício: não há apostas com dinheiro real.
 ```
 
-**Notas de la versión 1.6.3** (378/500)
+**Notas de la versión 1.6.4** (352/500)
 
 ```
-Versão 1.6.3: as séries têm um final natural e deixam de ser renovadas no auge; inscrição automática em festivais, onde brilham as obras modestas e locais; ofertas por franquia com interruptor; encomendas aos seus talentos pelo criador; seu avatar não perde mais energia com as automações; proponha um relacionamento em qualquer ficha; caixa de pendências e painel de automação.
+Versão 1.6.4: encomende o lançamento de qualquer obra a um rival ou filial, que paga metade do marketing e distribui com a rede dele; fábricas de edições físicas para cinema, séries, games, música e livros, com coleções do seu catálogo; além disso, séries com final natural, inscrição automática em festivais, caixa de pendências e painel de automação.
 ```

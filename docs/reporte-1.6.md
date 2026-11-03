@@ -1,4 +1,4 @@
-# INDUSTRY ART · Informe de las versiones 1.6 a 1.6.3
+# INDUSTRY ART · Informe de las versiones 1.6 a 1.6.4
 
 Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo funciona y cómo se verificó.
 
@@ -242,6 +242,36 @@ Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo 
   - En la ficha de cualquier talento adulto puedes proponerle una relación a tu avatar, si estás sin pareja.
   - La respuesta depende de la química, la amistad, la edad y si tiene pareja.
   - Puedes intentarlo una vez al año por persona.
+
+## 13. Versión 1.6.4: lanzamientos encomendados y ediciones físicas
+
+- **Encomendar el lanzamiento:**
+  - **Dónde:** en el plan de lanzamiento de cualquier obra lista, de cualquier medio, y en Pendientes.
+  - **Cómo funciona:** eliges un rival o una filial que trabaje ese medio. Lanza la obra con el mejor plan, paga la mitad del marketing (llega como aporte del socio) y la distribuye con su propia red.
+  - **Cobertura del socio:** sale de su tamaño y de su especialidad en el medio, entre 55 y 98 %. Si es mayor que la tuya, la obra vende más.
+  - **Comisión:** se queda con el 30 % de lo que recaude, o con el 15 % si es tu filial. La ficha de la obra muestra quién la distribuye.
+  - **Cuándo conviene:** cuando tu distribución es pequeña o te falta caja para el marketing.
+  - **En la prueba:** con 96 % de cobertura propia, el socio te cobra más de lo que añade.
+- **Ediciones físicas:** una planta por medio, en la pestaña de cada medio, con 3 niveles.
+
+| Medio | Qué fabrica | Efecto |
+|---|---|---|
+| Cine | Ediciones en disco y de colección | Hasta +75 % en la venta en disco |
+| Series | Temporadas en caja | Hasta +75 % en la venta en disco |
+| Videojuegos | Ediciones físicas y de colección | Hasta +18 % en ventas |
+| Música | Discos, vinilos y cajas recopilatorias | Hasta +18 % en ventas |
+| Libros | Estuches y colecciones | Hasta +18 % en ventas |
+
+- **Colecciones del catálogo:** cada mes la planta vende colecciones de tus obras con más de un año.
+- **Peso según la época:**
+  - El disco llega con el video casero en 1976 y baja con el streaming hasta el 35 %, sin desaparecer, por los coleccionistas.
+  - La música tiene un repunte de vinilo.
+  - Los libros se mantienen.
+- **Costos:**
+  - Comprar cuesta 1,5, 3 y 6 presupuestos típicos por nivel.
+  - El mantenimiento es el 0,4 % de su valor al mes.
+  - Al venderla recuperas el 60 %.
+- **Dato:** en 2020, en EE. UU., los vinilos volvieron a facturar más que los CD por primera vez desde 1986.
 
 ## Pruebas de esta versión
 
