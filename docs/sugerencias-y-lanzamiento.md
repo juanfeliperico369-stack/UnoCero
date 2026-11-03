@@ -125,6 +125,15 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Parejas del avatar como decisión propia.
   - En general, parejas de distinto sexo.
 
+- **De las pruebas de juego (versión 1.6.3):**
+  - Energía del avatar corregida.
+  - Series con final natural.
+  - Postulación automática a festivales y jurados que favorecen lo modesto y lo local.
+  - Reestrenos espaciados.
+  - Encargo a talentos desde el creador.
+  - Ofertas por franquicia detalladas y con interruptor.
+  - Proponer una relación.
+
 ### Pendientes
 1. **Copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`). La bandeja de pendientes ya está hecha (1.6.2).
 2. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.

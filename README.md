@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.6.2
+## INDUSTRY ART · versión 1.6.3
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -81,6 +81,7 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Franquicias**: buscador por franquicia, obra o personaje, y todos los personajes en la ficha, también los nuevos de obras en producción.
 - **Encomendar desde el creador** a una filial o un rival, y **guiones comprados que se guardan solos** en Proyectos.
 - **Proyección para la prensa** solo como ventana en tus obras propias; en la ficha de cada obra puedes ver cómo le fue.
+- **Series con final natural**, **postulación automática a festivales** (con jurados que favorecen las obras modestas y locales), **ofertas por franquicia detalladas y con interruptor**, **encargos a tus talentos desde el creador** y **automáticos que ya no usan a tu avatar**.
 - **Bandeja de pendientes y panel de automatización**: todo lo que espera tu decisión en un solo lugar, con contador en el menú, y todos los automáticos juntos, con «Activar todo» y «Apagar todo».
 - **Vida sentimental**: las parejas de tu avatar llegan como una situación que decides tú; en general las parejas son entre personas de distinto sexo.
 - **Archivo con buscador**, **Material en subpestañas**, **encomendar eligiendo el tipo de obra** y **ceremonias solo para tus obras propias**.
@@ -114,7 +115,7 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.6.2 están en `entregables/`.
+Los paquetes de la versión 1.6.3 están en `entregables/`.
 
 ### Lanzamiento
 

@@ -8,12 +8,12 @@ Hay **una sola versión**, la definitiva, y sobre ella se sigue trabajando. No h
 
 | Versión | versionCode | Dónde |
 |---|---|---|
-| 1.6.2 | 13 | `industry-art/index.html` y `entregables/industry-art-1.6.2.apk/.aab` |
+| 1.6.3 | 14 | `industry-art/index.html` y `entregables/industry-art-1.6.3.apk/.aab` |
 
 - **Edición real retirada:** la «edición real 1.0» de prueba (versionCode 10) que existió antes queda retirada. Lo real que el autor quiere se agregará más adelante dentro de esta misma versión.
 
 - **Firma:** el APK y el AAB se firman con la llave de subida `industryart-subida.jks`, que guarda el autor y nunca va al repositorio (huella SHA-256 `5f:f5:8e:ce:46:49:95:d1:…:26:f6`).
-- **Número de versión:** la 1.6.2 usa el versionCode 13. La próxima versión debe usar el **14 o más**; si no, el teléfono no la instala encima.
+- **Número de versión:** la 1.6.3 usa el versionCode 14. La próxima versión debe usar el **15 o más**; si no, el teléfono no la instala encima.
 
 ## 2. Cómo está hecho
 
@@ -55,6 +55,8 @@ Hay **una sola versión**, la definitiva, y sobre ella se sigue trabajando. No h
   - `t40`: archivo, Material, encargo con medio y ceremonias.
   - `t41`: bandeja y panel.
   - `t42`: parejas.
+  - `t43`: energía del avatar.
+  - `t44`: novedades de la 1.6.3.
   - Para probar el botón de volver hay que hacer clic de verdad en el elemento (`el.click()`), porque la pila de fichas se arma con el botón tocado.
 - **Android:** desde `android/`, `gradle assembleRelease bundleRelease`. Necesita `android/keystore.properties` (ruta y contraseña de la llave) y `android/local.properties` (`sdk.dir`), que no están en el repositorio. Después verifica la firma con `apksigner verify --print-certs` y que `assets/index.html` del APK sea igual al HTML.
 - **Contenido real:** existe un importador (`mundoImporta`) y un paquete de mundo con 92 estudios, 281 talentos y 188 obras, guardado aparte por el autor. Cuando se agregue lo real, debe ir dentro de esta misma versión: incluido en el juego o como paquete `.iamundo` que se importa en Estudio → Editor, nunca como una aplicación distinta.
@@ -93,6 +95,14 @@ Hecho en la 1.6 y la 1.6.1 (detalle en `docs/reporte-1.6.md`):
   - panel de automatización (`auto16M`, acción `au16`);
   - parejas del avatar como situación (evento `ROM16`, estado `S.rom16`, rechazos en `S.rom16no`);
   - regla de parejas (`relHet13` en `relLibre13`) y migración `rom16Mig`.
+- **1.6.3** (en `ronda16.js`, salvo lo indicado):
+  - `AUTOC16` y `sinAvatar16`: los automáticos no usan al avatar;
+  - fin natural de las series (`arco16`, `finSerie16`, en `ronda15.js`);
+  - postulación automática a festivales (`S.fpst16`) y bono de jurado (`fesB16`);
+  - reestreno automático una vez al año por medio (`ronda9.js`);
+  - encargo a talentos desde el creador (`talW16M`, en `ronda15.js`);
+  - ofertas por franquicia en la bandeja e interruptor `F.noOf16`;
+  - proponer una relación (`rom16p`).
 
 Pendiente, en orden sugerido:
 

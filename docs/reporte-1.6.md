@@ -1,4 +1,4 @@
-# INDUSTRY ART · Informe de las versiones 1.6, 1.6.1 y 1.6.2
+# INDUSTRY ART · Informe de las versiones 1.6 a 1.6.3
 
 Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo funciona y cómo se verificó.
 
@@ -214,6 +214,34 @@ Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo 
 - **Datos:**
   - El primer piloto automático de avión, de Lawrence Sperry, se mostró en París en 1914: voló con las manos en alto mientras su mecánico caminaba por el ala.
   - El método «Inbox Zero» de Merlin Mann (2007) no busca tener cero correos, sino no dejar que la bandeja decida por ti.
+
+## 12. Versión 1.6.3
+
+- **Energía del avatar:**
+  - **El problema:** los automáticos (renovaciones, presupuesto por medio, festivales en automático, encargos y talentos que producen solos) ponían a tu avatar en sus equipos porque era el mejor disponible, y cada obra le quitaba 10 de energía. Por eso no subía.
+  - **La solución:** ahora ninguna producción automática usa a tu avatar. Si estaba en el equipo o en el reparto de una temporada anterior, lo reemplaza el mejor disponible. Solo tú puedes ponerlo en una obra.
+  - **Prueba:** con todo en automático, un año empezando en 0 de energía termina en 61 (antes, en 1). Lo único que aún resta es la rutina intensa de ejercicio, 5 al mes, que es parte de su diseño.
+- **Series con final:**
+  - Cada serie tiene una duración natural según su singularidad: entre 3 y 10 temporadas, más larga cuanto más compleja.
+  - La renovación automática se detiene al concluir la historia, o cuando la crítica de la última temporada cae más de 6 puntos respecto de su mejor temporada («cerró en su mejor momento»).
+  - La lista de series muestra su estado («pensada para 5 temporadas», «historia concluida»…).
+  - Una temporada extra a mano sigue siendo tu decisión.
+- **Festivales:**
+  - Postulación automática: cada año inscribe tus 2 mejores obras elegibles en cada festival. Se activa en la tarjeta «Crear para un festival» y en el panel de automatización.
+  - Los jurados de los festivales favorecen, para todos los estudios, las producciones modestas (hasta +5) y las obras del país del festival (+5) o de su región (+2); las superproducciones restan un poco. Esto sigue el documento original: en los festivales participan todos y en especial las producciones modestas y las del país del festival.
+- **Reestrenos:**
+  - Cada obra solo se reestrena 5 años después de su último estreno.
+  - El reestreno automático hace como mucho uno por medio al año (antes, cada 3 meses).
+- **Encomendar desde el creador a tus talentos firmados:**
+  - Junto a filiales y rivales, ahora aparecen tus talentos firmados, con las opciones «Que se encargue de todo» y «Encomendar y editar».
+  - La obra cuenta como de tus talentos.
+- **Ofertas por franquicias:**
+  - La bandeja dice qué rival ofrece, cuánto y por cuál franquicia, con «Ver franquicia», «Vender» y «Rechazar».
+  - Cada franquicia tiene el interruptor «Recibir propuestas de compra»: si lo apagas, no llegan ofertas por ella.
+- **Proponer una relación:**
+  - En la ficha de cualquier talento adulto puedes proponerle una relación a tu avatar, si estás sin pareja.
+  - La respuesta depende de la química, la amistad, la edad y si tiene pareja.
+  - Puedes intentarlo una vez al año por persona.
 
 ## Pruebas de esta versión
 

@@ -70,10 +70,10 @@ Idiomas: español, inglés, francés y portugués.
 Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales; el juego no está afiliado a ellos. El casino del juego usa dinero ficticio: no hay apuestas con dinero real.
 ```
 
-**Notas de la versión 1.6.2** (434/500)
+**Notas de la versión 1.6.3** (412/500)
 
 ```
-Versión 1.6.2: bandeja de pendientes con todo lo que espera tu decisión y panel de automatización con todos los automáticos juntos; las parejas de tu avatar se deciden en situaciones; rescata rivales y reabre los que cerraron; nacen estudios nuevos cada año; renovación automática de temporadas; ficha completa de tu avatar; obras para festivales; presupuesto por medio; tu propia prensa; redes de distribución y sedes que dan dinero.
+Versión 1.6.3: las series tienen un final natural y se dejan de renovar en su mejor momento; postulación automática a festivales, donde brillan las obras modestas y locales; ofertas por cada franquicia con interruptor; encargos a tus talentos desde el creador; tu avatar ya no pierde energía por los automáticos; propón una relación desde cualquier ficha; además, bandeja de pendientes y panel de automatización.
 ```
 
 ## English (en-US)
@@ -129,10 +129,10 @@ Languages: Spanish, English, French and Portuguese.
 The real works, awards, people, brands and places in the game are historical and cultural references; the game is not affiliated with them. The in-game casino uses fictional money: there is no real-money gambling.
 ```
 
-**Notas de la versión 1.6.2** (407/500)
+**Notas de la versión 1.6.3** (364/500)
 
 ```
-Version 1.6.2: an inbox with everything waiting for your decision and an automation panel with every automatic option together; your avatar's relationships are decided in situations; rescue rivals and reopen closed ones; new studios every year; automatic season renewal; full profile for your avatar; works for festivals; budget per medium; your own press; distribution networks and offices that earn money.
+Version 1.6.3: series have a natural ending and stop being renewed at their peak; automatic festival submissions, where modest and local works shine; offers for each franchise with an on/off switch; commission your talents from the creator; your avatar no longer loses energy to automations; ask someone out from any profile; plus an inbox and an automation panel.
 ```
 
 ## Français (fr-FR)
@@ -188,10 +188,10 @@ Langues : espagnol, anglais, français et portugais.
 Les œuvres, prix, personnes, marques et lieux réels présents dans le jeu sont des références historiques et culturelles ; le jeu n'y est pas affilié. Le casino du jeu utilise de l'argent fictif : il n'y a pas de jeu d'argent réel.
 ```
 
-**Notas de la versión 1.6.2** (396/500)
+**Notas de la versión 1.6.3** (396/500)
 
 ```
-Version 1.6.2 : une boîte des décisions en attente et un panneau qui réunit toutes les automatisations ; les relations de ton avatar se décident en situations ; sauve des rivaux et rouvre ceux qui ont fermé ; nouveaux studios chaque année ; saisons renouvelées automatiquement ; fiche complète de ton avatar ; œuvres pour festivals ; budget par média ; ta propre presse ; réseaux de distribution.
+Version 1.6.3 : les séries ont une fin naturelle et s'arrêtent au sommet ; candidatures automatiques aux festivals, où brillent les œuvres modestes et locales ; offres par franchise avec interrupteur ; commandes à tes talents depuis le créateur ; ton avatar ne perd plus d'énergie à cause des automatismes ; propose une relation depuis une fiche ; boîte des décisions et panneau d'automatisation.
 ```
 
 ## Português (pt-BR)
@@ -247,8 +247,8 @@ Idiomas: espanhol, inglês, francês e português.
 As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais; o jogo não é afiliado a eles. O cassino do jogo usa dinheiro fictício: não há apostas com dinheiro real.
 ```
 
-**Notas de la versión 1.6.2** (402/500)
+**Notas de la versión 1.6.3** (378/500)
 
 ```
-Versão 1.6.2: caixa de pendências com tudo o que espera sua decisão e painel de automação com todas as opções automáticas juntas; os relacionamentos do seu avatar se decidem em situações; resgate rivais e reabra os que fecharam; estúdios novos todo ano; renovação automática de temporadas; ficha completa do avatar; obras para festivais; orçamento por meio; sua própria imprensa; redes de distribuição.
+Versão 1.6.3: as séries têm um final natural e deixam de ser renovadas no auge; inscrição automática em festivais, onde brilham as obras modestas e locais; ofertas por franquia com interruptor; encomendas aos seus talentos pelo criador; seu avatar não perde mais energia com as automações; proponha um relacionamento em qualquer ficha; caixa de pendências e painel de automação.
 ```
