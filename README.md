@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.6.5
+## INDUSTRY ART · versión 1.6.6
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -81,7 +81,7 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Franquicias**: buscador por franquicia, obra o personaje, y todos los personajes en la ficha, también los nuevos de obras en producción.
 - **Encomendar desde el creador** a una filial o un rival, y **guiones comprados que se guardan solos** en Proyectos.
 - **Proyección para la prensa** solo como ventana en tus obras propias; en la ficha de cada obra puedes ver cómo le fue.
-- **Grabaciones de funciones de teatro** y **cerrar una filial absorbiendo su caja, instalaciones, sede, proyectos y franquicias**.
+- **Grabaciones de funciones de teatro** y **cerrar una filial absorbiendo su caja, instalaciones, sede, proyectos y franquicias**, con la opción de **reabrirla** después; las **ofertas por franquicias** se regulan (ninguna, pocas o más).
 - **Encomendar el lanzamiento** de cualquier obra a un rival o filial (pone la mitad del marketing y la distribuye con su red) y **ediciones físicas** para cine, series, videojuegos, música y libros.
 - **Series con final natural**, **postulación automática a festivales** (con jurados que favorecen las obras modestas y locales), **ofertas por franquicia detalladas y con interruptor**, **encargos a tus talentos desde el creador** y **automáticos que ya no usan a tu avatar**.
 - **Bandeja de pendientes y panel de automatización**: todo lo que espera tu decisión en un solo lugar, con contador en el menú, y todos los automáticos juntos, con «Activar todo» y «Apagar todo».
@@ -117,7 +117,7 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.6.5 están en `entregables/`.
+Los paquetes de la versión 1.6.6 están en `entregables/`.
 
 ### Lanzamiento
 

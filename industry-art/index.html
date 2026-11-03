@@ -859,7 +859,7 @@ html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 
 .c.peri .peri-t::first-letter{color:#7a1f12!important}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.6.5";
+const VERN = "1.6.6";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -23571,11 +23571,13 @@ function frOf() {
     return !(own.length && own.every((p) => p.sold)) && L.some((p) => p.st >= 3);
   };
   frList().forEach((f) => {
-    if (R() > 0.025 || !est(f) || frG(f).x != null || frG(f).noOf16 || S.fo.some((o) => o.f == f)) return;
+    if (R() > 0.025 || !est(f) || frG(f).x != null || frG(f).noOf16 || !foOk(f) || S.fo.some((o) => o.f == f)) return;
     const v = frV(f, ix[f]);
     if (v < 10000) return;
     const r = rvAz();
     S.fo.push({ f, r, p: Math.round(v * (0.75 + R() * 0.6)), e: S.t + 8 });
+    S.foT16 = S.t;
+    frG(f).foT16 = S.t;
     nws(`${S.rv[r].n} ofrece comprar la franquicia «${frG(f).n}».`);
   });
 }
@@ -63143,7 +63145,10 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Panel de automatización", "Automation panel", "Panneau d'automatisation", "Painel de automação"],
   ["Todo lo que espera tu decisión, en un solo lugar: obras listas para estrenar (si son muchas, «Lanzar todas con el mejor plan»), propuestas de tus talentos por medio (con «Luz verde a todas»), pedidos de capital de tus filiales, rivales al borde de la quiebra, guiones listos para producir, series que se pueden renovar, obras que se pueden reestrenar, ofertas, colaboraciones, eventos, huelgas y avisos de caja. Está en Estudio → Inicio y en el menú; el número sobre el botón del menú dice cuántas cosas hay. Lo que pongas en automático deja de aparecer aquí. Dato: el método «Inbox Zero» de Merlin Mann (2007) no busca tener cero correos, sino no dejar que la bandeja decida por ti.", "Everything waiting for your decision, in one place: works ready to release (if there are many, «Launch all with the best plan»), proposals from your talents by medium (with «Green-light all»), capital requests from your subsidiaries, rivals on the brink of bankruptcy, scripts ready to produce, series that can be renewed, works that can be re-released, offers, collaborations, events, strikes and cash warnings. It's in Studio → Home and in the menu; the number on the menu button tells you how many there are. Whatever you set to automatic stops showing up here. Fact: Merlin Mann's «Inbox Zero» method (2007) isn't about having zero emails, but about not letting the inbox decide for you.", "Tout ce qui attend ta décision, au même endroit : œuvres prêtes à sortir (s'il y en a beaucoup, « Tout sortir avec le meilleur plan »), propositions de tes talents par média (avec « Feu vert à toutes »), demandes de capital de tes filiales, rivaux au bord de la faillite, scénarios prêts à produire, séries à renouveler, œuvres à ressortir, offres, collaborations, événements, grèves et alertes de trésorerie. C'est dans Studio → Accueil et dans le menu ; le chiffre sur le bouton du menu indique combien il y en a. Ce que tu mets en automatique n'apparaît plus ici. Anecdote : la méthode « Inbox Zero » de Merlin Mann (2007) ne vise pas zéro courriel, mais à ne pas laisser la boîte décider pour toi.", "Tudo o que espera sua decisão, num só lugar: obras prontas para estrear (se forem muitas, «Lançar todas com o melhor plano»), propostas dos seus talentos por meio (com «Sinal verde para todas»), pedidos de capital das suas filiais, rivais à beira da falência, roteiros prontos para produzir, séries que podem ser renovadas, obras que podem ser relançadas, ofertas, colaborações, eventos, greves e avisos de caixa. Fica em Estúdio → Início e no menu; o número no botão do menu diz quantas coisas há. O que você colocar no automático deixa de aparecer aqui. Curiosidade: o método «Inbox Zero» de Merlin Mann (2007) não busca ter zero e-mails, e sim não deixar a caixa decidir por você."],
   ["Todos los automáticos del estudio juntos. Por medio: si tus talentos firmados producen solos lo que aceptas, si sus propuestas reciben luz verde sola y el presupuesto anual (cada toque sube un nivel: 2, 5, 10, 20 % y vuelve a cero). Además: lanzamiento automático (manual, solo segundo plano o todas tus obras), renovar temporadas, reestrenos, venta de licencias a TV y streaming, compras para tu plataforma y tu canal, capital para filiales, puja automática por derechos, filiales que producen solas, gestión de parques y becas. «Activar todo» y «Apagar todo» cambian todos menos el presupuesto y las filiales. Cada opción sigue también en su pestaña de siempre. Dato: el primer piloto automático de avión, de Lawrence Sperry, se mostró en París en 1914: Sperry voló con las manos en alto mientras su mecánico caminaba por el ala.", "Every studio automation together. By medium: whether your signed talents produce on their own what you accept, whether their proposals get an automatic green light, and the annual budget (each tap raises a level: 2, 5, 10, 20% and back to zero). Also: automatic release (manual, background only or all your works), season renewals, re-releases, license sales to TV and streaming, buying for your platform and your channel, capital for subsidiaries, automatic bidding for rights, subsidiaries producing on their own, park management and scholarships. «Turn everything on» and «Turn everything off» change all of them except the budget and the subsidiaries. Each option also stays in its usual tab. Fact: Lawrence Sperry's first aircraft autopilot was shown in Paris in 1914: Sperry flew with his hands up while his mechanic walked out on the wing.", "Toutes les automatisations du studio réunies. Par média : si tes talents sous contrat produisent seuls ce que tu acceptes, si leurs propositions reçoivent un feu vert automatique et le budget annuel (chaque toucher monte d'un niveau : 2, 5, 10, 20 % puis zéro). En plus : sortie automatique (manuelle, arrière-plan seulement ou toutes tes œuvres), renouvellement des saisons, ressorties, vente de licences à la TV et au streaming, achats pour ta plateforme et ta chaîne, capital pour les filiales, enchères automatiques sur les droits, filiales qui produisent seules, gestion des parcs et bourses. « Tout activer » et « Tout désactiver » changent tout sauf le budget et les filiales. Chaque option reste aussi dans son onglet habituel. Anecdote : le premier pilote automatique d'avion, de Lawrence Sperry, a été présenté à Paris en 1914 : Sperry volait les mains en l'air pendant que son mécanicien marchait sur l'aile.", "Todas as automações do estúdio juntas. Por meio: se seus talentos contratados produzem sozinhos o que você aceita, se as propostas recebem sinal verde automático e o orçamento anual (cada toque sobe um nível: 2, 5, 10, 20 % e volta a zero). Além disso: lançamento automático (manual, só segundo plano ou todas as suas obras), renovação de temporadas, relançamentos, venda de licenças para TV e streaming, compras para sua plataforma e seu canal, capital para filiais, lance automático por direitos, filiais que produzem sozinhas, gestão de parques e bolsas. «Ativar tudo» e «Desligar tudo» mudam tudo menos o orçamento e as filiais. Cada opção continua também na sua aba de sempre. Curiosidade: o primeiro piloto automático de avião, de Lawrence Sperry, foi mostrado em Paris em 1914: Sperry voou com as mãos para cima enquanto seu mecânico caminhava pela asa."],
-  ["Versión 1.6.5", "Version 1.6.5", "Version 1.6.5", "Versão 1.6.5"],
+  ["Versión 1.6.6", "Version 1.6.6", "Version 1.6.6", "Versão 1.6.6"],
+  ["Ninguna", "None", "Aucune", "Nenhuma"],
+  ["Pocas", "Few", "Peu", "Poucas"],
+  ["Más", "More", "Plus", "Mais"],
   ["Encomendar el lanzamiento", "Handing over a release", "Confier une sortie", "Encomendar o lançamento"],
   ["Ediciones físicas", "Physical editions", "Éditions physiques", "Edições físicas"],
   ["En el plan de lanzamiento de una obra lista, o desde Pendientes. Eliges un rival o una de tus filiales que trabaje ese medio: lanza la obra con el mejor plan, paga la mitad del marketing y la distribuye con su propia red. Su cobertura depende de su tamaño y de su especialidad en el medio, y si es mayor que la tuya, la obra vende más. A cambio se queda con el 30 % de lo que recaude (el 15 % si es tu filial). Conviene cuando tu distribución es pequeña o te falta caja para el marketing. Dato: durante décadas, muchos estudios pequeños de Hollywood estrenaron sus películas a través de las grandes distribuidoras, que cobraban entre un 30 y un 40 % de la taquilla.", "In the launch plan of a finished work, or from Pending. You choose a rival or one of your subsidiaries that works in that medium: it releases the work with the best plan, pays half the marketing and distributes it through its own network. Its coverage depends on its size and its specialty in the medium, and if it's bigger than yours, the work sells more. In exchange it keeps 30% of the gross (15% if it's your subsidiary). It pays off when your distribution is small or you lack cash for marketing. Fact: for decades many small Hollywood studios released their films through the big distributors, which charged 30 to 40% of the box office.", "Dans le plan de sortie d'une œuvre terminée, ou depuis En attente. Tu choisis un rival ou une de tes filiales qui travaille ce média : il sort l'œuvre avec le meilleur plan, paie la moitié du marketing et la distribue avec son propre réseau. Sa couverture dépend de sa taille et de sa spécialité dans le média, et si elle dépasse la tienne, l'œuvre vend plus. En échange, il garde 30 % des recettes (15 % si c'est ta filiale). C'est utile quand ta distribution est petite ou que tu manques de trésorerie. Anecdote : pendant des décennies, beaucoup de petits studios d'Hollywood ont sorti leurs films via les grands distributeurs, qui prenaient 30 à 40 % du box-office.", "No plano de lançamento de uma obra pronta, ou em Pendentes. Você escolhe um rival ou uma das suas filiais que trabalhe esse meio: lança a obra com o melhor plano, paga metade do marketing e distribui com a própria rede. A cobertura depende do tamanho e da especialidade no meio, e se for maior que a sua, a obra vende mais. Em troca fica com 30 % da arrecadação (15 % se for sua filial). Vale a pena quando sua distribuição é pequena ou falta caixa para o marketing. Curiosidade: durante décadas, muitos estúdios pequenos de Hollywood lançaram seus filmes pelas grandes distribuidoras, que cobravam de 30 a 40 % da bilheteria."],
@@ -76326,7 +76331,9 @@ vDist = function () {
   } catch (e) {
     console.error(e);
   }
-  return h + vDistExt.apply(this, arguments);
+  const base = vDistExt.apply(this, arguments),
+    j = base.indexOf('<div class="c k"><div><b>1. ');
+  return j > 0 ? base.slice(0, j) + h + base.slice(j) : base + h;
 };
 ING.distribucion = "Redes de distribución";
 
@@ -77082,6 +77089,7 @@ function autoM() {
   h += sec(L4("Negocio y talento", "Business and talent", "Affaires et talent", "Negócio e talento"));
   h += fila(L4("Capital para filiales", "Capital for subsidiaries", "Capital pour les filiales", "Capital para filiais"), L4("Da o niega según tu caja.", "Gives or refuses depending on your cash.", "Donne ou refuse selon ta trésorerie.", "Dá ou nega conforme seu caixa."), sw("fp", S.fpAuto, lab(S.fpAuto)));
   h += fila(L4("Puja automática por derechos", "Automatic bidding for rights", "Enchères automatiques sur les droits", "Lance automático por direitos"), L4("Vende los derechos cuando la mejor oferta vale la pena.", "Sells rights when the best offer is worth it.", "Vend les droits quand la meilleure offre en vaut la peine.", "Vende os direitos quando a melhor oferta vale a pena."), sw("pja", S.pja, lab(S.pja)));
+  h += fila(L4("Ofertas por tus franquicias", "Offers for your franchises", "Offres pour tes franchises", "Ofertas pelas suas franquias"), L4("Pocas: como mucho 2 a la vez, una nueva cada 2 meses y la misma franquicia cada 2 años.", "Few: at most 2 at a time, a new one every 2 months and the same franchise every 2 years.", "Peu : au plus 2 à la fois, une nouvelle tous les 2 mois et la même franchise tous les 2 ans.", "Poucas: no máximo 2 por vez, uma nova a cada 2 meses e a mesma franquia a cada 2 anos."), [L4("Ninguna", "None", "Aucune", "Nenhuma"), L4("Pocas", "Few", "Peu", "Poucas"), L4("Más", "More", "Plus", "Mais")].map((n, i) => chx("fon16", i, n, (S.foN16 == null ? 1 : S.foN16) == i)).join(""));
   const F = misFiliales();
   if (F.length) {
     const on = F.every((i) => (S.rv[i].fa == null ? 1 : S.rv[i].fa) == 1);
@@ -77595,6 +77603,69 @@ ACT["fab16y"] = (v) => {
   bit(L4("Absorbes tu filial #.", "You absorb your subsidiary #.", "Tu absorbes ta filiale #.", "Você absorve sua filial #.").replace("#", r.n));
   cx();
   return pg();
+};
+
+const reabCosto = (r) => Math.max(TB(0) * 2, Math.round(TB(0) * 3 * Math.max(0.6, r.sz0 || r.sz || 0.7)));
+ACT["reab16"] = (v) => {
+  const i = +v,
+    r = S.rv[i];
+  if (!r || !r.abs16 || !r.dead) return;
+  const c = reabCosto(r);
+  if (S.cash < c) return toast(L4("Fondos insuficientes", "Insufficient funds", "Fonds insuffisants", "Fundos insuficientes"));
+  capital(-c);
+  r.dead = 0;
+  r.abs16 = 0;
+  r.own = 1;
+  r.cash = TB(0) * 2;
+  r.mal = 0;
+  r.sz = Math.max(0.6, r.sz || 0.6);
+  r.px = Math.max(0.5, r.px || 0.5);
+  r.gd = r.gan;
+  r.res16 = yr();
+  try {
+    filSync8();
+    SVV++;
+  } catch (e) {}
+  nws(L4("Reabres «#» como filial por %. Lo que absorbiste sigue siendo tuyo.", "You reopen «#» as a subsidiary for %. What you absorbed stays yours.", "Tu rouvres « # » comme filiale pour %. Ce que tu as absorbé reste à toi.", "Você reabre «#» como filial por %. O que você absorveu continua seu.").replace("#", r.n).replace("%", fm(c)));
+  return hojaAbierta() ? rvP(i) : pg();
+};
+const rscFilaExt = rscFila;
+rscFila = function (r) {
+  const h = rscFilaExt.apply(this, arguments);
+  if (!r || !r.abs16) return h;
+  const i = S.rv.indexOf(r),
+    c = reabCosto(r);
+  return h.replace(/<\/div>$/, `<span class="bts">${bt("reab16", i, L4("Reabrir", "Reopen", "Rouvrir", "Reabrir") + " · " + fm(c), S.cash >= c ? "" : "off")}</span></div>`);
+};
+const rscHExt = rscH;
+rscH = function (i) {
+  const h = rscHExt.apply(this, arguments),
+    r = S.rv[i];
+  if (!r || !r.abs16 || !r.dead) return h;
+  const c = reabCosto(r);
+  return h + `<div class="c sub" translate="no"><div class="m">${L4("La absorbiste en #. Puedes reabrirla como filial con su nombre, su estilo y sus especialidades; lo que absorbiste sigue siendo tuyo.", "You absorbed it in #. You can reopen it as a subsidiary with its name, style and specialties; what you absorbed stays yours.", "Tu l'as absorbée en #. Tu peux la rouvrir comme filiale avec son nom, son style et ses spécialités ; ce que tu as absorbé reste à toi.", "Você a absorveu em #. Pode reabri-la como filial com nome, estilo e especialidades; o que você absorveu continua seu.").replace("#", r.dead)}</div><div class="bts">${bt("reab16", i, L4("Reabrir como filial", "Reopen as subsidiary", "Rouvrir comme filiale", "Reabrir como filial") + " · " + fm(c), S.cash >= c ? "a" : "off")}</div></div>`;
+};
+
+const FO = [[0, 0], [2, 8], [5, 2]];
+function foOk(f) {
+  const k = S.foN16 == null ? 1 : S.foN16,
+    [mx, sep] = FO[k] || FO[1];
+  if (!mx) return false;
+  if ((S.fo || []).filter((o) => o.e > S.t).length >= mx) return false;
+  if (S.foT16 != null && S.t - S.foT16 < sep) return false;
+  const F = frG(f);
+  return !(F && F.foT16 != null && S.t - F.foT16 < 104);
+}
+on("semana", () => {
+  if (!S || !S.fo || S.fo.length <= 2) return;
+  const k = S.foN16 == null ? 1 : S.foN16,
+    mx = (FO[k] || FO[1])[0];
+  if (S.fo.length > mx) S.fo = S.fo.slice().sort((a, b) => b.p - a.p).slice(0, mx);
+});
+ACT["fon16"] = (v) => {
+  S.foN16 = cl(+v | 0, 0, 2);
+  if (!S.foN16) S.fo = [];
+  return autoM();
 };
 Object.assign(TX.es.ayuda, {
   pendientes16: ["Pendientes", "Todo lo que espera tu decisión, en un solo lugar: obras listas para estrenar (si son muchas, «Lanzar todas con el mejor plan»), propuestas de tus talentos por medio (con «Luz verde a todas»), pedidos de capital de tus filiales, rivales al borde de la quiebra, guiones listos para producir, series que se pueden renovar, obras que se pueden reestrenar, ofertas, colaboraciones, eventos, huelgas y avisos de caja. Está en Estudio → Inicio y en el menú; el número sobre el botón del menú dice cuántas cosas hay. Lo que pongas en automático deja de aparecer aquí. Dato: el método «Inbox Zero» de Merlin Mann (2007) no busca tener cero correos, sino no dejar que la bandeja decida por ti."],

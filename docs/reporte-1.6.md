@@ -1,4 +1,4 @@
-# INDUSTRY ART · Informe de las versiones 1.6 a 1.6.5
+# INDUSTRY ART · Informe de las versiones 1.6 a 1.6.6
 
 Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo funciona y cómo se verificó.
 
@@ -290,6 +290,22 @@ Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo 
   - **Después:** sus obras ya estrenadas siguen en tu plataforma y tu canal, y en la lista de estudios cerrados figura como «absorbido por ti», sin opción de rescate.
   - **Límite:** si tiene encargos tuyos en curso, hay que esperar a que los termine.
   - **Prueba:** en 2005 una filial dejó $13,8 B netos, 2 instalaciones, 9 proyectos y 4 franquicias.
+
+## 15. Versión 1.6.6
+
+- **Reabrir una filial absorbida:**
+  - **Dónde:** desde Mundo → Rivales, en «Estudios que cerraron o se fusionaron», o desde su ficha.
+  - **Cómo vuelve:** como tu filial, con su nombre, su estilo y sus especialidades, y vuelve a producir.
+  - **Costo:** el mismo que reabrir un estudio quebrado (tres presupuestos típicos según su tamaño).
+  - **Lo absorbido:** sigue siendo tuyo (instalaciones, sede, proyectos y franquicias).
+- **Redes de distribución por medio:** ahora están en Negocio → Distribución debajo del mapa, junto a las cadenas de cine y antes de la lista de países.
+- **Menos ofertas por tus franquicias:**
+  - **Pocas** (por defecto): como mucho 2 a la vez, una nueva cada 2 meses y la misma franquicia solo cada 2 años.
+  - **Más:** como mucho 5 a la vez, una cada 2 semanas.
+  - **Ninguna:** no llegan ofertas.
+  - **Dónde se elige:** en el panel de automatización.
+  - **Al actualizar:** si había muchas pendientes, quedan solo las de mayor valor.
+  - **Prueba:** en 2 años con «Pocas» llegaron 14 ofertas y nunca más de 2 a la vez; antes podían juntarse 21.
 
 ## Pruebas de esta versión
 
