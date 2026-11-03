@@ -859,7 +859,7 @@ html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 
 .c.peri .peri-t::first-letter{color:#7a1f12!important}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.6";
+const VERN = "1.6.1";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -23194,7 +23194,7 @@ function frCard(f) {
   return `<div class="c" style="display:flex;gap:10px"><canvas class="pt" data-id="${p.id}" style="width:48px;height:72px;border-radius:6px;flex:none"></canvas><div style="flex:1;min-width:0"><div class="k"><b>${esc(F.n)}</b><span class="m">${frH(f)}% popularidad</span></div><div class="m">${T.n} ${T.n == 1 ? "obra" : "obras"} · costo ${fm(T.c)} · bruto ${fm(T.g)} · ganancias ${fm(T.e)} · ${T.w} premios</div><div class="m">${F.org == "a" ? ic("libro") + " Adaptaci\u00F3n" : ic("idea") + " Original"}${F.x != null ? " \u00B7 crossover con \u00AB" + esc(frG(F.x).n) + "\u00BB" : ""}${frSold(f) ? " \u00B7 vendida" : ""}${o ? " \u00B7 oferta de compra" : ""}</div><div style="margin-top:6px">${bt("fro", f, "Abrir franquicia", "a")}</div></div></div>`;
 }
 function vFr() {
-  const L = frList().filter((f) => FRF6 == "t" || frOrig6(f) == FRF6),
+  const L = frList().filter((f) => (FRF6 == "t" || frOrig6(f) == FRF6) && frBusca(f)),
     n = Math.max(1, Math.ceil(L.length / 5)),
     p = Math.min(fil.fp | 0, n - 1);
   return (
@@ -24275,14 +24275,15 @@ ACT["pja"] = () => {
 function frPjs(f) {
   const M = {};
   frPs(f)
-    .filter((p) => p.st >= 3 && p.cast)
-    .sort((a, b) => a.rt - b.rt)
+    .filter((p) => p.cast && p.cast.length)
+    .sort((a, b) => (a.rt == null ? 1e9 + a.id : a.rt) - (b.rt == null ? 1e9 + b.id : b.rt))
     .forEach((p) =>
       p.cast.forEach((c) => {
-        if (c.i == 2) return;
+        if (!c || c.i == 2 || !c.n) return;
         const k = c.n,
           x = (M[k] = M[k] || { n: c.n, x: c.x, a: c.a, i: c.i, ob: 0, p: 0, t0: c.t, t: c.t });
         x.ob++;
+        if (p.st < 3) x.np = (x.np | 0) + 1;
         x.t = c.t;
         x.i = Math.min(x.i, c.i);
         x.p += (((p.a || 50) + (p.c || 50)) / 2) * [1, 0.6, 0, 0.4, 0.3, 0.2][c.i] * (p.fan ? 1.1 : 1);
@@ -24321,9 +24322,7 @@ const LPJ = [
 const lpjV = (x, k) => Math.round(TB(0) * 0.004 * LPJ[k][2] * Math.pow(x.pop / 50, 1.6) * (1 + Math.min(2, (S.fans || 0) / 2000000)));
 function frExtra(f) {
   const F = frG(f),
-    P = frPjs(f)
-      .filter((x) => x.i != 2)
-      .slice(0, 12),
+    P = frPjs(f).filter((x) => x.i != 2),
     y = yr(),
     mm = F.mm != null ? S.tl[F.mm] : null;
   return `<div class="c"><div class="k"><h3 style="margin:0">${ic("estrella")} Nivel: ${frNivel(f)}</h3>${bi("personajes")}</div>
@@ -24331,7 +24330,7 @@ function frExtra(f) {
 <h3>Personajes (${P.length})</h3>${
     P.map((x, j) => {
       const t = S.tl[x.t];
-      return `<div class="c sub"><div class="k"><b>${esc(x.n)}</b><span class="m">popularidad ${x.pop}</span></div><div class="m">${IMP[x.i][0].toLowerCase()} · ${arqN(x)} · ${x.ob} ${x.ob == 1 ? "obra" : "obras"}${t ? " \u00B7 lo interpreta " + esc(t.n) + (t.ret ? " (retirado)" : "") : ""}</div><div class="bts">${LPJ.filter(
+      return `<div class="c sub"><div class="k"><b>${esc(x.n)}</b><span class="m">popularidad ${x.pop}</span></div><div class="m">${IMP[x.i][0].toLowerCase()} · ${arqN(x)} · ${x.ob} ${x.ob == 1 ? "obra" : "obras"}${x.np && x.np >= x.ob ? " · " + L4("aún sin estrenar", "not released yet", "pas encore sorti", "ainda não lançado") : ""}${t ? " \u00B7 lo interpreta " + esc(t.n) + (t.ret ? " (retirado)" : "") : ""}</div><div class="bts">${LPJ.filter(
         (l) => y >= l[1],
       )
         .map((l) => {
@@ -24340,7 +24339,7 @@ function frExtra(f) {
           return bt("lpj", f + "|" + j + "|" + k, l[0] + " \u00B7 " + fm(lpjV(x, k)), u ? "off" : "");
         })
         .join("")}</div></div>`;
-    }).join("") || '<div class="m">Las obras con personajes con nombre llenan esta lista.</div>'
+    }).reduce((h, s, j) => h + (j == 12 ? '<details class="mas"><summary>' + L4("Ver # personajes más", "See # more characters", "Voir # personnages de plus", "Ver mais # personagens").replace("#", P.length - 12) + "</summary>" : "") + s, "") + (P.length > 12 ? "</details>" : "") || '<div class="m">Las obras con personajes con nombre llenan esta lista.</div>'
   }
 ${P.length ? `<div class="chips">${["Canon (suma hype)", "No canon (+30 % de dinero, baja el hype)"].map((n, i) => `<button class="ch${(FRL | 0) == i ? " on" : ""}" data-a="frl" data-v="${f}|${i}">${n}</button>`).join("")}</div>` : ""}</div>`;
 }
@@ -33935,7 +33934,7 @@ function rvVida() {
     }
   }
   EMR.forEach((e, k) => {
-    if (!S.emr.includes(k) && y >= e[0] && rvVivos().length < rvMax()) rvNace(k);
+    if (!S.emr.includes(k) && y >= e[0] && rvVivos().filter((j) => !S.rv[j].own).length < rvMax()) rvNace(k);
   });
   if (!(S.mr5 && S.mr5.solo && rvVivos().length >= 4) && ((rvVivos().length < 8 && R() < 0.5) || (y > 2150 && R() < 0.12 && rvVivos().length < rvMax()))) rvGenera();
   S.rv.forEach((r) => {
@@ -34041,7 +34040,7 @@ function vRiv() {
 ${L.map((x, k) => `<button class="fila lista" data-a="rvp" data-v="${x.i}"><span>${k + 1}. ${x.yo ? "<b>" + esc(x.n) + " (t\u00FA)</b>" : esc(x.n)}${x.own ? " \u00B7 tu filial" : ""}</span><span><span style="color:var(--g)">${estrellas(cl(Math.ceil((x[RKO] / mx) * 5), 1, 5))}</span><span class="m"> · ${val(x)}</span></span></button>`).join("")}</div>`;
   const muertos = S.rv.filter((r) => r.dead);
   if (muertos.length)
-    o += `<details class="c"><summary><b>Estudios que cerraron o se fusionaron (${muertos.length})</b></summary>${muertos.map((r) => `<div class="m">${esc(r.n)} · ${r.fus != null && S.rv[r.fus] ? "comprado por " + esc(S.rv[r.fus].n) : "quebr\u00F3"} en ${r.dead}</div>`).join("")}</details>`;
+    o += `<details class="c"><summary><b>Estudios que cerraron o se fusionaron (${muertos.length})</b></summary>${muertos.map(rscFila).join("")}</details>`;
   return o;
 }
 ACT["rks"] = (v) => {
@@ -34065,7 +34064,7 @@ function rvP(i) {
   op(`<div class="c"><div class="k"><div style="display:flex;gap:10px;align-items:center"><canvas class="rl" data-r="${i}" style="width:48px;height:48px;flex:none"></canvas><h2 style="margin:0">${esc(r.n)}</h2></div>${btx()}</div>
 <div class="m">${r.pais >= 0 && CY[r.pais] ? "Sede en " + CY[r.pais][0] : "Todo el mundo"}${r.fy ? " \u00B7 desde " + r.fy : ""} · ${esc(r.esp || "")}</div>${r.lema ? `<p class="m" style="font-style:italic">«${esc(r.lema)}»</p>` : ""}
 <div class="g"><div><div class="m">Estrategia</div><b>${E[0]}</b><div class="m">${E[1]}</div></div><div><div class="m">Tamaño</div><b>${dec1(r.sz, 2)}</b></div><div><div class="m">Índice en bolsa</div><b>${Math.round(r.px * 100)}</b></div><div><div class="m">Caja</div><b>${fm(r.cash)}</b></div><div><div class="m">Ingresos ${yr() - 1}</div><b>${fm(r.ingA || 0, yr() - 1)}</b></div><div><div class="m">Obras ${yr() - 1}</div><b>${r.nobY | 0}</b></div><div><div class="m">Premios</div><b>${r.w | 0}</b></div><div><div class="m">Cuota</div><b>${pct(cuotaR(i), 1)}</b></div></div>
-${r.dead ? `<div class="c sub aviso">${r.fus != null && S.rv[r.fus] ? "Fusionado con " + esc(S.rv[r.fus].n) : "En quiebra"} desde ${r.dead}.</div>` : ""}
+${r.dead ? `<div class="c sub aviso">${r.fus != null && S.rv[r.fus] ? "Fusionado con " + esc(S.rv[r.fus].n) : "En quiebra"} desde ${r.dead}.</div>` : ""}${rscH(i)}
 <h3>Sus mejores obras</h3>${(r.tw || []).map((x) => `<div class="fila"><span>«${esc(x.n)}» · ${MD[x.m][0]} · ${x.y}</span><span class="m">crítica ${x.C} · ${fm0(x.gR)} de hoy</span></div>`).join("") || '<div class="m">A\u00FAn ninguna destacada.</div>'}
 <h3>Franquicias</h3><div class="m">${(r.hits || []).map(esc).join(" \u00B7 ") || "Ninguna por ahora."}</div>
 <h3>Próximos estrenos</h3>${q.map((x) => `<div class="fila"><span>«${esc(x.n)}» · ${MD[x.m][0]}</span><span class="m">${fD(semIni(x.t))}</span></div>`).join("") || '<div class="m">Nada anunciado.</div>'}
@@ -53078,7 +53077,7 @@ function serieH() {
       .slice(0, 10),
     L = shr(),
     C = S.tl.filter((t) => !t.ret && !t.you && !t.dead && t.age >= 21 && (t.r == 0 || t.r == 1) && t.s[t.r] >= 55 && !L.some((x) => x.t == t.id)).sort((a, b) => b.s[b.r] - a.s[a.r]).slice(0, 6);
-  return `<div class="c"><h3 style="margin:0 0 6px">${dualReg("Tus series y temporadas", "Your series and seasons")}</h3>${
+  return `<div class="c"><h3 style="margin:0 0 6px">${dualReg("Tus series y temporadas", "Your series and seasons")}</h3>${renH()}${
     G.map((s) => {
       const u = s[s.length - 1];
       return `<div class="fila"><span><b>${esc(frG(u.fid).n)}</b><span class="m"> · ${s.length} ${s.length == 1 ? dualReg("temporada", "season") : dualReg("temporadas", "seasons")}${u.st >= 3 ? " · " + dualReg("crítica", "critics") + " " + Math.round(u.c) + " · " + dualReg("público", "audience") + " " + Math.round(u.a) : " · " + dualReg("en marcha", "in progress")}</span></span>${u.st >= 3 && !u.sold ? bt("cnt", u.id, dualReg("Nueva temporada", "New season"), "a") : ""}</div>`;
@@ -63135,6 +63134,11 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["En Negocio → Distribución, sobre las cadenas de cines. Cada medio tiene sus redes según la época: radio, televisión y streaming para las series; salones arcade, fabricantes de consolas, tiendas digitales y de aplicaciones para los videojuegos; circuitos de teatros, ópera, circo, café-concierto y clubes de comedia para el teatro; editoras de partituras, tiendas de discos, tiendas digitales y apps para la música; librerías, quioscos, clubes de lectura y libros electrónicos para el libro. Lo que controlas de un medio sube las ventas de tus obras de ese medio hasta un 25 % y te da cada semana una parte de todo lo que se vende en él, también lo de tus rivales. El precio sigue el tamaño del mercado; el mantenimiento cuesta el 0,25 % del valor al mes y al vender recuperas el 85 %. Cuando un formato pasa de moda (los salones arcade, las tiendas de discos), la red cierra y recuperas el 30 % de lo que pagaste. Las plataformas de streaming también suman un poco a tus películas. Los nombres son ficticios. Dato: el primer club de lectura por suscripción, el Book-of-the-Month Club, nació en Nueva York en 1926 y llegó a enviar millones de libros por correo.", "In Business → Distribution, above the cinema chains. Each medium has its own networks depending on the era: radio, television and streaming for series; arcade halls, console makers, digital and app stores for video games; theater circuits, opera, circus, music halls and comedy clubs for theater; sheet music publishers, record stores, digital stores and apps for music; bookstores, newsstands, book clubs and e-books for books. What you control of a medium raises the sales of your works in that medium by up to 25% and gives you each week a share of everything sold in it, your rivals' works included. The price follows the size of the market; upkeep costs 0.25% of the value a month and selling gets you back 85%. When a format goes out of fashion (arcade halls, record stores), the network closes and you get back 30% of what you paid. Streaming platforms also add a little to your films. The names are fictional. Fact: the first subscription book club, the Book-of-the-Month Club, was born in New York in 1926 and went on to mail millions of books.", "Dans Affaires → Distribution, au-dessus des chaînes de cinéma. Chaque média a ses réseaux selon l'époque : radio, télévision et streaming pour les séries ; salles d'arcade, fabricants de consoles, boutiques en ligne et d'applications pour les jeux vidéo ; circuits de théâtres, opéra, cirque, café-concert et clubs de comédie pour le théâtre ; éditeurs de partitions, disquaires, boutiques en ligne et applis pour la musique ; librairies, kiosques, clubs de lecture et livres numériques pour le livre. Ce que tu contrôles d'un média augmente les ventes de tes œuvres dans ce média jusqu'à 25 % et te donne chaque semaine une part de tout ce qui s'y vend, y compris les œuvres de tes rivaux. Le prix suit la taille du marché ; l'entretien coûte 0,25 % de la valeur par mois et la vente rapporte 85 %. Quand un format passe de mode (salles d'arcade, disquaires), le réseau ferme et tu récupères 30 % de ce que tu as payé. Les plateformes de streaming ajoutent aussi un peu à tes films. Les noms sont fictifs. Anecdote : le premier club de lecture par abonnement, le Book-of-the-Month Club, est né à New York en 1926 et a fini par envoyer des millions de livres par la poste.", "Em Negócio → Distribuição, acima das redes de cinema. Cada meio tem suas redes conforme a época: rádio, televisão e streaming para as séries; fliperamas, fabricantes de consoles, lojas digitais e de aplicativos para os videogames; circuitos de teatros, ópera, circo, café-concerto e clubes de comédia para o teatro; editoras de partituras, lojas de discos, lojas digitais e apps para a música; livrarias, bancas, clubes do livro e e-books para o livro. O que você controla de um meio aumenta as vendas das suas obras nesse meio em até 25 % e lhe dá toda semana uma parte de tudo o que se vende nele, inclusive as obras dos rivais. O preço acompanha o tamanho do mercado; a manutenção custa 0,25 % do valor por mês e ao vender você recupera 85 %. Quando um formato sai de moda (fliperamas, lojas de discos), a rede fecha e você recupera 30 % do que pagou. As plataformas de streaming também somam um pouco aos seus filmes. Os nomes são fictícios. Curiosidade: o primeiro clube do livro por assinatura, o Book-of-the-Month Club, nasceu em Nova York em 1926 e chegou a enviar milhões de livros pelo correio."],
   ["Redes de distribución", "Distribution networks", "Réseaux de distribution", "Redes de distribuição"],
   ["Sedes en otros países", "Offices in other countries", "Bureaux à l'étranger", "Sedes em outros países"],
+  ["Rescatar estudios", "Rescuing studios", "Sauver des studios", "Resgatar estúdios"],
+  ["Cuando un rival lleva años perdiendo dinero o público, primero llega un aviso: está al borde de la quiebra. Desde ese momento tienes un año para salvarlo desde su ficha. «Rescatar como filial» paga sus deudas y lo compra con descuento (el 60 % de su precio): pasa a ser tuyo y su catálogo llega a tu plataforma y tu canal. «Rescatar e invertir» le da capital para que siga como estudio independiente; ese dinero queda como inversión tuya en él y sube o baja con su bolsa. Los estudios que ya quebraron también se pueden reabrir desde Mundo → Rivales, en «Estudios que cerraron o se fusionaron»; los que fueron comprados por otro rival no. Cada rescate suma 1 de prestigio. Además, cada año pueden nacer estudios nuevos, a veces fundados por talentos veteranos; nacen más cuando quedan pocos rivales independientes. Dato: en 1997, Apple estaba a semanas de quedarse sin caja y Microsoft invirtió 150 millones de dólares en ella; fue uno de los rescates más famosos entre rivales.", "When a rival has been losing money or audience for years, a warning comes first: it's on the brink of bankruptcy. From then on you have a year to save it from its profile. «Rescue as subsidiary» pays its debts and buys it at a discount (60% of its price): it becomes yours and its catalog reaches your platform and channel. «Rescue and invest» gives it capital so it carries on as an independent studio; that money becomes your investment in it and rises or falls with its stock. Studios that already went bankrupt can also be reopened from World → Rivals, under «Studios that closed or merged»; those bought by another rival can't. Each rescue adds 1 prestige. Also, new studios can be born every year, sometimes founded by veteran talent; more are born when few independent rivals remain. Fact: in 1997 Apple was weeks away from running out of cash and Microsoft invested 150 million dollars in it; it was one of the most famous rescues between rivals.", "Quand un rival perd de l'argent ou du public depuis des années, un avertissement arrive d'abord : il est au bord de la faillite. Dès lors, tu as un an pour le sauver depuis sa fiche. « Sauver comme filiale » paie ses dettes et l'achète avec une remise (60 % de son prix) : il devient à toi et son catalogue arrive sur ta plateforme et ta chaîne. « Sauver et investir » lui apporte du capital pour qu'il continue comme studio indépendant ; cet argent devient ton investissement et suit sa bourse. Les studios déjà en faillite peuvent aussi rouvrir depuis Monde → Rivaux, dans « Studios fermés ou fusionnés » ; pas ceux rachetés par un autre rival. Chaque sauvetage ajoute 1 de prestige. De plus, de nouveaux studios peuvent naître chaque année, parfois fondés par des talents vétérans ; il en naît davantage quand il reste peu de rivaux indépendants. Anecdote : en 1997, Apple était à quelques semaines de manquer de trésorerie et Microsoft y a investi 150 millions de dollars ; ce fut l'un des sauvetages les plus célèbres entre rivaux.", "Quando um rival passa anos perdendo dinheiro ou público, primeiro chega um aviso: está à beira da falência. A partir daí você tem um ano para salvá-lo pela ficha dele. «Resgatar como filial» paga as dívidas e o compra com desconto (60 % do preço): passa a ser seu e o catálogo chega à sua plataforma e ao seu canal. «Resgatar e investir» dá capital para que continue como estúdio independente; esse dinheiro vira investimento seu e sobe ou desce com a bolsa dele. Os estúdios que já faliram também podem ser reabertos em Mundo → Rivais, em «Estúdios que fecharam ou se fundiram»; os comprados por outro rival não. Cada resgate soma 1 de prestígio. Além disso, todo ano podem nascer estúdios novos, às vezes fundados por talentos veteranos; nascem mais quando restam poucos rivais independentes. Curiosidade: em 1997 a Apple estava a semanas de ficar sem caixa e a Microsoft investiu 150 milhões de dólares nela; foi um dos resgates mais famosos entre rivais."],
+  ["Versión 1.6.1", "Version 1.6.1", "Version 1.6.1", "Versão 1.6.1"],
+  ["Renovar temporadas", "Renewing seasons", "Renouveler les saisons", "Renovar temporadas"],
+  ["En la pestaña del medio Serie, en «Tus series y temporadas». Con «Renovar temporadas automáticamente», cada mes se renuevan hasta 2 series: las que ya estrenaron su última temporada hace al menos 8 semanas, con un promedio de crítica y público de 60 o más, que no vendiste y que tienen menos de 12 temporadas. La nueva temporada conserva el equipo y el reparto; si alguien no puede, se usa el equipo recomendado. Primero se renuevan las mejores. Nunca se pasa de tu caja ni de la capacidad de tu sede; si algo lo impide, una noticia lo explica una vez al año por serie. «Renovar ahora las que conviene» hace lo mismo al instante con todas. Dato: en EE. UU., las cadenas anuncian en mayo, en los «upfronts», qué series renuevan y cuáles cancelan; Los Simpson, renovada temporada tras temporada desde 1989, es la serie de ficción con guion más longeva del horario estelar estadounidense.", "In the Series medium tab, under «Your series and seasons». With «Renew seasons automatically», up to 2 series are renewed each month: those whose last season premiered at least 8 weeks ago, with a critics-and-audience average of 60 or more, that you haven't sold and that have fewer than 12 seasons. The new season keeps the crew and cast; if someone can't, the recommended crew is used. The best ones are renewed first. It never goes over your cash or your office capacity; if something blocks it, a news item explains it once a year per series. «Renew the ones worth it now» does the same instantly with all of them. Fact: in the US, networks announce in May, at the «upfronts», which series they renew and which they cancel; The Simpsons, renewed season after season since 1989, is the longest-running scripted primetime series in American TV.", "Dans l'onglet du média Série, sous « Tes séries et saisons ». Avec « Renouveler les saisons automatiquement », jusqu'à 2 séries sont renouvelées chaque mois : celles dont la dernière saison est sortie il y a au moins 8 semaines, avec une moyenne critique et public de 60 ou plus, que tu n'as pas vendues et qui ont moins de 12 saisons. La nouvelle saison garde l'équipe et la distribution ; si quelqu'un ne peut pas, l'équipe recommandée est utilisée. Les meilleures passent en premier. Cela ne dépasse jamais ta trésorerie ni la capacité de ton siège ; si quelque chose bloque, une nouvelle l'explique une fois par an et par série. « Renouveler maintenant celles qui valent la peine » fait de même tout de suite avec toutes. Anecdote : aux États-Unis, les chaînes annoncent en mai, lors des « upfronts », les séries renouvelées et annulées ; Les Simpson, renouvelée saison après saison depuis 1989, est la série de fiction scénarisée la plus longue du prime time américain.", "Na aba do meio Série, em «Suas séries e temporadas». Com «Renovar temporadas automaticamente», até 2 séries são renovadas por mês: as que estrearam a última temporada há pelo menos 8 semanas, com média de crítica e público de 60 ou mais, que você não vendeu e que têm menos de 12 temporadas. A nova temporada mantém a equipe e o elenco; se alguém não puder, usa-se a equipe recomendada. As melhores são renovadas primeiro. Nunca passa do seu caixa nem da capacidade da sua sede; se algo impedir, uma notícia explica uma vez por ano por série. «Renovar agora as que valem a pena» faz o mesmo na hora com todas. Curiosidade: nos EUA, as redes anunciam em maio, nos «upfronts», quais séries renovam e quais cancelam; Os Simpsons, renovada temporada após temporada desde 1989, é a série de ficção roteirizada mais longeva do horário nobre americano."],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -75236,7 +75240,7 @@ on("anual", () => {
 const vAvatarPlus = vAvatar;
 vAvatar = function () {
   const h = vAvatarPlus.apply(this, arguments);
-  return `<div class="c"><div class="bts">${bt("tp", S.me, ic("talento") + " " + L4("Ver mi ficha personal", "View my personal profile", "Voir ma fiche personnelle", "Ver minha ficha pessoal"), "a")}</div></div>` + (typeof vAvExtra == "function" ? vAvExtra() : "") + h;
+  return (typeof vAvExtra == "function" ? vAvExtra() : "") + h;
 };
 let TPV = null;
 const tpExt = ACT["tp"];
@@ -76110,7 +76114,7 @@ function pracH() {
 }
 function vAvExtra() {
   try {
-    return fitH() + pracH();
+    return (typeof fichaAv == "function" ? fichaAv() : "") + fitH() + pracH();
   } catch (e) {
     console.error(e);
     return "";
@@ -76331,6 +76335,278 @@ on("mes", () => {
 });
 Object.assign(TX.es.ayuda, {
   redes14: ["Redes de distribución por medio", "En Negocio → Distribución, sobre las cadenas de cines. Cada medio tiene sus redes según la época: radio, televisión y streaming para las series; salones arcade, fabricantes de consolas, tiendas digitales y de aplicaciones para los videojuegos; circuitos de teatros, ópera, circo, café-concierto y clubes de comedia para el teatro; editoras de partituras, tiendas de discos, tiendas digitales y apps para la música; librerías, quioscos, clubes de lectura y libros electrónicos para el libro. Lo que controlas de un medio sube las ventas de tus obras de ese medio hasta un 25 % y te da cada semana una parte de todo lo que se vende en él, también lo de tus rivales. El precio sigue el tamaño del mercado; el mantenimiento cuesta el 0,25 % del valor al mes y al vender recuperas el 85 %. Cuando un formato pasa de moda (los salones arcade, las tiendas de discos), la red cierra y recuperas el 30 % de lo que pagaste. Las plataformas de streaming también suman un poco a tus películas. Los nombres son ficticios. Dato: el primer club de lectura por suscripción, el Book-of-the-Month Club, nació en Nueva York en 1926 y llegó a enviar millones de libros por correo."],
+});
+const rvQuiebraExt = rvQuiebra;
+rvQuiebra = function (i, motivo) {
+  const r = S.rv[i];
+  if (r && !r.dead && !r.ind && !r.own && /pérdidas|público/.test(String(motivo || ""))) {
+    if (!r.av15) {
+      r.av15 = yr();
+      nws(L4("# está al borde de la quiebra. Puedes rescatarlo desde su ficha antes de que cierre.", "# is on the brink of bankruptcy. You can rescue it from its profile before it closes.", "# est au bord de la faillite. Tu peux le sauver depuis sa fiche avant qu'il ferme.", "# está à beira da falência. Você pode resgatá-lo pela ficha antes que feche.").replace("#", r.n));
+      return;
+    }
+    if (yr() - r.av15 < 1) return;
+  }
+  return rvQuiebraExt.apply(this, arguments);
+};
+const rscApuro = (r) => !!r && !r.dead && !r.own && !r.ind && (!!r.av15 || (r.mal | 0) >= 2 || r.cash < 0);
+const rscFilial = (i) => {
+  const r = S.rv[i];
+  return r.dead ? Math.max(TB(0) * 2, Math.round(TB(0) * 3 * Math.max(0.6, r.sz0 || r.sz || 0.7))) : Math.round(precioR(r) * 0.6) + Math.max(0, -Math.round(r.cash));
+};
+const rscInv = (i) => {
+  const r = S.rv[i];
+  return r.dead ? Math.round(rscFilial(i) * 0.7) : Math.max(0, -Math.round(r.cash)) + Math.round(TB(0) * 1.5);
+};
+function rscRevive(i) {
+  const r = S.rv[i],
+    tb = TB(0);
+  if (r.dead) {
+    S.rem = (S.rem || []).filter((x) => x.o != i);
+    r.dead = 0;
+    delete r.fus;
+    r.sz = Math.max(0.6, r.sz || 0);
+    r.px = Math.max(0.5, r.px || 0);
+  }
+  r.cash = Math.max(r.cash, 0) + tb * 2;
+  r.mal = 0;
+  r.av15 = 0;
+  r.res15 = yr();
+}
+ACT["rscf"] = (v) => {
+  const i = +v,
+    r = S.rv[i];
+  if (!r || r.own || r.ind || (r.dead && r.fus != null) || (!r.dead && !rscApuro(r))) return;
+  const p = rscFilial(i);
+  if (S.cash < p) return toast(L4("Fondos insuficientes", "Insufficient funds", "Fonds insuffisants", "Fundos insuficientes"));
+  capital(-p);
+  rscRevive(i);
+  r.own = 1;
+  r.gd = r.gan;
+  S.pop = cl((S.pop || 0) + 1);
+  try {
+    filSync8();
+    SVV++;
+    filTv9();
+  } catch (e) {}
+  nws(L4("Rescatas a # por %: ahora es tu filial y su catálogo pasa a tu plataforma y tu canal.", "You rescue # for %: it's now your subsidiary and its catalog moves to your platform and channel.", "Tu sauves # pour % : c'est maintenant ta filiale et son catalogue passe sur ta plateforme et ta chaîne.", "Você resgata # por %: agora é sua filial e o catálogo passa para sua plataforma e seu canal.").replace("#", r.n).replace("%", fm(p)));
+  bit(L4("Rescatas el estudio #.", "You rescue the studio #.", "Tu sauves le studio #.", "Você resgata o estúdio #.").replace("#", r.n));
+  return hojaAbierta() ? rvP(i) : pg();
+};
+ACT["rsci"] = (v) => {
+  const i = +v,
+    r = S.rv[i];
+  if (!r || r.own || r.ind || (r.dead && r.fus != null) || (!r.dead && !rscApuro(r))) return;
+  const p = rscInv(i);
+  if (S.cash < p) return toast(L4("Fondos insuficientes", "Insufficient funds", "Fonds insuffisants", "Fundos insuficientes"));
+  capital(-p);
+  rscRevive(i);
+  S.iv = S.iv || {};
+  const o = S.iv[i],
+    val = o ? (o.a * r.px) / o.p : 0;
+  S.iv[i] = { a: val + p, p: r.px };
+  S.pop = cl((S.pop || 0) + 1);
+  nws(L4("Rescatas a # con %: sigue como estudio independiente y tu dinero queda como inversión en él.", "You rescue # with %: it stays independent and your money becomes an investment in it.", "Tu sauves # avec % : il reste indépendant et ton argent devient un investissement.", "Você resgata # com %: continua independente e seu dinheiro vira um investimento nele.").replace("#", r.n).replace("%", fm(p)));
+  return hojaAbierta() ? rvP(i) : pg();
+};
+function rscH(i) {
+  const r = S.rv[i];
+  if (!r || r.ind) return "";
+  let h = "";
+  const f = r.fund15 != null ? S.tl[r.fund15] : null;
+  if (f) h += `<div class="m" translate="no">${L4("Fundado por", "Founded by", "Fondé par", "Fundado por")} <button class="lnk" data-a="tp" data-v="${f.id}">${esc(f.n)}</button></div>`;
+  if (r.res15) h += `<div class="m" translate="no">${L4("Rescatado por ti en #", "Rescued by you in #", "Sauvé par toi en #", "Resgatado por você em #").replace("#", r.res15)}</div>`;
+  const quebro = r.dead && r.fus == null;
+  if (!quebro && !rscApuro(r)) return h;
+  const pf = rscFilial(i),
+    pi = rscInv(i);
+  return (
+    h +
+    `<div class="c sub" translate="no"><div class="k"><b>${ic("alerta")} ${quebro ? L4("Rescatar este estudio", "Rescue this studio", "Sauver ce studio", "Resgatar este estúdio") : L4("Está en apuros", "It's in trouble", "Il est en difficulté", "Está em apuros")}</b>${bi("rescate15")}</div><div class="m">${
+      quebro
+        ? L4("Puedes reabrirlo con su nombre, su estilo y sus especialidades.", "You can reopen it with its name, style and specialties.", "Tu peux le rouvrir avec son nom, son style et ses spécialités.", "Você pode reabri-lo com o nome, o estilo e as especialidades.")
+        : L4("Si no mejora, quebrará. Puedes salvarlo ahora.", "If it doesn't improve, it will go bankrupt. You can save it now.", "S'il ne s'améliore pas, il fera faillite. Tu peux le sauver maintenant.", "Se não melhorar, vai falir. Você pode salvá-lo agora.")
+    }</div><div class="bts">${bt("rscf", i, L4("Rescatar como filial", "Rescue as subsidiary", "Sauver comme filiale", "Resgatar como filial") + " · " + fm(pf), S.cash >= pf ? "a" : "off")}${bt("rsci", i, L4("Rescatar e invertir (sigue independiente)", "Rescue and invest (stays independent)", "Sauver et investir (reste indépendant)", "Resgatar e investir (segue independente)") + " · " + fm(pi), S.cash >= pi ? "" : "off")}</div></div>`
+  );
+}
+function rscFila(r) {
+  const i = S.rv.indexOf(r),
+    quebro = r.fus == null;
+  return `<div class="fila" translate="no"><span><button class="lnk" data-a="rvp" data-v="${i}">${esc(r.n)}</button><span class="m"> · ${r.fus != null && S.rv[r.fus] ? L4("comprado por", "bought by", "racheté par", "comprado por") + " " + esc(S.rv[r.fus].n) : L4("quebró", "went bankrupt", "a fait faillite", "faliu")} ${L4("en", "in", "en", "em")} ${r.dead}</span></span>${quebro ? `<span class="bts">${bt("rscf", i, L4("Rescatar", "Rescue", "Sauver", "Resgatar") + " · " + fm(rscFilial(i)), S.cash >= rscFilial(i) ? "" : "off")}</span>` : ""}</div>`;
+}
+function fundador(r) {
+  if (!r) return;
+  const L = (S.tl || []).filter((t) => t && !t.dead && !t.ret && !t.you && !t.ex && (t.age | 0) >= 35 && (t.age | 0) <= 70 && (t.r == 1 || t.r == 2 || t.r == 0) && (t.s[t.r] | 0) >= 70);
+  if (!L.length || R() < 0.4) return;
+  const t = pk(L);
+  r.fund15 = t.id;
+  nws(L4("# (%) funda su propio estudio: &.", "# (%) founds their own studio: &.", "# (%) fonde son propre studio : &.", "# (%) funda o próprio estúdio: &.").replace("#", t.n).replace("%", RO[t.r].toLowerCase()).replace("&", r.n));
+}
+on("anual", () => {
+  if (!S || S.pre || S.taller) return;
+  S.rv.forEach((r) => {
+    if (r && r.av15 && !r.dead && (r.mal | 0) == 0 && r.cash >= 0) r.av15 = 0;
+  });
+  const V = rvVivos(),
+    ind = V.filter((i) => !S.rv[i].own).length,
+    mx = rvMax();
+  if (V.length >= mx * 2 + 4) return;
+  let n = 0;
+  if (ind < Math.max(6, Math.round(mx * 0.6))) n = R() < 0.85 ? (ind < 4 ? 2 : 1) : 0;
+  else if (ind < mx + 4 && R() < 0.3) n = 1;
+  for (let k = 0; k < n; k++) {
+    const n0 = S.rv.length;
+    for (let t = 0; t < 4 && S.rv.length == n0; t++) rvGenera();
+    if (S.rv.length > n0) fundador(S.rv[S.rv.length - 1]);
+  }
+});
+
+let AVFICHA = true;
+function fichaAv() {
+  const me = yo();
+  if (!me) return "";
+  const op0 = op,
+    raf0 = window.requestAnimationFrame;
+  let cap = "";
+  op = (h) => {
+    cap = String(h || "");
+  };
+  window.requestAnimationFrame = () => 0;
+  try {
+    tpMExt(S.me);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    op = op0;
+    window.requestAnimationFrame = raf0;
+  }
+  if (!cap) return "";
+  cap = cap
+    .replace(/<h2 style="margin:0">Ficha del talento<\/h2><span class="bts">([\s\S]*?)<\/span><\/div>/, (m, b) => `<span></span><span class="bts">${b.replace(/<button[^>]*data-a="x"[^>]*>[\s\S]*?<\/button>/g, "")}</span></div>`)
+    .replace('id="trd"', 'id="trdAv"');
+  let extra = "";
+  try {
+    extra = (typeof awH == "function" ? awH(me) : "") + (typeof vidaH == "function" ? vidaH(me) : "");
+  } catch (e) {}
+  return `<details class="c avficha" ${AVFICHA ? "open" : ""} ontoggle="AVFICHA=this.open"><summary><b>${ic("talento")} ${L4("Tu ficha completa", "Your full profile", "Ta fiche complète", "Sua ficha completa")}</b> <span class="m">· ${L4("habilidades, fama, premios, relaciones e historial", "skills, fame, awards, relationships and history", "compétences, célébrité, prix, relations et historique", "habilidades, fama, prêmios, relações e histórico")}</span></summary>${cap}${extra}</details>`;
+}
+const pgAv = pg;
+pg = function () {
+  const r = pgAv.apply(this, arguments);
+  const c = document.getElementById("trdAv");
+  if (c && yo())
+    requestAnimationFrame(() => {
+      if (c.isConnected) rdr(c, yo().s, RO.map((x) => x.split(" ")[0]));
+    });
+  return r;
+};
+const vTAv = vT;
+vT = function () {
+  const h = vTAv.apply(this, arguments),
+    me = yo();
+  if (!me) return h;
+  return `<div class="c k" translate="no"><div style="display:flex;gap:10px;align-items:center;min-width:0"><canvas class="tf" data-t="${S.me}" style="width:48px;height:48px;flex:none"></canvas><div style="min-width:0"><b>${esc(me.n)}</b><div class="m">${esc(RO[me.r])} · ${me.age} ${L4("años", "years old", "ans", "anos")} · ${L4("habilidad", "skill", "compétence", "habilidade")} ${me.s[me.r]} · ${plural(me.gw | 0, L4("premio", "award", "prix", "prêmio"), L4("premios", "awards", "prix", "prêmios"))}</div></div></div><span class="bts">${bt("tp", S.me, L4("Mi ficha", "My profile", "Ma fiche", "Minha ficha"), "a")}</span></div>` + h;
+};
+
+function renGrupos() {
+  const F = {};
+  S.pj.filter((P) => P.m == 1 && P.fid != null).forEach((P) => (F[P.fid] = F[P.fid] || []).push(P));
+  return Object.keys(F).map((f) => F[f].sort((a, b) => a.id - b.id));
+}
+const renConv = (s) => {
+  const u = s[s.length - 1];
+  return u.st >= 3 && !u.sold && !u.rr && ((u.c || 0) + (u.a || 0)) / 2 >= 60 && s.length < 12 && (u.r0 == null || S.t - u.r0 >= 8);
+};
+function renueva(P) {
+  const W0 = W,
+    wz0 = wz;
+  let res = "";
+  wz = () => null;
+  try {
+    wFrom(P, P.m);
+    W.ct = 1;
+    W.src = P.id;
+    W.nm = cnNm(P, 1);
+    let r = producir();
+    if (typeof r == "string" && r != "Fondos insuficientes" && !/sede|huelga/i.test(r)) {
+      W.crew = eqRec(W.m, BD());
+      r = producir();
+    }
+    res = r;
+  } catch (e) {
+    res = String((e && e.message) || e);
+  }
+  wz = wz0;
+  W = W0;
+  return res;
+}
+function renLote(max) {
+  const L = renGrupos()
+    .filter(renConv)
+    .sort((a, b) => {
+      const x = a[a.length - 1],
+        y = b[b.length - 1];
+      return (y.c || 0) + (y.a || 0) - (x.c || 0) - (x.a || 0);
+    });
+  let n = 0;
+  for (const s of L) {
+    if (n >= max) break;
+    const u = s[s.length - 1],
+      r = renueva(u);
+    if (r && typeof r == "object") {
+      n++;
+      nws(L4("Renuevas «#» por una temporada más (temporada %).", "You renew «#» for another season (season %).", "Tu renouvelles « # » pour une saison de plus (saison %).", "Você renova «#» por mais uma temporada (temporada %).").replace("#", frG(u.fid).n).replace("%", s.length + 1));
+    } else if (u.ren16e != yr()) {
+      u.ren16e = yr();
+      if (r) nws(L4("No se pudo renovar «#»: %.", "«#» couldn't be renewed: %.", "« # » n'a pas pu être renouvelée : %.", "Não foi possível renovar «#»: %.").replace("#", frG(u.fid).n).replace("%", String(r).toLowerCase()));
+      if (/Fondos|sede/i.test(String(r))) break;
+    }
+  }
+  return n;
+}
+ACT["ren16"] = () => {
+  S.ren16 = S.ren16 ? 0 : 1;
+  return pg();
+};
+ACT["ren16y"] = () => {
+  const n = renLote(20);
+  toast(n ? L4("# temporadas renovadas", "# seasons renewed", "# saisons renouvelées", "# temporadas renovadas").replace("#", n) : L4("Ninguna serie para renovar ahora", "No series to renew now", "Aucune série à renouveler", "Nenhuma série para renovar agora"));
+  return pg();
+};
+on("mes", () => {
+  if (!S || S.pre || S.taller || !S.ren16) return;
+  renLote(2);
+});
+const renH = () =>
+  `<div class="chips" translate="no">${chx("ren16", "", L4("Renovar temporadas automáticamente", "Renew seasons automatically", "Renouveler les saisons automatiquement", "Renovar temporadas automaticamente"), !!S.ren16)}</div><div class="bts" translate="no">${bt("ren16y", "", L4("Renovar ahora las que conviene", "Renew the ones worth it now", "Renouveler maintenant celles qui valent la peine", "Renovar agora as que valem a pena") + " (" + renGrupos().filter(renConv).length + ")")}${bi("renovar16")}</div>`;
+
+let FRBUSCA = "";
+const frNorm = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+function frBusca(f) {
+  const q = frNorm(FRBUSCA).trim();
+  if (!q) return true;
+  const F = frG(f);
+  if (F && frNorm(F.n).includes(q)) return true;
+  return S.pj.some((p) => p.fid == f && (frNorm(p.n).includes(q) || (p.cast || []).some((c) => c && c.n && frNorm(c.n).includes(q))));
+}
+const frOFH = frOrigFH6;
+frOrigFH6 = function () {
+  const n = FRBUSCA ? frList().filter((f) => (FRF6 == "t" || frOrig6(f) == FRF6) && frBusca(f)).length : 0;
+  return (
+    frOFH.apply(this, arguments) +
+    `<div class="c" translate="no"><div class="k" style="gap:8px"><input type="search" enterkeyhint="search" style="flex:1;min-width:0" placeholder="${esc(L4("Buscar franquicia, obra o personaje", "Search franchise, work or character", "Chercher franchise, œuvre ou personnage", "Buscar franquia, obra ou personagem"))}" value="${esc(FRBUSCA)}" onchange="FRBUSCA=this.value.trim();fil.fp=0;pg()" aria-label="${esc(L4("Buscar franquicias", "Search franchises", "Chercher des franchises", "Buscar franquias"))}">${FRBUSCA ? bt("frbx", "", ic("cerrar")) : ""}</div>${FRBUSCA ? `<div class="m">${L4("# resultados para «%»", "# results for «%»", "# résultats pour « % »", "# resultados para «%»").replace("#", n).replace("%", esc(FRBUSCA))}</div>` : ""}</div>`
+  );
+};
+ACT["frbx"] = () => {
+  FRBUSCA = "";
+  fil.fp = 0;
+  return pg();
+};
+Object.assign(TX.es.ayuda, {
+  rescate15: ["Rescatar estudios", "Cuando un rival lleva años perdiendo dinero o público, primero llega un aviso: está al borde de la quiebra. Desde ese momento tienes un año para salvarlo desde su ficha. «Rescatar como filial» paga sus deudas y lo compra con descuento (el 60 % de su precio): pasa a ser tuyo y su catálogo llega a tu plataforma y tu canal. «Rescatar e invertir» le da capital para que siga como estudio independiente; ese dinero queda como inversión tuya en él y sube o baja con su bolsa. Los estudios que ya quebraron también se pueden reabrir desde Mundo → Rivales, en «Estudios que cerraron o se fusionaron»; los que fueron comprados por otro rival no. Cada rescate suma 1 de prestigio. Además, cada año pueden nacer estudios nuevos, a veces fundados por talentos veteranos; nacen más cuando quedan pocos rivales independientes. Dato: en 1997, Apple estaba a semanas de quedarse sin caja y Microsoft invirtió 150 millones de dólares en ella; fue uno de los rescates más famosos entre rivales."],
+});
+Object.assign(TX.es.ayuda, {
+  renovar16: ["Renovar temporadas", "En la pestaña del medio Serie, en «Tus series y temporadas». Con «Renovar temporadas automáticamente», cada mes se renuevan hasta 2 series: las que ya estrenaron su última temporada hace al menos 8 semanas, con un promedio de crítica y público de 60 o más, que no vendiste y que tienen menos de 12 temporadas. La nueva temporada conserva el equipo y el reparto; si alguien no puede, se usa el equipo recomendado. Primero se renuevan las mejores. Nunca se pasa de tu caja ni de la capacidad de tu sede; si algo lo impide, una noticia lo explica una vez al año por serie. «Renovar ahora las que conviene» hace lo mismo al instante con todas. Dato: en EE. UU., las cadenas anuncian en mayo, en los «upfronts», qué series renuevan y cuáles cancelan; Los Simpson, renovada temporada tras temporada desde 1989, es la serie de ficción con guion más longeva del horario estelar estadounidense."],
 });
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {

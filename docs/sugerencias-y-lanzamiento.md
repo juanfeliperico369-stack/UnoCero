@@ -105,6 +105,14 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Volver a la ficha sin perder tu lugar.
   - Estatura y complexión del avatar, una rutina para ponerse en forma y minijuegos de práctica.
 
+- **De las pruebas de juego (versión 1.6.1):**
+  - Una sola versión definitiva.
+  - Rescate de rivales al borde de la quiebra y reapertura de estudios cerrados.
+  - Estudios nuevos cada año.
+  - Renovación automática de temporadas.
+  - Ficha completa del avatar en su pestaña.
+  - Todos los personajes en la franquicia y un buscador de franquicias.
+
 ### Pendientes
 1. **Bandeja de pendientes, copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`).
 2. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.

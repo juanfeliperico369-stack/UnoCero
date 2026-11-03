@@ -1,4 +1,4 @@
-# INDUSTRY ART · Informe de la versión 1.6
+# INDUSTRY ART · Informe de las versiones 1.6 y 1.6.1
 
 Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo funciona y cómo se verificó.
 
@@ -135,6 +135,43 @@ Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo 
 
 - **Selector de festival:** el que se agregó en esta versión dejaba de funcionar en el juego final por un nombre interno. Se encontró en las pruebas y se corrigió antes de publicar.
 - **Botones de especialidad:** al elegir el medio de un talento firmado, la ficha se redibujaba sin esos botones; ahora se mantienen.
+
+## 10. Versión 1.6.1: una sola versión, rescates, estudios nuevos y la ficha del avatar
+
+- **Una sola versión definitiva:**
+  - La edición real de prueba queda retirada y se entrega solo esta versión.
+  - El contenido real se agregará más adelante dentro de ella.
+  - La 1.6.1 usa el versionCode 12, así que se instala encima de cualquier versión anterior y conserva las partidas.
+- **Aviso de quiebra:** cuando un rival lleva años perdiendo dinero o público, primero llega la noticia de que está al borde de la quiebra. Quiebra un año después si nadie lo salva.
+- **Rescatar como filial:**
+  - Pagas sus deudas y lo compras al 60 % de su precio.
+  - Su catálogo pasa a tu plataforma y a tu canal.
+- **Rescatar e invertir:** le das capital y sigue independiente. Tu dinero queda como inversión que sube o baja con su bolsa.
+- **Reabrir estudios quebrados:**
+  - Desde Mundo → Rivales («Estudios que cerraron o se fusionaron») o desde su ficha.
+  - Vuelve con su nombre, su estilo y sus especialidades, y sus franquicias salen del remate.
+  - Los que compró otro rival no se pueden reabrir.
+  - Cada rescate suma 1 de prestigio.
+- **Estudios nuevos cada año:**
+  - **Antes:** solo nacían estudios cuando quedaban menos de 8 rivales. Además, el tope de estudios contaba tus filiales, así que al comprar rivales ya no aparecían nuevos.
+  - **Ahora:** las filiales no cuentan para ese tope. Cada año pueden nacer estudios nuevos: casi seguro si quedan pocos independientes y, si no, con un 30 % de probabilidad.
+  - Hay un tope total para que la partida no se vuelva lenta.
+  - A veces los funda un talento veterano (director, productor o escritor), que aparece en la ficha del estudio.
+- **Ficha completa del avatar:**
+  - La pestaña «Tu avatar» muestra arriba la misma ficha que cualquier talento: estadísticas, gráfico de oficios, otras habilidades, fama por región, géneros, capacidades, especialidad por medio, relaciones, historial de proyectos, premios y línea de vida.
+  - Se puede plegar.
+  - En el catálogo de talentos tu avatar aparece primero, con su botón «Mi ficha».
+- **Renovar temporadas automáticamente** (pestaña del medio Serie, en «Tus series y temporadas»):
+  - **Cuáles:** cada mes renueva hasta 2 series, empezando por las mejores. Deben haber estrenado su última temporada hace al menos 8 semanas, tener un promedio de crítica y público de 60 o más, no estar vendidas y tener menos de 12 temporadas.
+  - **Equipo:** la temporada nueva conserva el equipo y el reparto. Si alguien no puede, usa el equipo recomendado.
+  - **Límites:** nunca pasa de tu caja ni de la capacidad de tu sede. Si algo lo impide, una noticia lo explica una vez al año por serie.
+  - **Botón inmediato:** «Renovar ahora las que conviene» hace lo mismo al instante.
+  - **Prueba:** de 40 series renovó 14 al momento, hasta llenar la capacidad de la sede.
+- **Personajes de la franquicia:**
+  - **Antes:** solo se contaban los de obras ya estrenadas y la lista se cortaba en 12.
+  - **Ahora:** salen todos, también los nuevos de secuelas y temporadas en producción («aún sin estrenar»). Los primeros 12 se ven completos y el resto está en «Ver N personajes más», con sus licencias de cómic, manga, juguetes y videojuego.
+- **Buscador de franquicias:** busca por nombre de franquicia, de obra o de personaje, sin importar tildes, y respeta la división elegida (propias, de tus talentos, compradas o con rivales).
+- **Dato:** en 1997, Apple estaba a semanas de quedarse sin caja y Microsoft, su gran rival, invirtió 150 millones de dólares en ella. Es uno de los rescates entre rivales más citados.
 
 ## Pruebas de esta versión
 
