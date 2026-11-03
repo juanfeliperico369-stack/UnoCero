@@ -70,10 +70,10 @@ Idiomas: español, inglés, francés y portugués.
 Las obras, premios, personas, marcas y lugares reales que aparecen en el juego son referencias históricas y culturales; el juego no está afiliado a ellos. El casino del juego usa dinero ficticio: no hay apuestas con dinero real.
 ```
 
-**Notas de la versión 1.5.3** (445/500)
+**Notas de la versión 1.6** (406/500)
 
 ```
-Versión 1.5.3: tus talentos firmados proponen y producen con tu infraestructura; luz verde automática; presupuesto acordado y cofinanciación con rivales; catálogo, archivo y franquicias en cuatro divisiones; tus obras y las de tus filiales siempre en tu streaming y tu canal, aunque vendas licencias; plan automático de lanzamiento y reestrenos automáticos; reparto que respeta edad y sexo; consola con ventas y exclusivos; títulos más variados.
+Versión 1.6: crea obras para un festival; presupuesto anual por medio con misiones; tu propia prensa; redes de distribución para música, videojuegos, TV, streaming, libros, teatro, circo y stand-up; capital automático para filiales; premios ganados y relaciones en la ficha de cada talento; volver a la ficha sin perder tu lugar; estatura, complexión, rutina física y minijuegos de práctica para tu avatar.
 ```
 
 ## English (en-US)
@@ -129,10 +129,10 @@ Languages: Spanish, English, French and Portuguese.
 The real works, awards, people, brands and places in the game are historical and cultural references; the game is not affiliated with them. The in-game casino uses fictional money: there is no real-money gambling.
 ```
 
-**Notas de la versión 1.5.3** (427/500)
+**Notas de la versión 1.6** (389/500)
 
 ```
-Version 1.5.3: your signed talents propose and produce with your facilities; automatic green light; agreed budget and co-financing with rivals; catalog, archive and franchises in four divisions; your works and your subsidiaries' always on your streaming and channel, even if you sell licenses; auto launch plan and automatic re-releases; casting that respects age and sex; console with sales and exclusives; more varied titles.
+Version 1.6: make works for a festival; annual budget per medium with missions; your own press; distribution networks for music, games, TV, streaming, books, theater, circus and stand-up; automatic capital for subsidiaries; awards won and relationships on every talent profile; go back to a profile without losing your place; height, build, workouts and practice minigames for your avatar.
 ```
 
 ## Français (fr-FR)
@@ -188,10 +188,10 @@ Langues : espagnol, anglais, français et portugais.
 Les œuvres, prix, personnes, marques et lieux réels présents dans le jeu sont des références historiques et culturelles ; le jeu n'y est pas affilié. Le casino du jeu utilise de l'argent fictif : il n'y a pas de jeu d'argent réel.
 ```
 
-**Notas de la versión 1.5.3** (443/500)
+**Notas de la versión 1.6** (411/500)
 
 ```
-Version 1.5.3 : tes talents sous contrat proposent et produisent avec tes installations ; feu vert automatique ; budget convenu et cofinancement avec des rivaux ; catalogue, archives et franchises en quatre divisions ; tes œuvres et celles de tes filiales toujours sur ton streaming et ta chaîne, même avec des licences vendues ; plan de sortie et ressorties automatiques ; distribution qui respecte l'âge et le sexe ; console ; titres variés.
+Version 1.6 : crée des œuvres pour un festival ; budget annuel par média avec missions ; ta propre presse ; réseaux de distribution pour la musique, les jeux, la TV, le streaming, les livres, le théâtre, le cirque et le stand-up ; capital automatique pour les filiales ; prix gagnés et relations sur chaque fiche ; retour à la fiche sans perdre ta place ; taille, corpulence, sport et mini-jeux pour ton avatar.
 ```
 
 ## Português (pt-BR)
@@ -247,8 +247,8 @@ Idiomas: espanhol, inglês, francês e português.
 As obras, prêmios, pessoas, marcas e lugares reais que aparecem no jogo são referências históricas e culturais; o jogo não é afiliado a eles. O cassino do jogo usa dinheiro fictício: não há apostas com dinheiro real.
 ```
 
-**Notas de la versión 1.5.3** (448/500)
+**Notas de la versión 1.6** (382/500)
 
 ```
-Versão 1.5.3: seus talentos contratados propõem e produzem com sua infraestrutura; sinal verde automático; orçamento acordado e cofinanciamento com rivais; catálogo, arquivo e franquias em quatro divisões; suas obras e as das suas filiais sempre no seu streaming e no seu canal, mesmo vendendo licenças; plano automático de lançamento e relançamentos automáticos; elenco que respeita idade e sexo; console com vendas e exclusivos; títulos variados.
+Versão 1.6: crie obras para um festival; orçamento anual por meio com missões; sua própria imprensa; redes de distribuição para música, games, TV, streaming, livros, teatro, circo e stand-up; capital automático para filiais; prêmios ganhos e relações na ficha de cada talento; volte à ficha sem perder seu lugar; altura, físico, rotina física e minijogos de prática para seu avatar.
 ```

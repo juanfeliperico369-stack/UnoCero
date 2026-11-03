@@ -94,6 +94,17 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Etiquetas de fama traducidas en todos los idiomas.
   - Al comprar un rival, su catálogo pasa al instante a tu plataforma y tu canal lo programa.
 
+- **De las pruebas de juego (versión 1.6):**
+  - Crear obras para un festival, en modo automático o detallado.
+  - Presupuesto anual por medio con misiones y aporte de filiales.
+  - Talentos firmados orientados a un medio.
+  - Tu propia prensa.
+  - Redes de distribución para todos los medios.
+  - Capital automático para filiales y sedes que dan dinero.
+  - Premios ganados y relaciones ordenadas en la ficha de cada talento.
+  - Volver a la ficha sin perder tu lugar.
+  - Estatura y complexión del avatar, una rutina para ponerse en forma y minijuegos de práctica.
+
 ### Pendientes
 1. **Bandeja de pendientes, copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`).
 2. **Balance con datos reales.** La música rinde más que los otros medios antes de 1900 (multiplicador de 5,5 a 6,5) y los videojuegos tienden a perder dinero después de 2150 (0,8). Conviene revisarlo con las partidas de los testers.

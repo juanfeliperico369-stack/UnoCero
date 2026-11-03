@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.5.3
+## INDUSTRY ART · versión 1.6
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -71,6 +71,15 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Venta de negocios, cadenas de cines y parques temáticos**. Los parques ampliados ya pueden mantenerse solos y tienen gestión automática de precio y mantenimiento.
 - **Academia**: becas automáticas para tus talentos firmados, que pueden estudiar y trabajar a la vez.
 - **Decisiones al avanzar**: eliges cuántas ventanas quieres (Muchas, Normal, Pocas o Solo importantes), y tu avatar recibe propuestas para trabajar con otros estudios según sus especialidades.
+- **Crear para un festival** (Mundo → Premios): automático o detallado; la obra se produce para estrenarse en la semana del festival y gana crítica y expectativa si llega a tiempo.
+- **Presupuesto anual por medio**: apartas el 2, 5, 10 o 20 % de tu caja para cada medio; con eso tus talentos firmados y tu oficina producen solos, tus filiales aportan y cada año hay una misión de estrenos con premio. Cada talento firmado puede orientarse a un medio desde su ficha.
+- **Tu prensa**: escritores y editores en nómina para tu revista, periódico, agencia, noticiero y redes; suben fans, prestigio y expectativa.
+- **Redes de distribución por medio** (Negocio → Distribución): además de los cines, canales de radio y TV, plataformas de streaming, fabricantes de consolas y tiendas de juegos, teatros, ópera, circo, clubes de comedia, tiendas y apps de música, librerías, quioscos y clubes de lectura. Suben las ventas de tus obras y te dan parte de lo que se vende en ese medio; cierran cuando su formato pasa de moda. Los nombres son ficticios.
+- **Las sedes dan dinero**: cada sede en otro país ingresa cada mes según su nivel y el tamaño del mercado, además de sus ventajas de siempre.
+- **Capital automático para filiales**: decide solo si darles el capital que piden, según tu caja.
+- **Ficha del talento**: lista de premios ganados (con categoría, año y obra) y nominaciones contigo; relaciones agrupadas en pareja, parejas anteriores, amistades y rivalidades; nadie tiene dos parejas a la vez.
+- **Volver a la ficha**: toda obra o ficha que abres desde un talento tiene el botón para volver, y al volver la pantalla queda donde estaba.
+- **Tu avatar**: estatura y complexión desde el inicio, rutina para ponerse en forma y minijuegos para practicar cada habilidad y ganar experiencia.
 - **Paquetes de mundo (`.iamundo`)**: la comunidad puede crear archivos con estudios, talentos y obras que aparecen en su año y franquicias que se compran con sus personajes. Se importan en Estudio → Editor.
 
 ### El futuro, hasta 2300
@@ -95,7 +104,7 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.5.3 están en `entregables/`.
+Los paquetes de la versión 1.6 están en `entregables/`.
 
 ### Lanzamiento
 

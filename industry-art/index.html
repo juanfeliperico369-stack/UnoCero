@@ -859,7 +859,7 @@ html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 
 .c.peri .peri-t::first-letter{color:#7a1f12!important}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.5.3";
+const VERN = "1.6";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -20283,7 +20283,7 @@ function relaciones(P) {
       else if (!r0 && c <= -0.45) {
         S.rel[k] = "rivalidad";
         if (A.you || B.you || (A.pjS && B.pjS)) nws(A.n + " y " + B.n + " ya no se soportan.");
-      } else if (r0 == "amistad" && c >= 0.7 && R() < 0.06) {
+      } else if (r0 == "amistad" && c >= 0.7 && R() < 0.06 && relLibre(A, B)) {
         S.rel[k] = "pareja";
         nws(A.n + " y " + B.n + " son pareja.");
       }
@@ -20388,8 +20388,8 @@ function tpM(id) {
 <canvas id="trd" style="height:190px;margin-top:6px"></canvas>
 ${t.tr && TRA[t.tr] ? `<div class="m">Rasgo «${t.tr}»: ${TRA[t.tr][0] > 0 ? "suma calidad" : TRA[t.tr][0] < 0 ? "resta calidad" : "calidad normal"}${TRA[t.tr][1] > 0.02 ? ", con riesgo de sobrecosto" : TRA[t.tr][1] < 0 ? ", ahorra costos" : ""}${TRA[t.tr][2] > 1.05 ? ", y cobra m\u00E1s" : TRA[t.tr][2] < 1 ? ", y cobra menos" : ""}.</div>` : ""}
 ${(t.vt || []).length ? `<div class="m">Ventajas: ${t.vt.map((k) => VTJ[k][0] + " (" + VTJ[k][1] + ")").join(" \u00B7 ")}</div>` : ""}
-${t.r == 7 ? `<div class="m">Belleza ${t.bel} · papeles recomendados: ${papeles(t).join(", ")}</div>` : ""}<div class="m">Se desenvuelve mejor hasta ${AG[ACL[t.cla == null ? 7 : t.cla]][0]} (m\u00E1s all\u00E1 cobra m\u00E1s y rinde menos)${t.age < 18 ? " (menor de edad: solo obras para todo p\u00FAblico y juveniles)" : ""}</div>
-${rel.length ? `<div class="m">Relaciones: ${rel.join(" \u00B7 ")}</div>` : ""}
+${t.r == 7 ? `<div class="m">Belleza ${t.bel} · papeles recomendados: ${papeles(t).join(", ")}</div>` : ""}<div class="m">${claH(t)}${t.age < 18 ? " (menor de edad: solo obras para todo p\u00FAblico y juveniles)" : ""}</div>
+${relH(t)}
 <h3>Otras habilidades</h3>${OTH.map((n, i) => bar(n, t.ot[i], "#35d0ba")).join("")}
 <h3>Fama por región</h3>${CT.map((c, r) => bar(c, famaR(t, r), "#ffc857")).join("")}
 <h3>Desempeño por familia de géneros</h3>${TXEJ.map((n, i) => bar(n, t.af[i], "#ff8f5a")).join("")}
@@ -20588,7 +20588,7 @@ const FRG = [
 const FTP = ["acci\u00F3n", "romance", "villano", "mentor", "comedia", "joven", "dram\u00E1tico"];
 let FISC = new Map();
 function tFis(t) {
-  const k = t.id + "|" + t.n + "|" + Math.floor((t.age | 0) / 5) + "|" + (t.av ? JSON.stringify(t.av) : "");
+  const k = t.id + "|" + t.n + "|" + Math.floor((t.age | 0) / 5) + "|" + (t.av ? JSON.stringify(t.av) : "") + "|" + (t.fx13 | 0);
   let f = FISC.get(k);
   if (f) return f;
   const q = mb((t.pf == null ? hs(t.n) : t.pf) + 7),
@@ -20613,11 +20613,12 @@ function tFis(t) {
   const z = mb(hs(t.n + "#fis" + t.id)),
     age = t.age | 0,
     kid = age < 16;
-  const h = kid ? Math.round(95 + age * 5 + z() * 8) : Math.round((F ? 164 : 176) + (z() + z() + z() - 1.5) * (F ? 9 : 10));
+  const h0 = kid ? Math.round(95 + age * 5 + z() * 8) : Math.round((F ? 164 : 176) + (z() + z() + z() - 1.5) * (F ? 9 : 10)),
+    h = !kid && A.est != null ? 145 + (A.est | 0) * 5 : h0;
   const cx0 = Math.floor(z() * 5),
     atl = t.r == 7 ? z() < 0.35 : z() < 0.2,
-    cx = atl ? 1 : cx0;
-  const fit = cl(Math.round(45 + z() * 50 + (cx == 1 ? 10 : cx >= 3 ? -8 : 0) - Math.max(0, age - 42) * 0.9), 10, 99);
+    cx = A.cx != null && A.cx >= 0 && A.cx < 5 ? A.cx | 0 : atl ? 1 : cx0;
+  const fit = cl(Math.round(45 + z() * 50 + (cx == 1 ? 10 : cx >= 3 ? -8 : 0) - Math.max(0, age - 42) * 0.9 + (t.fx13 | 0)), 10, 99);
   const oj = FOJ[Math.floor(z() * (rg == 2 ? 6 : 3))],
     r1 = FRG[Math.floor(z() * FRG.length)],
     r2 = FRG[Math.floor(z() * FRG.length)];
@@ -34250,11 +34251,11 @@ ${
     : ""
 }
 ${enc.length ? `<div class="m">Encargos en curso: ${enc.map((q) => "\u00AB" + esc(q.n) + "\u00BB (estrena en " + Math.max(0, q.t + 10 - S.t) + " sem)").join(", ")}</div>` : ""}${obras.length ? `<div class="m">Últimas obras: ${obras.map((x) => "\u00AB" + esc(x.n) + "\u00BB " + Math.round((x.A + x.C) / 2) + " \u00B7 " + FCN[x.ch].toLowerCase()).join(", ")}</div>` : ""}
-${r.pide ? `<div class="m" style="color:var(--g)">Pide ${fm(r.pide)} de capital.</div><div class="bts">${bt("fpa", i, "D\u00E1rselo", S.cash >= r.pide ? "a" : "off")}${bt("fpr", i, "Negarlo")}</div>` : ""}<div class="bts">${bt("fen", i, ic("mas") + " Encargar una obra", "a")}${bt("fve", i, "Vender la filial \u00B7 " + fm(valR(r)), "r")}</div></div>`;
+${r.pide ? `<div class="m" style="color:var(--g)">Pide ${fm(r.pide)} de capital.</div><div class="bts">${bt("fpa", i, "D\u00E1rselo", S.cash >= r.pide ? "a" : "off")}${bt("fpr", i, "Negarlo")}${bt("fpauto", "", S.fpAuto ? L4("Automático: sí", "Automatic: on", "Automatique : oui", "Automático: sim") : L4("Automático", "Automatic", "Automatique", "Automático"), S.fpAuto ? "a" : "")}</div>` : ""}<div class="bts">${bt("fen", i, ic("mas") + " Encargar una obra", "a")}${bt("fve", i, "Vender la filial \u00B7 " + fm(valR(r)), "r")}</div></div>`;
   };
   return (
     modH("fil") +
-    `<div class="c"><div class="k"><h3 style="margin:0">${ic("edificio")} Filiales</h3>${bi("filiales")}</div><details class="nota"><summary aria-label="Más información"></summary><div class="m">Te reparten el 60 % de sus utilidades. Elige si producen solas o solo por encargo, dónde estrenan y a qué puntaje apuntan (más alto, más caro). Sus obras van a tu catálogo de TV y streaming y a tu material («Obras y proyectos de tus filiales»).</div></details>${L.map(card).join("")}</div>`
+    `<div class="c"><div class="k"><h3 style="margin:0">${ic("edificio")} Filiales</h3>${bi("filiales")}</div><div class="chips">${chx("fpauto", "", L4("Capital automático", "Automatic capital", "Capital automatique", "Capital automático"), !!S.fpAuto)}</div><details class="nota"><summary aria-label="Más información"></summary><div class="m">Te reparten el 60 % de sus utilidades. Elige si producen solas o solo por encargo, dónde estrenan y a qué puntaje apuntan (más alto, más caro). Sus obras van a tu catálogo de TV y streaming y a tu material («Obras y proyectos de tus filiales»).</div></details>${L.map(card).join("")}</div>`
   );
 }
 ACT["ffa"] = (v) => {
@@ -55825,11 +55826,11 @@ sdH = function () {
   return `<div class="c"><div class="k"><h3 style="margin:0">${ic("mundo")} ${dualReg("Sedes en otros países", "Offices in other countries")}</h3>${bi("sedes")}</div><details class="nota"><summary aria-label="Más información"></summary><div class="m">${dual(
     "Cada sede abarata 15 % rodar en ese país, sus talentos te cobran 10 % menos y tus obras ganan público en su región. Nivel 2 (sede regional): +1,5 % de ventas en todo el mundo. Nivel 3 (estudio regional): además produce una obra más a la vez. Cada nivel sube el gasto mensual.",
     "Each office makes shooting in that country 15% cheaper, its talent charges you 10% less and your works gain audience in its region. Level 2 (regional HQ): +1.5% sales worldwide. Level 3 (regional studio): also produces one more work at a time. Each level raises the monthly cost.",
-  )}</div></details>${k
+  )} ${L4("Además, cada sede ingresa dinero cada mes: alquila sus instalaciones, dobla y distribuye tu catálogo en su país. Rinde más en los mercados grandes y con más nivel.", "Each office also earns money every month: it rents out its facilities and dubs and distributes your catalog in its country. It earns more in big markets and at higher levels.", "Chaque bureau rapporte aussi de l'argent chaque mois : il loue ses installations, double et distribue ton catalogue dans son pays. Il rapporte plus sur les grands marchés et à un niveau plus élevé.", "Cada sede também rende dinheiro todo mês: aluga suas instalações, dubla e distribui seu catálogo no país. Rende mais nos mercados grandes e com mais nível.")}</div></details>${k
     .map((c) => {
       const l = Math.max(1, sdLv(c)),
         up = sdUp(c);
-      return `<div class="fila"><span>${CY[c][0]} · <b>${SEDES_NIVEL[l - 1]}</b> · ${fm(sdSem(c) * 4 * (1 + (l - 1) * 1.2))}/${dualReg("mes", "month")}</span><span class="bts">${l < 3 ? bt("sdl", c, dualReg("Subir nivel", "Level up") + " · " + fm(up), S.cash >= up ? "" : "off") : ""}${bt("sdc", c, "Cerrar", "r")}</span></div>`;
+      return `<div class="fila"><span>${CY[c][0]} · <b>${SEDES_NIVEL[l - 1]}</b> · ${L4("gasta", "costs", "coûte", "gasta")} ${fm(sdSem(c) * 4 * (1 + (l - 1) * 1.2))} · ${L4("ingresa", "earns", "rapporte", "rende")} ${fm(sdIng(c))}/${dualReg("mes", "month")}</span><span class="bts">${l < 3 ? bt("sdl", c, dualReg("Subir nivel", "Level up") + " · " + fm(up), S.cash >= up ? "" : "off") : ""}${bt("sdc", c, "Cerrar", "r")}</span></div>`;
     })
     .join("")}<details${SDF >= 0 ? " open" : ""}><summary class="m">${ic("adelante")} ${dualReg("Abrir una sede", "Open an office")} (${L.length})</summary><div class="chips">${[[-1, dualReg("Todos", "All")]]
     .concat(CT.map((n, r) => [r, n]))
@@ -63112,6 +63113,28 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Hindi", "Hindi", "Hindi", "Hindi"],
   ["Árabe", "Arabic", "Arabe", "Árabe"],
   ["Ruso", "Russian", "Russe", "Russo"],
+  ["Crear para un festival", "Make it for a festival", "Créer pour un festival", "Criar para um festival"],
+  ["Presupuesto anual por medio", "Annual budget per medium", "Budget annuel par média", "Orçamento anual por meio"],
+  ["Tu prensa", "Your press", "Ta presse", "Sua imprensa"],
+  ["Ponerse en forma", "Getting in shape", "Se mettre en forme", "Entrar em forma"],
+  ["Practicar habilidades", "Practicing skills", "S'entraîner", "Praticar habilidades"],
+  ["En Mundo → Premios, sobre la lista de festivales. Eliges uno de los próximos (con al menos 22 semanas de margen) y el medio. «Automático» arma la obra con el equipo y el reparto recomendados, un 15 % más de presupuesto, y la produce; cuando está lista, la estrena con el mejor plan en la semana del festival. «Detallado» abre el creador con todo prellenado para que lo ajustes. Si llega a tiempo, la obra gana +2 de crítica, +1 de público y más expectativa; si se atrasa, sale con un plan normal. Dato: el Festival de Venecia, nacido en 1932, es el festival de cine más antiguo que sigue en activo.", "In World → Awards, above the festival list. You pick one of the upcoming festivals (at least 22 weeks away) and the medium. «Automatic» puts the work together with the recommended crew and cast, 15% more budget, and produces it; when it's ready, it premieres with the best plan in the festival week. «Detailed» opens the creator with everything pre-filled so you can adjust it. If it arrives on time, the work gains +2 critics, +1 audience and more buzz; if it's late, it goes out with a normal plan. Fact: the Venice Film Festival, born in 1932, is the oldest film festival still running.", "Dans Monde → Prix, au-dessus de la liste des festivals. Tu choisis un des prochains festivals (avec au moins 22 semaines de marge) et le média. « Automatique » monte l'œuvre avec l'équipe et la distribution recommandées, 15 % de budget en plus, et la produit ; quand elle est prête, elle sort avec le meilleur plan la semaine du festival. « Détaillé » ouvre le créateur avec tout prérempli pour que tu l'ajustes. Si elle arrive à temps, l'œuvre gagne +2 en critique, +1 en public et plus d'attente ; si elle est en retard, elle sort avec un plan normal. Anecdote : la Mostra de Venise, née en 1932, est le plus ancien festival de cinéma encore en activité.", "Em Mundo → Prêmios, acima da lista de festivais. Você escolhe um dos próximos festivais (com pelo menos 22 semanas de antecedência) e o meio. «Automático» monta a obra com a equipe e o elenco recomendados, 15 % a mais de orçamento, e a produz; quando fica pronta, estreia com o melhor plano na semana do festival. «Detalhado» abre o criador com tudo preenchido para você ajustar. Se chegar a tempo, a obra ganha +2 de crítica, +1 de público e mais expectativa; se atrasar, sai com um plano normal. Curiosidade: o Festival de Veneza, nascido em 1932, é o festival de cinema mais antigo ainda em atividade."],
+  ["En la pestaña de cada medio, bajo su infraestructura. Eliges qué parte de tu caja apartas cada año para ese medio: 2, 5, 10 o 20 %. Tus filiales fuertes en ese medio aportan el 5 % de su caja (como mucho medio presupuesto típico). Cada mes, si queda dinero, un talento firmado de ese medio o un subproductor ejecutivo propone un proyecto y lo produce solo; tu personal de oficina le suma calidad. Puedes orientar a cada talento firmado desde su ficha («Propone proyectos de»). Cada año hay una misión: estrenar 1 obra más que tu nivel de presupuesto; si la cumples, ganas un premio en dinero y prestigio. Dato: en la década de 1930, MGM estrenaba casi una película por semana con actores, guionistas y directores bajo contrato fijo.", "In each medium's tab, under its facilities. You choose how much of your cash you set aside each year for that medium: 2, 5, 10 or 20%. Your subsidiaries that are strong in that medium chip in 5% of their cash (at most half a typical budget). Each month, if there's money left, a signed talent of that medium or an executive subproducer proposes a project and produces it on their own; your office staff add quality. You can steer each signed talent from their profile («Proposes projects for»). Each year there's a mission: release 1 more work than your budget level; if you make it, you get a cash and prestige reward. Fact: in the 1930s, MGM released almost one film a week with actors, writers and directors under fixed contracts.", "Dans l'onglet de chaque média, sous ses installations. Tu choisis quelle part de ta trésorerie tu réserves chaque année pour ce média : 2, 5, 10 ou 20 %. Tes filiales fortes dans ce média apportent 5 % de leur trésorerie (au plus un demi-budget typique). Chaque mois, s'il reste de l'argent, un talent sous contrat de ce média ou un sous-producteur exécutif propose un projet et le produit seul ; ton personnel de bureau ajoute de la qualité. Tu peux orienter chaque talent sous contrat depuis sa fiche (« Propose des projets de »). Chaque année, il y a une mission : sortir 1 œuvre de plus que ton niveau de budget ; si tu la réussis, tu gagnes une prime en argent et en prestige. Anecdote : dans les années 1930, la MGM sortait presque un film par semaine avec des acteurs, scénaristes et réalisateurs sous contrat fixe.", "Na aba de cada meio, abaixo da infraestrutura. Você escolhe quanto do seu caixa separa a cada ano para esse meio: 2, 5, 10 ou 20 %. Suas filiais fortes nesse meio contribuem com 5 % do caixa delas (no máximo meio orçamento típico). Todo mês, se sobrar dinheiro, um talento contratado desse meio ou um subprodutor executivo propõe um projeto e o produz sozinho; sua equipe de escritório acrescenta qualidade. Você pode orientar cada talento contratado pela ficha dele («Propõe projetos de»). Todo ano há uma missão: lançar 1 obra a mais que o seu nível de orçamento; se cumprir, ganha um prêmio em dinheiro e prestígio. Curiosidade: nos anos 1930, a MGM lançava quase um filme por semana com atores, roteiristas e diretores sob contrato fixo."],
+  ["En la pestaña Editorial, bajo su infraestructura. Contratas escritores o editores para tu revista y tu periódico, tu agencia de prensa (desde 1835), tu noticiero (desde 1922) y tus redes sociales (desde 2004). Cada uno cobra un sueldo mensual y, según su habilidad, sube tus fans y tu prestigio cada mes y la expectativa de tus obras que están en marketing. Al contratarlos gastan 10 de energía; si mueren o se retiran, el puesto queda libre. Dato: la primera agencia de noticias, Havas, nació en París en 1835 y es el origen de la actual AFP.", "In the Publishing tab, under its facilities. You hire writers or editors for your magazine and newspaper, your press agency (from 1835), your newscast (from 1922) and your social media (from 2004). Each one earns a monthly salary and, depending on their skill, raises your fans and prestige every month and the buzz of your works in marketing. Hiring them costs 10 energy; if they die or retire, the post opens up. Fact: the first news agency, Havas, was born in Paris in 1835 and is the origin of today's AFP.", "Dans l'onglet Édition, sous ses installations. Tu engages des écrivains ou des éditeurs pour ta revue et ton journal, ton agence de presse (depuis 1835), ton journal télévisé (depuis 1922) et tes réseaux sociaux (depuis 2004). Chacun touche un salaire mensuel et, selon sa compétence, augmente tes fans et ton prestige chaque mois et l'attente de tes œuvres en marketing. Les engager coûte 10 d'énergie ; s'ils meurent ou prennent leur retraite, le poste se libère. Anecdote : la première agence de presse, Havas, est née à Paris en 1835 ; c'est l'origine de l'actuelle AFP.", "Na aba Editorial, abaixo da infraestrutura. Você contrata escritores ou editores para sua revista e seu jornal, sua agência de notícias (desde 1835), seu telejornal (desde 1922) e suas redes sociais (desde 2004). Cada um recebe um salário mensal e, conforme a habilidade, aumenta seus fãs e seu prestígio todo mês e a expectativa das suas obras em marketing. Contratá-los gasta 10 de energia; se morrerem ou se aposentarem, o posto fica livre. Curiosidade: a primeira agência de notícias, a Havas, nasceu em Paris em 1835 e é a origem da atual AFP."],
+  ["En la pestaña de tu avatar. Una rutina ligera o intensa cuesta un poco de dinero y de energía cada mes, sube tu forma física y, con constancia (cada 8 meses la ligera, cada 4 la intensa), te acerca a una complexión atlética. Con más de 60 de forma recuperas hasta 3 de energía extra al mes, y con buena forma y complexión delgada, atlética o media encajas en papeles de acción. Si dejas la rutina, la forma baja poco a poco. La estatura y la complexión iniciales se eligen al crear el personaje o en «Editar avatar». Dato: para Toro salvaje (1980), Robert De Niro subió unos 27 kilos; es uno de los cambios físicos más citados del cine.", "In your avatar's tab. A light or intense routine costs a little money and energy each month, raises your fitness and, with consistency (every 8 months for light, every 4 for intense), moves you toward an athletic build. Above 60 fitness you recover up to 3 extra energy a month, and in good shape with a slim, athletic or average build you fit action roles. If you drop the routine, fitness slowly goes down. Your starting height and build are chosen when you create your character or in «Edit avatar». Fact: for Raging Bull (1980), Robert De Niro gained about 27 kilos (60 pounds); it's one of the most cited physical transformations in film.", "Dans l'onglet de ton avatar. Une routine légère ou intense coûte un peu d'argent et d'énergie chaque mois, augmente ta forme physique et, avec de la régularité (tous les 8 mois pour la légère, tous les 4 pour l'intense), te rapproche d'une silhouette athlétique. Au-dessus de 60 de forme, tu récupères jusqu'à 3 d'énergie en plus par mois, et en bonne forme avec une silhouette mince, athlétique ou moyenne, tu conviens aux rôles d'action. Si tu arrêtes la routine, la forme baisse peu à peu. La taille et la corpulence de départ se choisissent à la création du personnage ou dans « Modifier l'avatar ». Anecdote : pour Raging Bull (1980), Robert De Niro a pris environ 27 kilos ; c'est l'une des transformations physiques les plus citées du cinéma.", "Na aba do seu avatar. Uma rotina leve ou intensa custa um pouco de dinheiro e de energia por mês, aumenta sua forma física e, com constância (a cada 8 meses a leve, a cada 4 a intensa), aproxima você de um físico atlético. Acima de 60 de forma você recupera até 3 de energia extra por mês, e em boa forma com físico magro, atlético ou médio você combina com papéis de ação. Se deixar a rotina, a forma cai aos poucos. A altura e o físico iniciais são escolhidos ao criar o personagem ou em «Editar avatar». Curiosidade: para Touro Indomável (1980), Robert De Niro engordou cerca de 27 quilos; é uma das transformações físicas mais citadas do cinema."],
+  ["En la pestaña de tu avatar. Cada oficio tiene un minijuego: ordenar una frase (escritura), encuadrar en el momento justo (dirección, fotografía y diseño), cuadrar un presupuesto (producción), repetir una secuencia de notas o de emociones (composición e interpretación) y ordenar planos por tiempo (edición). Tu puntuación, de 0 a 100, da experiencia; cada 100 de experiencia suben 1 punto la habilidad. Cuanto más alta es la habilidad, menos experiencia da cada práctica; con menos de 10 de energía rindes la mitad. Las 3 primeras prácticas de cada semana suman; después puedes seguir jugando sin ganar experiencia. Dato: la idea de las «10 000 horas» viene de un estudio de 1993 de Anders Ericsson con violinistas; él mismo aclaró que importa más la práctica deliberada que la cantidad de horas.", "In your avatar's tab. Each craft has a minigame: order a sentence (writing), frame at the right moment (directing, cinematography and design), balance a budget (producing), repeat a sequence of notes or emotions (composing and acting) and put shots in order by timecode (editing). Your score, from 0 to 100, gives experience; every 100 experience raises the skill by 1 point. The higher the skill, the less experience each practice gives; with less than 10 energy you get half. The first 3 practices each week count; after that you can keep playing without gaining experience. Fact: the «10,000 hours» idea comes from a 1993 study of violinists by Anders Ericsson; he himself clarified that deliberate practice matters more than the number of hours.", "Dans l'onglet de ton avatar. Chaque métier a son mini-jeu : remettre une phrase en ordre (écriture), cadrer au bon moment (réalisation, photographie et design), boucler un budget (production), répéter une séquence de notes ou d'émotions (composition et interprétation) et ranger des plans par minutage (montage). Ton score, de 0 à 100, donne de l'expérience ; chaque tranche de 100 augmente la compétence d'1 point. Plus la compétence est haute, moins chaque entraînement rapporte ; avec moins de 10 d'énergie, tu obtiens la moitié. Les 3 premiers entraînements de chaque semaine comptent ; ensuite, tu peux continuer à jouer sans gagner d'expérience. Anecdote : l'idée des « 10 000 heures » vient d'une étude de 1993 d'Anders Ericsson sur des violonistes ; il a lui-même précisé que la pratique délibérée compte plus que le nombre d'heures.", "Na aba do seu avatar. Cada ofício tem um minijogo: ordenar uma frase (escrita), enquadrar no momento certo (direção, fotografia e design), fechar um orçamento (produção), repetir uma sequência de notas ou de emoções (composição e interpretação) e ordenar planos por tempo (edição). Sua pontuação, de 0 a 100, dá experiência; cada 100 de experiência sobem 1 ponto da habilidade. Quanto mais alta a habilidade, menos experiência cada prática dá; com menos de 10 de energia você rende a metade. As 3 primeiras práticas de cada semana contam; depois você pode continuar jogando sem ganhar experiência. Curiosidade: a ideia das «10 000 horas» vem de um estudo de 1993 de Anders Ericsson com violinistas; ele mesmo esclareceu que a prática deliberada importa mais que a quantidade de horas."],
+  ["Cuerpo", "Body", "Corps", "Corpo"],
+  ["Estatura", "Height", "Taille", "Altura"],
+  ["Complexión", "Build", "Corpulence", "Físico"],
+  ["Delgada", "Slim", "Mince", "Magro"],
+  ["Atlética", "Athletic", "Athlétique", "Atlético"],
+  ["Robusta", "Sturdy", "Robuste", "Robusto"],
+  ["Corpulenta", "Heavyset", "Corpulente", "Corpulento"],
+  ["Versión 1.6", "Version 1.6", "Version 1.6", "Versão 1.6"],
+  ["Redes de distribución por medio", "Distribution networks by medium", "Réseaux de distribution par média", "Redes de distribuição por meio"],
+  ["En Negocio → Distribución, sobre las cadenas de cines. Cada medio tiene sus redes según la época: radio, televisión y streaming para las series; salones arcade, fabricantes de consolas, tiendas digitales y de aplicaciones para los videojuegos; circuitos de teatros, ópera, circo, café-concierto y clubes de comedia para el teatro; editoras de partituras, tiendas de discos, tiendas digitales y apps para la música; librerías, quioscos, clubes de lectura y libros electrónicos para el libro. Lo que controlas de un medio sube las ventas de tus obras de ese medio hasta un 25 % y te da cada semana una parte de todo lo que se vende en él, también lo de tus rivales. El precio sigue el tamaño del mercado; el mantenimiento cuesta el 0,25 % del valor al mes y al vender recuperas el 85 %. Cuando un formato pasa de moda (los salones arcade, las tiendas de discos), la red cierra y recuperas el 30 % de lo que pagaste. Las plataformas de streaming también suman un poco a tus películas. Los nombres son ficticios. Dato: el primer club de lectura por suscripción, el Book-of-the-Month Club, nació en Nueva York en 1926 y llegó a enviar millones de libros por correo.", "In Business → Distribution, above the cinema chains. Each medium has its own networks depending on the era: radio, television and streaming for series; arcade halls, console makers, digital and app stores for video games; theater circuits, opera, circus, music halls and comedy clubs for theater; sheet music publishers, record stores, digital stores and apps for music; bookstores, newsstands, book clubs and e-books for books. What you control of a medium raises the sales of your works in that medium by up to 25% and gives you each week a share of everything sold in it, your rivals' works included. The price follows the size of the market; upkeep costs 0.25% of the value a month and selling gets you back 85%. When a format goes out of fashion (arcade halls, record stores), the network closes and you get back 30% of what you paid. Streaming platforms also add a little to your films. The names are fictional. Fact: the first subscription book club, the Book-of-the-Month Club, was born in New York in 1926 and went on to mail millions of books.", "Dans Affaires → Distribution, au-dessus des chaînes de cinéma. Chaque média a ses réseaux selon l'époque : radio, télévision et streaming pour les séries ; salles d'arcade, fabricants de consoles, boutiques en ligne et d'applications pour les jeux vidéo ; circuits de théâtres, opéra, cirque, café-concert et clubs de comédie pour le théâtre ; éditeurs de partitions, disquaires, boutiques en ligne et applis pour la musique ; librairies, kiosques, clubs de lecture et livres numériques pour le livre. Ce que tu contrôles d'un média augmente les ventes de tes œuvres dans ce média jusqu'à 25 % et te donne chaque semaine une part de tout ce qui s'y vend, y compris les œuvres de tes rivaux. Le prix suit la taille du marché ; l'entretien coûte 0,25 % de la valeur par mois et la vente rapporte 85 %. Quand un format passe de mode (salles d'arcade, disquaires), le réseau ferme et tu récupères 30 % de ce que tu as payé. Les plateformes de streaming ajoutent aussi un peu à tes films. Les noms sont fictifs. Anecdote : le premier club de lecture par abonnement, le Book-of-the-Month Club, est né à New York en 1926 et a fini par envoyer des millions de livres par la poste.", "Em Negócio → Distribuição, acima das redes de cinema. Cada meio tem suas redes conforme a época: rádio, televisão e streaming para as séries; fliperamas, fabricantes de consoles, lojas digitais e de aplicativos para os videogames; circuitos de teatros, ópera, circo, café-concerto e clubes de comédia para o teatro; editoras de partituras, lojas de discos, lojas digitais e apps para a música; livrarias, bancas, clubes do livro e e-books para o livro. O que você controla de um meio aumenta as vendas das suas obras nesse meio em até 25 % e lhe dá toda semana uma parte de tudo o que se vende nele, inclusive as obras dos rivais. O preço acompanha o tamanho do mercado; a manutenção custa 0,25 % do valor por mês e ao vender você recupera 85 %. Quando um formato sai de moda (fliperamas, lojas de discos), a rede fecha e você recupera 30 % do que pagou. As plataformas de streaming também somam um pouco aos seus filmes. Os nomes são fictícios. Curiosidade: o primeiro clube do livro por assinatura, o Book-of-the-Month Club, nasceu em Nova York em 1926 e chegou a enviar milhões de livros pelo correio."],
+  ["Redes de distribución", "Distribution networks", "Réseaux de distribution", "Redes de distribuição"],
+  ["Sedes en otros países", "Offices in other countries", "Bureaux à l'étranger", "Sedes em outros países"],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -73552,7 +73575,7 @@ function talAuto5(i) {
       }
       W.nm = W.nm || x.n;
       const c0 = wCosto(wP());
-      if (c0.tot > Math.max(0, S.cash) * 0.5) err = "$";
+      if (c0.tot > Math.max(0, S.cash) * 0.5 || (x.pre12 && typeof preOk == "function" && !preOk(m, c0.tot))) err = "$";
       else {
         const r = producir();
         if (r && typeof r == "object") P = r;
@@ -74692,6 +74715,7 @@ function frOrigFH6() {
 }
 
 const medio6 = (t) => {
+  if (t && t.esp12 != null && MD[t.esp12] && yr() >= MD[t.esp12][2] && MD[t.esp12][1].includes(t.r)) return t.esp12;
   const y = yr(),
     ok = (j) => MD[j] && y >= MD[j][2],
     pref = ({ 0: [5, 0, 3, 1], 1: [0, 1, 3], 2: [0, 1, 2, 3], 3: [2, 0, 3], 4: [0, 1], 5: [4, 3, 0], 6: [5, 0, 1], 7: [0, 3, 1] }[t.r] || [0, 3]).filter(ok);
@@ -75212,7 +75236,7 @@ on("anual", () => {
 const vAvatarPlus = vAvatar;
 vAvatar = function () {
   const h = vAvatarPlus.apply(this, arguments);
-  return `<div class="c"><div class="bts">${bt("tp", S.me, ic("talento") + " " + L4("Ver mi ficha personal", "View my personal profile", "Voir ma fiche personnelle", "Ver minha ficha pessoal"), "a")}</div></div>` + h;
+  return `<div class="c"><div class="bts">${bt("tp", S.me, ic("talento") + " " + L4("Ver mi ficha personal", "View my personal profile", "Voir ma fiche personnelle", "Ver minha ficha pessoal"), "a")}</div></div>` + (typeof vAvExtra == "function" ? vAvExtra() : "") + h;
 };
 let TPV = null;
 const tpExt = ACT["tp"];
@@ -75221,20 +75245,1093 @@ ACT["tp"] = (v) => {
   TPV = +v;
   return r;
 };
-const detExt = ACT["det"];
-ACT["det"] = (v) => {
-  const h0 = document.querySelector("#md.on .hoja"),
-    desde = h0 && h0.querySelector(".vida5") && TPV != null && S.tl[TPV] ? TPV : null;
-  const r = detExt(v),
-    h = document.querySelector("#md.on .hoja");
-  if (desde != null && h && !h.querySelector(".volver11")) {
+const festSem = (f, Y) => (Y - S.y0) * 52 + Math.floor(((f[1] - 1) * 30.44 + f[2] - 1) / 7);
+function festL() {
+  const y = yr();
+  return FESTI.filter((f) => y >= f[4]).map((f) => {
+    let Y = y,
+      t = festSem(f, Y);
+    if (t - S.t < 22) t = festSem(f, ++Y);
+    return { n: f[0], t, Y, f };
+  }).sort((a, b) => a.t - b.t);
+}
+let FESTSEL = { i: 0, m: 0 };
+function festH() {
+  const L = festL();
+  if (!L.length) return "";
+  if (FESTSEL.i >= L.length) FESTSEL.i = 0;
+  const M = MD.map((d, j) => j).filter((j) => yr() >= MD[j][2]);
+  if (!M.includes(FESTSEL.m)) FESTSEL.m = M[0];
+  const x = L[FESTSEL.i];
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("trofeo")} ${L4("Crear para un festival", "Make it for a festival", "Créer pour un festival", "Criar para um festival")}</h3>${bi("festival12")}</div><div class="m">${L4("La obra se produce para estrenarse en el festival que elijas: gana crítica y expectativa si llega a tiempo.", "The work is produced to premiere at the festival you choose: it gains critics and buzz if it arrives on time.", "L'œuvre est produite pour être présentée au festival choisi : elle gagne en critique et en attente si elle arrive à temps.", "A obra é produzida para estrear no festival que você escolher: ganha crítica e expectativa se chegar a tempo.")}</div><select onchange="FESTSEL.i=+this.value;pg()">${L.map((z, i) => `<option value="${i}"${i == FESTSEL.i ? " selected" : ""}>${esc(z.n)} · ${fD(semIni(z.t))} (${z.t - S.t} ${L4("sem", "wk", "sem", "sem")})</option>`).join("")}</select><div class="chips">${M.map((j) => chx("fe12m", j, MEDN5()[j], FESTSEL.m == j)).join("")}</div><div class="bts">${bt("fe12", "a", ic("brillo") + " " + L4("Automático", "Automatic", "Automatique", "Automático"), "a")}${bt("fe12", "d", L4("Detallado", "Detailed", "Détaillé", "Detalhado"))}</div><div class="m">${esc(x.n)}: ${fD(semIni(x.t))}</div></div>`;
+}
+ACT["fe12m"] = (v) => {
+  FESTSEL.m = +v;
+  return pg();
+};
+function festW(x) {
+  W.fest12 = { n: x.n, t: x.t };
+  W.cx = Math.max(W.cx | 0, 3);
+  W.nm = W.nm || titMedio5(W.m);
+}
+ACT["fe12"] = (v) => {
+  const x = festL()[FESTSEL.i],
+    m = FESTSEL.m;
+  if (!x) return;
+  if (v == "d") {
+    ACT["md4n"](m);
+    if (!W) return;
+    festW(x);
+    W.md = "d";
+    return wz();
+  }
+  const W0 = W,
+    wz0 = wz;
+  let P = null,
+    err = "";
+  wz = () => null;
+  try {
+    ACT["md4n"](m);
+    if (W) {
+      festW(x);
+      if (W.bv != null) W.bv = Math.min(1000, Math.round(W.bv * 1.15));
+      W.crew = eqRec(W.m, BD());
+      repartoRec(W);
+      const r = producir();
+      if (r && typeof r == "object") P = r;
+      else err = String(r || "");
+    }
+  } catch (e) {
+    err = String((e && e.message) || e);
+  }
+  wz = wz0;
+  W = W0;
+  cx();
+  if (!P) return toast(err || "?");
+  nws(L4("«#» se produce para estrenarse en el festival de %.", "«#» is produced to premiere at the % festival.", "« # » est produite pour être présentée au festival de %.", "«#» é produzida para estrear no festival de %.").replace("#", P.n).replace("%", x.n));
+  toast(L4("Proyecto para el festival en marcha", "Festival project under way", "Projet pour le festival lancé", "Projeto para o festival em andamento"));
+  return pg();
+};
+GANCHOS.prod.push((P, W2) => {
+  if (W2 && W2.fest12) P.fest12 = Object.assign({}, W2.fest12);
+});
+GANCHOS.mods.push((P, add) => {
+  if (P.fest12 && P.fest12.ok) add(2, 1, L4("estreno en festival", "festival premiere", "première en festival", "estreia em festival"));
+});
+on("semana", () => {
+  if (!S || S.pre) return;
+  S.pj.forEach((P) => {
+    const f = P.fest12;
+    if (!f || P.st != 1 || f.lz) return;
+    f.lz = 1;
+    const k = f.t - S.t;
+    if (k < 2) {
+      nws(L4("«#» no llegó a tiempo al festival de %: sale con un plan normal.", "«#» didn't make it to the % festival: it goes out with a normal plan.", "« # » n'est pas arrivée à temps au festival de % : elle sort avec un plan normal.", "«#» não chegou a tempo ao festival de %: sai com um plano normal.").replace("#", P.n).replace("%", f.n));
+      try {
+        lanzaSilencio6(P);
+      } catch (e) {}
+      return;
+    }
+    const b = planMejor6(P);
+    PL = { id: P.id, mk: b.mk, rf: 0, roy: 45, k, paso: "fe" };
+    const c = P.mkOk ? 0 : mkTot(PL.mk, P);
+    if (c > Math.max(0, S.cash)) PL.mk = [];
+    try {
+      const pg0 = pg;
+      pg = () => null;
+      try {
+        ACT["rl"]();
+      } finally {
+        pg = pg0;
+      }
+      f.ok = 1;
+      P.E = cl((P.E || 50) + 6, 0, 99);
+      nws(L4("«#» se estrenará en el festival de % el &.", "«#» will premiere at the % festival on &.", "« # » sera présentée au festival de % le &.", "«#» estreará no festival de % em &.").replace("#", P.n).replace("%", f.n).replace("&", fD(semIni(f.t))));
+    } catch (e) {}
+  });
+});
+const vFes = vFestis;
+vFestis = function () {
+  return festH() + vFes.apply(this, arguments);
+};
+
+const PREP = [0, 0.02, 0.05, 0.1, 0.2];
+const preExt = () => (S.pr12 = S.pr12 || {});
+function preNuevo(m) {
+  const P = preExt(),
+    a = P[m] || { p: 0 },
+    y = yr();
+  if (a.y == y) return a;
+  const subs = rvVivos().filter((i) => S.rv[i] && S.rv[i].own && (S.rv[i].sp[m] | 0) >= 2);
+  let ap = 0;
+  if (a.p)
+    subs.forEach((i) => {
+      const r = S.rv[i],
+        x = Math.max(0, Math.min((r.cash || 0) * 0.05, TB(m) * 0.5));
+      r.cash -= x;
+      ap += x;
+    });
+  const fin = a.mis && a.y != null ? a.mis : null;
+  if (fin && a.y == y - 1) {
+    const hechas = S.pj.filter((q) => q.m == m && q.r0 != null && S.y0 + Math.floor(q.r0 / 52) == a.y).length;
+    if (hechas >= fin.n) {
+      gana("bonos", fin.pr);
+      S.pop = cl((S.pop || 0) + 2);
+      nws(L4("Misión de & cumplida: # obras estrenadas. Premio %.", "& mission complete: # works released. Reward %.", "Mission & accomplie : # œuvres sorties. Prime %.", "Missão de & cumprida: # obras lançadas. Prêmio %.").replace("&", MEDN5()[m]).replace("#", hechas).replace("%", fm(fin.pr)));
+    } else nws(L4("Misión de & sin cumplir: # de % obras.", "& mission missed: # of % works.", "Mission & manquée : # sur % œuvres.", "Missão de & não cumprida: # de % obras.").replace("&", MEDN5()[m]).replace("#", hechas).replace("%", fin.n));
+  }
+  const b = Math.round(Math.max(0, S.cash) * PREP[a.p | 0]) + Math.round(ap);
+  const n = a.p ? 1 + (a.p | 0) : 0;
+  P[m] = { p: a.p | 0, y, b, g: 0, n: 0, ap: Math.round(ap), mis: n ? { n, pr: Math.round(TB(m) * 0.25 * n) } : null };
+  return P[m];
+}
+ACT["pre12"] = (v) => {
+  const [m, i] = String(v).split("|").map(Number),
+    P = preExt();
+  P[m] = Object.assign(P[m] || {}, { p: cl(i, 0, PREP.length - 1), y: null });
+  preNuevo(m);
+  return pg();
+};
+const preOk = (m, c) => {
+  const a = (S.pr12 || {})[m];
+  return !a || !a.p || a.b - a.g >= c * 0.5;
+};
+const stfQ = () => Math.min(3, (S.stf || []).reduce((s, x) => s + (x.lv | 0), 0) / 100);
+on("anual", () => {
+  if (!S || !S.pr12) return;
+  Object.keys(S.pr12).forEach((m) => preNuevo(+m));
+});
+on("mes", () => {
+  if (!S || S.pre || S.taller || !S.pr12) return;
+  Object.keys(S.pr12).forEach((k) => {
+    const m = +k,
+      a = preNuevo(m);
+    if (!a.p || yr() < MD[m][2] || a.b - a.g < TB(m) * 0.4 || S.cash < TB(m) * 0.4) return;
+    const F = (S.tl || []).filter((t) => t && (t.ex || esSubprod6(t)) && !t.dead && !t.ret && !t.you && (t.e == null || t.e >= 10) && medio6(t) == m);
+    const t = F.length ? pk(F) : proTal(m);
+    if (!t) return;
+    const p = proNueva(m, { tid: t.id, free: 1, k: 0 });
+    if (!p) return;
+    const x = S.mt[matAdd(p)];
+    x.auto5 = { k: "t", tid: t.id, n: t.n };
+    x.pre12 = 1;
+    const i = S.mt.indexOf(x),
+      P = talAuto5(i);
+    if (P && typeof P == "object") {
+      P.pre12 = 1;
+      P.qdc = (P.qdc || 0) + stfQ();
+      a.g += P.paid || 0;
+      a.n++;
+    }
+  });
+});
+function preH(m) {
+  if (yr() < MD[m][2]) return "";
+  const a = preNuevo(m),
+    hechas = S.pj.filter((q) => q.m == m && q.r0 != null && S.y0 + Math.floor(q.r0 / 52) == yr()).length,
+    F = (S.tl || []).filter((t) => t && (t.ex || esSubprod6(t)) && !t.dead && !t.ret && !t.you && medio6(t) == m).length,
+    O = (S.stf || []).length;
+  return `<details class="c"${a.p ? " open" : ""}><summary><b>${ic("dinero")} ${L4("Presupuesto anual de &", "& annual budget", "Budget annuel de &", "Orçamento anual de &").replace("&", MEDN5()[m])}</b>${a.p ? ` <span class="m">· ${fm(Math.max(0, a.b - a.g))} ${L4("disponibles", "left", "disponibles", "disponíveis")}</span>` : ""}</summary><div class="k"><span class="m">${L4("Cada año apartas una parte de tu caja para este medio. Con ella, tus talentos firmados de este medio y tu personal de oficina desarrollan y producen proyectos solos; tus filiales del medio aportan dinero. Cada año hay una misión de estrenos.", "Each year you set aside part of your cash for this medium. With it, your signed talents in this medium and your office staff develop and produce projects on their own; your subsidiaries in the medium chip in. Each year there's a release mission.", "Chaque année, tu réserves une part de ta trésorerie pour ce média. Avec elle, tes talents sous contrat de ce média et ton personnel de bureau développent et produisent des projets seuls ; tes filiales du média y contribuent. Chaque année, il y a une mission de sorties.", "Todo ano você separa parte do seu caixa para este meio. Com ela, seus talentos contratados deste meio e sua equipe de escritório desenvolvem e produzem projetos sozinhos; suas filiais do meio contribuem. Todo ano há uma missão de lançamentos.")}</span>${bi("presupuesto12")}</div><div class="chips">${PREP.map((x, i) => chx("pre12", m + "|" + i, x ? Math.round(x * 100) + " %" : L4("Nada", "None", "Rien", "Nada"), (a.p | 0) == i)).join("")}</div>${
+    a.p
+      ? `<div class="m">${L4("Este año", "This year", "Cette année", "Este ano")}: ${fm(a.b)}${a.ap ? " (" + L4("filiales", "subsidiaries", "filiales", "filiais") + " " + fm(a.ap) + ")" : ""} · ${L4("gastado", "spent", "dépensé", "gasto")} ${fm(a.g)} · ${a.n} ${L4("proyectos", "projects", "projets", "projetos")} · ${F} ${L4("talentos firmados", "signed talents", "talents sous contrat", "talentos contratados")} · ${O} ${L4("en oficina", "office staff", "au bureau", "no escritório")}</div>${a.mis ? `<div class="m"><b>${L4("Misión", "Mission", "Mission", "Missão")}</b>: ${L4("estrenar # obras este año", "release # works this year", "sortir # œuvres cette année", "lançar # obras este ano").replace("#", a.mis.n)} · ${hechas}/${a.mis.n} · ${L4("premio", "reward", "prime", "prêmio")} ${fm(a.mis.pr)}</div>` : ""}`
+      : ""
+  }</details>`;
+}
+
+const PREBase = [["rev", 1700, ["Revista propia", "Own magazine", "Revue maison", "Revista própria"]], ["per", 1700, ["Periódico", "Newspaper", "Journal", "Jornal"]], ["age", 1835, ["Agencia de prensa", "Press agency", "Agence de presse", "Agência de imprensa"]], ["not", 1922, ["Noticiero", "Newscast", "Journal télévisé", "Telejornal"]], ["red", 2004, ["Redes sociales", "Social media", "Réseaux sociaux", "Redes sociais"]]];
+const pren = () => (S.pren12 = S.pren12 || {});
+const prenSal = (t) => Math.max(200, Math.round(fee(Object.assign({}, t, { ex: 0 }), t.r, 5) * 0.04));
+ACT["pren12"] = (v) => {
+  const k = String(v);
+  const L = (S.tl || []).filter((t) => t && !t.dead && !t.ret && !t.you && (t.r == 0 || t.r == 6) && (t.e == null || t.e >= 10) && !Object.values(pren()).includes(t.id)).sort((a, b) => b.s[b.r] - a.s[a.r]).slice(0, 40);
+  if (!L.length) return toast(L4("No hay escritores ni editores libres", "No free writers or editors", "Aucun écrivain ni éditeur disponible", "Não há escritores nem editores livres"));
+  return fxPick({
+    t: L4("Contratar para la prensa", "Hire for the press", "Embaucher pour la presse", "Contratar para a imprensa"),
+    items: L.map((t) => ({ v: t.id, l: t.n, nt: 1, s: `${RO[t.r]} ${t.s[t.r]} · ${fm(prenSal(t))}/${L4("mes", "mo", "mois", "mês")}`, g: RO[t.r] })),
+    orden: false,
+    ok: (s) => {
+      const t = S.tl[+s[0]];
+      if (!t) return;
+      pren()[k] = t.id;
+      t.e = Math.max(0, (t.e == null ? 100 : t.e) - 10);
+      nws(L4("# empieza a escribir para tu %.", "# starts writing for your %.", "# commence à écrire pour ta %.", "# começa a escrever para seu %.").replace("#", t.n).replace("%", L4(...PREBase.find((x) => x[0] == k)[2]).toLowerCase()));
+      pg();
+    },
+  });
+};
+ACT["pren12x"] = (v) => {
+  delete pren()[v];
+  return pg();
+};
+on("mes", () => {
+  if (!S || S.pre || !S.pren12) return;
+  Object.keys(S.pren12).forEach((k) => {
+    const t = S.tl[S.pren12[k]];
+    if (!t || t.dead || t.ret) {
+      delete S.pren12[k];
+      return;
+    }
+    const q = (t.s[t.r] | 0) / 60;
+    gasta("salarios", prenSal(t));
+    S.fans = Math.round((S.fans || 0) + (S.fans || 0) * 0.003 * q + 150 * q);
+    S.pop = cl((S.pop || 0) + 0.04 * q);
+    S.pj.forEach((P) => {
+      if (P.st == 2) P.E = cl((P.E || 50) + 0.4 * q, 0, 99);
+    });
+  });
+});
+function prenH() {
+  const y = yr(),
+    P = pren();
+  return `<div class="c"><div class="k"><h3 style="margin:0">${ic("libro")} ${L4("Tu prensa", "Your press", "Ta presse", "Sua imprensa")}</h3>${bi("prensa12")}</div><div class="m">${L4("Escritores y editores en nómina que escriben para tus medios: suben tus fans y tu prestigio cada mes y la expectativa de tus obras en marketing.", "Writers and editors on payroll writing for your outlets: they raise your fans and prestige every month and the buzz of your works in marketing.", "Écrivains et éditeurs salariés qui écrivent pour tes médias : ils augmentent tes fans et ton prestige chaque mois et l'attente de tes œuvres en marketing.", "Escritores e editores na folha que escrevem para seus meios: aumentam seus fãs e prestígio todo mês e a expectativa das suas obras em marketing.")}</div>${PREBase.filter((x) => y >= x[1])
+    .map((x) => {
+      const t = P[x[0]] != null ? S.tl[P[x[0]]] : null;
+      return `<div class="fila"><span>${esc(L4(...x[2]))}${t ? `<span class="m"> · ${esc(t.n)} · ${RO[t.r]} ${t.s[t.r]} · ${fm(prenSal(t))}/${L4("mes", "mo", "mois", "mês")}</span>` : ""}</span><span class="bts">${t ? bt("pren12x", x[0], L4("Despedir", "Dismiss", "Renvoyer", "Dispensar"), "r") : bt("pren12", x[0], L4("Contratar", "Hire", "Embaucher", "Contratar"))}</span></div>`;
+    })
+    .join("")}</div>`;
+}
+const facH = facH5;
+facH5 = function (m) {
+  return facH.apply(this, arguments) + preH(m) + (m == 5 ? prenH() : "");
+};
+ACT["esp12"] = (v) => {
+  const [id, m] = String(v).split("|").map(Number),
+    t = S.tl[id];
+  if (t) t.esp12 = m;
+  return tpM(id);
+};
+Object.assign(ICO, {
+  salud: ICO.salud || "M12 20s-7-4.4-8.6-9C2.3 7.6 4.6 4.5 7.8 4.5c1.9 0 3.3 1 4.2 2.4.9-1.4 2.3-2.4 4.2-2.4 3.2 0 5.5 3.1 4.4 6.5C19 15.6 12 20 12 20zM3.5 12h4l1.5-3 3 6 1.5-3h7",
+  objetivo: ICO.objetivo || Cp(12, 12, 9) + Cp(12, 12, 5) + Cp(12, 12, 1),
+  brillo: ICO.brillo || "M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z",
+});
+const AWC = {
+  es: [["Mejor escritor", "Mejor escritora"], ["Mejor director", "Mejor directora"], ["Mejor productor", "Mejor productora"], ["Mejor diseño"], ["Mejor fotografía"], ["Mejor compositor", "Mejor compositora"], ["Mejor edición"], ["Mejor actor", "Mejor actriz"]],
+  en: [["Best writer"], ["Best director"], ["Best producer"], ["Best design"], ["Best cinematography"], ["Best composer"], ["Best editing"], ["Best actor", "Best actress"]],
+  fr: [["Meilleur scénario"], ["Meilleure réalisation"], ["Meilleure production"], ["Meilleur design"], ["Meilleure photographie"], ["Meilleure musique"], ["Meilleur montage"], ["Meilleur acteur", "Meilleure actrice"]],
+  pt: [["Melhor roteiro"], ["Melhor direção"], ["Melhor produção"], ["Melhor design"], ["Melhor fotografia"], ["Melhor trilha sonora"], ["Melhor edição"], ["Melhor ator", "Melhor atriz"]],
+};
+const awCat = (rl, fem) => {
+  const L = (AWC[CFG.idi] || AWC.es)[rl];
+  return L ? L[fem && L[1] ? 1 : 0] : "";
+};
+let EVI = null;
+const evId = (id) => {
+  if (!EVI) {
+    EVI = {};
+    EV.forEach((e) => (EVI[e.id] = e));
+  }
+  return EVI[id] || null;
+};
+function awAdd(t, r) {
+  const A = (t.aw13 = t.aw13 || []);
+  if (A.some((a) => a[0] == r[0] && a[1] == r[1] && a[2] == r[2])) {
+    if (r[3]) A.forEach((a) => a[0] == r[0] && a[1] == r[1] && a[2] == r[2] && (a[3] = 1));
+    return;
+  }
+  A.push(r);
+  if (A.length > 30) {
+    const i = A.findIndex((a) => !a[3]);
+    A.splice(i >= 0 ? i : 0, 1);
+  }
+}
+GANCHOS.premio.push((e, x, l) => {
+  if (!e || !l || e.n == "Bastard Awards") return;
+  const y = yr();
+  l.forEach((z) => {
+    const t = z && z.t != null ? S.tl[z.t] : null;
+    if (!t) return;
+    const gano = z === x ? 1 : 0;
+    if (!gano && !z.u) return;
+    let o = "";
+    if (z.u) {
+      const P = pj(z.p);
+      o = P ? P.n : "";
+    } else {
+      const mm = /«([^»]*)»\s*$/.exec(z.n || "");
+      o = mm ? mm[1] : "";
+    }
+    awAdd(t, [y, e.id, String(o).slice(0, 60), gano]);
+  });
+});
+function awMig() {
+  if (!S || S.aw13m) return;
+  S.aw13m = 1;
+  const porN = {};
+  EV.forEach((e) => {
+    if (e.rl != null && e.fs == null) porN[e.n] = e;
+  });
+  (S.ah || []).forEach((a) => {
+    const e = porN[a.a];
+    if (!e) return;
+    const P = S.pj.find((p) => p.n == a.p);
+    const t = P && P.crew ? S.tl[P.crew[e.rl]] : null;
+    if (t) awAdd(t, [a.y, e.id, String(a.p).slice(0, 60), a.w ? 1 : 0]);
+  });
+  const vivas = {};
+  Object.keys(S.rel || {}).forEach((k) => {
+    if (S.rel[k] != "pareja") return;
+    const [a, b] = k.split("|").map(Number),
+      A = S.tl[a],
+      B = S.tl[b];
+    if (!A || !B) return;
+    if (A.dead || B.dead) return;
+    if (vivas[a] || vivas[b]) S.rel[k] = "expareja";
+    else vivas[a] = vivas[b] = 1;
+  });
+}
+function awHist(t) {
+  if (t.aw13s) return;
+  const A = t.aw13 || [],
+    falta = (t.gw | 0) - A.filter((a) => a[3]).length;
+  if (falta <= 0) return;
+  t.aw13s = 1;
+  const C = [];
+  (t.fh || []).forEach((x) => C.push({ y: x.y, n: x.n, m: x.m, r: x.r == null ? t.r : x.r, c: x.d ? x.d[0] : 50 }));
+  (S.rw || []).forEach((e) => {
+    if (e.d == t.id) C.push({ y: e.y, n: e.n, m: e.m, r: e.m == 4 ? 5 : 1, c: e.C | 0 });
+    if (e.a == t.id) C.push({ y: e.y, n: e.n, m: e.m, r: 7, c: e.C | 0 });
+  });
+  C.sort((a, b) => b.c - a.c);
+  const usadas = {};
+  let n = 0;
+  for (const c of C) {
+    if (n >= falta) break;
+    if (usadas[c.n] || !MD[c.m] || !MD[c.m][1].includes(c.r)) continue;
+    const i = AW.findIndex((a) => a[2] == c.m);
+    if (i < 0 || c.y + 1 < (AWD[AW[i][1]] || 0) || c.y + 1 > yr()) continue;
+    const id = "a" + i + "r" + c.r + (c.r == 7 ? (t.ge == "F" ? "F" : "M") : "");
+    if (!evId(id)) continue;
+    usadas[c.n] = 1;
+    awAdd(t, [c.y + 1, id, String(c.n).slice(0, 60), 1]);
+    n++;
+  }
+}
+function awH(t) {
+  awMig();
+  awHist(t);
+  const A = (t.aw13 || []).slice().sort((a, b) => b[0] - a[0]),
+    G = A.filter((a) => a[3]),
+    N = A.filter((a) => !a[3]),
+    sin = Math.max(0, (t.gw | 0) - G.length);
+  if (!G.length && !N.length && !sin) return "";
+  const fila = (a) => {
+    const e = evId(a[1]);
+    if (!e) return "";
+    const fest = e.rl == null,
+      cat = fest ? bibTr(e.n) : awCat(e.rl, e.rl == 7 ? e.sx == "F" : t.ge == "F"),
+      nom = e.fs != null ? String(e.n).split(" \u00B7 ").slice(1).join(" \u00B7 ") : e.b || "",
+      P = S.pj.find((p) => p.n == a[2]),
+      obra = a[2] ? (P ? `<button class="lnk" data-a="det" data-v="${P.id}">«${esc(a[2])}»</button>` : `«${esc(a[2])}»`) : "";
+    return `<div class="uni-r"><b>${a[0]}</b> ${esc(cat)}${fest || !nom ? "" : ` <span class="m">· ${esc(bibTr(nom))}</span>`}${obra ? `<span class="m"> · ${L4("por", "for", "pour", "por")} </span>${obra}` : ""}</div>`;
+  };
+  return `<div class="aw13" translate="no" style="margin-top:10px"><h3 style="margin:0 0 4px">${ic("trofeo")} ${L4("Premios ganados", "Awards won", "Prix remportés", "Prêmios ganhos")} (${t.gw | 0})</h3><div class="uni-l">${G.slice(0, 6).map(fila).join("")}</div>${
+    G.length > 6 ? `<details class="mas"><summary>${L4("Ver # más", "See # more", "Voir # de plus", "Ver mais #").replace("#", G.length - 6)}</summary><div class="uni-l">${G.slice(6).map(fila).join("")}</div></details>` : ""
+  }${sin ? `<div class="m">${L4("Además, # de antes, sin detalle.", "Plus # earlier, without details.", "Plus # plus anciens, sans détail.", "Além disso, # anteriores, sem detalhes.").replace("#", plural(sin, L4("premio", "award", "prix", "prêmio"), L4("premios", "awards", "prix", "prêmios")))}</div>` : ""}${
+    N.length ? `<details class="mas"><summary>${L4("Nominaciones contigo (#)", "Nominations with you (#)", "Nominations avec toi (#)", "Indicações com você (#)").replace("#", N.length)}</summary><div class="uni-l">${N.slice(0, 20).map(fila).join("")}</div></details>` : ""
+  }</div>`;
+}
+
+const parejaViva = (id) =>
+  Object.keys(S.rel || {}).some((k) => {
+    if (S.rel[k] != "pareja") return false;
+    const [a, b] = k.split("|").map(Number);
+    if (a != id && b != id) return false;
+    const o = S.tl[a == id ? b : a];
+    return o && !o.dead;
+  });
+function relLibre(A, B) {
+  return Math.abs((A.age | 0) - (B.age | 0)) <= 15 && !parejaViva(A.id) && !parejaViva(B.id);
+}
+function relH(t) {
+  const G = { pareja: [], expareja: [], amistad: [], rivalidad: [] };
+  Object.keys(S.rel || {}).forEach((k) => {
+    const [a, b] = k.split("|").map(Number);
+    if (a != t.id && b != t.id) return;
+    const o = S.tl[a == t.id ? b : a],
+      v = S.rel[k];
+    if (o && G[v]) G[v].push(o);
+  });
+  const ord = (L) => L.sort((a, b) => !!a.dead - !!b.dead || tspw(b) - tspw(a)),
+    vivas = ord(G.pareja.filter((o) => !o.dead)),
+    antes = ord(G.expareja.concat(G.pareja.filter((o) => o.dead), vivas.slice(1)));
+  ord(G.amistad);
+  ord(G.rivalidad);
+  if (!vivas.length && !antes.length && !G.amistad.length && !G.rivalidad.length) return "";
+  const ln = (o) => `<button class="lnk" data-a="tp" data-v="${o.id}">${esc(o.n)}${o.dead ? " †" : ""}</button>`,
+    grupo = (tit, L) => {
+      if (!L.length) return "";
+      return `<div class="m" style="margin-top:4px"><b>${tit} (${L.length})</b>: ${L.slice(0, 5).map(ln).join(", ")}${
+        L.length > 5 ? `<details class="mas"><summary>${L4("Ver # más", "See # more", "Voir # de plus", "Ver mais #").replace("#", L.length - 5)}</summary>${L.slice(5).map(ln).join(", ")}</details>` : ""
+      }</div>`;
+    };
+  return `<div class="rel13" translate="no" style="margin-top:6px"><h3 style="margin:0 0 2px">${L4("Relaciones", "Relationships", "Relations", "Relações")}</h3>${
+    vivas.length ? `<div class="m"><b>${L4("Pareja", "Partner", "En couple avec", "Parceria")}</b>: ${ln(vivas[0])}</div>` : ""
+  }${grupo(L4("Parejas anteriores", "Former partners", "Anciens partenaires", "Ex-parceiros"), antes)}${grupo(L4("Amistades", "Friends", "Amitiés", "Amizades"), G.amistad)}${grupo(L4("Rivalidades", "Rivalries", "Rivalités", "Rivalidades"), G.rivalidad)}</div>`;
+}
+function claH(t) {
+  const i = ACL[t.cla == null ? 7 : t.cla],
+    g = AG[i] ? AG[i][0] : "";
+  if (i >= AG.length - 1) return `<span translate="no">${L4("Acepta obras de cualquier clasificación por edad.", "Accepts works of any age rating.", "Accepte des œuvres de toute classification d'âge.", "Aceita obras de qualquer classificação etária.")}</span>`;
+  return `<span translate="no">${L4(`Trabaja a gusto en obras con clasificación hasta ${g}; en obras más adultas cobra más y rinde menos.`, `Comfortable in works rated up to ${g}; in more adult works they charge more and perform worse.`, `À l'aise dans les œuvres classées jusqu'à ${g} ; dans des œuvres plus adultes, cette personne demande plus et rend moins.`, `Trabalha à vontade em obras com classificação até ${g}; em obras mais adultas cobra mais e rende menos.`)}</span>`;
+}
+
+function espEl(t, h) {
+  if (!t || !h || !(t.ex || esSubprod6(t)) || t.you || h.querySelector(".esp12")) return;
+  const M = MD.map((d, j) => j).filter((j) => yr() >= MD[j][2] && MD[j][1].includes(t.r)),
+    cur = medio6(t);
+  if (M.length < 2) return;
+  const d = document.createElement("div");
+  d.className = "c esp12";
+  d.innerHTML = `<div class="m"><b>${L4("Propone proyectos de", "Proposes projects for", "Propose des projets de", "Propõe projetos de")}</b></div><div class="chips">${M.map((j) => chx("esp12", t.id + "|" + j, MEDN5()[j], t.esp12 == j || (t.esp12 == null && cur == j))).join("")}</div>`;
+  h.appendChild(d);
+}
+function tpDeco(t) {
+  const h = document.querySelector("#md.on .hoja");
+  if (!t || !h) return;
+  if (!h.querySelector(".ficha13")) {
+    const i = document.createElement("i");
+    i.className = "ficha13";
+    i.hidden = true;
+    i.dataset.t = t.id;
+    h.appendChild(i);
+  }
+  if (!h.querySelector(".vida5") && typeof vidaH == "function") {
     const d = document.createElement("div");
-    d.className = "c volver11";
-    d.innerHTML = bt("tp", desde, ic("atras") + " " + L4("Volver a la ficha de #", "Back to #'s profile", "Retour à la fiche de #", "Voltar à ficha de #").replace("#", esc(S.tl[desde].n)), "a");
-    h.insertBefore(d, h.firstChild);
+    d.className = "vida5";
+    d.innerHTML = vidaH(t);
+    h.appendChild(d);
+  }
+  espEl(t, h);
+  if (!h.querySelector(".aw13")) {
+    const g = h.querySelector(".c > .g"),
+      x = awH(t);
+    if (g && x) g.insertAdjacentHTML("afterend", x);
+  }
+}
+const tpMExt = tpM;
+tpM = function (id) {
+  const r = tpMExt.apply(this, arguments);
+  try {
+    tpDeco(S.tl[+id]);
+  } catch (e) {
+    console.error(e);
   }
   return r;
 };
+
+let STK = [];
+const fichaId = (h) => {
+  const m = h && h.querySelector(".ficha13");
+  return m ? +m.dataset.t : null;
+};
+function volverBtn(h, id) {
+  if (!h || h.querySelector(".volver11") || !S.tl[id]) return;
+  const d = document.createElement("div");
+  d.className = "c volver11";
+  d.innerHTML = bt("tp", id, ic("atras") + " " + L4("Volver a la ficha de #", "Back to #'s profile", "Retour à la fiche de #", "Voltar à ficha de #").replace("#", esc(S.tl[id].n)), "a");
+  const asa = h.querySelector(".asa");
+  h.insertBefore(d, asa ? asa.nextSibling : h.firstChild);
+}
+const actExt = act;
+act = function (a, v, el) {
+  const h0 = document.querySelector("#md.on .hoja");
+  if (!el || !h0 || !h0.contains(el) || a == "x") {
+    if (el && (!h0 || !h0.contains(el))) STK = [];
+    return actExt.apply(this, arguments);
+  }
+  const cur = fichaId(h0),
+    hs = h0.scrollTop,
+    teniaV = !!h0.querySelector(".volver11"),
+    back = a == "tp" && !!el.closest(".volver11"),
+    ent = back ? STK.pop() || null : null;
+  const r = actExt.apply(this, arguments);
+  try {
+    const h = document.querySelector("#md.on .hoja");
+    if (!h) {
+      STK = [];
+      return r;
+    }
+    if (MODAL) return r;
+    const nid = fichaId(h),
+      top = () => STK[STK.length - 1];
+    if (back) {
+      if (ent && nid == ent.id) {
+        const y = ent.hs;
+        h.scrollTop = y;
+        requestAnimationFrame(() => {
+          if (h.isConnected && Math.abs(h.scrollTop - y) > 2) h.scrollTop = y;
+        });
+      }
+      if (STK.length && top().id != nid) volverBtn(h, top().id);
+      return r;
+    }
+    if (nid != null) while (STK.length && top().id == nid) STK.pop();
+    if (cur != null && nid !== cur) {
+      if (!STK.length || top().id != cur) STK.push({ id: cur, hs });
+      if (STK.length > 12) STK.shift();
+      volverBtn(h, cur);
+    } else if (STK.length && (teniaV || cur != null)) {
+      if (top().id != nid) volverBtn(h, top().id);
+    } else if (!teniaV && cur == null) STK = [];
+  } catch (e) {
+    console.error(e);
+  }
+  return r;
+};
+
+Object.defineProperty(AVO, "est", { enumerable: true, configurable: true, get: () => [L4("Estatura", "Height", "Taille", "Altura"), Array.from({ length: 14 }, (_, i) => { const x = (1.45 + i * 0.05).toFixed(2); return (CFG.idi == "en" ? x : x.replace(".", ",")) + " m"; })] });
+Object.defineProperty(AVO, "cx", { enumerable: true, configurable: true, get: () => [L4("Complexión", "Build", "Corpulence", "Físico"), [L4("Delgada", "Slim", "Mince", "Magro"), L4("Atlética", "Athletic", "Athlétique", "Atlético"), L4("Media", "Average", "Moyenne", "Médio"), L4("Robusta", "Sturdy", "Robuste", "Robusto"), L4("Corpulenta", "Heavyset", "Corpulente", "Corpulento")]] });
+AVGR.unshift(["Cuerpo", ["est", "cx"]]);
+const avdado = ACT["avdado"];
+ACT["avdado"] = (v) => {
+  const r = avdado(v),
+    A = v == "pv" ? PV.av : yo() && yo().av,
+    F = v == "pv" ? (($("#nsx") || {}).value || "") == "F" : yo() && yo().ge == "F";
+  if (A) {
+    const cm = (F ? 164 : 176) + (RU() + RU() + RU() - 1.5) * (F ? 9 : 10);
+    A.est = cl(Math.round((cm - 145) / 5), 0, 13);
+    A.cx = RU() < 0.5 ? 2 : Math.floor(RU() * 5);
+    if (v == "pv") {
+      ["est", "cx"].forEach((k) => {
+        const s = document.querySelector(`select[onchange^="avSet('pv','${k}'"]`);
+        if (s) s.value = A[k];
+      });
+      avPv();
+    } else if (hojaAbierta()) ACT["avedit"]();
+  }
+  return r;
+};
+
+const FIT = [
+  [["Sin rutina", "No routine", "Sans routine", "Sem rotina"], 0, 0, 0],
+  [["Rutina ligera", "Light routine", "Routine légère", "Rotina leve"], 0.0006, 2, 1],
+  [["Rutina intensa", "Intense routine", "Routine intense", "Rotina intensa"], 0.0016, 5, 2],
+];
+const fitCosto = (k) => Math.max(5, Math.round(TB(0) * FIT[k][1]));
+ACT["fit13"] = (v) => {
+  S.fit13 = cl(+v | 0, 0, 2);
+  S.fit13m = 0;
+  return pg();
+};
+on("mes", () => {
+  if (!S || S.pre) return;
+  const me = yo();
+  if (!me || me.dead) return;
+  const k = S.fit13 | 0;
+  if (k) {
+    gasta("otros", fitCosto(k));
+    me.e = cl((me.e | 0) - FIT[k][2]);
+    me.fx13 = Math.min(30, (me.fx13 | 0) + FIT[k][3]);
+    me.mo = cl((me.mo == null ? 65 : me.mo) + 1);
+    S.fit13m = (S.fit13m | 0) + 1;
+    const f = tFis(me);
+    if (S.fit13m % (k == 2 ? 6 : 12) == 0 && (me.fx13 | 0) >= 8 && f.cx != 1) {
+      me.av = me.av || {};
+      me.av.cx = f.cx == 0 ? 1 : f.cx - 1;
+      nws(L4("Tu rutina da frutos: ahora tu complexión es #.", "Your routine pays off: your build is now #.", "Ta routine porte ses fruits : ta silhouette est maintenant #.", "Sua rotina dá resultado: agora seu físico é #.").replace("#", L4(...[["delgada", "slim", "mince", "magro"], ["atlética", "athletic", "athlétique", "atlético"], ["media", "average", "moyenne", "médio"], ["robusta", "sturdy", "robuste", "robusto"], ["corpulenta", "heavyset", "corpulente", "corpulento"]][me.av.cx])));
+    }
+  } else {
+    S.fit13d = (S.fit13d | 0) + 1;
+    if ((me.fx13 | 0) > 0 && S.fit13d % 2 == 0) me.fx13--;
+  }
+  const f = tFis(me);
+  if (f.fit > 60) me.e = cl((me.e | 0) + Math.min(3, Math.floor((f.fit - 60) / 10)));
+});
+function fitH() {
+  const me = yo();
+  if (!me) return "";
+  const f = tFis(me),
+    k = S.fit13 | 0;
+  return `<div class="c" translate="no"><div class="k"><h3 style="margin:0">${ic("salud")} ${L4("Ponerse en forma", "Get in shape", "Se mettre en forme", "Entrar em forma")}</h3>${bi("forma13")}</div><div class="m">${L4("Forma física", "Fitness", "Forme physique", "Forma física")} ${f.fit}/100 · ${(f.h / 100).toFixed(2).replace(".", ",")} m · ${L4(...[["delgada", "slim", "mince", "magro"], ["atlética", "athletic", "athlétique", "atlético"], ["media", "average", "moyenne", "médio"], ["robusta", "sturdy", "robuste", "robusto"], ["corpulenta", "heavyset", "corpulente", "corpulento"]][f.cx])}</div><div class="bar"><i style="width:${f.fit}%;background:#35d0ba"></i></div><div class="chips">${FIT.map((x, i) => chx("fit13", i, L4(...x[0]) + (i ? " · " + fm(fitCosto(i)) + "/" + L4("mes", "mo", "mois", "mês") : ""), k == i)).join("")}</div><div class="m">${L4("Con buena forma recuperas más energía cada mes y encajas en papeles de acción. La rutina gasta un poco de energía y, con constancia, te acerca a una complexión atlética.", "In good shape you recover more energy each month and fit action roles. The routine uses a little energy and, with consistency, moves you toward an athletic build.", "En bonne forme, tu récupères plus d'énergie chaque mois et tu conviens aux rôles d'action. La routine consomme un peu d'énergie et, avec de la régularité, te rapproche d'une silhouette athlétique.", "Em boa forma você recupera mais energia por mês e combina com papéis de ação. A rotina gasta um pouco de energia e, com constância, aproxima você de um físico atlético.")}</div></div>`;
+}
+
+const MGR = ["orden", "encuadre", "calculo", "encuadre", "encuadre", "ritmo", "montaje", "ritmo"];
+const MG = {
+  orden: ["Ordena la frase", "Order the sentence", "Remets la phrase en ordre", "Ordene a frase"],
+  encuadre: ["Encuadre perfecto", "Perfect framing", "Cadrage parfait", "Enquadramento perfeito"],
+  calculo: ["Cuadra el presupuesto", "Balance the budget", "Boucle le budget", "Feche o orçamento"],
+  ritmo: ["Repite la secuencia", "Repeat the sequence", "Répète la séquence", "Repita a sequência"],
+  montaje: ["Montaje en orden", "Edit in order", "Montage dans l'ordre", "Montagem em ordem"],
+};
+const FRA = {
+  es: ["La lluvia borró las huellas del jardín", "Nadie sabía quién había escrito la carta", "El tren llegó tarde aquella noche fría", "Ella guardó el secreto durante veinte años", "Un perro viejo esperaba frente al teatro", "Mi abuelo contaba historias junto al fuego", "El faro se apagó antes del amanecer", "Dos hermanos cruzaron el desierto sin agua"],
+  en: ["The rain erased the footprints in the garden", "Nobody knew who had written the letter", "The train arrived late that cold night", "She kept the secret for twenty years", "An old dog waited outside the theater", "My grandfather told stories by the fire", "The lighthouse went dark before dawn", "Two brothers crossed the desert without water"],
+  fr: ["La pluie a effacé les traces du jardin", "Personne ne savait qui avait écrit la lettre", "Le train est arrivé tard cette nuit-là", "Elle a gardé le secret pendant vingt ans", "Un vieux chien attendait devant le théâtre", "Mon grand-père racontait des histoires près du feu", "Le phare s'est éteint avant l'aube", "Deux frères ont traversé le désert sans eau"],
+  pt: ["A chuva apagou as pegadas do jardim", "Ninguém sabia quem tinha escrito a carta", "O trem chegou tarde naquela noite fria", "Ela guardou o segredo durante vinte anos", "Um cachorro velho esperava em frente ao teatro", "Meu avô contava histórias perto do fogo", "O farol se apagou antes do amanhecer", "Dois irmãos atravessaram o deserto sem água"],
+};
+const PAD = {
+  5: [["Do", "C", "Do", "Dó"], ["Re", "D", "Ré", "Ré"], ["Mi", "E", "Mi", "Mi"], ["Sol", "G", "Sol", "Sol"]],
+  7: [["Alegría", "Joy", "Joie", "Alegria"], ["Tristeza", "Sadness", "Tristesse", "Tristeza"], ["Ira", "Anger", "Colère", "Raiva"], ["Sorpresa", "Surprise", "Surprise", "Surpresa"]],
+};
+const PADC = ["#e4572e", "#29a3d6", "#f2c14e", "#6bbf59"],
+  PADF = [262, 294, 330, 392];
+const riU = (a, b) => a + Math.floor(RU() * (b - a + 1));
+const barajaU = (L) => {
+  const A = L.slice();
+  for (let i = A.length - 1; i > 0; i--) {
+    const j = Math.floor(RU() * (i + 1));
+    [A[i], A[j]] = [A[j], A[i]];
+  }
+  return A;
+};
+let MGExt = null;
+const mgSemana = () => {
+  const w = Math.floor(S.t);
+  if (!S.mg13w || S.mg13w.w != w) S.mg13w = { w, n: 0 };
+  return S.mg13w;
+};
+function mgRonda() {
+  const G = MGExt;
+  G.ronda++;
+  G.ts = performance.now();
+  if (G.tipo == "orden") {
+    const F = FRA[CFG.idi] || FRA.es,
+      libres = F.map((x, i) => i).filter((i) => !G.usadas.includes(i)),
+      i = libres[Math.floor(RU() * libres.length)];
+    G.usadas.push(i);
+    G.ok = F[i].split(" ");
+    G.items = barajaU(G.ok.map((w, j) => ({ w, j })));
+    G.k = 0;
+    G.err = 0;
+    G.hecho = [];
+  } else if (G.tipo == "montaje") {
+    const L = [];
+    while (L.length < 5) {
+      const s = riU(3, 600);
+      if (!L.includes(s)) L.push(s);
+    }
+    L.sort((a, b) => a - b);
+    G.ok = L.map((s) => String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"));
+    G.items = barajaU(G.ok.map((w, j) => ({ w, j })));
+    G.k = 0;
+    G.err = 0;
+    G.hecho = [];
+  } else if (G.tipo == "calculo") {
+    const B = riU(30, 90) * 10,
+      ok = B - riU(2, 25),
+      sobre = B + riU(5, 60),
+      bajo = B - riU(80, 200),
+      par = (s) => {
+        const a = Math.round(s * (0.2 + RU() * 0.6));
+        return [a, s - a];
+      };
+    G.B = B;
+    G.op = barajaU([{ s: ok, p: par(ok), ok: 1 }, { s: sobre, p: par(sobre) }, { s: bajo, p: par(bajo) }]);
+  } else if (G.tipo == "encuadre") {
+    G.v = 0.45 + G.ronda * 0.14;
+    G.pos = null;
+  } else if (G.tipo == "ritmo") {
+    G.seq = G.seq || [];
+    while (G.seq.length < 2 + G.ronda) G.seq.push(riU(0, 3));
+    G.k = 0;
+    G.viendo = 1;
+  }
+}
+const MGMAX = { orden: 3, montaje: 3, calculo: 5, encuadre: 5, ritmo: 5 };
+ACT["mg13i"] = (v) => {
+  const r = +v;
+  MGExt = { r, tipo: MGR[r] || "orden", ronda: 0, pts: 0, usadas: [], fin: 0, tok: 0 };
+  mgRonda();
+  return mgDib();
+};
+const mgPos = (G) => {
+  const x = (((performance.now() - G.ts) / 1000) * G.v) % 2;
+  return (x < 1 ? x : 2 - x) * 100;
+};
+function mgDib() {
+  const G = MGExt;
+  if (!G) return;
+  const me = yo(),
+    tit = L4(...MG[G.tipo]),
+    cab = `<div class="k"><h2 style="margin:0">${ic("objetivo")} ${L4("Práctica", "Practice", "Entraînement", "Prática")}</h2>${btx()}</div><div class="m"><b>${esc(tit)}</b> · ${esc(RO[G.r])} ${me.s[G.r]} · ${L4("ronda", "round", "manche", "rodada")} ${Math.min(G.ronda, MGMAX[G.tipo])}/${MGMAX[G.tipo]} · ${L4("puntos", "points", "points", "pontos")} ${Math.round(G.pts)}</div>`;
+  let cu = "";
+  if (G.fin) cu = G.finH;
+  else if (G.tipo == "orden" || G.tipo == "montaje")
+    cu = `<div class="m">${G.tipo == "orden" ? L4("Toca las palabras en el orden correcto.", "Tap the words in the right order.", "Touche les mots dans le bon ordre.", "Toque as palavras na ordem certa.") : L4("Toca los planos de menor a mayor tiempo.", "Tap the shots from earliest to latest timecode.", "Touche les plans du plus tôt au plus tard.", "Toque os planos do menor para o maior tempo.")}</div><div class="m" style="min-height:28px;font-size:17px"><b>${G.hecho.map(esc).join(" ")}</b></div><div class="bts">${G.items
+      .map((x, i) => (x.us ? "" : bt("mg13o", i, (G.tipo == "montaje" ? "🎞 " : "") + esc(x.w))))
+      .join("")}</div>`;
+  else if (G.tipo == "calculo")
+    cu = `<div class="m">${L4("Presupuesto: # millones. Elige el paquete que más lo aprovecha sin pasarse.", "Budget: # million. Pick the package that uses the most of it without going over.", "Budget : # millions. Choisis le lot qui en profite le plus sans le dépasser.", "Orçamento: # milhões. Escolha o pacote que mais aproveita sem passar.").replace("#", G.B)}</div><div class="bts">${G.op.map((o, i) => bt("mg13c", i, o.p[0] + " + " + o.p[1])).join("")}</div>`;
+  else if (G.tipo == "encuadre")
+    cu = `<div class="m">${L4("Toca «¡Acción!» cuando la marca esté en el centro.", "Tap «Action!» when the mark is in the center.", "Touche « Action ! » quand le repère est au centre.", "Toque «Ação!» quando a marca estiver no centro.")}</div><div style="position:relative;height:46px;border-radius:10px;background:var(--b2,#333);margin:10px 0;overflow:hidden"><div style="position:absolute;left:42%;width:16%;top:0;bottom:0;background:rgba(53,208,186,.35)"></div><div id="mg13m" style="position:absolute;top:4px;bottom:4px;width:8px;margin-left:-4px;border-radius:4px;background:var(--a,#ffc857);left:${G.pos == null ? 0 : G.pos}%"></div></div><div class="bts">${bt("mg13e", "", L4("¡Acción!", "Action!", "Action !", "Ação!"), "a")}</div>`;
+  else if (G.tipo == "ritmo")
+    cu = `<div class="m">${G.viendo ? L4("Mira y escucha la secuencia…", "Watch and listen to the sequence…", "Regarde et écoute la séquence…", "Veja e ouça a sequência…") : L4("Ahora repítela.", "Now repeat it.", "Maintenant, répète-la.", "Agora repita.")}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">${(PAD[G.r] || PAD[5])
+      .map((p, i) => `<button id="mg13p${i}" class="b" data-a="mg13r" data-v="${i}" style="min-height:70px;background:${PADC[i]};color:#111;font-weight:700;opacity:.75">${esc(L4(...p))}</button>`)
+      .join("")}</div>`;
+  op(`<div class="c" translate="no">${cab}${cu}</div>`);
+  if (G.fin) return;
+  if (G.tipo == "encuadre") {
+    const tk = ++G.tok,
+      paso = () => {
+        if (!MGExt || MGExt !== G || G.tok != tk || G.fin) return;
+        const m = document.getElementById("mg13m");
+        if (!m) return;
+        m.style.left = mgPos(G) + "%";
+        requestAnimationFrame(paso);
+      };
+    requestAnimationFrame(paso);
+  }
+  if (G.tipo == "ritmo" && G.viendo) {
+    const tk = ++G.tok;
+    G.seq.forEach((p, i) => {
+      setTimeout(() => {
+        if (MGExt !== G || G.tok != tk) return;
+        const b = document.getElementById("mg13p" + p);
+        if (!b) return;
+        b.style.opacity = "1";
+        b.style.filter = "brightness(1.35)";
+        try {
+          bp(PADF[p], 0.25, "triangle", 0.05);
+        } catch (e) {}
+        setTimeout(() => {
+          if (b.isConnected) {
+            b.style.opacity = ".75";
+            b.style.filter = "";
+          }
+        }, 380);
+      }, 500 + i * 620);
+    });
+    setTimeout(() => {
+      if (MGExt !== G || G.tok != tk) return;
+      G.viendo = 0;
+      mgDib();
+    }, 500 + G.seq.length * 620 + 150);
+  }
+}
+function mgSig(pts) {
+  const G = MGExt;
+  G.pts += pts;
+  if (G.ronda >= MGMAX[G.tipo]) return mgFin();
+  mgRonda();
+  return mgDib();
+}
+function mgFin() {
+  const G = MGExt,
+    me = yo(),
+    r = G.r,
+    sem = mgSemana(),
+    sc = cl(Math.round(G.pts), 0, 100);
+  let f = cl(1.15 - me.s[r] / 100, 0.25, 1);
+  const cans = (me.e | 0) < 10,
+    lleno = sem.n >= 3;
+  if (cans) f *= 0.5;
+  if (lleno) f = 0;
+  const xp = Math.round(sc * 0.6 * f);
+  sem.n++;
+  me.xp13 = me.xp13 || [0, 0, 0, 0, 0, 0, 0, 0];
+  me.xp13[r] = (me.xp13[r] | 0) + xp;
+  let sube = 0;
+  while (me.xp13[r] >= 100 && me.s[r] < 99) {
+    me.xp13[r] -= 100;
+    me.s[r]++;
+    sube++;
+  }
+  if (me.s[r] >= 99) me.xp13[r] = Math.min(me.xp13[r], 99);
+  if (sc >= 60) me.mo = cl((me.mo == null ? 65 : me.mo) + 1);
+  G.fin = 1;
+  G.finH = `<div style="text-align:center;margin:10px 0"><div style="font-size:34px;font-weight:800">${sc}</div><div class="m">${L4("puntos de 100", "points out of 100", "points sur 100", "pontos de 100")}</div></div><div class="m">${
+    lleno
+      ? L4("Ya practicaste 3 veces esta semana: esta vez no suma experiencia. Vuelve la próxima semana.", "You already practiced 3 times this week: this time gives no experience. Come back next week.", "Tu t'es déjà entraîné 3 fois cette semaine : cette fois ne donne pas d'expérience. Reviens la semaine prochaine.", "Você já praticou 3 vezes esta semana: desta vez não soma experiência. Volte na próxima semana.")
+      : L4("+# de experiencia en %.", "+# experience in %.", "+# d'expérience en %.", "+# de experiência em %.").replace("#", xp).replace("%", RO[r]) + (cans ? " " + L4("(con poca energía rindes la mitad)", "(with low energy you get half)", "(avec peu d'énergie, tu obtiens la moitié)", "(com pouca energia você rende a metade)") : "")
+  }</div>${sube ? `<div class="m" style="color:var(--g)"><b>${L4("¡Tu habilidad sube a #!", "Your skill rises to #!", "Ta compétence passe à # !", "Sua habilidade sobe para #!").replace("#", me.s[r])}</b></div>` : ""}<div class="m">${L4("Experiencia hacia el siguiente punto", "Experience toward the next point", "Expérience vers le prochain point", "Experiência para o próximo ponto")}: ${me.xp13[r] | 0}/100</div><div class="bts" style="margin-top:8px">${bt("mg13i", r, L4("Otra vez", "Again", "Encore", "De novo"), "a")}${bt("x", "", L4("Terminar", "Finish", "Terminer", "Terminar"))}</div>`;
+  return mgDib();
+}
+ACT["mg13o"] = (v) => {
+  const G = MGExt;
+  if (!G || G.fin) return;
+  const x = G.items[+v];
+  if (!x || x.us) return;
+  if (x.w == G.ok[G.k]) {
+    x.us = 1;
+    G.hecho.push(x.w);
+    G.k++;
+    try {
+      bp(700 + G.k * 40, 0.05);
+    } catch (e) {}
+    if (G.k >= G.ok.length) {
+      const s = (performance.now() - G.ts) / 1000,
+        pts = Math.max(0, 100 - G.err * 15 - Math.max(0, s - (G.tipo == "orden" ? 12 : 8)) * 3) / MGMAX[G.tipo];
+      return mgSig(pts);
+    }
+  } else {
+    G.err++;
+    try {
+      bp(160, 0.12, "square", 0.03);
+    } catch (e) {}
+  }
+  return mgDib();
+};
+ACT["mg13c"] = (v) => {
+  const G = MGExt;
+  if (!G || G.fin) return;
+  const o = G.op[+v],
+    s = (performance.now() - G.ts) / 1000;
+  return mgSig(o && o.ok ? Math.max(8, 20 - Math.max(0, s - 6) * 1.5) : 0);
+};
+ACT["mg13e"] = () => {
+  const G = MGExt;
+  if (!G || G.fin) return;
+  G.pos = mgPos(G);
+  G.tok++;
+  return mgSig(Math.max(0, 20 - Math.abs(G.pos - 50) * 0.8));
+};
+ACT["mg13r"] = (v) => {
+  const G = MGExt;
+  if (!G || G.fin || G.viendo) return;
+  const p = +v;
+  try {
+    bp(PADF[p], 0.18, "triangle", 0.05);
+  } catch (e) {}
+  if (p != G.seq[G.k]) {
+    G.ronda = MGMAX.ritmo;
+    return mgSig(0);
+  }
+  G.k++;
+  if (G.k >= G.seq.length) {
+    G.viendo = 1;
+    return mgSig(20);
+  }
+  const b = document.getElementById("mg13p" + p);
+  if (b) {
+    b.style.opacity = "1";
+    setTimeout(() => b.isConnected && (b.style.opacity = ".75"), 200);
+  }
+};
+function pracH() {
+  const me = yo();
+  if (!me) return "";
+  const sem = mgSemana(),
+    xp = me.xp13 || [];
+  return `<details class="c" translate="no"><summary><b>${ic("objetivo")} ${L4("Practicar habilidades", "Practice skills", "Entraîner tes compétences", "Praticar habilidades")}</b> <span class="m">· ${L4("esta semana", "this week", "cette semaine", "esta semana")} ${Math.min(sem.n, 3)}/3</span></summary><div class="k"><span class="m">${L4("Minijuegos que dan experiencia: cada 100 puntos suben 1 punto la habilidad. Las 3 primeras prácticas de cada semana suman.", "Minigames that give experience: every 100 points raise the skill by 1. The first 3 practices each week count.", "Des mini-jeux qui donnent de l'expérience : chaque tranche de 100 points augmente la compétence de 1. Les 3 premiers entraînements de chaque semaine comptent.", "Minijogos que dão experiência: cada 100 pontos sobem 1 ponto da habilidade. As 3 primeiras práticas de cada semana contam.")}</span>${bi("practica13")}</div>${RO.map(
+    (n, r) =>
+      `<div class="fila"><span>${esc(n)} <b>${me.s[r]}</b><span class="m"> · ${esc(L4(...MG[MGR[r]]))} · ${L4("exp.", "xp", "exp.", "exp.")} ${me.s[r] >= 99 ? "—" : (xp[r] | 0) + "/100"}</span></span><span class="bts">${bt("mg13i", r, L4("Practicar", "Practice", "S'entraîner", "Praticar"), me.s[r] >= 99 ? "off" : "")}</span></div>`,
+  ).join("")}</details>`;
+}
+function vAvExtra() {
+  try {
+    return fitH() + pracH();
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
+}
+Object.assign(TX.es.ayuda, {
+  festival12: ["Crear para un festival", "En Mundo → Premios, sobre la lista de festivales. Eliges uno de los próximos (con al menos 22 semanas de margen) y el medio. «Automático» arma la obra con el equipo y el reparto recomendados, un 15 % más de presupuesto, y la produce; cuando está lista, la estrena con el mejor plan en la semana del festival. «Detallado» abre el creador con todo prellenado para que lo ajustes. Si llega a tiempo, la obra gana +2 de crítica, +1 de público y más expectativa; si se atrasa, sale con un plan normal. Dato: el Festival de Venecia, nacido en 1932, es el festival de cine más antiguo que sigue en activo."],
+  presupuesto12: ["Presupuesto anual por medio", "En la pestaña de cada medio, bajo su infraestructura. Eliges qué parte de tu caja apartas cada año para ese medio: 2, 5, 10 o 20 %. Tus filiales fuertes en ese medio aportan el 5 % de su caja (como mucho medio presupuesto típico). Cada mes, si queda dinero, un talento firmado de ese medio o un subproductor ejecutivo propone un proyecto y lo produce solo; tu personal de oficina le suma calidad. Puedes orientar a cada talento firmado desde su ficha («Propone proyectos de»). Cada año hay una misión: estrenar 1 obra más que tu nivel de presupuesto; si la cumples, ganas un premio en dinero y prestigio. Dato: en la década de 1930, MGM estrenaba casi una película por semana con actores, guionistas y directores bajo contrato fijo."],
+  prensa12: ["Tu prensa", "En la pestaña Editorial, bajo su infraestructura. Contratas escritores o editores para tu revista y tu periódico, tu agencia de prensa (desde 1835), tu noticiero (desde 1922) y tus redes sociales (desde 2004). Cada uno cobra un sueldo mensual y, según su habilidad, sube tus fans y tu prestigio cada mes y la expectativa de tus obras que están en marketing. Al contratarlos gastan 10 de energía; si mueren o se retiran, el puesto queda libre. Dato: la primera agencia de noticias, Havas, nació en París en 1835 y es el origen de la actual AFP."],
+  forma13: ["Ponerse en forma", "En la pestaña de tu avatar. Una rutina ligera o intensa cuesta un poco de dinero y de energía cada mes, sube tu forma física y, con constancia (cada 8 meses la ligera, cada 4 la intensa), te acerca a una complexión atlética. Con más de 60 de forma recuperas hasta 3 de energía extra al mes, y con buena forma y complexión delgada, atlética o media encajas en papeles de acción. Si dejas la rutina, la forma baja poco a poco. La estatura y la complexión iniciales se eligen al crear el personaje o en «Editar avatar». Dato: para Toro salvaje (1980), Robert De Niro subió unos 27 kilos; es uno de los cambios físicos más citados del cine."],
+  practica13: ["Practicar habilidades", "En la pestaña de tu avatar. Cada oficio tiene un minijuego: ordenar una frase (escritura), encuadrar en el momento justo (dirección, fotografía y diseño), cuadrar un presupuesto (producción), repetir una secuencia de notas o de emociones (composición e interpretación) y ordenar planos por tiempo (edición). Tu puntuación, de 0 a 100, da experiencia; cada 100 de experiencia suben 1 punto la habilidad. Cuanto más alta es la habilidad, menos experiencia da cada práctica; con menos de 10 de energía rindes la mitad. Las 3 primeras prácticas de cada semana suman; después puedes seguir jugando sin ganar experiencia. Dato: la idea de las «10 000 horas» viene de un estudio de 1993 de Anders Ericsson con violinistas; él mismo aclaró que importa más la práctica deliberada que la cantidad de horas."],
+});
+const DSTK = [
+  [1, ["Red de radio", "Radio network", "Réseau de radio", "Rede de rádio"], 1940, 1975],
+  [1, ["Cadena de televisión", "TV network", "Chaîne de télévision", "Rede de televisão"], 1946, 2300],
+  [1, ["Plataforma de streaming", "Streaming platform", "Plateforme de streaming", "Plataforma de streaming"], 2007, 2300],
+  [2, ["Cadena de salones arcade", "Arcade hall chain", "Chaîne de salles d'arcade", "Rede de fliperamas"], 1971, 2005],
+  [2, ["Fabricante de consolas", "Console maker", "Fabricant de consoles", "Fabricante de consoles"], 1977, 2300],
+  [2, ["Tienda digital de juegos", "Digital game store", "Boutique de jeux en ligne", "Loja digital de jogos"], 2003, 2300],
+  [2, ["Tienda de aplicaciones", "App store", "Magasin d'applications", "Loja de aplicativos"], 2008, 2300],
+  [3, ["Circuito de teatros", "Theater circuit", "Circuit de théâtres", "Circuito de teatros"], 1600, 2300],
+  [3, ["Teatro de ópera", "Opera house", "Maison d'opéra", "Teatro de ópera"], 1637, 2300],
+  [3, ["Circo", "Circus", "Cirque", "Circo"], 1768, 2300],
+  [3, ["Café-concierto y vodevil", "Music hall and vaudeville", "Café-concert et vaudeville", "Café-concerto e vaudeville"], 1850, 1935],
+  [3, ["Club de comedia (stand-up)", "Comedy club (stand-up)", "Club de comédie (stand-up)", "Clube de comédia (stand-up)"], 1960, 2300],
+  [4, ["Editora de partituras", "Sheet music publisher", "Éditeur de partitions", "Editora de partituras"], 1600, 1960],
+  [4, ["Cadena de tiendas de discos", "Record store chain", "Chaîne de disquaires", "Rede de lojas de discos"], 1900, 2012],
+  [4, ["Tienda digital de música", "Digital music store", "Boutique de musique en ligne", "Loja digital de música"], 2003, 2030],
+  [4, ["App de música en streaming", "Music streaming app", "Appli de musique en streaming", "App de música em streaming"], 2008, 2300],
+  [5, ["Cadena de librerías", "Bookstore chain", "Chaîne de librairies", "Rede de livrarias"], 1600, 2300],
+  [5, ["Red de quioscos", "Newsstand network", "Réseau de kiosques", "Rede de bancas"], 1830, 2300],
+  [5, ["Club de lectura por suscripción", "Subscription book club", "Club de lecture par abonnement", "Clube do livro por assinatura"], 1926, 2300],
+  [5, ["Tienda de libros electrónicos", "E-book store", "Boutique de livres numériques", "Loja de e-books"], 2007, 2300],
+];
+const DST = [
+  ["Radio Faro", 0, 0.34], ["Onda Continental", 0, 0.26], ["Red Eco", 0, 0.16],
+  ["Canal Aurora", 1, 0.3], ["Red Meridiano", 1, 0.24], ["Telenova", 1, 0.16],
+  ["Nébula Play", 2, 0.3], ["Mareavista", 2, 0.22], ["Flujo+", 2, 0.14],
+  ["Salones Pixelia", 3, 0.32], ["Arcadia Magna", 3, 0.24], ["Recreativos Neón", 3, 0.14],
+  ["Kaiju Interactive", 4, 0.34], ["Órbita Systems", 4, 0.28], ["Nimbus Hardware", 4, 0.18],
+  ["Forja Digital", 5, 0.4], ["Atlas Launcher", 5, 0.2], ["Cumbre Games", 5, 0.12],
+  ["Bolsillo Apps", 6, 0.45], ["Mosaico Store", 6, 0.35],
+  ["Circuito Proscenio", 7, 0.3], ["Teatros Telón Rojo", 7, 0.22], ["Gran Escena", 7, 0.14],
+  ["Ópera Lírica Imperial", 8, 0.36], ["Casa del Bel Canto", 8, 0.24],
+  ["Gran Circo Cometa", 9, 0.34], ["Carpa de los Mil Colores", 9, 0.22],
+  ["La Linterna Music-Hall", 10, 0.3], ["Vodevil Palace", 10, 0.26],
+  ["Club Carcajada", 11, 0.3], ["Micrófono Abierto", 11, 0.24], ["Risa Central", 11, 0.16],
+  ["Ediciones Clave de Sol", 12, 0.36], ["Partituras Armonía", 12, 0.24],
+  ["Discos Surco", 13, 0.3], ["Vinilo Mundial", 13, 0.24], ["Melodía Records", 13, 0.16],
+  ["Pista Digital", 14, 0.4], ["Nota Store", 14, 0.24],
+  ["Sonar", 15, 0.32], ["Ritmia", 15, 0.24], ["Ondas Play", 15, 0.14],
+  ["Librerías Atenea", 16, 0.3], ["Página Mundial", 16, 0.22], ["El Lector Feliz", 16, 0.14],
+  ["Quioscos Gaceta", 17, 0.34], ["Red Prensa Libre", 17, 0.22],
+  ["Club Marcapáginas", 18, 0.4], ["Lectores Unidos", 18, 0.26],
+  ["Tinta Digital", 19, 0.4], ["Folio Nube", 19, 0.24],
+];
+const dst = () => (S.dst14 = S.dst14 || {});
+const dstPeso = (k, y) => {
+  const K = DSTK[k];
+  if (y < K[2] || y > K[3]) return 0;
+  return Math.min(1, (y - K[2] + 1) / 6) * Math.min(1, (K[3] - y + 1) / 6);
+};
+function dstQ(m) {
+  const y = yr(),
+    O = S.dst14 || {};
+  let tot = 0,
+    mio = 0;
+  DSTK.forEach((K, k) => {
+    if (K[0] != m) return;
+    const w = dstPeso(k, y);
+    tot += w;
+    DST.forEach((d, i) => {
+      if (d[1] == k && O[i]) mio += w * d[2];
+    });
+  });
+  return tot > 0 ? Math.min(1, mio / tot) : 0;
+}
+const dstMerc = (m) => {
+  const K = S.mk && S.mk[m];
+  return Math.max(TB(m) * 25, K && K.wt > 0 ? K.wt * 52 : 0);
+};
+const dstPrecio = (i) => {
+  const d = DST[i],
+    m = DSTK[d[1]][0],
+    w = Math.max(0.15, dstPeso(d[1], yr()));
+  return Math.round(dstMerc(m) * d[2] * 0.35 * w);
+};
+ACT["dstb"] = (v) => {
+  const i = +v,
+    O = dst();
+  if (O[i] || !DST[i] || !dstPeso(DST[i][1], yr())) return;
+  const p = dstPrecio(i);
+  if (S.cash < p) return toast(L4("Fondos insuficientes", "Insufficient funds", "Fonds insuffisants", "Fundos insuficientes"));
+  capital(-p);
+  O[i] = { y: yr(), p };
+  nws(L4("Compras # (%).", "You buy # (%).", "Tu achètes # (%).", "Você compra # (%).").replace("#", DST[i][0]).replace("%", L4(...DSTK[DST[i][1]][1]).toLowerCase()));
+  return pg();
+};
+ACT["dsts"] = (v) => {
+  const i = +v,
+    O = dst();
+  if (!O[i]) return;
+  const p = Math.round(dstPrecio(i) * 0.85);
+  gana("ventas", p);
+  delete O[i];
+  nws(L4("Vendes # por %.", "You sell # for %.", "Tu vends # pour %.", "Você vende # por %.").replace("#", DST[i][0]).replace("%", fm(p)));
+  return pg();
+};
+GANCHOS.ventas.push((P) => {
+  if (!S || !S.dst14 || !P || P.m == null) return 1;
+  const q = P.m == 0 ? dstQ(1) * 0.3 : dstQ(P.m);
+  return 1 + 0.25 * q;
+});
+on("semana", () => {
+  if (!S || S.pre || !S.dst14) return;
+  for (let m = 1; m <= 5; m++) {
+    const q = dstQ(m);
+    if (q > 0) gana("distribucion", (dstMerc(m) / 52) * q * 0.07);
+  }
+});
+on("mes", () => {
+  if (!S || S.pre || !S.dst14) return;
+  const O = S.dst14,
+    y = yr();
+  let c = 0;
+  Object.keys(O).forEach((k) => {
+    const i = +k,
+      d = DST[i];
+    if (!d) return delete O[k];
+    if (y > DSTK[d[1]][3]) {
+      const p = Math.round((O[k].p || dstPrecio(i)) * 0.3);
+      gana("ventas", p);
+      delete O[k];
+      nws(L4("# cierra: su formato pasó de moda. Recuperas %.", "# closes: its format went out of fashion. You recover %.", "# ferme : son format est passé de mode. Tu récupères %.", "# fecha: o formato saiu de moda. Você recupera %.").replace("#", d[0]).replace("%", fm(p)));
+      return;
+    }
+    c += dstPrecio(i) * 0.0025;
+  });
+  if (c > 0) gasta("distribucion", Math.round(c));
+});
+let DSTM = 1;
+ACT["dstm"] = (v) => {
+  DSTM = +v;
+  return pg();
+};
+function dstH() {
+  const y = yr(),
+    M = [1, 2, 3, 4, 5].filter((m) => y >= MD[m][2] && DSTK.some((K, k) => K[0] == m && dstPeso(k, y) > 0));
+  if (!M.length) return "";
+  if (!M.includes(DSTM)) DSTM = M[0];
+  const m = DSTM,
+    q = dstQ(m),
+    O = S.dst14 || {},
+    sem = (dstMerc(m) / 52) * q * 0.07,
+    tot = Object.keys(O).length;
+  const filas = DSTK.map((Kd, k) => [Kd, k])
+    .filter(([Kd, k]) => Kd[0] == m && dstPeso(k, y) > 0)
+    .map(
+      ([Kd, k]) =>
+        `<div class="m" style="margin-top:8px"><b>${esc(L4(...Kd[1]))}</b>${Kd[3] < 2300 ? ` · ${L4("hasta", "until", "jusqu'en", "até")} ~${Kd[3]}` : ""}</div>` +
+        DST.map((d, i) => [d, i])
+          .filter(([d]) => d[1] == k)
+          .map(([d, i]) => {
+            const p = dstPrecio(i);
+            return `<div class="fila"><span>${esc(d[0])}<span class="m"> · ${pct(d[2])} ${L4("del sector", "of the sector", "du secteur", "do setor")}</span></span><span class="bts">${O[i] ? bt("dsts", i, L4("Vender", "Sell", "Vendre", "Vender") + " · " + fm(Math.round(p * 0.85)), "r") : bt("dstb", i, L4("Comprar", "Buy", "Acheter", "Comprar") + " · " + fm(p), S.cash >= p ? "a" : "off")}</span></div>`;
+          })
+          .join(""),
+    )
+    .join("");
+  return `<div class="c" translate="no"><div class="k"><h3 style="margin:0">${ic("edificio")} ${L4("Redes de distribución por medio", "Distribution networks by medium", "Réseaux de distribution par média", "Redes de distribuição por meio")}</h3>${bi("redes14")}</div><div class="m">${L4("Además de las cadenas de cines: canales y plataformas, consolas y tiendas de juegos, teatros, circos y clubes de comedia, tiendas y apps de música, librerías y quioscos.", "Besides cinema chains: channels and platforms, consoles and game stores, theaters, circuses and comedy clubs, music stores and apps, bookstores and newsstands.", "En plus des chaînes de cinéma : chaînes et plateformes, consoles et boutiques de jeux, théâtres, cirques et clubs de comédie, disquaires et applis de musique, librairies et kiosques.", "Além das redes de cinema: canais e plataformas, consoles e lojas de jogos, teatros, circos e clubes de comédia, lojas e apps de música, livrarias e bancas.")}</div><div class="chips">${M.map((j) => chx("dstm", j, MEDN5()[j], j == m)).join("")}</div><div class="g" style="margin-top:6px"><div><div class="m">${L4("Controlas", "You control", "Tu contrôles", "Você controla")}</div><b>${pct(q, 1)}</b></div><div><div class="m">${L4("Ventas de tus obras", "Sales of your works", "Ventes de tes œuvres", "Vendas das suas obras")}</div><b>+${pct(0.25 * q, 1)}</b></div><div><div class="m">${L4("Ingresos por semana", "Income per week", "Revenus par semaine", "Receita por semana")}</div><b>${fm(sem)}</b></div><div><div class="m">${L4("Redes propias", "Networks owned", "Réseaux possédés", "Redes próprias")}</div><b>${tot}</b></div></div>${filas}</div>`;
+}
+const vDistExt = vDist;
+vDist = function () {
+  let h = "";
+  try {
+    h = dstH();
+  } catch (e) {
+    console.error(e);
+  }
+  return h + vDistExt.apply(this, arguments);
+};
+ING.distribucion = "Redes de distribución";
+
+ACT["fpauto"] = () => {
+  S.fpAuto = S.fpAuto ? 0 : 1;
+  if (S.fpAuto) fpAuto();
+  return pg();
+};
+function fpAuto() {
+  if (!S || !S.fpAuto) return;
+  rvVivos().forEach((i) => {
+    const r = S.rv[i];
+    if (!r || !r.own || !r.pide) return;
+    const p = r.pide;
+    if (S.cash - p >= p * 2 && valR(r) > p) {
+      capital(-p);
+      r.cash += p;
+      r.pide = 0;
+      nws(L4("Capital automático: le das % a #.", "Automatic capital: you give % to #.", "Capital automatique : tu donnes % à #.", "Capital automático: você dá % para #.").replace("#", r.n).replace("%", fm(p)));
+    } else {
+      r.pide = 0;
+      r.sz = Math.max(0.4, r.sz * 0.95);
+      nws(L4("Capital automático: no alcanza para #, que recorta su producción.", "Automatic capital: not enough for #, which cuts back production.", "Capital automatique : pas assez pour #, qui réduit sa production.", "Capital automático: não dá para #, que reduz a produção.").replace("#", r.n));
+    }
+  });
+}
+on("mes", fpAuto);
+
+const sdIng = (c) => {
+  const l = Math.max(1, sdLv(c));
+  return Math.round(sdSem(c) * 4 * [1.2, 3, 5][Math.min(3, l) - 1] * Math.min(3, 0.8 + (CY[c][2] || 0) * 20));
+};
+ING.sedes = "Sedes en otros países";
+on("mes", () => {
+  if (!S || S.pre || !S.sds) return;
+  const x = Object.keys(S.sds).reduce((a, c) => a + (CY[+c] ? sdIng(+c) : 0), 0);
+  if (x > 0) gana("sedes", x);
+});
+Object.assign(TX.es.ayuda, {
+  redes14: ["Redes de distribución por medio", "En Negocio → Distribución, sobre las cadenas de cines. Cada medio tiene sus redes según la época: radio, televisión y streaming para las series; salones arcade, fabricantes de consolas, tiendas digitales y de aplicaciones para los videojuegos; circuitos de teatros, ópera, circo, café-concierto y clubes de comedia para el teatro; editoras de partituras, tiendas de discos, tiendas digitales y apps para la música; librerías, quioscos, clubes de lectura y libros electrónicos para el libro. Lo que controlas de un medio sube las ventas de tus obras de ese medio hasta un 25 % y te da cada semana una parte de todo lo que se vende en él, también lo de tus rivales. El precio sigue el tamaño del mercado; el mantenimiento cuesta el 0,25 % del valor al mes y al vender recuperas el 85 %. Cuando un formato pasa de moda (los salones arcade, las tiendas de discos), la red cierra y recuperas el 30 % de lo que pagaste. Las plataformas de streaming también suman un poco a tus películas. Los nombres son ficticios. Dato: el primer club de lectura por suscripción, el Book-of-the-Month Club, nació en Nueva York en 1926 y llegó a enviar millones de libros por correo."],
+});
 let ORD0 = { t: null, n: null, ro: null };
 function ordAjusta() {
   const t = document.getElementById("top"),
