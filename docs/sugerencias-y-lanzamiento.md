@@ -115,6 +115,9 @@ La política de privacidad pública está en `privacidad.html` y se publica con 
   - Encomendar desde el creador.
   - Guiones comprados que se guardan solos.
   - Proyección de prensa solo para tus obras y visible en la ficha de cada obra.
+  - Buscador en el archivo y Material en subpestañas.
+  - Elegir el tipo de obra al encomendar.
+  - Ceremonias solo para tus obras.
 
 ### Pendientes
 1. **Bandeja de pendientes, copia de seguridad automática y rentabilidad por división** (detalle en `reporte-1.5.md`).

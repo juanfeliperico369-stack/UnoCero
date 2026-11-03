@@ -52,6 +52,7 @@ Hay **una sola versión**, la definitiva, y sobre ella se sigue trabajando. No h
   - `t36`: encomendar desde el creador.
   - `t37`: guiones comprados.
   - `t38`: proyección para la prensa.
+  - `t40`: archivo, Material, encargo con medio y ceremonias.
   - Para probar el botón de volver hay que hacer clic de verdad en el elemento (`el.click()`), porque la pila de fichas se arma con el botón tocado.
 - **Android:** desde `android/`, `gradle assembleRelease bundleRelease`. Necesita `android/keystore.properties` (ruta y contraseña de la llave) y `android/local.properties` (`sdk.dir`), que no están en el repositorio. Después verifica la firma con `apksigner verify --print-certs` y que `assets/index.html` del APK sea igual al HTML.
 - **Contenido real:** existe un importador (`mundoImporta`) y un paquete de mundo con 92 estudios, 281 talentos y 188 obras, guardado aparte por el autor. Cuando se agregue lo real, debe ir dentro de esta misma versión: incluido en el juego o como paquete `.iamundo` que se importa en Estudio → Editor, nunca como una aplicación distinta.
@@ -81,6 +82,10 @@ Hecho en la 1.6 y la 1.6.1 (detalle en `docs/reporte-1.6.md`):
   - todos los personajes en la franquicia (`frPjs` incluye obras en producción) y buscador de franquicias (`FRBUSCA`).
   - botón «Encomendar» al final del creador (`wzenc`, reutiliza `encomiendaM`) y guardado automático de guiones comprados (`gmb` llama a `idGuarda`).
   - la ventana de prensa solo sale para obras propias (`obraMia`, filtra la cola `S.prj`); la proyección (`P.rev`) se ve en la ficha de cada obra.
+  - buscador del archivo (`ARCQ`, en `ronda8.js`);
+  - Material en subpestañas (`MTTAB`; el HTML de `mtV` se separa por cada `<h3 class="sec">`);
+  - elegir el medio al encomendar un material (`mtenc`);
+  - ceremonias solo con obras propias (`awards` filtra `S.cer`; cada nominado propio guarda `p`).
 
 Pendiente, en orden sugerido:
 

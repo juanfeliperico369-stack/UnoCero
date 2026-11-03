@@ -81,6 +81,7 @@ Abre `industry-art/index.html` en cualquier navegador moderno, en el celular o e
 - **Franquicias**: buscador por franquicia, obra o personaje, y todos los personajes en la ficha, también los nuevos de obras en producción.
 - **Encomendar desde el creador** a una filial o un rival, y **guiones comprados que se guardan solos** en Proyectos.
 - **Proyección para la prensa** solo como ventana en tus obras propias; en la ficha de cada obra puedes ver cómo le fue.
+- **Archivo con buscador**, **Material en subpestañas**, **encomendar eligiendo el tipo de obra** y **ceremonias solo para tus obras propias**.
 - **Ficha completa de tu avatar** en su pestaña, y tu avatar destacado arriba del catálogo de talentos.
 - **Las sedes dan dinero**: cada sede en otro país ingresa cada mes según su nivel y el tamaño del mercado, además de sus ventajas de siempre.
 - **Capital automático para filiales**: decide solo si darles el capital que piden, según tu caja.

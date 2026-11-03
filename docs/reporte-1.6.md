@@ -180,6 +180,10 @@ Lo que se agregó y corrigió a partir de las pruebas de juego del autor, cómo 
 - **Proyección para la prensa:**
   - **Cuándo sale la ventana:** solo con las obras que creaste tú directamente. No sale con las de tus talentos firmados, encargos, coproducciones, compras, reestrenos, temporadas renovadas solas ni festivales en modo automático.
   - **En la ficha:** todas las obras con crítica muestran su proyección en una sección plegable, con cada crítico, su medio, su frase, su nota y el promedio.
+- **Buscador en el archivo:** en el archivo de la línea de producción y en el de segundo plano. Busca por título, género, medio, año o personaje, sin importar tildes, dentro de la división elegida.
+- **Material en subpestañas:** «Tus materiales», «Tus obras», «Dominio público», «Derechos en venta» e «Ideas vendidas», cada una con su contador. Antes había que bajar entre decenas de materiales y obras propias para llegar al dominio público.
+- **Encomendar con tipo de obra:** al encomendar un material, después de elegir el estudio eliges si será cine, serie, videojuego, teatro, música o libro, con la especialidad del estudio en cada medio y el recomendado marcado.
+- **Ceremonias:** la ventana de una ceremonia solo aparece si hay nominada una obra hecha enteramente por ti. Los premios de las demás se registran igual en las noticias, en el palmarés y en las fichas.
 - **Dato:** en 1997, Apple estaba a semanas de quedarse sin caja y Microsoft, su gran rival, invirtió 150 millones de dólares en ella. Es uno de los rescates entre rivales más citados.
 
 ## Pruebas de esta versión

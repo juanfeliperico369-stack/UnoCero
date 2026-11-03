@@ -23963,7 +23963,7 @@ function awards(w) {
         if (e.rl == null) nws(`${e.n}: «${P.n}» nominada.`);
       });
       if (S.ah.length > 200) S.ah.length = 200;
-      if (e.rl == null && !e.lib && l2.some((x) => x.u)) S.cer.push({ a: e.n, ph: 1, l: l2.map((x) => ({ n: x.n, u: x.u, w: 0 })) });
+      if (e.rl == null && !e.lib && l2.some((x) => x.u)) S.cer.push({ a: e.n, ph: 1, l: l2.map((x) => ({ n: x.n, u: x.u, w: 0, p: x.u ? x.p : null })) });
       return;
     }
     const l = S.nm[e.id];
@@ -24009,7 +24009,7 @@ function awards(w) {
       if (main) nws(`${e.n}: gana «${x.n}» de ${o ? o.n : "un rival"}.`);
     }
     if (e.rl == null && !e.lib && l.some((y) => y.u))
-      S.cer.push({ a: e.n, ph: 2, l: l.map((y, i) => ({ n: y.n + (y.u ? "" : " \u00B7 " + nomR(y.o)), u: y.u, w: i == wi ? 1 : 0 })) });
+      S.cer.push({ a: e.n, ph: 2, l: l.map((y, i) => ({ n: y.n + (y.u ? "" : " \u00B7 " + nomR(y.o)), u: y.u, w: i == wi ? 1 : 0, p: y.u ? y.p : null })) });
   });
 }
 function ce() {
@@ -24187,7 +24187,7 @@ function awNac(w) {
       .filter((x) => x.y == yr() - 1 && S.rv[x.o] && S.rv[x.o].reg == S.reg)
       .forEach((x) => L.push({ x: x.id, o: x.o, n: x.n, u: 0, s: x.C * 0.5 + x.A * 0.5 + ri(-3, 3) }));
     S.nm.nac = L.sort((a, b) => b.s - a.s).slice(0, 5);
-    if (S.nm.nac.some((x) => x.u)) S.cer.push({ a: nacN(), ph: 1, l: S.nm.nac.map((x) => ({ n: x.n, u: x.u, w: 0 })) });
+    if (S.nm.nac.some((x) => x.u)) S.cer.push({ a: nacN(), ph: 1, l: S.nm.nac.map((x) => ({ n: x.n, u: x.u, w: 0, p: x.u ? x.p : null })) });
     return;
   }
   const l = S.nm.nac;
@@ -24205,7 +24205,7 @@ function awNac(w) {
     nws(nacN() + ": \u00AB" + P.n + "\u00BB GANA.");
   }
   if (l.some((y) => y.u))
-    S.cer.push({ a: nacN(), ph: 2, l: l.map((y, i) => ({ n: y.n + (y.u ? "" : " \u00B7 " + nomR(y.o)), u: y.u, w: i == wi ? 1 : 0 })) });
+    S.cer.push({ a: nacN(), ph: 2, l: l.map((y, i) => ({ n: y.n + (y.u ? "" : " \u00B7 " + nomR(y.o)), u: y.u, w: i == wi ? 1 : 0, p: y.u ? y.p : null })) });
 }
 function proxGala() {
   const h = hoyN();
@@ -74966,7 +74966,14 @@ Object.assign(TX.es.ayuda, {
 });
 const ARC6 = { 0: "p", 1: "f" };
 const arcSel6 = (b) => ARC6[b ? 1 : 0];
-const arcOk6 = (p, b) => arcSel6(b) == "t" || filOrigen5(p) == arcSel6(b);
+const ARCQ = { 0: "", 1: "" };
+const arcNorm8 = (x) => String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const arcQOk8 = (p, b) => {
+  const q = arcNorm8(ARCQ[b ? 1 : 0]).trim();
+  if (!q) return true;
+  return [p.n, MD[p.m] ? MD[p.m][0] : "", dy(p), (p.gn || []).join(" "), (p.cast || []).map((c) => (c && c.n) || "").join(" ")].some((x) => arcNorm8(x).includes(q));
+};
+const arcOk6 = (p, b) => (arcSel6(b) == "t" || filOrigen5(p) == arcSel6(b)) && arcQOk8(p, b);
 ACT["arc6"] = (v) => {
   const [b, k] = String(v).split("|");
   ARC6[+b ? 1 : 0] = ["p", "f", "c", "r", "t"].includes(k) ? k : "t";
@@ -74974,15 +74981,16 @@ ACT["arc6"] = (v) => {
   return pg();
 };
 function arcH6(b) {
-  const L = S.pj.filter((p) => p.st == 4 && (!fil.pq || p.n.toLowerCase().includes(fil.pq)));
-  if (!L.length) return "";
+  const bq = b ? 1 : 0,
+    L = S.pj.filter((p) => p.st == 4 && (!fil.pq || p.n.toLowerCase().includes(fil.pq)) && arcQOk8(p, b));
+  if (!L.length && !ARCQ[bq]) return "";
   const n = { p: 0, f: 0, c: 0, r: 0, t: L.length };
   L.forEach((p) => n[filOrigen5(p)]++);
   const lab = { p: L4("Propias", "Own", "Propres", "Próprias"), f: L4("De tus talentos", "By your talents", "De tes talents", "Dos seus talentos"), c: L4("Compradas", "Bought", "Achetées", "Compradas"), r: L4("Con rivales", "With rivals", "Avec des rivaux", "Com rivais"), t: L4("Todas", "All", "Toutes", "Todas") },
     k = arcSel6(b),
     vis = k == "t" ? n.t : n[k],
     mx = fil.ar || 20;
-  return `<h3 class="sec">${L4("Archivo", "Archive", "Archives", "Arquivo")}${vis > mx ? " · " + mx + " " + L4("de", "of", "sur", "de") + " " + vis : ""}</h3><div class="c"><div class="chips">${["p", "f", "c", "r", "t"].map((x) => chx("arc6", (b ? 1 : 0) + "|" + x, `${lab[x]} <span class="m">${n[x]}</span>`, k == x)).join("")}</div>${vis ? "" : `<div class="m">${L4("No hay obras archivadas en esta división.", "No archived works in this division.", "Aucune œuvre archivée dans cette division.", "Não há obras arquivadas nesta divisão.")}</div>`}</div>`;
+  return `<h3 class="sec">${L4("Archivo", "Archive", "Archives", "Arquivo")}${vis > mx ? " · " + mx + " " + L4("de", "of", "sur", "de") + " " + vis : ""}</h3><div class="c"><div class="chips">${["p", "f", "c", "r", "t"].map((x) => chx("arc6", (b ? 1 : 0) + "|" + x, `${lab[x]} <span class="m">${n[x]}</span>`, k == x)).join("")}</div><div class="k" style="gap:8px;margin-top:6px" translate="no"><input type="search" enterkeyhint="search" style="flex:1;min-width:0" placeholder="${esc(L4("Buscar en el archivo: título, género, año o personaje", "Search the archive: title, genre, year or character", "Chercher dans les archives : titre, genre, année ou personnage", "Buscar no arquivo: título, gênero, ano ou personagem"))}" value="${esc(ARCQ[bq])}" onchange="ARCQ[${bq}]=this.value.trim();fil.ar=20;pg()" aria-label="${esc(L4("Buscar en el archivo", "Search the archive", "Chercher dans les archives", "Buscar no arquivo"))}">${ARCQ[bq] ? bt("arcqx", bq, ic("cerrar")) : ""}</div>${ARCQ[bq] ? `<div class="m">${L4("# resultados para «%»", "# results for «%»", "# résultats pour « % »", "# resultados para «%»").replace("#", vis).replace("%", esc(ARCQ[bq]))}</div>` : ""}${vis ? "" : `<div class="m">${ARCQ[bq] ? L4("Nada con esa búsqueda.", "Nothing matches that search.", "Rien ne correspond à cette recherche.", "Nada com essa busca.") : L4("No hay obras archivadas en esta división.", "No archived works in this division.", "Aucune œuvre archivée dans cette division.", "Não há obras arquivadas nesta divisão.")}</div>`}</div>`;
 }
 
 const svPropio8 = (t) => t && (t.tipo == "propio" || t.tipo == "original" || t.tipo == "filial");
@@ -75032,6 +75040,12 @@ vSv = function () {
       "Suas obras ficam na sua plataforma quando vão para o arquivo (as originais, desde a estreia) e as das suas filiais quando termina a exibição. Não ocupam espaço do catálogo e continuam aqui mesmo se você vender licenças: só saem se você vender todos os direitos.",
     )} ${L4("Ahora: # tuyas y de tus filiales.", "Now: # yours and your subsidiaries'.", "Maintenant : # à toi et à tes filiales.", "Agora: # suas e das suas filiais.").replace("#", C.propias || 0)}</div></div>`
   );
+};
+
+ACT["arcqx"] = (v) => {
+  ARCQ[+v ? 1 : 0] = "";
+  fil.ar = 20;
+  return pg();
 };
 const rrMk9 = (P) => (P.m == 0 ? [1, 4] : [1]);
 const rrCosto9 = (P) => Math.round(mkTot(rrMk9(P), P) * 0.5);
@@ -76669,6 +76683,86 @@ GANCHOS.ficha.push((P) => {
     .map((r) => (CRI[r[0]] ? `<div class="fila"><span><b>${esc(CRI[r[0]][0])}</b> <span class="m">· ${esc(CRI[r[0]][1])} (${medioC(y)})</span><br><i class="m">«${esc(frR(r))}»</i></span><b style="color:${r[1] >= 60 ? "var(--a)" : "var(--r)"}">${r[1]}</b></div>` : ""))
     .join("")}</details>`;
 });
+
+ACT["mtenc"] = (v) => {
+  const F = misFiliales(),
+    items = F.map((r) => ({ v: "r" + r, l: S.rv[r].n, nt: 1, s: L4("Tu filial: produce y te reparte utilidades", "Your subsidiary: produces and shares profits", "Ta filiale : produit et partage ses bénéfices", "Sua filial: produz e divide os lucros"), g: L4("Tus filiales", "Your subsidiaries", "Tes filiales", "Suas filiais") })).concat(
+      rivL(null).map((r) => ({ v: "r" + r, l: S.rv[r].n, nt: 1, s: L4("Produce y cobra un 15 %", "Produces and charges 15%", "Produit et prend 15 %", "Produz e cobra 15 %"), g: L4("Rivales", "Rivals", "Rivaux", "Rivais") })),
+    );
+  if (!items.length) return mtencBase(v);
+  return fxPick({
+    t: L4("Encomendar el material", "Commission the material", "Confier le matériel", "Encomendar o material"),
+    items: items.concat(artL().length ? [{ v: "art", l: L4("Tus artistas firmados…", "Your signed artists…", "Tes artistes sous contrat…", "Seus artistas contratados…"), nt: 1, s: L4("Grabar con una banda o solista de tu sello", "Record with a band or solo artist of your label", "Enregistrer avec un groupe ou un soliste de ton label", "Gravar com uma banda ou solista do seu selo"), g: L4("Música", "Music", "Musique", "Música") }] : []),
+    orden: false,
+    ok: (s) => {
+      const k = String(s[0]);
+      if (k == "art") return mtencBase(v);
+      const r = +k.slice(1),
+        [t0, i0] = String(v).split("|"),
+        x = t0 == "o" ? S.mt[+i0] : null,
+        y = yr(),
+        ok = (j) => MD[j] && y >= MD[j][2],
+        M = MD.map((d, j) => j).filter(ok),
+        fuerte = M.slice().sort((a, b) => (S.rv[r].sp[b] | 0) - (S.rv[r].sp[a] | 0))[0],
+        rec = x && x.m40 != null && ok(x.m40) ? x.m40 : fuerte != null ? fuerte : M[0];
+      if (M.length < 2) return encomiendaM({ abre: () => ACT["mtg"](t0 + "|" + i0 + "|" + rec) }, r);
+      return fxPick({
+        t: L4("¿Qué tipo de obra será?", "What kind of work will it be?", "Quel type d'œuvre ?", "Que tipo de obra será?"),
+        items: M.map((j) => ({ v: j, l: cap1(MEDN5()[j]), nt: 1, s: L4("especialidad de #: %/4", "#'s specialty: %/4", "spécialité de # : %/4", "especialidade de #: %/4").replace("#", S.rv[r].n).replace("%", S.rv[r].sp[j] | 0) + (j == rec ? " · " + L4("recomendado", "recommended", "recommandé", "recomendado") : "") })),
+        orden: false,
+        ok: (s2) => {
+          const md = +s2[0];
+          encomiendaM({ abre: () => ACT["mtg"](t0 + "|" + i0 + "|" + md) }, r);
+        },
+      });
+    },
+  });
+};
+
+let MTTAB = "mat";
+const MTT = [
+  ["mat", /Tus materiales|Your materials/, ["Tus materiales", "Your materials", "Tes matériels", "Seus materiais"]],
+  ["obr", /Tus obras: propiedad|Your works: your studio/, ["Tus obras", "Your works", "Tes œuvres", "Suas obras"]],
+  ["pd", /Dominio público|Public domain/, ["Dominio público", "Public domain", "Domaine public", "Domínio público"]],
+  ["der", /Derechos en venta|Rights for sale/, ["Derechos en venta", "Rights for sale", "Droits à vendre", "Direitos à venda"]],
+  ["ide", /Ideas vendidas|Ideas sold|Idées vendues|Ideias vendidas/, ["Ideas vendidas", "Ideas sold", "Idées vendues", "Ideias vendidas"]],
+];
+const mtVExt = mtV;
+mtV = function () {
+  const h = mtVExt.apply(this, arguments),
+    parts = h.split(/(?=<h3 class="sec")/),
+    intro = parts.shift(),
+    G = {};
+  parts.forEach((sec) => {
+    const head = sec.slice(0, Math.max(0, sec.indexOf("</h3>")));
+    const k = (MTT.find((x) => x[1].test(head)) || ["otr"])[0];
+    (G[k] = G[k] || []).push(sec);
+  });
+  const keys = MTT.map((x) => x[0])
+    .concat(["otr"])
+    .filter((k) => G[k]);
+  if (!keys.length) return h;
+  if (!keys.includes(MTTAB)) MTTAB = keys.includes("mat") ? "mat" : keys[0];
+  const cuenta = (k) => {
+    const s = G[k].join(""),
+      m = /\((\d+)\)/.exec(s.slice(0, s.indexOf("</h3>")));
+    return m ? +m[1] : (s.match(/class="c sub/g) || []).length;
+  };
+  const lab = (k) => (k == "otr" ? L4("Otros", "Other", "Autres", "Outros") : L4(...MTT.find((x) => x[0] == k)[2]));
+  return intro + `<div class="c" translate="no"><div class="chips">${keys.map((k) => chx("mtt", k, `${lab(k)} <span class="m">${cuenta(k)}</span>`, MTTAB == k)).join("")}</div></div>` + G[MTTAB].join("");
+};
+ACT["mtt"] = (v, el) => {
+  MTTAB = String(v);
+  return el && el.closest && el.closest("#md") ? mtM() : pg();
+};
+
+const awardsExt = awards;
+awards = function () {
+  const r = awardsExt.apply(this, arguments);
+  if (S && S.cer && S.cer.length)
+    S.cer = S.cer.filter((c) => !c || !c.l || c.l.some((x) => x && x.u && (x.p == null || obraMia(pj(x.p)))));
+  return r;
+};
 Object.assign(TX.es.ayuda, {
   rescate15: ["Rescatar estudios", "Cuando un rival lleva años perdiendo dinero o público, primero llega un aviso: está al borde de la quiebra. Desde ese momento tienes un año para salvarlo desde su ficha. «Rescatar como filial» paga sus deudas y lo compra con descuento (el 60 % de su precio): pasa a ser tuyo y su catálogo llega a tu plataforma y tu canal. «Rescatar e invertir» le da capital para que siga como estudio independiente; ese dinero queda como inversión tuya en él y sube o baja con su bolsa. Los estudios que ya quebraron también se pueden reabrir desde Mundo → Rivales, en «Estudios que cerraron o se fusionaron»; los que fueron comprados por otro rival no. Cada rescate suma 1 de prestigio. Además, cada año pueden nacer estudios nuevos, a veces fundados por talentos veteranos; nacen más cuando quedan pocos rivales independientes. Dato: en 1997, Apple estaba a semanas de quedarse sin caja y Microsoft invirtió 150 millones de dólares en ella; fue uno de los rescates más famosos entre rivales."],
 });
