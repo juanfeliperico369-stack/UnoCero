@@ -859,7 +859,7 @@ html.una-mano.zine #top{border-top:var(--bw) solid var(--ink);box-shadow:0 -3px 
 .c.peri .peri-t::first-letter{color:#7a1f12!important}
 </style></head><body><div id="app"></div><div id="md"></div><div id="ts"></div><script id="juego">"use strict";
 const VER = 40;
-const VERN = "1.5.1";
+const VERN = "1.5.2";
 const prx = (k) => (S && S.prx && S.prx[k]) || 1;
 const EDICION = "completa";
 const M = {};
@@ -63093,6 +63093,7 @@ Object.assign(DIC_PT, {"Versión 1.0 · vigente desde el 24 de octubre de 2026":
   ["Versión 1.5", "Version 1.5", "Version 1.5", "Versão 1.5"],
   ["Licencia de 3 años a una plataforma ajena (sigue en tu catálogo y tu canal)", "3-year license to another platform (stays in your catalog and your channel)", "Licence de 3 ans à une autre plateforme (reste dans ton catalogue et ta chaîne)", "Licença de 3 anos para outra plataforma (continua no seu catálogo e no seu canal)"],
   ["Versión 1.5.1", "Version 1.5.1", "Version 1.5.1", "Versão 1.5.1"],
+  ["Versión 1.5.2", "Version 1.5.2", "Version 1.5.2", "Versão 1.5.2"],
 ].forEach(([es, en, fr, pt]) => {
   if (ENX[es] == null) ENX[es] = en;
   if (DIC_FR[es] == null) DIC_FR[es] = fr;
@@ -71517,6 +71518,11 @@ function scxAncla(el, raiz) {
   const L = Array.from(raiz.querySelectorAll(q));
   return { el, q, i: Math.max(0, L.indexOf(el)), n: L.length, tx: (el.textContent || "").trim().slice(0, 60), top: el.getBoundingClientRect().top };
 }
+function scxH3(el, raiz) {
+  const L = Array.from(raiz.querySelectorAll("h3")),
+    tx = (el.textContent || "").trim().slice(0, 60);
+  return { el, q: "h3", i: Math.max(0, L.indexOf(el)), n: L.length, tx, top: el.getBoundingClientRect().top };
+}
 function scxGuarda(b) {
   const hj = document.querySelector("#md.on .hoja"),
     enHoja = !!(b.closest && b.closest("#md")),
@@ -71527,20 +71533,53 @@ function scxGuarda(b) {
   if (a0) A.push(a0);
   const r0 = b.getBoundingClientRect().top,
     vh = innerHeight;
-  Array.from(raiz.querySelectorAll("[data-a]"))
-    .filter((x) => x !== b && !x.closest("#inf-p"))
+  const tarjeta = b.closest && b.closest(".c");
+  Array.from(raiz.querySelectorAll("[data-a], h3"))
+    .filter((x) => x !== b && !x.closest("#inf-p") && !(tarjeta && tarjeta !== raiz && tarjeta.contains(x)))
     .map((x) => [x, x.getBoundingClientRect().top])
     .filter(([, t]) => t > -40 && t < vh + 40)
     .sort((x, y) => (x[1] > r0) - (y[1] > r0) || Math.abs(x[1] - r0) - Math.abs(y[1] - r0))
     .slice(0, 8)
     .forEach(([x]) => {
-      const k = scxAncla(x, raiz);
+      const k = x.tagName == "H3" ? scxH3(x, raiz) : scxAncla(x, raiz);
       if (k) A.push(k);
     });
-  return { a: b.dataset.a, A, enHoja, hs: hj ? hj.scrollTop : 0, ht: String(HOJAT).split("|")[0], ws: window.scrollY, tab, sub: SUB.join(","), hoja: !!hj, t0: performance.now() };
+  let M = [];
+  if (enHoja) {
+    const rm = scxRaiz(false),
+      c0 = innerHeight / 2;
+    if (rm)
+      M = Array.from(rm.querySelectorAll("[data-a], h3"))
+        .map((x) => [x, x.getBoundingClientRect().top])
+        .filter(([, t]) => t > -40 && t < innerHeight + 40)
+        .sort((x, y) => Math.abs(x[1] - c0) - Math.abs(y[1] - c0))
+        .slice(0, 10)
+        .map(([x]) => (x.tagName == "H3" ? scxH3(x, rm) : scxAncla(x, rm)))
+        .filter(Boolean);
+  }
+  return { a: b.dataset.a, A, M, enHoja, hs: hj ? hj.scrollTop : 0, ht: String(HOJAT).split("|")[0], ws: window.scrollY, tab, sub: SUB.join(","), hoja: !!hj, t0: performance.now() };
+}
+function scxFijaM(c) {
+  if (!c.M || !c.M.length || tab != c.tab || SUB.join(",") != c.sub) return;
+  const rm = scxRaiz(false);
+  if (!rm) return;
+  for (const k of c.M) {
+    let el = k.el && k.el.isConnected && rm.contains(k.el) ? k.el : null;
+    if (!el) {
+      const L = Array.from(rm.querySelectorAll(k.q)),
+        T = L.filter((x) => (x.textContent || "").trim().slice(0, 60) == k.tx);
+      el = L[k.i] && (L[k.i].textContent || "").trim().slice(0, 60) == k.tx && L.length == k.n ? L[k.i] : T.length == 1 ? T[0] : null;
+    }
+    if (!el || !el.getClientRects().length) continue;
+    const d = el.getBoundingClientRect().top - k.top;
+    if (Math.abs(d) > innerHeight * 0.9) continue;
+    if (Math.abs(d) > 2) window.scrollBy(0, d);
+    return;
+  }
 }
 function scxFija(c) {
   const hj = document.querySelector("#md.on .hoja");
+  if (c.enHoja) scxFijaM(c);
   if (c.enHoja) {
     if (!hj || String(HOJAT).split("|")[0] != c.ht) return false;
   } else if ((hj && !c.hoja) || tab != c.tab || SUB.join(",") != c.sub) return false;
@@ -71556,6 +71595,7 @@ function scxFija(c) {
     }
     if (!el || !el.getClientRects().length) continue;
     const d = el.getBoundingClientRect().top - k.top;
+    if (Math.abs(d) > innerHeight * 0.9) continue;
     if (Math.abs(d) > 2) {
       if (c.enHoja) hj.scrollTop += d;
       else window.scrollBy(0, d);

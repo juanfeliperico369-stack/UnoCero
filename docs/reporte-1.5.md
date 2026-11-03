@@ -1,4 +1,4 @@
-# INDUSTRY ART · Informe de verificación de las versiones 1.5 y 1.5.1
+# INDUSTRY ART · Informe de verificación de las versiones 1.5, 1.5.1 y 1.5.2
 
 Lo pedido después de la 1.4, qué cambió, cómo comprobarlo y qué midieron las pruebas. El informe completo de la 1.4 sigue en `reporte-1.4.md`.
 
@@ -47,6 +47,15 @@ Lo pedido después de la 1.4, qué cambió, cómo comprobarlo y qué midieron la
   - Las obras que tus filiales estrenaron antes de que las compraras nunca entraban. Ahora entran al cargar la partida y cada mes.
 - **Medido:** con el catálogo lleno de 400 títulos de calidad 95, se veían tus 209 obras, también las 5 con licencia vendida. Una filial con 27 obras estrenadas pasó de 0 a 27 en tu plataforma y en el catálogo del canal.
 - Tus obras llegan a la plataforma cuando pasan al archivo (las originales, desde su estreno); la plataforma lo explica en una nota.
+
+## 7. Versión 1.5.2: la pantalla no se mueve al reestrenar
+
+- **Qué pasaba:** al tocar «Reestrenar» en una obra del archivo, la vista saltaba hacia arriba entre 2.000 y 4.400 px. La obra sale del archivo y sube a «En cartelera», y la pantalla se anclaba a los otros botones de esa misma tarjeta («Ficha»), así que la seguía hasta arriba. Lo mismo podía pasar con cualquier acción que mueve una obra a otra sección, como confirmar un plan de lanzamiento.
+- **Ahora:**
+  - La pantalla se ancla en el contenido que no se movió: lo que está arriba del botón tocado, sin contar la tarjeta que cambia de lugar.
+  - Si un ancla tendría que mover la vista más de casi una pantalla, se descarta, porque significa que ese contenido cambió de sección.
+  - Cuando actúas desde una ficha u hoja abierta, la página de fondo también queda en su lugar.
+- **Medido con toques reales:** al reestrenar desde la tarjeta o desde la ficha, las tarjetas de arriba quedan exactamente donde estaban (0 px) y las de abajo suben una tarjeta para ocupar el hueco. Antes la vista se iba 2.000 px o más hacia arriba.
 
 ## Pruebas de esta versión
 

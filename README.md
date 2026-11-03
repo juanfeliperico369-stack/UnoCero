@@ -1,6 +1,6 @@
 # UnoCero
 
-## INDUSTRY ART · versión 1.5.1
+## INDUSTRY ART · versión 1.5.2
 
 Simulador de estudio de cine, series, videojuegos, teatro, música y libros, de 1700 a 2300.
 
@@ -94,7 +94,7 @@ El proyecto de la app está en `android/` y empaqueta el mismo `industry-art/ind
 2. Indica el SDK de Android en `android/local.properties` (`sdk.dir=/ruta/al/sdk`).
 3. Desde `android/`, ejecuta `gradle assembleRelease bundleRelease`. El APK queda en `app/build/outputs/apk/release/` y el AAB en `app/build/outputs/bundle/release/`.
 
-Los paquetes de la versión 1.5.1 están en `entregables/`.
+Los paquetes de la versión 1.5.2 están en `entregables/`.
 
 ### Lanzamiento
 
