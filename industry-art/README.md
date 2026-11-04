@@ -43,6 +43,24 @@ Para que la imagen al compartir el enlace salga en todas las redes, genera el bu
 `SITIO=https://tu-dominio/industry-art/ python3 build/pulido_1_0.py …` (pone `og:image` y `og:url` absolutos).
 Activa la compresión gzip o brotli del hosting: el HTML pasa de 6,7 MB a unos 2,4 MB en la descarga.
 
+## iPhone y iPad
+
+`ios/` es la app nativa: una WKWebView a pantalla completa que carga el mismo `index.html` desde el paquete de
+la app, con el esquema propio `industryart://` para que las partidas queden en IndexedDB. Usa el mismo puente que
+Android (`window.AndroidBridge`), así que exportar partidas, imágenes o PDF abre el menú de compartir de iOS
+(Guardar en Archivos, AirDrop…). También muestra los avisos y confirmaciones del juego, abre los enlaces externos en
+Safari, ajusta el color de la barra de estado a la pantalla y, si iOS cierra el proceso web por falta de memoria,
+vuelve a cargar el juego.
+
+- `.github/workflows/ios.yml` genera el proyecto con XcodeGen, compila la `.ipa` sin firmar, prueba la app en un
+  simulador de iPhone (inicia una partida rápida, avanza 12 semanas, guarda y carga) y sube todo como artefacto.
+- Instalarla en un iPhone sin App Store: Sideloadly o AltStore la firman con tu Apple ID. Con una cuenta gratuita,
+  la firma dura 7 días y hay que renovarla; con una cuenta de desarrollador de Apple (99 USD al año) dura un año.
+- App Store o TestFlight: en un Mac, `brew install xcodegen && cd industry-art/ios && xcodegen`, abre
+  `IndustryArt.xcodeproj`, elige tu equipo en Signing y haz Product → Archive.
+- Sin app: la carpeta `web/` publicada con HTTPS se instala desde Safari con Compartir → «Añadir a pantalla de inicio».
+  Se abre a pantalla completa, funciona sin conexión y usa el ícono `apple-touch-icon.png`.
+
 ## Cómo se genera
 
 ```

@@ -306,7 +306,11 @@ open(OUT, 'w', encoding='utf-8').write(h)
 # ------------------------------------------------------------------ 11. carpeta web
 if WEB:
     os.makedirs(WEB, exist_ok=True)
-    shutil.copyfile(OUT, os.path.join(WEB, 'index.html'))
+    # En la web, el ícono de Apple es un archivo (Safari lo usa al «Añadir a pantalla de inicio») y el juego no lo reemplaza.
+    hw = rep(h, f'<link rel="apple-touch-icon" href="{dataurl("apple-touch-icon.png")}">', '<link rel="apple-touch-icon" href="apple-touch-icon.png">', 1, 'web apple')
+    hw = rep(hw, '''document.querySelectorAll('link[rel="icon"],link[rel="apple-touch-icon"]').forEach((l) => (l.href = u));''',
+             '''document.querySelectorAll('link[rel="icon"]').forEach((l) => (l.href = u));''', 1, 'web apple js')
+    open(os.path.join(WEB, 'index.html'), 'w', encoding='utf-8').write(hw)
     imgs = ['icono-192.png', 'icono-512.png', 'icono-maskable-512.png', 'apple-touch-icon.png', 'compartir.png']
     for n in imgs:
         shutil.copyfile(os.path.join(ICON, n), os.path.join(WEB, n))

@@ -1,0 +1,82 @@
+# Industry Art para iPhone: compila la app, la prueba en un simulador y deja la .ipa (sin firmar) como artefacto.
+name: iOS
+
+on:
+  push:
+    paths:
+      - "industry-art/index.html"
+      - "industry-art/ios/**"
+      - ".github/workflows/ios.yml"
+  workflow_dispatch:
+
+jobs:
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Herramientas
+        run: |
+          brew install xcodegen
+          xcodebuild -version
+          xcrun simctl list runtimes
+
+      - name: Generar el proyecto de Xcode
+        working-directory: industry-art/ios
+        run: xcodegen
+
+      - name: Compilar para iPhone (IPA sin firmar)
+        working-directory: industry-art/ios
+        run: |
+          set -o pipefail
+          xcodebuild -project IndustryArt.xcodeproj -scheme IndustryArt -configuration Release -sdk iphoneos \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build | tail -40
+          mkdir -p "$GITHUB_WORKSPACE/salida/Payload"
+          cp -R build/Build/Products/Release-iphoneos/IndustryArt.app "$GITHUB_WORKSPACE/salida/Payload/"
+          cd "$GITHUB_WORKSPACE/salida" && zip -qry industry-art-1.0.ipa Payload && rm -rf Payload
+          ls -la "$GITHUB_WORKSPACE/salida"
+
+      - name: Probar en el simulador
+        working-directory: industry-art/ios
+        run: |
+          set -o pipefail
+          xcodebuild -project IndustryArt.xcodeproj -scheme IndustryArt -configuration Debug -sdk iphonesimulator \
+            -derivedDataPath build-sim CODE_SIGNING_ALLOWED=NO build | tail -20
+          APP=build-sim/Build/Products/Debug-iphonesimulator/IndustryArt.app
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)["devices"]
+          c = [(k, x) for k, v in d.items() if "iOS" in k for x in v if x["name"].startswith("iPhone")]
+          ver = lambda k: [int(n) for n in k.split("iOS-")[1].split("-") if n.isdigit()]
+          c.sort(key=lambda kx: ver(kx[0]), reverse=True)
+          import re
+          base = [x for k, x in c if re.fullmatch(r"iPhone \d+", x["name"])] or [x for k, x in c]
+          print(base[0]["udid"]); print(base[0]["name"], file=sys.stderr)')
+          echo "Simulador: $UDID"
+          xcrun simctl boot "$UDID"
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl install "$UDID" "$APP"
+          xcrun simctl launch "$UDID" com.onezero.industryart
+          sleep 15
+          xcrun simctl io "$UDID" screenshot "$GITHUB_WORKSPACE/salida/captura-inicio.png"
+          xcrun simctl terminate "$UDID" com.onezero.industryart
+          xcrun simctl launch --console "$UDID" com.onezero.industryart -pruebaIA > prueba.log 2>&1 &
+          for i in $(seq 1 90); do grep -q PRUEBA_IA_FIN prueba.log && break; sleep 2; done
+          sleep 2
+          xcrun simctl io "$UDID" screenshot "$GITHUB_WORKSPACE/salida/captura-partida.png"
+          echo "----- resultado de la prueba -----"
+          grep PRUEBA_IA prueba.log || (echo "La prueba no terminó"; tail -50 prueba.log; exit 1)
+          grep -q '"partida":true' prueba.log
+          grep -q '"recarga":true' prueba.log
+          for f in captura-inicio captura-partida; do
+            sips -Z 640 -s format jpeg -s formatOptions 55 "$GITHUB_WORKSPACE/salida/$f.png" --out "/tmp/$f.jpg" > /dev/null
+            echo "IMG_${f}_INICIO"; base64 -i "/tmp/$f.jpg" -b 120; echo "IMG_${f}_FIN"
+          done
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: industry-art-1.0-ios
+          path: salida/
+          if-no-files-found: warn
