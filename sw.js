@@ -1,7 +1,7 @@
 // Industry Art · service worker de la versión web.
 // Sirve el juego desde la caché (abre al instante y sin conexión) y la actualiza en segundo plano:
 // una versión nueva subida al servidor se usa a partir de la siguiente vez que se abre.
-const CACHE = "industry-art-1.0-8594f306ce";
+const CACHE = "industry-art-1.0-d3df187e19";
 const BASE = ["./", "index.html", "manifest.webmanifest", "icono-192.png", "icono-512.png", "icono-maskable-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => {
