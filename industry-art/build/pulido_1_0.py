@@ -28,6 +28,10 @@ Aplica, con reemplazos exactos (cada uno comprueba cuántas veces aparece):
      dispositivo) y en Ajustes se pueden copiar o borrar.
  10. Búsquedas por nombre sin distinguir tildes (Talento, Obras, Archivo, Buscar,
      Taxonomía, dominio público).
+ 12. Unos 200 temas nuevos en 15 grupos (guerra y vida militar, western, noir y
+     justicia, ciencia ficción, fantasía, terror, catástrofes, arcos del héroe, mundo
+     antiguo, Edad Media a Barroco, siglos XIX y XX, mitologías y culturas de cada
+     continente), en 4 idiomas, con su etiqueta, su época y si son solo de ficción.
  11. Web: favicon, íconos, Open Graph, manifiesto, service worker (sin conexión) y
      almacenamiento persistente; nada de eso se activa dentro de la app Android.
      Si se pasa una carpeta como tercer argumento, deja ahí la versión web lista
@@ -185,6 +189,18 @@ for old, new, n in [
 
 # ------------------------------------------------------------------ edificio animado: datos calculados una vez por repintado, no en cada fotograma
 h = rep(h, '''  if (z) edif(z.c, z.w, z.h, t, edifDatos());''', '''  if (z) edif(z.c, z.w, z.h, t, edifD9());''', 1, 'edC')
+
+# ------------------------------------------------------------------ 12. temas nuevos (guerra, western, noir, ciencia ficción, fantasía, épocas, culturas…)
+temas = open(os.path.join(AQUI, 'temas_1_0.js'), encoding='utf-8').read().strip('\n')
+h = rep(h, '''
+
+aplicarCfg();
+idiomaIni();
+if (!/[?&]bot=/.test(location.search)) mn();''', '\n' + temas + '''
+
+aplicarCfg();
+idiomaIni();
+if (!/[?&]bot=/.test(location.search)) mn();''', 1, 'temas')
 
 # ------------------------------------------------------------------ bloque nuevo al final del script del juego
 a = h.index('<script id="juego">')

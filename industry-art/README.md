@@ -23,6 +23,12 @@
 - **Diccionarios FR/PT**: 1,5 MB de literales salen del script y quedan como JSON inerte en `<head>`. Solo se leen
   si el idioma es francés o portugués.
 - **Edificio animado de Inicio**: sus datos se calculan una vez por repintado en vez de en cada fotograma.
+- **Temas nuevos**: de 484 a 705 temas, con 16 grupos nuevos: guerra y vida militar (soldados, batallas, veteranos…),
+  western y frontera, noir y justicia, ciencia ficción y espacio, fantasía y criaturas, terror y monstruos,
+  catástrofes, arcos y viajes del héroe, mundo antiguo, de la Edad Media al Barroco, siglos XIX y XX, mitologías
+  del mundo y culturas de Asia, África y Oceanía, América y Europa. Están en los 4 idiomas, cada grupo tiene su
+  etiqueta de juego y los históricos tienen año y épocas (no se puede hacer una obra sobre Vietnam en 1900). Los
+  fantásticos solo valen para ficción, y los violentos no se pueden usar en obras infantiles (`build/temas_1_0.js`).
 - **Versión**: «Edición 1.0» en la portada (`VERN = "1.0"`). La versión interna de las partidas (`VER = 40`) no cambia.
 - **Autoguardado**: nueva opción «Cada 3 meses». El autoguardado espera a que se pinte la semana nueva, y si guardar
   ya tarda más de 400 ms en ese dispositivo (partidas muy largas), lo avisa una vez y lo explica en Ajustes.
@@ -94,7 +100,7 @@ La 1.0 se firma con una clave nueva (`industry-art-subida.jks`, alias `industrya
 actualizaciones. **No está en el repositorio** (`.gitignore` bloquea `*.jks`): guárdala tú, con su contraseña,
 en al menos dos sitios.
 
-- `versionCode 18`, `versionName "1.0"`. Cada actualización necesita un `versionCode` mayor.
+- `versionCode 19`, `versionName "1.0"` (la 1.0 con los temas nuevos). Cada actualización necesita un `versionCode` mayor.
 - Para publicar en Play Store se sube el AAB. Con la firma de apps de Play, Google firma lo que reciben los usuarios.
   Si algún día pierdes la clave de subida, se puede pedir que la restablezcan desde Play Console.
 
